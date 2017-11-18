@@ -106,4 +106,13 @@ $ php artisan serve --port 8080
 <img src="screenshot/11.png" >
 <img src="screenshot/12.png" >
 
-# License
+System Dependencies
+===================
+* PHP >=7
+* OpenSSL PHP Extension
+* PDO PHP Extension
+* Mbstring PHP Extension
+* Tokenizer PHP Extension
+* XML PHP Extension
+
+
