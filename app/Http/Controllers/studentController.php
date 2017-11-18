@@ -32,11 +32,11 @@ class studentController extends BaseController {
 	public function index()
 	{
 		$classes = ClassModel::select('name','code')->get();
-		$sections = SectionModel::select('name')->get();
+		//$sections = SectionModel::select('name')->get();
 
 
 		//return View::Make('app.studentCreate',compact('classes'));
-		return View('app.studentCreate',compact('classes','sections'));
+		return View('app.studentCreate',compact('classes'));
 	}
 
 	public  function getRegi($class,$session,$section)
