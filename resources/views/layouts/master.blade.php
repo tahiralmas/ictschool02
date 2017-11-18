@@ -94,6 +94,7 @@
             </ul>
         </div>
         <!-- Addmission dropdown starts -->
+        @if (Session::get('userRole') =="Admin")
         <div class="btn-group pull-right">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
@@ -170,7 +171,7 @@
             </ul>
         </div>
         <!-- fees dropdown ends -->
-
+     @endif
     </div>
 </div>
 <!-- topbar ends -->
@@ -188,7 +189,14 @@
                         <li class="nav-header">Main</li>
                         <li><a class="ajax-link" href="/dashboard"><i class="glyphicon glyphicon-th-large"></i><span> Dashboard</span></a>
                         </li>
-
+                        @if (Session::get('userRole') =="Admin")
+                         <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-folder-open"></i><span> Levels</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="/level/create">Add New</a></li>
+                                <li><a href="/level/list">Levels List</a></li>
+                            </ul>
+                        </li>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-home"></i><span> Class</span></a>
                             <ul class="nav nav-pills nav-stacked">
@@ -196,6 +204,14 @@
                                 <li><a href="/class/list">Class List</a></li>
                             </ul>
                         </li>
+                         <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-folder-open"></i><span> Section</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="/section/create">Add New</a></li>
+                                <li><a href="/section/list">Section List</a></li>
+                            </ul>
+                        </li>
+                        
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-book"></i><span> Subject</span></a>
                             <ul class="nav nav-pills nav-stacked">
@@ -211,11 +227,27 @@
 
                             </ul>
                         </li>
-                        
+                        @endif
+                         <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-text-width"></i><span> Teacher</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                            @if (Session::get('userRole') =="Admin")
+                              <li><a href="/teacher/create-file">Add from file</a></li>
+                                <li><a href="/teacher/create">Add New</a></li>
+                                @endif
+                                <li><a href="/teacher/list">Teacher List</a></li>
+                                @if (Session::get('userRole') =="Admin")
+                                <li><a href="/teacher/create-timetable">Timetable Management</a></li>
+                                @endif
+
+                            </ul>
+                        </li>
                         <li class="accordion">
                        <a href="#"><i class="glyphicon glyphicon-pencil"></i><span> Attendance</span></a>
                        <ul class="nav nav-pills nav-stacked">
+                       @if (Session::get('userRole') =="Admin")
                            <li><a href="/attendance/create-file">Add from file</a></li>
+                           @endif
                            <li><a href="/attendance/create">Add</a></li>
                            <li><a href="/attendance/list">View</a></li>
 
@@ -229,6 +261,7 @@
                                 <li><a href="/mark/list">Marks List</a></li>
                             </ul>
                         </li>
+                        @if (Session::get('userRole') =="Admin")
                         <li class="accordion">
                             <a href="#"><i class="glyphicon  glyphicon glyphicon-list"></i><span> Result</span></a>
                             <ul class="nav nav-pills nav-stacked">
@@ -253,6 +286,7 @@
 
                             </ul>
                         </li>
+                        @endif
                       <!--  <li class="accordion">
 
                           <a href="#"><i class="glyphicon glyphicon-envelope"></i><span> SMS</span></a>
@@ -263,6 +297,7 @@
 
                           </ul>
                       </li> -->
+                      @if (Session::get('userRole') =="Admin")
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-print"></i><span> Reports</span></a>
                             <ul class="nav nav-pills nav-stacked">
@@ -277,6 +312,7 @@
 
                             </ul>
                         </li>
+                         @endif
                          <?php 
                          
                         //echo Session::get('userRole')."adeel";
