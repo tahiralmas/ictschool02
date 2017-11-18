@@ -204,14 +204,6 @@
                                 <li><a href="/class/list">Class List</a></li>
                             </ul>
                         </li>
-                         <li class="accordion">
-                            <a href="#"><i class="glyphicon glyphicon-folder-open"></i><span> Section</span></a>
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="/section/create">Add New</a></li>
-                                <li><a href="/section/list">Section List</a></li>
-                            </ul>
-                        </li>
-                        
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-book"></i><span> Subject</span></a>
                             <ul class="nav nav-pills nav-stacked">
@@ -392,7 +384,6 @@
 </div><!--/.fluid-container-->
 
 <!-- external javascript -->
-
 
 <script src="{{ URL::asset('/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
