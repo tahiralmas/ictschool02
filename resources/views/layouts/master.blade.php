@@ -393,6 +393,7 @@
 
 <!-- external javascript -->
 
+
 <script src="{{ URL::asset('/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
 <!-- library for cookie management -->
