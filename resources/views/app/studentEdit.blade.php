@@ -97,7 +97,7 @@
 
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                        <?php /* $data=[
+                        <?php  $data=[
                           'A'=>'A',
                           'B'=>'B',
                           'C'=>'C',
@@ -111,15 +111,15 @@
                           ];?>
                           {{ Form::select('section',$data,$student->section,['class'=>'form-control','required'=>'true'])}}
 
-               */?>
+              
             
-               <select name="section" id="section" required="true" class="form-control" >
+             <?php /*  <select name="section" id="section" required="true" class="form-control" >
                 @if ($sections->count())
                @foreach($sections as $section)
             <option value="{{ $section->name }}"  <?php if ($student->section == $section->name){ echo "selected"; } ?> >{{ $section->name }}</option>    
            @endforeach
            @endif
-          </select>
+          </select> */ ?>
 
                     </div>
                   </div>
