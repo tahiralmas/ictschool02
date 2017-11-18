@@ -60,10 +60,16 @@
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select name="section" id="section" required="true" class="form-control" >
-                    @foreach($sections as $section)
-                      <option value="{{$section->name}}">{{$section->name}}</option>
-                      @endforeach
-
+                     <option value="A">A</option>
+                      <option value="B">B</option>
+                      <option value="C">C</option>
+                      <option value="D">D</option>
+                      <option value="E">E</option>
+                      <option value="F">F</option>
+                      <option value="G">G</option>
+                      <option value="H">H</option>
+                      <option value="I">I</option>
+                      <option value="J">J</option>
 
                     </select>
 
