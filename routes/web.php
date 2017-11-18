@@ -48,12 +48,12 @@ Route::get('/class/getsubjects/{class}','classController@getSubjects');
 
 // section routes
 Route::group(['middleware' => 'admin'], function(){ 
-Route::get('/section/create','sectionController@index');
+/*Route::get('/section/create','sectionController@index');
 Route::post('/section/create','sectionController@create');
 Route::get('/section/list','sectionController@show');
 Route::get('/section/edit/{id}','sectionController@edit');
 Route::post('/section/update','sectionController@update');
-Route::get('/section/delete/{id}','sectionController@delete');
+Route::get('/section/delete/{id}','sectionController@delete');*/
 
 // level routes
 Route::get('/level/create','levelController@index');
