@@ -14,7 +14,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 use Validator;
-
 use App\ClassModel;
 use App\Subject;
 use App\Attendance;
@@ -55,15 +54,57 @@ class UserController extends Controller
         }
     }
     /**
-     * details api
+     * profile api
      *
      * @return \Illuminate\Http\Response
      */
-    public function details()
+    public function profile()
     {
         $user = Auth::user();
         return response()->json(['success' => $user], $this->successStatus);
     }
+    /**
+     * get_user api
+     *@param  int  $user_id
+     * @return \Illuminate\Http\Response
+     */
+    public function get_user($user_id)
+    {
+    	//dd($user_id);
+       // $user = Auth::user();
+        $user = DB::table('users')->select('id','firstname','lastname','desc','login','email','group')->where('id','=',$user_id)->first();
+        if(!is_null($user)){
+       	 return response()->json(['user' => $user], $this->successStatus);
+        }else{
+
+           return response()->json(['error'=>'Student not found'], 401);
+        }   
+    }
+
+     /**
+     * logout api
+     *
+     * @return \Illuminate\Http\Response
+     */
+		public function logout(Request $request)
+		{
+		    $request->user()->token()->revoke();
+
+		    $this->guard()->logout();
+
+		    $request->session()->flush();
+
+		    $request->session()->regenerate();
+
+		    $json = [
+		        'success' => true,
+		        'code' => 200,
+		        'message' => 'You are Logged out.',
+		    ];
+		    return response()->json($json, '200');
+		}
+
+
        /**
      * attendance api
      *
@@ -326,5 +367,27 @@ class UserController extends Controller
 					      return response()->json(['attendance'=>$s_attendence]);
 
 				    }
-		    }  
+		    } 
+              /**
+		     * allstudent api
+		     *
+		     * @return \Illuminate\Http\Response
+		     */
+		     public function allstudent()
+		    { 
+
+               $student =	DB::table('Student')->get();
+                if($student->count()>0){
+                return response()->json(['student'=>$student]);
+	            }else{
+
+	              return response()->json(['error'=>'Student not found'], 401);
+                }
+
+		    }
+      
+		protected function guard()
+		{
+		    return Auth::guard('api');
+		}
 }
