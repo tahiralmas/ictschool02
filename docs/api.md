@@ -4,17 +4,33 @@ A complete list of available APIs only for overview and analysis, for full docum
 
 User
 ----
-* POST api/login
-* GET api/details
+* POST users/login
+* GET users/logout
+* GET users/profile
+* GET users/{user_id}
+
+Levels
+------
+* GET levels
+* GET levels/level_id
+
+Classes
+-------
+* GET classes
+* GET classes/{class_id}
+* PUT classes/{class_id}
 
 Students
 --------
-* GET api/allstudents
+* GET students
+* GET students/{student_id}
+* PUT students/{student_id}
 
 Attendence
 ----------
-* GET api/attendance
-* POST api/attendance-create
-* POST api/student-classwise
-* POST api/attendance-view
+* GET attendances
+* POST attendances
+* GET attendances/{attendance_id}
+* PUT attendances/{attendance_id}
+* DELETE attendances/{attendance_id}
 
