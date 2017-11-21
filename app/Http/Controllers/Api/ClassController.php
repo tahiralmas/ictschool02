@@ -32,51 +32,54 @@ class ClassController extends Controller
     }
    public $successStatus = 200;
 
-			/**
-		     * student_classwise api
-		     *
-		     * @return \Illuminate\Http\Response
-		     */
-		    public function classes()
-		    {
-				
-					  $class = DB::table('Class')->get();
-					  if(count($class)<1)
-					  {
-					     return response()->json(['error'=>'No Class Found!'], 401);
+	/**
+     * student_classwise api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function classes()
+    {
+	  $class = DB::table('Class')->get();
+	  if(count($class)<1)
+	  {
+	     return response()->json(['error'=>'No Class Found!'], 401);
+	  }
+	  else {
+		  return response()->json(['classes' => $class]);
+	  }
+    }
 
-					  }
-					  else {
-						  //$formdata = new formfoo;
-						 /* $formdata->class=Input::get('class');
-						  $formdata->section=Input::get('section');
-						  $formdata->shift=Input::get('shift');
-						  $formdata->session=trim(Input::get('session'));*/
-						  //return View::Make("app.studentList", compact('students','classes','formdata'));
-						  //return View("app.studentList", compact('students','classes','formdata'));
-						  return response()->json(['classes' => $class]);
-					  }
-				  }
+    public function getclass($class_id)
+    {
+         $classes = ClassModel::find($class_id);
+        if(!is_null($classes) && $classes->count()>0){
+           return response()->json(['class'=>$classes]);
+        }else{
+        return response()->json(['error'=>'Class Not Found'], 401);
+       }
+    }
 
-		    public function getclass($class_id)
-		    {
-                 $classes = ClassModel::find($class_id);
+    public function update_class($class_id)
+    {
+        $rules=[
+		'name' => 'required',
+		'description' => 'required'
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails())
+		{
+		 return response()->json(['error'=>'Please Fill the Required Field'], 401);
+		}
+		else {
+			$class = ClassModel::find($class_id);
+			$class->name= Input::get('name');
+			$class->description=Input::get('description');
+			$class->save();
+          return response()->json(['success'=>"Class Updated Succesfully."]);
 
-                if(!is_null($classes) && $classes->count()>0){
+		}
 
-                   return response()->json(['class'=>$classes]);
-		        }else{
-		        return response()->json(['error'=>'Class Not Found'], 401);
-	           }
-
-		    }
-
-		    public function update_student($class_id)
-		    {
-		    	 return response()->json(['class'=>$class_id]);
-		    }
-
-		    
+    }	    
 }
 
 
