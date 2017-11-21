@@ -37,16 +37,16 @@ Route::post('users/login', 'Api\UserController@login');
    Route::get('classes','Api\ClassController@classes');
    Route::get('classes/{class_id}','Api\ClassController@getclass');
    Route::put('classes/{class_id}','Api\ClassController@update_class');
-	//Route::get('/attendance/create-file','attendanceController@index_file');
-	//Route::post('/attendance/create-file','attendanceController@create_file');
 
-	//Route::post('/attendance-view','Api\UserController@attendance_view');
+   // Levels
+   Route::get('levels','Api\LevelController@levels');
+   Route::get('levels/{level_id}','Api\LevelController@getlevel');
 	
 });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('products', function () {
     return response(['Product 1', 'Product 2', 'Product 3'],200);
-});
+});*/
