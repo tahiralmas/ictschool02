@@ -70,22 +70,24 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <!--<div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label" for="shift">Shift</label>
 
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                                <?php  $data=[
+                                                <?php /* $data=[
                                                         'Day'=>'Day',
                                                         'Morning'=>'Morning'
-                                                ];?>
+                                                ]; */ ?>
                                                 {!! Form::select('shift',$data,$formdata->shift,['class'=>'form-control','required'=>'true']) !!}
 
 
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>-->
+
+                                    <input type="hidden" name="shift" value="Morning">
                                     <div class="col-md-3">
                                         <div class="form-group ">
                                             <label for="session">session</label>
@@ -135,7 +137,7 @@
                                                                <td>{{$student->firstName}} {{$student->middleName}} {{$student->lastName}}</td>
                                                                <td>{{$student->gender}}</td>
                                                                   <td>{{$student->religion}}</td>
-                                                                  <td>{{$student->fatherCellNo.'<br>' }}{{$student->motherCellNo.'<br>'}}{{$student->localGuardianCell}}</td>
+                                                                  <td>   {!! "<b> Father:</b> ". $student->fatherCellNo. " <br \><b >Mother: </b>". $student->motherCellNo. $student->localGuardianCell !!}</td>
                                                                   <td>{{$student->presentAddress}}</td>
                                                        <td>
                                                   <a title='View' class='btn btn-success' href='{{url("/student/view")}}/{{$student->id}}'> <i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp&nbsp<a title='Edit' class='btn btn-info' href='{{url("/student/edit")}}/{{$student->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/student/delete")}}/{{$student->id}}'> <i class="glyphicon glyphicon-trash icon-white"></i></a>
