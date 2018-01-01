@@ -86,7 +86,7 @@
                                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign  blue"></i></span>
                                       <select name="subgroup" class="form-control" required >
                                           <option value="N/A">N/A</option>
-                                          <option value="Bangla">Bangla</option>
+                                          <option value="Bangla">Urdu</option>
                                           <option value="English">English</option>
 
 
@@ -115,7 +115,7 @@
 
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
-                                                <select name="class" class="form-control" required >
+                                                <select name="class[]" class="form-control selectpicker" multiple data-hide-disabled="true" data-size="5"required >
                                                   @foreach($classes as $class)
                                                     <option value="{{$class->code}}">{{$class->name}}</option>
                                                   @endforeach
