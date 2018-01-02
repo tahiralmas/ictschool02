@@ -83,7 +83,7 @@
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                    <select name="subject" class="form-control" required >
+                    <select name="subject" class="form-control " required >
                       @foreach($subjects as $subject)
                       <option value="{{$subject->id}}">{{$subject->name}}</option>
                       @endforeach
@@ -124,7 +124,7 @@
             <div class="col-md-4">
               <div class="form-group ">
                 <label for="photo">Day</label>
-                <select name="day" class="form-control">
+                <select name="day[]" class="form-control selectpicker" multiple data-hide-disabled="true" data-size="5">
                 <option value="">---Select Day---</option>
                 <option value="monday">Monday</option>
                 <option value="tuesday">Tuesday</option>
@@ -159,5 +159,6 @@
 <script>
  $('#timepicker1').timepicker();
   $('#timepicker2').timepicker();
+  $('.selectpicker').selectpicker();
 </script>
 @stop

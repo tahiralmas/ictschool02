@@ -86,6 +86,8 @@ Route::get('/student/view/{id}','studentController@view');
 Route::get('/student/edit/{id}','studentController@edit');
 Route::post('/student/update','studentController@update');
 Route::get('/student/delete/{id}','studentController@delete');
+Route::post('/student/create-file','studentController@create_file');
+Route::get('/student/csvexample','studentController@csvexample');
 });
 Route::get('/student/getList/{class}/{section}/{shift}/{session}','studentController@getForMarks');
 

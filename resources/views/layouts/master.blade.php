@@ -214,6 +214,7 @@
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-user"></i><span> Student</span></a>
                             <ul class="nav nav-pills nav-stacked">
+                                <li><a href="/student/create-file">Add from file</a></li>
                                 <li><a href="/student/create">Add New</a></li>
                                 <li><a href="/student/list">Student List</a></li>
 

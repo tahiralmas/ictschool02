@@ -345,6 +345,7 @@ public function update()
 		$student->motherCellNo= Input::get('motherCellNo');
 		$student->localGuardian= Input::get('localGuardian');
 		$student->localGuardianCell= Input::get('localGuardianCell');
+		$student->shift= Input::get('shift');
 
 		$student->presentAddress= Input::get('presentAddress');
 		$student->parmanentAddress= Input::get('parmanentAddress');
@@ -384,4 +385,90 @@ public function getForMarks($class,$section,$shift,$session)
 	$students= Student::select('regiNo','rollNo','firstName','middleName','lastName')->where('isActive','=','Yes')->where('class','=',$class)->where('section','=',$section)->where('shift','=',$shift)->where('session','=',$session)->get();
 	return $students;
 }
+
+public function index_file(){
+	return View('app.studentCreateFile');
+
+
+}
+public function create_file(){
+
+$file = Input::file('fileUpload');
+			$ext = strtolower($file->getClientOriginalExtension());
+			$validator = \Validator::make(array('ext' => $ext),array('ext' => 'in:xls,xlsx,csv'));
+
+			if ($validator->fails()) {
+				return Redirect::to('student/create-file')->withErrors($validator);
+			}else {
+				    try{
+						$toInsert = 0;
+			            $data = \Excel::load(Input::file('fileUpload'), function ($reader) { })->get();
+
+			             
+
+			                if(!empty($data) && $data->count()){
+								DB::beginTransaction();
+								try {
+			                        foreach ($data->toArray() as $raw) {
+                                     // echo "<pre>";print_r($raw);
+									$studentData= [
+											'class' => $raw['class'],
+											'section' => $raw['section'],
+											'session' =>    $raw['session'],
+											 'regiNo' => $raw['registration'],
+											  'rollNo' => $raw['nocardroll_no'],
+                                               'shift' => 'Morning',
+                                               'isActive'=>'Yes',
+											  'group' => $raw['group'],
+											'firstName' => $raw['first_name'],
+											'lastName' =>    $raw['last_name'],
+											 'Gender' => $raw['gender'],
+											  'fatherName' => $raw['father_name'],
+											  'fatherCellNo' => $raw['fathers_mobile_no']
+
+										];
+										$hasStudent = Student::where('rollNo','=',$raw['nocardroll_no'])->first();
+											if ($hasStudent)
+											{
+												$errorMessages = new \Illuminate\Support\MessageBag;
+									             $errorMessages->add('Error', 'Doublication rollNo ');
+									            return Redirect::to('/student/create-file')->withErrors($errorMessages);
+											}else{
+												Student::insert($studentData);
+												$toInsert++;
+											}
+			                        }
+			                         
+										 DB::commit();
+								} catch (Exception $e) {
+									DB::rollback();
+									$errorMessages = new \Illuminate\Support\MessageBag;
+									 $errorMessages->add('Error', 'Something went wrong!');
+									return Redirect::to('/student/create-file')->withErrors($errorMessages);
+
+									// something went wrong
+								}
+			            }
+					   if($toInsert){
+			                return Redirect::to('/student/create-file')->with("success", $toInsert.' Student data upload successfully.');
+			            }
+						$errorMessages = new \Illuminate\Support\MessageBag;
+						 $errorMessages->add('Validation', 'File is empty!!!');
+						return Redirect::to('/student/create-file')->withErrors($errorMessages);
+	                }catch (Exception $e) {
+						  $errorMessages = new \Illuminate\Support\MessageBag;
+						  $errorMessages->add('Error', 'Something went wrong!');
+						   return Redirect::to('/student/create-file')->withErrors($errorMessages);
+	                }
+		}
+
+	
+}
+
+public function csvexample(){
+
+ return response()->download(storage_path('app/public/' . 'student.csv'));
+
+}
+
 }

@@ -429,6 +429,13 @@ public function index_file()
 
 	public function create_timetable()
 	{
+
+
+//echo "<pre>";print_r(Input::get('day'));
+
+$days = Input::get('day');
+
+
 		$rules=[//'regiNo' => 'required',
 		'teacher' => 'required',
 		'class' => 'required',
@@ -445,14 +452,8 @@ public function index_file()
 	}
 	else {
 
-		$timetable = new Timetable;
-		$timetable->teacher_id= Input::get('teacher');
-		$timetable->class_id= Input::get('class');
-		$timetable->section_id= Input::get('section');
-		$timetable->subject_id= Input::get('subject');
-		$timetable->stattime= Input::get('startt');
-		$timetable->endtime= Input::get('endt');
-		$timetable->day= Input::get('day');
+	
+		//$timetable->day= Input::get('day');
 	
 		/*$hasTimetable = Timetable::where('teacher_id','=',Input::get('teacher'))->where('class_id','=',Input::get('class'))->first();
 		if ($hasTimetable)
@@ -462,7 +463,27 @@ public function index_file()
 			return Redirect::to('/teacher/create')->withErrors($messages)->withInput();
 		}
 		else {*/
-			$timetable->save();
+
+foreach($days as $day){
+
+	$timetable = new Timetable;
+		$timetable->teacher_id= Input::get('teacher');
+		$timetable->class_id= Input::get('class');
+		$timetable->section_id= Input::get('section');
+		$timetable->subject_id= Input::get('subject');
+		$timetable->stattime= Input::get('startt');
+		$timetable->endtime= Input::get('endt');
+         $timetable->day = $day;
+
+
+$timetable->save();
+
+
+
+} 
+
+
+			
 			//echo request()->photo->move(public_path('images/'), $fileName);
 			return Redirect::to('/teacher/create-timetable')->with("success","Time Table Created Succesfully.");
 	//	}

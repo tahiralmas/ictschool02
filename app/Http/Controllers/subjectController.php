@@ -37,6 +37,9 @@ class subjectController extends BaseController {
 	*/
 	public function create()
 	{
+
+//echo "<pre>";print_r(Input::get('class'));
+    $classes =  Input::get('class');
 		$rules=[
 			'name' => 'required',
 			'code' => 'required',
@@ -68,10 +71,11 @@ class subjectController extends BaseController {
 
 			}
 			else {
+				foreach($classes as $class){
 				$subject = new Subject;
 				$subject->name = Input::get('name');
 				$subject->code = Input::get('code');
-				$subject->class = Input::get('class');
+				$subject->class = $class;
 				$subject->gradeSystem = Input::get('gradeSystem');
 				$subject->type = Input::get('type');
 				$subject->subgroup = Input::get('subgroup');
@@ -89,6 +93,7 @@ class subjectController extends BaseController {
 				$subject->ppass = Input::get('ppass');
 
 				$subject->save();
+			}
 				return Redirect::to('/subject/create')->with("success", "Subject Created Succesfully.");
 			}
 
