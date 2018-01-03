@@ -76,7 +76,7 @@
                 </div>
               </div>
 
-              <div class="col-md-4">
+             <!-- <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label" for="shift">Shift</label>
 
@@ -89,7 +89,7 @@
 
                   </div>
                 </div>
-              </div>
+              </div>-->
 
 
             </div>
@@ -127,11 +127,28 @@
 
           <div class="row">
             <div class="col-md-12">
-              <div class="green"><h4>Send SMS On Absent? <input type="checkbox" id="isSendSMS" name="isSendSMS"></h4></div>
+              <div class="green"><h4>Send Voice On Absent? <input type="checkbox" id="isSendvoice" name="isSendSMS"></h4></div>
             </div>
           </div>
 
+            <div class="col-md-4" id="divtemp" style="display:none">
+                <div class="form-group">
+                  <label class="control-label" for="message">Select Message</label>
 
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                    <select id="message" name="message"  class="form-control" >
+                      <option value="">  Select Template </option>
+                       @foreach($messages as $message)
+                       <option value="{{$message->id}}">{{$message->name}}</option>
+                       @endforeach
+
+                    </select>
+
+
+                  </div>
+                </div>
+              </div>
           <div class="row">
             <div class="col-md-12">
               <div class="table-responsive">
@@ -170,11 +187,39 @@
       @stop
       @section('script')
       <script src="/js/bootstrap-datepicker.js"></script>
+        <script type="text/javascript">
+         
+        $(document).ready(function () {
+         
+        //Uncheck the CheckBox initially
+        $('#isSendvoice').change(function () {
+         
+        if (this.checked) {
+         
+         
+        $('#divtemp').show();
+         
+        }
+         
+        else {
+        
+         
+        $('#divtemp').hide();
+         
+        }
+         
+        });
+         
+        });
+         
+        </script>
       <script type="text/javascript">
       var getStudent = function () {
         var aclass = $('#class').val();
         var section =  $('#section').val();
-        var shift = $('#shift').val();
+    //    var shift = $('#shift').val();
+        var shift = 'Morning';
+
         var session = $('#session').val().trim();
         $.ajax({
           url: '/student/getList/'+aclass+'/'+section+'/'+shift+'/'+session,

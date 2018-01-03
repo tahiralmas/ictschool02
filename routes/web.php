@@ -198,6 +198,12 @@ Route::post('/institute','instituteController@save');
 Route::get('/promotion','promotionController@index');
 Route::post('/promotion','promotionController@store');
 
+Route::get('/template/create','templateController@index');
+Route::post('/template/create','templateController@create');
+Route::get('/template/list','templateController@show');
+Route::get('/message/edit/{id}','templateController@edit');
+Route::post('/message/update','templateController@update');
+Route::get('/message/delete/{id}','templateController@delete');
 //Accounting
 //if(session()->all()['userRole']=='Admin'){
 

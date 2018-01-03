@@ -268,6 +268,16 @@
                             <a href="/promotion"><i class="glyphicon glyphicon-arrow-up"></i><span> Promotion</span></a>
 
                         </li>
+                        
+                        
+                        <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-folder-open"></i><span> Message Template</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="/template/create">Add New</a></li>
+                                <li><a href="/template/list">Message List</a></li>
+                            </ul>
+                        </li>
+                        
                         <li class="accordion">
                             <a href="#"><i class="glyphicon  glyphicon glyphicon-list-alt"></i><span> Accounting</span></a>
                             <ul class="nav nav-pills nav-stacked">

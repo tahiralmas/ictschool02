@@ -13,8 +13,6 @@ Class formfoo{
 }
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
-
-//ictcore integration//
 class attendanceController extends BaseController {
 
 	public function __construct() {
