@@ -48,12 +48,12 @@ Route::get('/class/getsubjects/{class}','classController@getSubjects');
 
 // section routes
 Route::group(['middleware' => 'admin'], function(){ 
-Route::get('/section/create','sectionController@index');
+/*Route::get('/section/create','sectionController@index');
 Route::post('/section/create','sectionController@create');
 Route::get('/section/list','sectionController@show');
 Route::get('/section/edit/{id}','sectionController@edit');
 Route::post('/section/update','sectionController@update');
-Route::get('/section/delete/{id}','sectionController@delete');
+Route::get('/section/delete/{id}','sectionController@delete');*/
 
 // level routes
 Route::get('/level/create','levelController@index');
@@ -86,17 +86,13 @@ Route::get('/student/view/{id}','studentController@view');
 Route::get('/student/edit/{id}','studentController@edit');
 Route::post('/student/update','studentController@update');
 Route::get('/student/delete/{id}','studentController@delete');
-Route::get('/student/create-file','studentController@index_file');
 Route::post('/student/create-file','studentController@create_file');
 Route::get('/student/csvexample','studentController@csvexample');
-
-
 });
 Route::get('/student/getList/{class}/{section}/{shift}/{session}','studentController@getForMarks');
 
 // Teacher routes
 Route::get('/teacher/getRegi/{class}/{session}/{section}','teacherController@getRegi');
-
 Route::group(['middleware' => 'admin'], function(){ 
 Route::get('/teacher/create','teacherController@index');
 Route::post('/teacher/create','teacherController@create');
@@ -121,21 +117,19 @@ Route::get('/teacher/view-timetable/{id}','teacherController@view_timetable');
 
 
 //student attendance
-Route::get('/attendance/create','attendancesController@index');
-Route::post('/attendance/create','attendancesController@create');
-Route::get('/attendance/create-file','attendancesController@index_file');
-Route::post('/attendance/create-file','attendancesController@create_file');
-Route::get('/attendance/list','attendancesController@show');
-Route::post('/attendance/list','attendancesController@getlist');
-Route::get('/attendance/edit/{id}','attendancesController@edit');
-Route::post('/attendance/update','attendancesController@update');
-Route::get('/attendance/printlist/{class}/{section}/{shift}/{session}/{date}','attendancesController@printlist');
+Route::get('/attendance/create','attendanceController@index');
+Route::post('/attendance/create','attendanceController@create');
+Route::get('/attendance/create-file','attendanceController@index_file');
+Route::post('/attendance/create-file','attendanceController@create_file');
+Route::get('/attendance/list','attendanceController@show');
+Route::post('/attendance/list','attendanceController@getlist');
+Route::get('/attendance/edit/{id}','attendanceController@edit');
+Route::post('/attendance/update','attendanceController@update');
+Route::get('/attendance/printlist/{class}/{section}/{shift}/{session}/{date}','attendanceController@printlist');
 Route::group(['middleware' => 'admin'], function(){ 
-Route::get('/attendance/report','attendancesController@report');
-Route::post('/attendance/report','attendancesController@getReport');
+Route::get('/attendance/report','attendanceController@report');
+Route::post('/attendance/report','attendanceController@getReport');
 });
-
-
 
 //GPA Routes
 Route::get('/gpa','gpaController@index');
@@ -200,17 +194,6 @@ Route::post('/settings','settingsController@save');
 Route::get('/institute','instituteController@index');
 Route::post('/institute','instituteController@save');
 
-Route::get('/ictcore','ictcoreController@index');
-Route::post('/ictcore','ictcoreController@create');
-
-Route::get('/ictcore/attendance','ictcoreController@attendance_index');
-Route::post('/ictcore/attendance','ictcoreController@post_attendance');
-
-
-
-
-
-
 //promotion
 Route::get('/promotion','promotionController@index');
 Route::post('/promotion','promotionController@store');
@@ -221,13 +204,6 @@ Route::get('/template/list','templateController@show');
 Route::get('/message/edit/{id}','templateController@edit');
 Route::post('/message/update','templateController@update');
 Route::get('/message/delete/{id}','templateController@delete');
-
-
-Route::get('/message','messageController@index');
-Route::post('/message','messageController@create');
-
-
-
 //Accounting
 //if(session()->all()['userRole']=='Admin'){
 
@@ -301,15 +277,7 @@ Route::get('/fees/report/std/{regiNo}','feesController@reportstd');
 Route::get('/fees/report/{sDate}/{eDate}','feesController@reportprint');
 
 
-
 Route::get('/fees/details/{billNo}','feesController@billDetails');
-Route::get('/fees/classreport','feesController@classreportindex');
-Route::post('/fees/classreport','feesController@classreport');
-Route::post('/fees/classview','feesController@classview');
-
-
-
-
 });
 //Admisstion routes
 Route::group(['middleware' => 'admin'], function(){ 
