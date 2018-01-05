@@ -12,7 +12,7 @@
 <div class="box col-md-12">
         <div class="box-inner">
             <div data-original-title="" class="box-header well">
-                <h2><i class="glyphicon glyphicon-th"></i> Message Create</h2>
+                <h2><i class="glyphicon glyphicon-th"></i>Attendance Message</h2>
 
             </div>
              <div class="box-content">
@@ -23,7 +23,7 @@
                                 <div class="form-group col-md-12 row">
                                     <label for="name"  class="col-sm-2 col-form-label">Title</label>
                                     <div class="input-group col-md-6">
-                                       <input type="text" name="title" class="form-control" required>
+                                       <input type="text" name="title" class="form-control" required value="{{$ictcore_attendance->name}}" >
                                     </div>
                                 </div>
                               
@@ -31,7 +31,7 @@
                                     <label for="name" class="col-sm-2 col-form-label">Description</label>
                                     <div class="input-group col-md-6">
 
-                                        <textarea type="text" class="form-control"  name="description" placeholder="Class Description"></textarea>
+                                        <textarea type="text" class="form-control"  name="description" placeholder="Class Description">{{$ictcore_attendance->description}}</textarea>
                                     </div>
                                 </div>
 
@@ -40,7 +40,15 @@
                                     <label for="name" class="col-sm-2 col-form-label">Upload Message File</label>
                                     <div class="input-group col-md-6">
 
-                                        <input type="file" class="form-control" required name="message" placeholder=""></textarea>
+                                        <input type="file" class="form-control" required name="message" placeholder="">
+                                        @if($ictcore_attendance->recording !='')
+                                       <div style="line-height:72px;">
+                                        <audio controls>
+                                          <source src=" {{'/recording/'.$ictcore_attendance->recording}}" type="audio/wav">
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
 

@@ -42,6 +42,8 @@
     <link href='{{ URL::asset('/css/uploadify.css') }}' rel='stylesheet'>
     <link href='{{ URL::asset('/css/animate.min.css') }}' rel='stylesheet'>
     <link href='{{ URL::asset('/css/app.css') }}' rel='stylesheet'>
+    <link href='//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css' rel='stylesheet'>
+
 
     @yield("style")
     <style media="screen">
@@ -167,6 +169,8 @@
                 <li><a href="/fees/setup"><i class="glyphicon glyphicon-cog"></i> Fees Setup</a></li>
                 <li class="divider"></li>
                 <li><a href="/fees/report"><i class="glyphicon glyphicon-print"></i> Fee Collection Report</a></li>
+                
+               <li><a href="/fees/classreport"><i class="glyphicon glyphicon-print"></i> Fee Class Report</a></li>
 
             </ul>
         </div>
@@ -247,6 +251,9 @@
 
                        </ul>
                    </li>
+                   
+                   
+                   
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-list-alt"></i><span> Mark Manage</span></a>
                             <ul class="nav nav-pills nav-stacked">
@@ -278,6 +285,12 @@
                             </ul>
                         </li>
                         
+                        
+                        
+                        
+                        <li class="">
+                            <a href="/message"><i class="glyphicon glyphicon-envelope"></i><span> Voice / SMS</span></a>
+                        </li>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon  glyphicon glyphicon-list-alt"></i><span> Accounting</span></a>
                             <ul class="nav nav-pills nav-stacked">
@@ -329,6 +342,9 @@
 
                                 <li><a href="/users">Users</a></li>
                                 <li><a href="/institute">Institute</a></li>
+                                <li><a href="/ictcore">IctCore Integration</a></li>
+                                <li><a href="/ictcore/attendance">Attendance Message</a></li>
+
 
                             </ul>
                         </li>
@@ -397,6 +413,9 @@
 <!-- external javascript -->
 
 <script src="{{ URL::asset('/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
 
 <!-- library for cookie management -->
 <script src="{{ URL::asset('/js/jquery.cookie.js') }}"></script>

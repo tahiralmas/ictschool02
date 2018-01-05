@@ -131,7 +131,7 @@
             </div>
           </div>
 
-            <div class="col-md-4" id="divtemp" style="display:none">
+            <?php /*<div class="col-md-4" id="divtemp" style="display:none">
                 <div class="form-group">
                   <label class="control-label" for="message">Select Message</label>
 
@@ -149,6 +149,7 @@
                   </div>
                 </div>
               </div>
+              */?>
           <div class="row">
             <div class="col-md-12">
               <div class="table-responsive">
@@ -189,7 +190,7 @@
       <script src="/js/bootstrap-datepicker.js"></script>
         <script type="text/javascript">
          
-        $(document).ready(function () {
+       /* $(document).ready(function () {
          
         //Uncheck the CheckBox initially
         $('#isSendvoice').change(function () {
@@ -210,7 +211,7 @@
          
         });
          
-        });
+        });*/
          
         </script>
       <script type="text/javascript">

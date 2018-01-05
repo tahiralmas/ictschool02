@@ -405,4 +405,57 @@ class feesController extends BaseController {
 		$date = explode('-', $datestr);
 		return $date[2].'/'.$date[1].'/'.$date[0];
 	}
+
+
+      public function classreportindex(){
+      	
+
+
+
+$classes = ClassModel::pluck('name','code');
+		$student = new studentfdata;
+		$student->class="";
+		$student->section="";
+		$student->shift="";
+		$student->session="";
+		$student->regiNo="";
+		$fees=array();
+
+		return View('app.feestdreportclass',compact('classes','student','fees','totals'));
+	}
+
+	public function classview(){
+
+
+
+		$classes = ClassModel::pluck('name','code');
+		$student = new studentfdata;
+		$student->class=Input::get('class');
+		$student->section=Input::get('section');
+		$student->shift=Input::get('shift');
+		$student->session=Input::get('session');
+		$student->regiNo=Input::get('student');
+		/*$fees=DB::Table('stdBill')
+		->select(DB::RAW("billNo,payableAmount,paidAmount,dueAmount,DATE_FORMAT(payDate,'%D %M,%Y') AS date"))
+		->where('class',Input::get('class'))
+		->where('regiNo',Input::get('student'))
+		->get();
+		$totals = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+		->where('class',Input::get('class'))
+		//->where('regiNo',Input::get('student'))
+		->first();*/
+
+
+		$student =	DB::table('Student')
+								->leftJoin('stdBill', 'Student.regiNo', '=', 'stdBill.regiNo')
+								
+								->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','stdBill.class as class1','stdBill.payableAmount')
+								->where('Student.class','=',Input::get('class'))->get();
+								//->where('class',Input::get('class'))
+echo "<pre>";print_r($student);
+		//return View::Make('app.feeviewstd',compact('classes','student','fees','totals'));
+		//return View('app.feestdreportclass',compact('classes','student','fees','totals'));
+
+
+	}
 }

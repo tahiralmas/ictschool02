@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Student;
+use App\Ictcore_integration;
+use App\Ictcore_attendance;
 use App\SectionModel;
 use App\ClassModel;
 use DB;
@@ -20,9 +22,130 @@ class ictcoreController {
 	* @return Response
 	*/
 
-	public function helloword(){
+	public function index(){
 
-		return "testing";
+		$ictcore_integration= Ictcore_integration::select("*")->first();
+		if(is_null($ictcore_integration))
+		{
+			$ictcore_integration=new Ictcore_integration;
+			$ictcore_integration->ictcore_url = "";
+			$ictcore_integration->ictcore_user = "";
+			$ictcore_integration->ictcore_password = "";
+			
+		}
+
+		//return View::Make('app.institute',compact('institute'));
+		return View('app.ictcore',compact('ictcore_integration'));
+	}
+
+	public function create(){
+
+
+		$rules=[
+			'ictcore_url' => 'required',
+			'ictcore_user' => 'required',
+			'ictcore_password' => 'required',
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails())
+		{
+			return Redirect::to('ictcore')->withinput(Input::all())->withErrors($validator);
+		}
+		else {
+
+			DB::table("ictcore_integration")->delete();
+
+			$ictcore_integration=new Ictcore_integration;
+			$ictcore_integration->ictcore_url =Input::get('ictcore_url');;
+			$ictcore_integration->ictcore_user = Input::get('ictcore_user');;
+			$ictcore_integration->ictcore_password = Input::get('ictcore_password');;
+			$ictcore_integration->save();
+
+			return Redirect::to('ictcore')->with('success', 'Integration  Information saved.');
+
+		}
+	}
+
+	public function attendance_index(){
+
+		$ictcore_attendance= Ictcore_attendance::select("*")->first();
+		if(is_null($ictcore_attendance))
+		{
+			$ictcore_attendance=new Ictcore_attendance;
+			$ictcore_attendance->name = "";
+			$ictcore_attendance->description = "";
+			$ictcore_attendance->recording = "";
+		}
+
+	   return View('app.ictcoreAttendance',compact('ictcore_attendance'));
+
+	}
+
+	public function post_attendance(){
+
+		$rules=[
+			'title' => 'required',
+			//'message' => 'required'
+			//'message' => 'required|mimes:audio/wav',
+			'message' => 'required|mimes:wav',
+
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails())
+		{
+			return Redirect::to('/ictcore/attendance')->withErrors($validator);
+		}
+		else {
+            // echo "<pre>";print_r(Input::file('message'));exit;
+            $ictcore_attendance =	DB::table('ictcore_attendance')->select('*')->get();
+            unlink(base_path().'/public/recording/'.$ictcore_attendance[0]->recording);
+            DB::table("ictcore_attendance")->delete();
+          
+			$sname = Input::get('title');
+			
+                $remove_spaces =  str_replace(" ","_",Input::get('title'));
+				$fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
+                Input::file('message')->move(base_path() .'/public/recording',$fileName);
+                sleep(3);
+                $data = array(
+                             'name' => Input::get('title'),
+				             'description' => Input::get('description'),
+							 );
+
+                 $recording_id  =  $this->ictcore_api('messages/recordings','POST',$data );
+                 $name          =  base_path() .'/public/recording/'.$fileName;
+                 $finfo         =  new \finfo(FILEINFO_MIME_TYPE);
+                 $mimetype      =  $finfo->file($name);
+                 $cfile         =  curl_file_create($name, $mimetype, basename($name));
+                 $data          =  array( $cfile);
+				 $result        =  $this->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
+                 $recording_id  =  $result ;
+                if(!is_array($recording_id )){
+
+                  $data = array(
+                             'name' => Input::get('title'),
+				             'recording_id' => $recording_id,
+							 );
+                 $program_id = $this->ictcore_api('programs/voicemessage','POST',$data );
+                 if(!is_array( $program_id )){
+                  $program_id = $program_id;
+                 }else{
+                 	return Redirect::to('/ictcore/attendance')->withErrors("ERROR: Program not Created" );
+                 }
+                }else{
+                     return Redirect::to('/ictcore/attendance')->withErrors("ERROR: Recording not Created" );               
+                }
+
+				$ictcore_attendance = new Ictcore_attendance;
+				$ictcore_attendance->name = Input::get('title');
+				$ictcore_attendance->description = Input::get('description');
+			    $ictcore_attendance->recording =$fileName;
+			    $ictcore_attendance->ictcore_recording_id =$recording_id;
+                $ictcore_attendance->ictcore_program_id  =$program_id;
+				$ictcore_attendance->save();
+				
+				return Redirect::to('/ictcore/attendance')->with("success", "Attendance Message Created Succesfully.");
+		}
 	}
 	
  /*  function executeCurl($arrOptions) 
@@ -72,10 +195,12 @@ class ictcoreController {
 
 
 function ictcore_api($method,$req, $arguments = array()) {
+
+	$ictcore_integration =	DB::table('ictcore_integration')->select('*')->get();
       // update following with proper access info
-      $api_username = 'admin';    // <=== Username at ICTCore
-      $api_password = 'helloAdmin';  // <=== Password at ICTCore
-      $service_url  = 'http://172.17.0.2/ictcore/api'; // <=== URL for ICTCore REST APIs
+      $api_username = $ictcore_integration[0]->ictcore_user;    // <=== Username at ICTCore
+      $api_password = $ictcore_integration[0]->ictcore_password;  // <=== Password at ICTCore
+      $service_url  =  $ictcore_integration[0]->ictcore_url;  //'http://172.17.0.2/ictcore/api'; // <=== URL for ICTCore REST APIs
       $requestType = $req; // This can be PUT or POST
     
       $api_url = "$service_url/$method";

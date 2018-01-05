@@ -16,9 +16,13 @@ use App\Subject;
 use App\Attendance;
 use App\Student;
 use App\SectionModel;
+use App\Ictcore_attendance;
+use App\SMSLog;
 use DB;
 use Excel;
 use Illuminate\Support\Collection;
+use App\Http\Controllers\ictcoreController;
+
 use Carbon\Carbon;
 
 class AttendanceController extends Controller
@@ -81,12 +85,12 @@ class AttendanceController extends Controller
 						$st['regiNo'] = $students;
 						if ($all) 
 						{
-							$st['status'] = 'No';
+							$st['status'] = 'no';
 						} else 
 						{
 							$st['status'] = $presents;
 						}
-						if ($st['status'] == "No") 
+						if ($st['status'] == "no") 
 						{
 							array_push($absentStudents, $students);
 						}
@@ -94,6 +98,63 @@ class AttendanceController extends Controller
 						{
 							array_push($stpresent, $st);
 						}
+
+                      if(count($absentStudents) > 0) {
+                       $student =	DB::table('Student')
+								->join('Class', 'Student.class', '=', 'Class.code')
+								->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Class.Name as class')
+								->where('Student.regiNo','=',$absentStudents[0])
+								->where('class',Input::get('class'))
+								->first();
+								 $data = array(
+                                       'first_name' => $student->firstName,
+								        'last_name' => $student->lastName,
+								        'phone'     => $student->fatherCellNo,
+								        'email'     => '',
+							     	);
+
+                                   $ict  = new ictcoreController();
+
+                                    $ictcore_attendance= Ictcore_attendance::select("*")->first();
+                                if($ictcore_attendance->ictcore_program_id!=''){
+                                	
+								   $contact_id = $ict->ictcore_api('contacts','POST',$data );
+								    $data = array(
+	                                       'title' => 'Attendance',
+									       'program_id' => $ictcore_attendance->ictcore_program_id,
+									        'account_id'     => 1,
+									        'contact_id'     => $contact_id,
+									        'origin'     => 1,
+									        'direction'     => 'outbound',
+								     	);
+								     $transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+
+	                                 $transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+
+	                                 if(!is_array($transmission_send)){
+
+	                                 	$status = "Completed";
+	                                 }else{
+	                                 	$status ="Pending";
+	                                 }
+                                    $msg =$ictcore_attendance->recording;
+									 $smsLog = new SMSLog();
+									 $smsLog->type      = "Attendanceapi";
+									 $smsLog->sender    = "ictcore";
+									 $smsLog->message   = $msg;
+									 $smsLog->recipient = $student->fatherCellNo;
+									 $smsLog->regiNo    = $absentStudents[0];
+									 $smsLog->status    = $status;
+									 $smsLog->save();
+							
+						return response()->json(['success'=>"Students attendance save Succesfully.",'id' => $absentStudents[0]]);
+					}else{
+
+			          return response()->json(['Error'=>"Please Add Attendance Message in Setting.");
+
+					}
+
+				}
 					//}
 					$presentDate = $this->parseAppDate(Input::get('date'));
 					DB::beginTransaction();
@@ -163,12 +224,6 @@ class AttendanceController extends Controller
 						}
 
                         return response()->json(['attendance'=>$s_attendence]);
-
-                    
-
-
-
-
 				/*$validator = \Validator::make(Input::all(), $rules);
 				if ($validator->fails())
 				{
