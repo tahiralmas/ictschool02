@@ -25,7 +25,7 @@
   <div class="box col-md-12">
     <div class="box-inner">
       <div data-original-title="" class="box-header well">
-        <h2><i class="glyphicon glyphicon-book"></i> SMS Logs</h2>
+        <h2><i class="glyphicon glyphicon-book"></i> Voice Logs / Sms Log</h2>
 
       </div>
       <div class="box-content">

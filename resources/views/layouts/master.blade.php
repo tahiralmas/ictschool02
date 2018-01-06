@@ -320,7 +320,7 @@
                                 <li><a href="/gradesheet">Marksheet</a></li>
                                 <li><a href="/attendance/report">Attendance</a></li>
                                 <li><a href="/tabulation">Tabulationsheet</a></li>
-                                <li><a href="/smslog">SMS Log</a></li>
+                                <li><a href="/smslog">Voice Log / SMS Log</a></li>
                                 <li><a href="/accounting/report">Account By Type</a></li>
                                 <li><a href="/accounting/reportsum">Account Balance</a></li>
                                  <li><a href="/barcode">Barcode Generate</a></li>
