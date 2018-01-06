@@ -344,7 +344,7 @@
                                 <li><a href="/institute">Institute</a></li>
                                 <li><a href="/ictcore">IctCore Integration</a></li>
                                 <li><a href="/ictcore/attendance">Attendance Message</a></li>
-
+                                <li><a href="/ictcore/fees">Fees Message</a></li>
 
                             </ul>
                         </li>

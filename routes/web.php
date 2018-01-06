@@ -207,6 +207,10 @@ Route::get('/ictcore/attendance','ictcoreController@attendance_index');
 Route::post('/ictcore/attendance','ictcoreController@post_attendance');
 
 
+Route::get('/ictcore/fees','ictcoreController@fee_message_index');
+Route::post('/ictcore/fees','ictcoreController@post_fees');
+
+
 
 
 
@@ -304,8 +308,13 @@ Route::get('/fees/report/{sDate}/{eDate}','feesController@reportprint');
 
 Route::get('/fees/details/{billNo}','feesController@billDetails');
 Route::get('/fees/classreport','feesController@classreportindex');
-Route::post('/fees/classreport','feesController@classreport');
-Route::post('/fees/classview','feesController@classview');
+//Route::post('/fees/classreport','feesController@classreport');
+Route::post('/fees/classreport','feesController@classview');
+
+
+//Route::post('/fees/classview','feesController@classview');
+Route::post('/fees/unpaid_notification','feesController@ictcorefees');
+
 
 
 

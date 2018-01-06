@@ -14,6 +14,10 @@ use App\FeeSetup;
 use App\Institute;
 use App\FeeHistory;
 use DB;
+
+use App\Ictcore_fees;
+use App\Ictcore_integration;
+use App\Http\Controllers\ictcoreController;
 class studentfdata{
 
 
@@ -407,12 +411,13 @@ class feesController extends BaseController {
 	}
 
 
-      public function classreportindex(){
-      	
-
-
-
-$classes = ClassModel::pluck('name','code');
+    public function classreportindex(){
+        $classes = ClassModel::pluck('name','code');
+        $class = '';
+        $section = '';
+        $month = '';
+        $session = '';
+        $year = '';
 		$student = new studentfdata;
 		$student->class="";
 		$student->section="";
@@ -420,13 +425,12 @@ $classes = ClassModel::pluck('name','code');
 		$student->session="";
 		$student->regiNo="";
 		$fees=array();
-
-		return View('app.feestdreportclass',compact('classes','student','fees','totals'));
+		$paid_student = array();
+		$resultArray =array();
+		return View('app.feestdreportclass',compact('classes','student','fees','totals','class','section','month','session','paid_student','year','resultArray'));
 	}
 
-	public function classview(){
-
-
+    public function classview(){
 
 		$classes = ClassModel::pluck('name','code');
 		$student = new studentfdata;
@@ -435,27 +439,133 @@ $classes = ClassModel::pluck('name','code');
 		$student->shift=Input::get('shift');
 		$student->session=Input::get('session');
 		$student->regiNo=Input::get('student');
-		/*$fees=DB::Table('stdBill')
-		->select(DB::RAW("billNo,payableAmount,paidAmount,dueAmount,DATE_FORMAT(payDate,'%D %M,%Y') AS date"))
-		->where('class',Input::get('class'))
-		->where('regiNo',Input::get('student'))
-		->get();
-		$totals = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
-		->where('class',Input::get('class'))
-		//->where('regiNo',Input::get('student'))
-		->first();*/
+		$feeyear = Input::get('year') ;
+
+		$student_all =	DB::table('Student')->select( '*')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
+
+		if(count($student_all)>0){
+			$i=0;
+			foreach($student_all as $stdfees){
+
+				$student =	DB::table('billHistory')->leftJoin('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
+				->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo')
+				// ->whereYear('stdBill.payDate', '=', 2017)
+				->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', Input::get('year'))->where('billHistory.month','=',Input::get('month'))->where('billHistory.month','<>','-1')
+				//->orderby('stdBill.payDate')
+				->get();
+
+				if(count($student)>0 ){
+
+					foreach($student as $rey){
+
+						$status[] = "paid".'_'.$stdfees->regiNo."_";
+
+						$resultArray[$i] = get_object_vars($stdfees);
+
+						array_push($resultArray[$i],'Paid',$rey->payDate,$rey->billNo,$rey->fee);
+						$i++;
+					}
+
+				}else{
+					$status[$i] = "unpaid".'_'.$stdfees->regiNo."_";
+					$resultArray[] = get_object_vars($stdfees);
+					array_push($resultArray[$i],'unPaid');
+					$i++;
+				}
+
+			}
+		}
+		else{
+		$resultArray = array();
+		}
+
+		$class   = Input::get('class');
+		$month   = Input::get('month');
+		$section = Input::get('section');
+		$session = Input::get('session');
+		$year    = Input::get('year');
+
+		return View('app.feestdreportclass',compact('resultArray','class','month','section','classes','session','year'));
+    }
+
+    public function ictcorefees(){
 
 
-		$student =	DB::table('Student')
-								->leftJoin('stdBill', 'Student.regiNo', '=', 'stdBill.regiNo')
-								
-								->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','stdBill.class as class1','stdBill.payableAmount')
-								->where('Student.class','=',Input::get('class'))->get();
-								//->where('class',Input::get('class'))
-echo "<pre>";print_r($student);
-		//return View::Make('app.feeviewstd',compact('classes','student','fees','totals'));
-		//return View('app.feestdreportclass',compact('classes','student','fees','totals'));
+        echo "<pre>";print_r(Input::get());
+		$classes = ClassModel::pluck('name','code');
+		$student = new studentfdata;
+		$student->class=Input::get('class');
+		$student->section=Input::get('section');
+		$student->shift=Input::get('shift');
+		$student->session=Input::get('session');
+		$student->regiNo=Input::get('student');
+		$feeyear = Input::get('year') ;
 
+		$student_all =	DB::table('Student')->select( '*')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
 
-	}
+		if(count($student_all)>0){
+			$i=0;
+
+						 $ictcore_fees = Ictcore_fees::select("*")->first();
+					     $ictcore_integration = Ictcore_integration::select("*")->first();
+				if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
+				      $ict  = new ictcoreController();
+					  $data = array(
+						'name' => 'Fee Notification',
+						'description' => 'this is Fee Notifacation Group',
+						);
+
+					 $group_id= $ict->ictcore_api('groups','POST',$data );
+
+		     	}else{
+
+		            return Redirect::to('/fees/classreport')->withErrors("Please Add ictcore integration in Setting Menu");
+
+		     	}
+				foreach($student_all as $stdfees){
+
+					$student =	DB::table('billHistory')->leftJoin('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
+					->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo')
+					// ->whereYear('stdBill.payDate', '=', 2017)
+					->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', Input::get('year'))->where('billHistory.month','=',Input::get('month'))->where('billHistory.month','<>','-1')
+					//->orderby('stdBill.payDate')
+					->get();
+
+					if(count($student)>0 ){
+							//$resultArray = get_object_vars($stdfees)
+					}else{
+						$data = array(
+						'first_name' => $stdfees->firstName,
+						'last_name' =>  $stdfees->lastName,
+						'phone'     =>  $stdfees->fatherCellNo,
+						'email'     => '',
+						);
+
+						$contact_id = $ict->ictcore_api('contacts','POST',$data );
+
+					   $group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+
+						//$resultArray[] = get_object_vars($stdfees);
+					}
+
+				}
+			}
+			else{
+			$resultArray = array();
+			}
+                $data = array(
+					'program_id' => $ictcore_fees->ictcore_program_id,
+					'group_id' => $group_id,
+					'delay' => '',
+					'try_allowed' => '',
+					'account_id' => 1,
+					'status' => '',
+				);
+				$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
+			
+	          //echo "<pre>";print_r($data);
+
+				return Redirect::to('/fees/classreport')->with("success", "Voice campaign Created Succesfully.");
+		//return View('app.feestdreportclass',compact('resultArray','class','month','section','classes','session','year'));
+    }
 }

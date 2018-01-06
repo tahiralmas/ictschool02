@@ -34,7 +34,7 @@
       </div>
       <div class="box-content">
 
-        <form role="form" action="/fees/classview" method="post" enctype="multipart/form-data">
+        <form role="form" action="/fees/classreport" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <div class="row">
             <div class="col-md-12">
@@ -47,7 +47,7 @@
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
-                    {{ Form::select('class',$classes,$student->class,['class'=>'form-control','id'=>'class','required'=>'true'])}}
+                    {{ Form::select('class',$classes,$class,['class'=>'form-control','id'=>'class','required'=>'true'])}}
 
                   </div>
                 </div>
@@ -70,7 +70,7 @@
                       'I'=>'I',
                       'J'=>'J'
                     ];?>
-                    {{ Form::select('section',$data,$student->section,['class'=>'form-control','id'=>'section','required'=>'true'])}}
+                    {{ Form::select('section',$data,$section,['class'=>'form-control','id'=>'section','required'=>'true'])}}
 
 
 
@@ -105,29 +105,23 @@
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                    <select id="month" name="month" class="form-control" style="">
-
-                      <option selected="selected" value="-1">--Select Month--</option>
-                      <option value="1">January</option>
-                      <option value="2">February</option>
-                      <option value="3">March</option>
-                      <option value="4">April</option>
-                      <option value="5">May</option>
-                      <option value="6">June</option>
-                      <option value="7">July</option>
-                      <option value="8">August</option>
-                      <option value="9">September</option>
-                      <option value="10">October</option>
-                      <option value="11">November</option>
-                      <option value="12">December</option>
-
-                    </select>
-
-                  
+                      <?php  $data=[
+                      '1'=>'January',
+                      '2'=>'February',
+                      '3'=>'March',
+                      '4'=>'April',
+                      '5'=>'May',
+                      '6'=>'June',
+                      '7'=>'July',
+                      '8'=>'August',
+                      '9'=>'September',
+                      '10'=>'October',
+                      '11'=>'November',
+                      '12'=>'December'
+                    ];?>
+                    {{ Form::select('month',$data,$month,['class'=>'form-control','id'=>'month','required'=>'true'])}}
                 </div>
         </div>
-
-
           <div class="row">
             <div class="col-md-12">
               <div class="col-md-4">
@@ -136,19 +130,31 @@
                   <div class="input-group">
 
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                    <input  value="{{date('Y')}}" type="text" id="session" required="true" class="form-control datepicker2" name="session"   data-date-format="yyyy" value="{{$student->session}}">
+                    <input  value="{{date('Y')}}" type="text" id="session" required="true" class="form-control datepicker2" name="session"   data-date-format="yyyy" value="{{$session}}">
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
+             <?php /* <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label" for="student">Student</label>
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-book blue"></i></span>
-                    <select id="student" name="student" class="form-control" required="true">
+                    <select id="student" name="student" class="form-control">
                       <option value="">--Select Student--</option>
                     </select>
+                  </div>
+                </div>
+              </div>
+              */?>
+
+               <div class="col-md-4">
+                <div class="form-group ">
+                  <label for="session">Year</label>
+                  <div class="input-group">
+
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                    <input  type="text" value="{{$year}}" id="year" required="true" class="form-control datepicker2" name="year"   data-date-format="yyyy" >
                   </div>
                 </div>
               </div>
@@ -173,72 +179,64 @@
 
 
         </form>
-        @if($student->regiNo !="" && count($fees)<1)
-        <div class="alert alert-danger">
+
+        <form action="/fees/unpaid_notification" method="post">
+         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="month" value="{{$month}}">
+        <input type="hidden" name="section" value="{{$section}}">
+        <input type="hidden" name="class" value="{{$class}}">
+        <input type="hidden" name="session" value="{{$session}}">
+         <input type="hidden" name="year" value="{{$year}}">
+            <div class="col-md-2">
+                <div class="form-group">
+                  <label class="control-label" for="">&nbsp;</label>
+
+                  <div class="input-group">
+                    <button class="btn btn-primary pull-right" id="btnsave" type="submit"><i class="glyphicon glyphicon-th"></i> Send Notification to Unpaid </button>
+
+                  </div>
+                </div>
+              </div>
+        </form>
+    
+        <!--<div class="alert alert-danger">
           <strong>Whoops!</strong> There are no fees entry for this student.<br><br>
         </div>
-        @endif
-        @if($fees)
+      -->
+
         <div class="row">
           <div class="col-md-12">
             <table id="feeList" class="table table-striped table-bordered table-hover">
               <thead>
                 <tr>
-                  <th>Bill No</th>
-                  <th>Payable Amount</th>
-                  <th>Paid Amount</th>
-                  <th>Due Amount</th>
+                  <th>Name</th>
+                  <th>Registration Number</th>
+                  <th>Roll Number</th>
+                  <th>Fee Status</th>
                   <th>Pay Date</th>
-                  <th>Action</th>
+                
                 </tr>
               </thead>
               <tbody>
-                @foreach($fees as $fee)
+              @if($resultArray !='')
+                @foreach($resultArray as $fee)
                 <tr>
-                  <td><a class="btnbill" href="#">{{$fee->billNo}}</a></td>
-                  <td>{{$fee->payableAmount}}</td>
-                  <td>{{$fee->paidAmount}}</td>
-                  <td>{{$fee->dueAmount}}</td>
-                  <td>{{$fee->date}}</td>
-
-                  <td>
-                    <a title='Delete' class='btn btn-danger' href='{{url("/fees/delete")}}/{{$fee->billNo}}'> <i class="glyphicon glyphicon-trash icon-red"></i></a>
-                  </td>
+                  
+                  <td>{{$fee['firstName']}} {{$fee['lastName']}}</td>
+                  <td>{{$fee['regiNo']}}</td>
+                  <td>{{$fee['rollNo']}}</td>
+                  <td>{{$fee[0]}}</td>
+                  <td>@if($fee[0]=='Paid'){{$fee[1]}} @else  @endif</td>
+                 <?php /*  <td>
+                   <a title='Delete' class='btn btn-danger' href='{{url("/fees/delete")}}/{{$fee->billNo}}'> <i class="glyphicon glyphicon-trash icon-red"></i></a>
+                  </td> */ ?>
                   @endforeach
                 </tbody>
+                @endif
               </table>
             </div>
 
-          </div>
-          <div class="row">
-            <div class="col-md-12">
-              <table class="table">
-
-                <?php /* <tbody>
-
-                  <tr>
-                    <td></td>
-                    <td>Total Payable: <strong><i class="blue">{{$totals->payTotal}}</i></strong> tk.</td>
-                    <td>Total Paid: <strong><i class="blue">{{$totals->paiTotal}}</i></strong> tk.</td>
-                    <td>Total Due: <strong><i class="blue">{{$fee->dueAmount}}</i></strong> tk.</td>
-                    <td></td>
-
-                    <td>
-                      <a title='Print' id="btnPrint" class='btn btn-info' target='_blank' href='{{url("/fees/report/std")}}/{{$student->regiNo}}'> <i class="glyphicon glyphicon-print icon-red"></i> Print</a>
-                    </td>
-
-                  </tbody> */ ?>
-                </table>
-              </div>
-
-            </div>
-            @endif
-
-
-
-          </div>
-        </div>
-      </div>
+          
       <!-- Modal Goes here -->
       <div id="billDetails" class="modal fade">
         <div class="modal-dialog">
@@ -274,13 +272,11 @@
 
                 </div>
               </div>
-            </div>
-          </div>
+           
           @stop
           @section('script')
           <script src="/js/bootstrap-datepicker.js"></script>
           <script type="text/javascript">
-          var stdRegiNo="{{$student->regiNo}}";
           $( document ).ready(function() {
             $('#feeList').dataTable();
             var session = $('#session').val().trim();
