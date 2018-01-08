@@ -12,7 +12,7 @@
 <div class="box col-md-12">
         <div class="box-inner">
             <div data-original-title="" class="box-header well">
-                <h2><i class="glyphicon glyphicon-th"></i> Message Create</h2>
+                <h2><i class="glyphicon glyphicon-th"></i> Send Notification </h2>
 
             </div>
             <div class="box-content">
@@ -112,7 +112,7 @@
                                       </div>
                                 @endif
                                     <div class="form-group">
-                                        <button class="btn btn-primary pull-right" type="submit"><i class="glyphicon glyphicon-plus"></i>Add</button>
+                                        <button class="btn btn-primary pull-right" type="submit"><i class="glyphicon glyphicon-send"></i>Send</button>
                                         <br>
                                     </div>
                          </form>

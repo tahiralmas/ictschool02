@@ -3,9 +3,11 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\ClassModel;
-
+use App\Ictcore_integration;
 use App\Message;
 use DB;
+use App\Http\Controllers\ictcoreController;
+
 class templateController extends BaseController {
 
 	public function __construct() {
@@ -23,10 +25,8 @@ class templateController extends BaseController {
 	*/
 	public function index()
 	{
-	         // echo "adeel"; exit;
-		// $classes = ClassModel::select('code','name')->orderby('code','asc')->get();
+	         
 		return View('app.templateCreate');
-		//echo "this is section controller";
 	}
 	/**
 	* Show the form for creating a new resource.
@@ -60,7 +60,7 @@ class templateController extends BaseController {
 				return Redirect::to('/template/create')->withErrors($errorMessages);
 			}
 			else {
-                $remove_spaces =  str_replace(" ","_",Input::get('title'));
+               /* $remove_spaces =  str_replace(" ","_",Input::get('title'));
 
 				$fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
 
@@ -72,8 +72,60 @@ class templateController extends BaseController {
 				$class->save();
 				Input::file('message')->move(base_path() .'/public/recording',$fileName);
 
+				return Redirect::to('/template/create')->with("success", "Message Created Succesfully.");*/
+
+                   $ictcore_integration = Ictcore_integration::select("*")->first();
+                   
+		    if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
+				$ictcore_api  = new ictcoreController();
+				$sname = Input::get('title');
+                $remove_spaces =  str_replace(" ","_",Input::get('title'));
+				$fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
+                Input::file('message')->move(base_path() .'/public/recording',$fileName);
+                sleep(3);
+
+                $data = array(
+                             'name' => Input::get('title'),
+				             'description' => Input::get('description'),
+							 );
+
+                 $recording_id  =  $ictcore_api->ictcore_api('messages/recordings','POST',$data );
+                 $name          =  base_path() .'/public/recording/'.$fileName;
+                 $finfo         =  new \finfo(FILEINFO_MIME_TYPE);
+                 $mimetype      =  $finfo->file($name);
+                 $cfile         =  curl_file_create($name, $mimetype, basename($name));
+                 $data          =  array( $cfile);
+				 $result        =  $ictcore_api->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
+                 $recording_id  =  $result ;
+                if(!is_array($recording_id )){
+
+                  $data = array(
+                             'name' => Input::get('title'),
+				             'recording_id' => $recording_id,
+							 );
+                 $program_id = $ictcore_api->ictcore_api('programs/voicemessage','POST',$data );
+                 if(!is_array( $program_id )){
+                  $program_id = $program_id;
+                 }else{
+                 	return Redirect::to('/template/create')->withErrors("ERROR: Program not Created" );
+                 }
+                }else{
+                     return Redirect::to('/template/create')->withErrors("ERROR: Recording not Created" );               
+                }
+				$ictcore_message = new Message;
+				$ictcore_message->name = Input::get('title');
+				$ictcore_message->description = Input::get('description');
+			    $ictcore_message->recording =$fileName;
+			    $ictcore_message->ictcore_recording_id =$recording_id;
+                $ictcore_message->ictcore_program_id  =$program_id;
+				$ictcore_message->save();
 				return Redirect::to('/template/create')->with("success", "Message Created Succesfully.");
-			}
+			
+
+          }else{
+          	  return Redirect::to('/template/create')->withErrors("Please Add ictcore integration in Setting Menu");
+          }
+		}
 
 		}
 
