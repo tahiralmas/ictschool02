@@ -1,19 +1,18 @@
-<?php
+<?php  
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\ClassModel;
 use App\Subject;
 use DB;
-
 class classController extends BaseController {
-
 	public function __construct() {
 		/*$this->beforeFilter('csrf', array('on'=>'post'));
 		$this->beforeFilter('auth');
 		$this->beforeFilter('userAccess',array('only'=> array('delete')));*/
 		
 	       $this->middleware('auth');
+	       
               // $this->middleware('userAccess',array('only'=> array('delete')));
 	}
 	/**

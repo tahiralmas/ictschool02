@@ -11,7 +11,7 @@
   <div class="box col-md-12">
     <div class="box-inner">
       <div data-original-title="" class="box-header well">
-        <h2><i class="glyphicon glyphicon-home"></i> Message List</h2>
+        <h2><i class="glyphicon glyphicon-home"></i> Recording List</h2>
       </div>
       <div class="box-content">
         <table id="classList" class="table table-striped table-bordered table-hover">
@@ -19,7 +19,7 @@
             <tr>
               <th style="width:30%">Name</th>
               <th style="width:30%">Description</th>
-               <th style="width:30%">Message</th>
+               <th style="width:30%">Recording Media</th>
               <th style="width:15%">Action</th>
             </tr>
           </thead>

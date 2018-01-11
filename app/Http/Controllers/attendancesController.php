@@ -366,7 +366,7 @@ class attendancesController extends BaseController {
 		$rules=[
 			'class' => 'required',
 			'section' => 'required',
-			'shift' => 'required',
+			//'shift' => 'required',
 			'session' => 'required',
 			'date' => 'required',
 
@@ -378,19 +378,17 @@ class attendancesController extends BaseController {
 		}
 		else {
 			$date = $this->parseAppDate(Input::get('date'));
-			
 			$attendance = \App\Student::with(['attendance' => function($query) use($date){
-			     $query->where('date','=',$date);
+			     $query->where('date','=','2018-01-11');
 			}])
 			->where('class','=',Input::get('class'))
 			->where('section','=',Input::get('section'))
-			->Where('shift','=',Input::get('shift'))
+			->Where('shift','=','Morning')
 			->where('session','=',trim(Input::get('session')))
 			->where('isActive', '=', 'Yes')->with('attendance')
 			->get();
-			
-			
-			/*$attendance = Student::with(['attendance' => function ($query) use($date) {
+
+		 /*$attendance = Student::with(['attendance' => function ($query) use($date) {
           $query->where('date', '=',$date);
 
       }])->get();*/
@@ -409,10 +407,10 @@ class attendancesController extends BaseController {
 			$classes2 = ClassModel::select('code','name')->orderby('code','asc')->pluck('name','code');
 
 			//return View::Make('app.attendanceList',compact('classes2','attendance','formdata'));
-
-			//echo "<pre>";print_r($attendance);
+            $attendance = $attendance->toArray();
+			echo "<pre>";print_r($attendance);
 			//exit;
-			return View('app.attendanceList',compact('classes2','attendance','formdata'));
+			//return View('app.attendanceList',compact('classes2','attendance','formdata'));
 		}
 	}
 	/**

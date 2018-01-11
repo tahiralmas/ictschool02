@@ -48,8 +48,8 @@ class promotionController extends BaseController {
 	} else {
 		if(Input::get('class')==Input::get('nclass'))
 		{
-			$errorMessages = new Illuminate\Support\MessageBag;
-			$errorMessages->add('validation', 'Promotion From and Promotion To class shouldn not be same!');
+			//$errorMessages = new Illuminate\Support\MessageBag;
+			$errorMessages = 'Promotion From and Promotion To class shouldn not be same!';
 			return Redirect::to('/promotion')->withInput(Input::all())->withErrors($errorMessages);
 		}
 		else
@@ -60,8 +60,11 @@ class promotionController extends BaseController {
 			$ids= array_keys($newrollNo);
 			if(count($promotion)<1)
 			{
-				$errorMessages = new Illuminate\Support\MessageBag;
-				$errorMessages->add('validation', 'Select Student!');
+				//$errorMessages = new Illuminate\Support\MessageBag;
+				//$errorMessages->add('validation', 'Select Student!');
+
+				$errorMessages = 'Select Student!';
+
 				return Redirect::to('/promotion')->withInput(Input::all())->withErrors($errorMessages);
 			}
 			$realPromot=array();
@@ -71,8 +74,9 @@ class promotionController extends BaseController {
 				$rollnumber=$this->checkRollno($promotion[$i],$ids,$newrollNo);
 				if($rollnumber=='')
 				{
-					$errorMessages = new Illuminate\Support\MessageBag;
-					$errorMessages->add('validation', 'New Roll number can not be empty!');
+					//$errorMessages = new Illuminate\Support\MessageBag;
+					$errorMessages = 'New Roll number can not be empty!';
+
 					return Redirect::to('/promotion')->withInput(Input::all())->withErrors($errorMessages);
 				}
 				if($rollnumber!='No')

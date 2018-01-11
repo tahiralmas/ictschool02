@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\User;
 use DB;
 use Auth;
+use Hash;
 class settingsController extends BaseController {
 	public function __construct() {
 		/*$this->beforeFilter('csrf', array('on'=>'post'));

@@ -18,19 +18,22 @@
           <thead>
             <tr>
               <th style="width:30%">Name</th>
+               <th style="width:30%">Class</th>
               <th style="width:30%">Description</th>
+             
               <th style="width:15%">Action</th>
             </tr>
           </thead>
           <tbody>
-            @foreach($levels as $level)
+            @foreach($sections as $section)
 
             <tr>
-              <td>{{$level->name}}</td>
-              <td>{{$level->description}}</td>
+              <td>{{$section->name}}</td>
+              <td>{{$section->class_code}}</td>
+              <td>{{$section->description}}</td>
 
               <td>
-                <a title='Edit' class='btn btn-info' href='{{url("/level/edit")}}/{{$level->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/level/delete")}}/{{$level->id}}'> <i class="glyphicon glyphicon-trash icon-white"></i></a>
+                <a title='Edit' class='btn btn-info' href='{{url("/section/edit")}}/{{$section->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/section/delete")}}/{{$section->id}}'> <i class="glyphicon glyphicon-trash icon-white"></i></a>
               </td>
               @endforeach
             </tbody>

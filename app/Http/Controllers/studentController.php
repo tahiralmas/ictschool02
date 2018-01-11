@@ -5,10 +5,13 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Student;
+use App\User;
 use App\SectionModel;
 use App\ClassModel;
-
+use Hash;
 use DB;
+use App\Ictcore_integration;
+use App\Http\Controllers\ictcoreController;
 class foobar{
 
 }
@@ -32,11 +35,13 @@ class studentController extends BaseController {
 	public function index()
 	{
 		$classes = ClassModel::select('name','code')->get();
+		
+		$section= SectionModel::select('id','name')->where('class_code','=','cl1')->get();
 		//$sections = SectionModel::select('name')->get();
 
 
 		//return View::Make('app.studentCreate',compact('classes'));
-		return View('app.studentCreate',compact('classes'));
+		return View('app.studentCreate',compact('classes','section'));
 	}
 
 	public  function getRegi($class,$session,$section)
@@ -162,6 +167,67 @@ class studentController extends BaseController {
 		else {
 			$student->save();
 			Input::file('photo')->move(base_path() .'/public/images',$fileName);
+             
+                 $user = new User;
+
+                $user->firstname = Input::get('fname');
+                $user->lastname  = Input::get('lname');
+                $user->email =     Input::get('regiNo').'@gmail.com';
+              	$user->login     = Input::get('regiNo');
+              	$user->group     =  'Student';
+                $user->password  =	Hash::make(Input::get('regiNo'));
+                $user->save();
+
+                 $ictcore_integration = Ictcore_integration::select("*")->first();
+			if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
+
+							 $ict  = new ictcoreController();
+							 	$data = array(
+								'first_name' => $student->firstName,
+								'last_name' => $student->lastName,
+								'phone'     => $student->fatherCellNo,
+								'email'     => '',
+								);
+								$contact_id = $ict->ictcore_api('contacts','POST',$data );
+
+                               $message = 'School name'.'<br>'.'Login Name: '. Input::get('regiNo').'Password: '.Input::get('regiNo');
+                                $data = array(
+								'name' => 'School Name',
+								'data' => $message,
+								'type'     => 'plain',
+								'description'     => 'testing message',
+								);
+
+	                          $text_id = $ict->ictcore_api('messages/texts','POST',$data );
+
+	                          $data = array(
+								'name' => 'School Name',
+								'text_id' => $text_id
+								);
+
+                                $program_id = $ict->ictcore_api('programs/sendsms','POST',$data );
+
+								$data = array(
+								'title' => 'User Detail',
+								'program_id' => $program_id,
+								'account_id'     => 1,
+								'contact_id'     => $contact_id,
+								'origin'     => 1,
+								'direction'     => 'outbound',
+								);
+								$transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+								//echo "================================================================transmission==========================================";
+								// print_r($transmission_id);
+								//GET transmissions/{transmission_id}/send
+								//$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+
+             
+            }
+
+
+
+
+
 			return Redirect::to('/student/create')->with("success","Student Admited Succesfully.");
 		}
 
@@ -255,8 +321,13 @@ public function edit($id)
 {
 	$classes = ClassModel::pluck('name','code');
 	$student= Student::find($id);
+	
+	$sections = SectionModel::select('id','name')->where('class_code','=',$student->class)->get();
+	//$sections = $sections->toArray();
+      // $sections = SectionModel::pluck('id', 'name')->where('class_code','=',$student->class);
+	//echo "<pre>";print_r($sections);
 	//dd($student);
-	$sections = SectionModel::select('name')->get();
+	//$sections = SectionModel::select('name')->get();
 	//return View::Make("app.studentEdit",compact('student','classes'));
 	return View("app.studentEdit",compact('student','classes','sections'));
 }

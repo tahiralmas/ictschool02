@@ -77,7 +77,7 @@
                 </div>
               </div>
 
-              <div class="col-md-4">
+              <?php /*<div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label" for="shift">Shift</label>
 
@@ -94,11 +94,9 @@
 
 
             </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">
-              <div class="col-md-4">
+           */?>
+           <input type="hidden" value="Morning" name="shift">
+             <div class="col-md-4">
                 <div class="form-group ">
                   <label for="session">session</label>
                   <div class="input-group">
@@ -108,6 +106,10 @@
                   </div>
                 </div>
               </div>
+ </div>
+          <div class="row">
+            <div class="col-md-12">
+            
               <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label" for="student">Student</label>
@@ -341,7 +343,9 @@
     var getStudents = function () {
       var aclass = $('#class').val();
       var section =  $('#section').val();
-      var shift = $('#shift').val();
+     // var shift = $('#shift').val();
+      var shift = 'Morning';
+
       var session = $('#session').val().trim();
       $.ajax({
         url: '/student/getList/'+aclass+'/'+section+'/'+shift+'/'+session,
@@ -368,7 +372,10 @@
 
     };
     $( document ).ready(function() {
-
+        getsections();
+              $('#class').on('change',function() {
+                getsections();
+              });
       btnSaveIsvisibale();
       getStudents();
       $(".datepicker").datepicker({autoclose:true,todayHighlight: true});
@@ -621,6 +628,39 @@
         }
       });
     });
+function getsections()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        //alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section').empty();
+      // $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+        
+          //console.log(opt);
+          $('#section').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
 
     </script>
 

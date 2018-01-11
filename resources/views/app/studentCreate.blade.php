@@ -54,7 +54,7 @@
                 </div>
               </div>
               <div class="col-md-4">
-                <div class="form-group">
+               <?php /* <div class="form-group">
                   <label class="control-label" for="section">Section</label>
 
                   <div class="input-group">
@@ -75,7 +75,25 @@
 
 
                   </div>
+                </div>*/?>
+                <div class="form-group">
+                  <label class="control-label" for="student">Section</label>
+
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-book blue"></i></span>
+                    <select id="section" name="section" class="form-control" required="true">
+                  <?/*  @foreach($section as $sec)
+                      <option value="{{$sec->id}}">{{$sec->name}}</option>
+                      @endforeach*/?>
+                      <option value=""></option>
+                    </select>
+                  </div>
                 </div>
+
+
+
+
+
               </div>
               <div class="col-md-4">
                 <div class="form-group ">
@@ -130,7 +148,7 @@
 
             </div>
           </div>
-          <div class="row">
+         <!-- <div class="row">
             <div class="col-md-12">
               <div class="col-md-4">
                 <div class="form-group">
@@ -147,7 +165,9 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
+
+          <input type="hidden" value="Morning" name="shift" >
 
           <div class="row">
             <div class="col-md-12">
@@ -429,13 +449,18 @@
    var aclass = $('#class').val();
    var session = $('#session').val().trim();
    var section=$('#section').val().trim();
+
+//  var section = $("#section option:selected").val();
+  // alert(section);
    $.ajax({
      url: '/student/getRegi/'+aclass+'/'+session+'/'+section,
      data: {
        format: 'json'
      },
      error: function(error) {
+      if(aclass=='' && session==''){
        alert(error);
+      }
      },
      dataType: 'json',
      success: function(data) {
@@ -445,8 +470,49 @@
      type: 'GET'
    });
  };
+
+ function getsections()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section').empty();
+       $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+        
+          //console.log(opt);
+          $('#section').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
+
 $( document ).ready(function() {
   getStdRegiRollNo();
+getsections();
+ 
+  $('#class').on('change',function() {
+    getsections();
+  });
+ 
   $('.datepicker').datepicker({autoclose:true});
   $(".datepicker2").datepicker( {
     format: " yyyy", // Notice the Extra space at the beginning
@@ -462,7 +528,11 @@ $( document ).ready(function() {
   $('#section').on('change',function() {
     getStdRegiRollNo();
   });
+
+
 });
+
+
 
 </script>
 @stop

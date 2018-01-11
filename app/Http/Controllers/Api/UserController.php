@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Validator;
 use App\ClassModel;
+use App\User;
 use App\Subject;
 use App\Attendance;
 use App\Student;
@@ -40,7 +41,6 @@ class UserController extends Controller
      */
     public function login()
     {
-    	//dd(request('email'));
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')]))
         {
 
@@ -79,6 +79,48 @@ class UserController extends Controller
 
            return response()->json(['error'=>'Student not found'], 401);
         }   
+    }
+
+     /**
+     * get_user api
+     *@param  int  $user_id
+     * @return \Illuminate\Http\Response
+     */
+    public function get_alluser()
+    {
+    	//dd($user_id);
+       // $user = Auth::user();
+        $user = DB::table('users')->select('id','firstname','lastname','desc','login','email','group')->get();
+        if(!is_null($user)){
+       	 return response()->json(['user' => $user], $this->successStatus);
+        }else{
+
+           return response()->json(['error'=>'Student not found'], 401);
+        }   
+    }
+public function put_user($user_id)
+    {
+    	//dd($user_id);
+       /$rules=[
+		'firstname' => 'required',
+		'lastname' => 'required',
+		'password'=>  'required'
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails())
+		{
+		 return response()->json( $validator->errors(), 422);
+		}
+		else {
+		 $user = User::find($user_id);
+          $user->firstname = Input::get('firstname');
+          $user->lastname = Input::get('lastname');
+          $user->password = Hash::make(Input::get('password'));
+          $user->save();
+          return response()->json(['user'=>$user],200);
+
+		}
+
     }
 
      /**

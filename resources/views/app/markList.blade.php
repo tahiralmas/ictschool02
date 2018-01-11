@@ -76,24 +76,16 @@
                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                       <?php  $data=[
                         'A'=>'A',
-                        'B'=>'B',
-                        'C'=>'C',
-                        'D'=>'D',
-                        'E'=>'E',
-                        'F'=>'F',
-                        'G'=>'G',
-                        'H'=>'H',
-                        'I'=>'I',
-                        'J'=>'J'
+                        
                       ];?>
-                      {{ Form::select('section',$data,$formdata->section,['class'=>'form-control','required'=>'true'])}}
+                      {{ Form::select('section',$data,$formdata->section,['class'=>'form-control','id'=>'section','required'=>'true'])}}
 
 
                     </div>
                   </div>
                 </div>
 
-                <div class="col-md-4">
+              <?php /*  <div class="col-md-4">
                   <div class="form-group">
                     <label class="control-label" for="shift">Shift</label>
 
@@ -110,11 +102,11 @@
                   </div>
                 </div>
 
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="col-md-4">
+              </div> */ ?>
+
+               <input type="hidden" value="Morning" name="shift">
+
+               <div class="col-md-4">
                   <div class="form-group ">
                     <label for="session">session</label>
                     <div class="input-group">
@@ -124,6 +116,11 @@
                     </div>
                   </div>
                 </div>
+             
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+               
                 <div class="col-md-4">
                   <div class="form-group">
                     <label class="control-label" for="subject">subject</label>
@@ -227,22 +224,63 @@
     <script type="text/javascript">
     var getSubjects = function () {
       var val = $('#class').val();
+
+       // alert(val);
       $.ajax({
         url:'/class/getsubjects/'+val,
         type:'get',
         dataType: 'json',
         success: function( json ) {
+
+
           $('#subject').empty();
           $('#subject').append($('<option>').text("--Select Subject--").attr('value',""));
           $.each(json, function(i, subject) {
-            // console.log(subject);
+             console.log(subject);
 
             $('#subject').append($('<option>').text(subject.name).attr('value', subject.code));
           });
         }
       });
     };
+
+function getsections()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        //alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section').empty();
+      // $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+        
+          //console.log(opt);
+          $('#section').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
+
     $( document ).ready(function() {
+      
+ 
       $(".datepicker2").datepicker( {
         format: " yyyy", // Notice the Extra space at the beginning
         viewMode: "years",
@@ -253,8 +291,10 @@
       $('#markList').dataTable();
       $('#class').on('change', function (e) {
         getSubjects();
+        getsections();
       });
       getSubjects();
+       getsections();
     });
     </script>
     @stop

@@ -54,6 +54,8 @@ Route::get('/section/list','sectionController@show');
 Route::get('/section/edit/{id}','sectionController@edit');
 Route::post('/section/update','sectionController@update');
 Route::get('/section/delete/{id}','sectionController@delete');
+Route::get('/section/getList/{class}','sectionController@getsections');
+
 
 // level routes
 Route::get('/level/create','levelController@index');
@@ -118,21 +120,21 @@ Route::get('/teacher/create-timetable','teacherController@index_timetable');
 Route::post('/teacher/create_timetable','teacherController@create_timetable');
 });
 Route::get('/teacher/view-timetable/{id}','teacherController@view_timetable');
-
+Route::get('/section/getList/{class}','sectionController@getsections');
 
 //student attendance
-Route::get('/attendance/create','attendancesController@index');
-Route::post('/attendance/create','attendancesController@create');
-Route::get('/attendance/create-file','attendancesController@index_file');
-Route::post('/attendance/create-file','attendancesController@create_file');
-Route::get('/attendance/list','attendancesController@show');
-Route::post('/attendance/list','attendancesController@getlist');
-Route::get('/attendance/edit/{id}','attendancesController@edit');
-Route::post('/attendance/update','attendancesController@update');
-Route::get('/attendance/printlist/{class}/{section}/{shift}/{session}/{date}','attendancesController@printlist');
+Route::get('/attendance/create','attendanceController@index');
+Route::post('/attendance/create','attendanceController@create');
+Route::get('/attendance/create-file','attendanceController@index_file');
+Route::post('/attendance/create-file','attendanceController@create_file');
+Route::get('/attendance/list','attendanceController@show');
+Route::post('/attendance/list','attendanceController@getlist');
+Route::get('/attendance/edit/{id}','attendanceController@edit');
+Route::post('/attendance/update','attendanceController@update');
+Route::get('/attendance/printlist/{class}/{section}/{shift}/{session}/{date}','attendanceController@printlist');
 Route::group(['middleware' => 'admin'], function(){ 
-Route::get('/attendance/report','attendancesController@report');
-Route::post('/attendance/report','attendancesController@getReport');
+Route::get('/attendance/report','attendanceController@report');
+Route::post('/attendance/report','attendanceController@getReport');
 });
 
 
@@ -243,7 +245,8 @@ return Auth::user()->group;
 });*/
 
 });
-
+Route::get('/settings','settingsController@index');
+Route::post('/settings','settingsController@save');
 // Accounting
 
 Route::group(['middleware' => 'admin'], function(){ 

@@ -82,15 +82,7 @@
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                             <?php  $data=[
                                                     'A'=>'A',
-                                                    'B'=>'B',
-                                                    'C'=>'C',
-                                                    'D'=>'D',
-                                                    'E'=>'E',
-                                                    'F'=>'F',
-                                                    'G'=>'G',
-                                                    'H'=>'H',
-                                                    'I'=>'I',
-                                                    'J'=>'J'
+                                                 
                                             ];?>
                                             {{ Form::select('section',$data,$formdata->section,['class'=>'form-control','id'=>'section','required'=>'true'])}}
 
@@ -99,7 +91,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                               <?php /* <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label" for="shift">Shift</label>
 
@@ -117,7 +109,7 @@
                                 </div>
 
                             </div>
-                        </div>
+                        </div> */ ?>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="col-md-4">
@@ -202,6 +194,11 @@
     <script src="/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript">
         $( document ).ready(function() {
+
+               getsections();
+              $('#class').on('change',function() {
+                getsections();
+              });
             $(".datepicker2").datepicker( {
                 format: " yyyy", // Notice the Extra space at the beginning
                 viewMode: "years",
@@ -220,7 +217,8 @@
             $( "#btnPrint" ).click(function() {
                 var aclass = $('#class').val();
                 var section =  $('#section').val();
-                var shift = $('#shift').val();
+                //var shift = $('#shift').val();
+                var shift = 'Morning';
                 var session = $('#session').val().trim();
                 var subject = $('#subject').val();
                 var atedate =$('#date').val().trim();
@@ -241,6 +239,41 @@
             });
 
         });
+
+
+function getsections()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section').empty();
+       //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+        
+          //console.log(opt);
+          $('#section').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
 
     </script>
 @stop

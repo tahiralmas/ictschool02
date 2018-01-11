@@ -2,17 +2,17 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
-use App\Level;
+use App\SectionModel;
 use DB;
-class levelController extends BaseController {
+class sectionController extends BaseController {
 
 	public function __construct() {
 		/*$this->beforeFilter('csrf', array('on'=>'post'));
 		$this->beforeFilter('auth');
 		$this->beforeFilter('userAccess',array('only'=> array('delete')));*/
 		
-	      $this->middleware('auth');
-          $this->middleware('auth',array('only'=> array('delete')));
+	       $this->middleware('auth');
+           $this->middleware('auth',array('only'=> array('delete')));
 	}
 	/**
 	* Display a listing of the resource.
@@ -21,11 +21,12 @@ class levelController extends BaseController {
 	*/
 	public function index()
 	{
-		return View('app.levelCreate');
+		$class = DB::table('Class')
+		->select(DB::raw('name,code'))
+		->get();
+		return View('app.sectionCreate',compact('class'));
 		//echo "this is section controller";
 	}
-
-
 	/**
 	* Show the form for creating a new resource.
 	*
@@ -35,35 +36,35 @@ class levelController extends BaseController {
 	{
 		$rules=[
 			'name' => 'required',
+			'class'=> 'required',
 			'description' => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-			return Redirect::to('/level/create')->withErrors($validator);
+			return Redirect::to('/section/create')->withErrors($validator);
 		}
 		else {
 			$sname = Input::get('name');
-			$sexists=Level::select('*')->where('name','=',$sname)->get();
+			$sexists=SectionModel::select('*')->where('name','=',$sname)->where('class_code','=',Input::get('class'))->get();
 			if(count($sexists)>0){
 
 				$errorMessages = new \Illuminate\Support\MessageBag;
-				$errorMessages->add('deplicate', 'level all ready exists!!');
-				return Redirect::to('/level/create')->withErrors($errorMessages);
+				$errorMessages->add('deplicate', 'Section all ready exists!!');
+				return Redirect::to('/section/create')->withErrors($errorMessages);
 			}
 			else {
-				$class = new Level;
+				$class = new SectionModel;
 				$class->name = Input::get('name');
+				$class->class_code = Input::get('class');
 				$class->description = Input::get('description');
 				$class->save();
-				return Redirect::to('/level/create')->with("success", "Level Created Succesfully.");
+				return Redirect::to('/section/create')->with("success", "Section Created Succesfully.");
 			}
 
 		}
 
 	}
-
-
 	/**
 	* Store a newly created resource in storage.
 	*
@@ -72,12 +73,12 @@ class levelController extends BaseController {
 	public function show()
 	{
 		//$Classes = ClassModel::orderby('code','asc')->get();
-		$levels = DB::table('level')
-		->select(DB::raw('level.id,level.name,level.description'))
+		$sections = DB::table('section')
+		->select(DB::raw('section.id,section.class_code,section.name,section.description'))
 		->get();
 		//dd($sections);
 		//return View::Make('app.classList',compact('Classes'));
-		return View('app.levelList',compact('levels'));
+		return View('app.sectionList',compact('sections'));
 	}
 
 
@@ -90,9 +91,12 @@ class levelController extends BaseController {
 	*/
 	public function edit($id)
 	{
-		$level = Level::find($id);
+		$section = SectionModel::find($id);
+		$class = DB::table('Class')
+		->select(DB::raw('name,code'))
+		->get();
 		//return View::Make('app.classEdit',compact('class'));
-		return View('app.levelEdit',compact('level'));
+		return View('app.sectionEdit',compact('section','class'));
 	}
 
 
@@ -111,15 +115,15 @@ class levelController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-			return Redirect::to('/level/edit/'.Input::get('id'))->withErrors($validator);
+			return Redirect::to('/section/edit/'.Input::get('id'))->withErrors($validator);
 		}
 		else {
-			$section = Level::find(Input::get('id'));
+			$section = SectionModel::find(Input::get('id'));
 			$section->name= Input::get('name');
-
+            $section->class_code = Input::get('class');
 			$section->description=Input::get('description');
 			$section->save();
-			return Redirect::to('/level/list')->with("success","Level Updated Succesfully.");
+			return Redirect::to('/section/list')->with("success","Section Updated Succesfully.");
 
 		}
 	}
@@ -133,9 +137,15 @@ class levelController extends BaseController {
 	*/
 	public function delete($id)
 	{
-		$class = Level::find($id);
+		$class = SectionModel::find($id);
 		$class->delete();
-		return Redirect::to('/level/list')->with("success","Level Deleted Succesfully.");
+		return Redirect::to('/section/list')->with("success","Section Deleted Succesfully.");
+	}
+
+	public function getsections($class){
+
+      $section= SectionModel::select('id','name')->where('class_code','=',$class)->get();
+	return $section;
 	}
 
 }

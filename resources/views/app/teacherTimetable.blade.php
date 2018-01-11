@@ -47,10 +47,10 @@
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                    <select name="class" class="form-control" required >
+                    <select name="class" id="class" class="form-control" required >
 
                       @foreach($classes as $class)
-                      <option value="{{$class->id}}">{{$class->name }}</option>
+                      <option value="{{$class->code}}">{{$class->name }}</option>
                       @endforeach
                     </select>
                   </div>
@@ -62,17 +62,9 @@
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                    <select name="section" class="form-control" required >
-                      <option value="A">A</option>
-                      <option value="B">B</option>
-                      <option value="C">C</option>
-                      <option value="D">D</option>
-                      <option value="E">E</option>
-                      <option value="F">F</option>
-                      <option value="G">G</option>
-                      <option value="H">H</option>
-                      <option value="I">I</option>
-                      <option value="J">J</option>
+                    <select name="section" id="section" class="form-control" required >
+                      <option value=""></option>
+                    
                     </select>
                   </div>
                 </div>
@@ -157,8 +149,48 @@
 @section('script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 <script>
+   $( document ).ready(function() {
  $('#timepicker1').timepicker();
   $('#timepicker2').timepicker();
   $('.selectpicker').selectpicker();
+
+ getsections();
+  $('#class').on('change',function() {
+    getsections();
+  });
+    });
+  function getsections()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section').empty();
+       //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+        
+          //console.log(opt);
+          $('#section').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
 </script>
 @stop

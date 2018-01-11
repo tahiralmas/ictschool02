@@ -60,8 +60,14 @@
 <div id="printableArea">
   <div class="wraperResult">
     <div class="resHdr">
-        <img src="/markssheetcontent/res-logo.png" alt="" class="resLogo">            <div class="schoolIdentity">
-            <img src="/markssheetcontent/school-title.png" alt="">                <div class="hdrText">
+    <h2 > ICTVISSION</h2>
+    <br> <br> 
+       <!--<img src="/markssheetcontent/res-logo.png" alt="" class="resLogo">   -->         
+       <div class="schoolIdentity">
+     <!--  <h3><b>ICT Vission Private School Systems</b></h3>-->
+       <br>
+            <!--<img src="/markssheetcontent/school-title.png" alt="">   -->           
+            <div class="hdrText">
                 <span>{{$extra[0]}} EXAMINATION-{{$student->session}}</span>
                 <strong>{{$student->class}} / Equivalent Result Publication {{$student->session}} </strong>
             </div><!-- end of hdrText -->
@@ -129,7 +135,7 @@
                     <td class="res6">Grade</td>-->
                 </tr>
 
-                <tr>
+              <?php /*  <tr>
                     @if($extra[1])
 
                     <td>{{$banglaArray[0][0]}}</td>
@@ -197,8 +203,8 @@
 
                     <td><b>{{$englishArray[0][5]}}</b></td>
                     <td rowspan="2"><b>{{$englishArray[0][5]+$englishArray[1][5]}}</b></td>
-
-
+@foreach ($errors->all() as $error)
+   @endforeach
                     <td rowspan="2"><b>{{$enextra[0]}}</b></td>
                     <td rowspan="2"><b>{{$enextra[1]}}</b></td>
                     <td rowspan="2"><b>{{$enextra[2]}}</b></td>
@@ -232,7 +238,7 @@
                         <td><b>&nbsp;</b></td>-->
                     </tr>
                 @endif
-
+*/ ?>
                 @foreach($subcollection as $subject)
                 <tr>
                     <td>{{$subject->subcode}}</td>
@@ -285,7 +291,6 @@
                 <tr class="lastitem">
                     <td>&nbsp;</td>
                     <td class="markTotal" colspan="9">Total Marks &amp; GPA = </td>
-                    
                     <td><b>{{intval($meritdata->totalNo)}}</b></td>
                     <td><b>{{$extra[2]}}</b></td>
                     <td><b>{{$meritdata->point}}</b></td>
@@ -308,7 +313,7 @@
                         <th class="column2" style="width:130px">Total Marks</th>
                         <th class="column3">Gp</th>
                     </tr>
-                    @if($extra[1])
+               <?php /*     @if($extra[1])
                     <tr>
 
 
@@ -325,7 +330,7 @@
                             <td class="column2" style="width:130px">{{$enextra[0]}}</td>
                             <td class="column3"><b>{{$enextra[2]}}</b></td>
                         </tr>
-                    @endif
+                    @endif */?>
                     @foreach($subcollection as $subject)
 
                         <tr>

@@ -6,11 +6,15 @@ use Illuminate\Support\Facades\Redirect;
 //use Illuminate\Foundation\Http\FormRequest;
 use App\Student;
 use App\Teacher;
+use App\User;
 use App\SectionModel;
 use App\ClassModel;
 use App\Subject;
 use App\Timetable;
 use DB;
+use Hash;
+use App\Ictcore_integration;
+use App\Http\Controllers\ictcoreController;
 class foobar{
 
 }
@@ -138,13 +142,67 @@ class teacherController extends BaseController {
 			$teacher->save();
 			 Input::file('photo')->move(base_path() .'/public/images/teacher',$fileName);
 			//echo request()->photo->move(public_path('images/'), $fileName);
-			return Redirect::to('/teacher/create')->with("success","Teacher Created Succesfully.");
-		}
+			
+			
+			  $user = new User;
+			  $user->firstname = Input::get('fname');
+			  $user->lastname  = Input::get('lname');
+			  $user->email =     Input::get('emails');
+			  $user->login     = Input::get('fname').'_'.Input::get('lname');
+			  $user->group     = 'Teacher';
+			  $user->password  =	Hash::make('123456');
+			  $user->save();
+
+			  $ictcore_integration = Ictcore_integration::select("*")->first();
+				  if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
+
+				      $ict  = new ictcoreController();
+					      $data = array(
+					      'first_name' => $teacher->firstName,
+					      'last_name' => $teacher->lastName,
+					      'phone'     => $teacher->phone,
+					      'email'     => $teacher->email,
+					      );
+					      $contact_id = $ict->ictcore_api('contacts','POST',$data );
+
+					$message = 'School name'.'<br>'.'Login Name: '. $user->login.'Password: '.'123456';
+					  $data = array(
+							'name' => 'School Name',
+							'data' => $message,
+							'type'     => 'plain',
+							'description'     => 'testing message',
+							);
+
+					    $text_id = $ict->ictcore_api('messages/texts','POST',$data );
+
+					    $data = array(
+							  'name' => 'School Name',
+							  'text_id' => $text_id
+							  );
+
+					  $program_id = $ict->ictcore_api('programs/sendsms','POST',$data );
+
+					      $data = array(
+					      'title' => 'User Detail',
+					      'program_id' => $program_id,
+					      'account_id'     => 1,
+					      'contact_id'     => $contact_id,
+					      'origin'     => 1,
+					      'direction'     => 'outbound',
+					      );
+					      $transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+					      //echo "================================================================transmission==========================================";
+					      // print_r($transmission_id);
+					      //GET transmissions/{transmission_id}/send
+					      //$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+			  }
+			  
+			  return Redirect::to('/teacher/create')->with("success","Teacher Created Succesfully.");
 
 
 	}
 }
-
+}
 
 /**
 * Display the specified resource.

@@ -60,15 +60,7 @@
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <?php  $data=[
                       'A'=>'A',
-                      'B'=>'B',
-                      'C'=>'C',
-                      'D'=>'D',
-                      'E'=>'E',
-                      'F'=>'F',
-                      'G'=>'G',
-                      'H'=>'H',
-                      'I'=>'I',
-                      'J'=>'J'
+                     
                     ];?>
                     {{ Form::select('section',$data,$student->section,['class'=>'form-control','id'=>'section','required'=>'true'])}}
 
@@ -78,7 +70,7 @@
                 </div>
               </div>
 
-              <div class="col-md-4">
+             <?php /* <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label" for="shift">Shift</label>
 
@@ -93,15 +85,10 @@
 
                   </div>
                 </div>
-              </div>
+              </div> */ ?>
+                         <input type="hidden" value="Morning" name="shift">
 
-
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-12">
-              <div class="col-md-4">
+ <div class="col-md-4">
                 <div class="form-group ">
                   <label for="session">session</label>
                   <div class="input-group">
@@ -111,6 +98,13 @@
                   </div>
                 </div>
               </div>
+
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+             
               <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label" for="student">Student</label>
@@ -253,6 +247,11 @@
           <script type="text/javascript">
           var stdRegiNo="{{$student->regiNo}}";
           $( document ).ready(function() {
+
+            getsections();
+            $('#class').on('change',function() {
+              getsections();
+            });
             $('#feeList').dataTable();
             var session = $('#session').val().trim();
               getstudents();
@@ -310,7 +309,7 @@
           {
             var aclass = $('#class').val();
             var section =  $('#section').val();
-            var shift = $('#shift').val();
+            var shift = 'Morning';
             var session = $('#session').val().trim();
             $.ajax({
               url: '/student/getList/'+aclass+'/'+section+'/'+shift+'/'+session,
@@ -434,6 +433,40 @@
 
 
           };
+
+            function getsections()
+            {
+                var aclass = $('#class').val();
+               // alert(aclass);
+                $.ajax({
+                  url: '/section/getList/'+aclass,
+                  data: {
+                    format: 'json'
+                  },
+                  error: function(error) {
+                    alert("Please fill all inputs correctly!");
+                  },
+                  dataType: 'json',
+                  success: function(data) {
+                    $('#section').empty();
+                   //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
+                    $.each(data, function(i, section) {
+                      //console.log(student);
+                     
+                      
+                        var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+                    
+                      //console.log(opt);
+                      $('#section').append(opt);
+
+                    });
+                    //console.log(data);
+
+                  },
+                  type: 'GET'
+                });
+            };
 
           </script>
 

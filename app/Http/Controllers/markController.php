@@ -107,7 +107,8 @@ class markController extends BaseController {
 					}
 					else
 					{
-						$totalmark = ((($writtens[$i]+$mcqs[$i])*80)/100)+$practicals[$i]+$cas[$i];
+						//$totalmark = ((($writtens[$i]+$mcqs[$i])*80)/100)+$practicals[$i]+$cas[$i];
+						$totalmark = $writtens[$i]+$mcqs[$i]+$practicals[$i]+$cas[$i];
 					}
 					$marks->total=$totalmark;
 					foreach ($gparules as $gpa) {
@@ -198,7 +199,7 @@ class markController extends BaseController {
 			->where('Student.class','=',Input::get('class'))
 			->where('Marks.class','=',Input::get('class'))
 			->where('Marks.section','=',Input::get('section'))
-			->Where('Marks.shift','=',Input::get('shift'))
+		         //->Where('Marks.shift','=',Input::get('shift'))
 			->where('Marks.session','=',trim(Input::get('session')))
 			->where('Marks.subject','=',Input::get('subject'))
 			->where('Marks.exam','=',Input::get('exam'))
@@ -293,7 +294,9 @@ class markController extends BaseController {
 			}
 			else
 			{
-				$totalmark = (((Input::get('written')+Input::get('mcq'))*80)/100)+Input::get('practical')+Input::get('ca');
+				//$totalmark = (((Input::get('written')+Input::get('mcq'))*80)/100)+Input::get('practical')+Input::get('ca');
+				 $totalmark =Input::get('written')+Input::get('mcq')+Input::get('practical')+Input::get('ca');
+
 			}
 			$marks->total=$totalmark;
 			foreach ($gparules as $gpa) {

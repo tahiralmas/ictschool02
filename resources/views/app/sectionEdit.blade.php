@@ -4,27 +4,50 @@
 <div class="box col-md-12">
         <div class="box-inner">
             <div data-original-title="" class="box-header well">
-                <h2><i class="glyphicon glyphicon-home"></i> Level Edit</h2>
+                <h2><i class="glyphicon glyphicon-home"></i> Section Edit</h2>
 
             </div>
             <div class="box-content">
-              @if (isset($level))
-              <form role="form" action="/level/update" method="post">
+              @if (isset($section))
+              <form role="form" action="/section/update" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                   <input type="hidden" name="id" value="{{$level->id }}">
+                   <input type="hidden" name="id" value="{{$section->id }}">
                       <div class="form-group">
                         <label for="name">Name</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                            <input type="text" class="form-control" required name="name" value="{{$level->name}}" placeholder="Class Name">
+                            <input type="text" class="form-control" required name="name" value="{{$section->name}}" placeholder="Class Name">
                         </div>
                     </div>
+                    
+                 <div class="form-group">
+                    <!--  <label for="name">Numeric Value of Class[One=1,Six=6,Ten=10 etc]</label>-->
+                      <label for="name">Class</label>
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                          <!--<input type="number" min="1" max="10" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">-->
+                          
+                          <select class="form-control"  name="class" required >
+                          <option value="">---Select Class---</option>
+                           @foreach($class as $cls)
+                             <option value="{{$cls->code }}" @if($cls->code==$section->class_code) selected @endif>{{ $cls->name}}</option>
+                             @endforeach
+                          </select>
+                      </div>
+                  </div>
+                        
+                    
+                    
+                    
+                    
+                    
+                    
 
                     <div class="form-group">
                         <label for="name">Description</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                            <textarea type="text" class="form-control" required name="description" placeholder="Class Description">{{$level->description}}</textarea>
+                            <textarea type="text" class="form-control" required name="description" placeholder="Class Description">{{$section->description}}</textarea>
                         </div>
                     </div>
                     <div class="clearfix"></div>
@@ -45,7 +68,7 @@
                 </form>
                 @else
                         <div class="alert alert-danger">
-                            <strong>Whoops!</strong>There is no such Level!<br><br>
+                            <strong>Whoops!</strong>There is no such Class!<br><br>
                             <ul>
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>

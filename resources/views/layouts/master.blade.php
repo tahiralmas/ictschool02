@@ -124,10 +124,10 @@
                 <li><a href="/library/issuebook"><i class="glyphicon glyphicon-pencil"></i> Borrow Book</a></li>
                 <li><a href="/library/issuebookview"><i class="glyphicon glyphicon-list"></i> Borrowd Book List</a></li>
                 <li class="divider"></li>
-                    <li><a href="/library/view-show"><i class="glyphicon glyphicon-list"></i> Book List</a></li>
-                    <li><a href="/library/addbook"><i class="glyphicon glyphicon-pencil"></i> Book Entry</a></li>
-                    <li><a href="/library/reports"><i class="glyphicon glyphicon-print"></i> Reports</a></li>
-                    <li><a href="/library/reports/fine"><i class="glyphicon glyphicon-print"></i> Monthly Fine Reports</a></li>
+                <li><a href="/library/view-show"><i class="glyphicon glyphicon-list"></i> Book List</a></li>
+                <li><a href="/library/addbook"><i class="glyphicon glyphicon-pencil"></i> Book Entry</a></li>
+                <li><a href="/library/reports"><i class="glyphicon glyphicon-print"></i> Reports</a></li>
+                <li><a href="/library/reports/fine"><i class="glyphicon glyphicon-print"></i> Monthly Fine Reports</a></li>
 
 
             </ul>
@@ -208,6 +208,14 @@
                                 <li><a href="/class/list">Class List</a></li>
                             </ul>
                         </li>
+                        
+                          <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-folder-open"></i><span> Section</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="/section/create">Add New</a></li>
+                                <li><a href="/section/list">Section List</a></li>
+                            </ul>
+                        </li>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-book"></i><span> Subject</span></a>
                             <ul class="nav nav-pills nav-stacked">
@@ -240,18 +248,15 @@
                             </ul>
                         </li>
                         <li class="accordion">
-                       <a href="#"><i class="glyphicon glyphicon-pencil"></i><span> Attendance</span></a>
-                       <ul class="nav nav-pills nav-stacked">
-                       @if (Session::get('userRole') =="Admin")
-                           <li><a href="/attendance/create-file">Add from file</a></li>
-                           @endif
-                           <li><a href="/attendance/create">Add</a></li>
-                           <li><a href="/attendance/list">View</a></li>
-
-
-                       </ul>
-                   </li>
-                   
+                           <a href="#"><i class="glyphicon glyphicon-pencil"></i><span> Attendance</span></a>
+                           <ul class="nav nav-pills nav-stacked">
+                           @if (Session::get('userRole') =="Admin")
+                               <li><a href="/attendance/create-file">Add from file</a></li>
+                               @endif
+                               <li><a href="/attendance/create">Add</a></li>
+                               <li><a href="/attendance/list">View</a></li>
+                           </ul>
+                       </li>
                    
                    
                         <li class="accordion">
@@ -277,17 +282,13 @@
                         </li>
                         
                         
-                        <li class="accordion">
+                      <?php /*  <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-folder-open"></i><span> Message Template</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="/template/create">Add New</a></li>
                                 <li><a href="/template/list">Message List</a></li>
                             </ul>
-                        </li>
-                        
-                        
-                        
-                        
+                        </li> */ ?>
                         <li class="">
                             <a href="/message"><i class="glyphicon glyphicon-envelope"></i><span> Voice / SMS</span></a>
                         </li>
@@ -304,13 +305,9 @@
                         </li>
                         @endif
                       <!--  <li class="accordion">
-
                           <a href="#"><i class="glyphicon glyphicon-envelope"></i><span> SMS</span></a>
                           <ul class="nav nav-pills nav-stacked">
                               <li><a href="/sms">Bulk SMS</a></li>
-
-
-
                           </ul>
                       </li> -->
                       @if (Session::get('userRole') =="Admin")
@@ -345,6 +342,9 @@
                                 <li><a href="/ictcore">IctCore Integration</a></li>
                                 <li><a href="/ictcore/attendance">Attendance Message</a></li>
                                 <li><a href="/ictcore/fees">Fees Message</a></li>
+
+                                <li><a href="/template/create">Add Message</a></li>
+                                <li><a href="/template/list">Recording List</a></li>
 
                             </ul>
                         </li>

@@ -74,7 +74,7 @@
 
                   <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
-                         {{ Form::select('class',$classes,$student->class,['class'=>'form-control','required'=>'true'])}}
+                         {{ Form::select('class',$classes,$student->class,['class'=>'form-control','id'=>'class','required'=>'true'])}}
 
                   </div>
                 </div>
@@ -109,7 +109,16 @@
                           'I'=>'I',
                           'J'=>'J'
                           ];?>
-                          {{ Form::select('section',$data,$student->section,['class'=>'form-control','required'=>'true'])}}
+                      <select id="section" name="section" class="form-control" required="true">
+                    @foreach($sections as $sec)
+                      <option value="{{$sec->id}}" @if($sec->id==$student->section)  selected @endif>{{$sec->name}}</option>
+                      @endforeach
+                     
+                    </select>
+
+
+                         <?php /* {{ Form::select('section',$sections,$student->section,['class'=>'form-control','id'=>'section','required'=>'true'])}}*/ ?>
+
 
               
             
@@ -126,7 +135,7 @@
                     </div>
               </div>
             </div>
-            <div class="row">
+          <!--  <div class="row">
               <div class="col-md-12">
                 <div class="col-md-4">
                   <div class="form-group">
@@ -134,10 +143,10 @@
 
                   <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                      <?php  $data=[
+                      <?php /* $data=[
                         'Day'=>'Day',
                         'Morning'=>'Morning'
-                        ];?>
+                        ];*/?>
                         {{ Form::select('shift',$data,$student->shift,['class'=>'form-control','required'=>'true'])}}
 
 
@@ -145,7 +154,8 @@
                 </div>
                   </div>
                 </div>
-              </div>
+              </div>-->
+          <input type="hidden" value="Morning" name="shift" >
 
             <div class="row">
               <div class="col-md-12">
@@ -450,9 +460,48 @@
     minViewMode: "years",
     autoclose:true
 });
-
+//getsections();
+ 
+  $('#class').on('change',function() {
+    getsections();
+  });
 
     });
+
+
+function getsections()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section').empty();
+      // $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+        
+          //console.log(opt);
+          $('#section').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
 
 
 </script>

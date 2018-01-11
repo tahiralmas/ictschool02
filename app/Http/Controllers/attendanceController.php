@@ -6,17 +6,20 @@ use App\ClassModel;
 use App\Subject;
 use App\Attendance;
 use App\Student;
+use App\Message;
+use App\Ictcore_attendance;
+use App\Ictcore_integration;
 use DB;
 use Excel;
+use App\SMSLog;
+use App\Http\Controllers\ictcoreController;
+
 Class formfoo{
 
 }
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
-
-//ictcore integration//
 class attendanceController extends BaseController {
-
 	public function __construct() {
 		/*$this->beforeFilter('csrf', array('on'=>'post'));
 		$this->beforeFilter('auth');
@@ -25,126 +28,193 @@ class attendanceController extends BaseController {
               // $this->middleware('userAccess',array('only'=> array('delete')));
 
 	}
-
-	public function index()
+		public function index()
 		{
+	      
 			$classes=array();
 			$classes2 = ClassModel::select('code','name')->orderby('code','asc')->get();
 			$subjects = Subject::pluck('name','code');
 			$attendance=array();
+			$messages = DB::table('message')
+				    ->select(DB::raw('message.id,message.name,message.description,message.recording'))
+				    ->get();
+				   
 			//return View::Make('app.attendanceCreate',compact('classes2','classes','subjects','attendance'));
-			return View('app.attendanceCreate',compact('classes2','classes','subjects','attendance'));
+			return View('app.attendanceCreate',compact('classes2','classes','subjects','attendance','messages'));
 		}
-
 		public function index_file()
 		{
 			//return View::Make('app.attendanceCreateFile');
 			return View('app.attendanceCreateFile');
 		}
-
 		public function create()
 		{
 			$rules = [
-				'class' => 'required',
-				'section' => 'required',
-				'shift' => 'required',
-				'session' => 'required',
-				'regiNo' => 'required',
-				'date' => 'required',
+			'class' => 'required',
+			'section' => 'required',
+			//'shift' => 'required',
+			'session' => 'required',
+			'regiNo' => 'required',
+			'date' => 'required',
 			];
 			$validator = \Validator::make(Input::all(), $rules);
 			if ($validator->fails()) {
-				return Redirect::to('/attendance/create')->withInput(Input::all())->withErrors($validator);
+			 return Redirect::to('/attendance/create')->withInput(Input::all())->withErrors($validator);
 			} else {
 
-					$absentStudents = array();
-					$students = Input::get('regiNo');
-					$presents = Input::get('present');
-					$all = false;
-					if ($presents == null) {
-						$all = true;
+				$absentStudents = array();
+				$students = Input::get('regiNo');
+				$presents = Input::get('present');
+				$all = false;
+				if ($presents == null) {
+				 $all = true;
+				} else {
+				 $ids = array_keys($presents);
+				}
+				 $stpresent = array();
+				foreach ($students as $student) {
+					$st = array();
+					$st['regiNo'] = $student;
+					if ($all) {
+						$st['status'] = 'No';
 					} else {
-						$ids = array_keys($presents);
-
+						$st['status'] = $this->checkPresent($student, $ids);
 					}
-					$stpresent = array();
-
-					foreach ($students as $student) {
-
-						$st = array();
-						$st['regiNo'] = $student;
-						if ($all) {
-							$st['status'] = 'No';
-						} else {
-							$st['status'] = $this->checkPresent($student, $ids);
-						}
-						if ($st['status'] == "No") {
-							array_push($absentStudents, $student);
-						}
-						else {
-							array_push($stpresent, $st);
-						}
+					if ($st['status'] == "No") {
+						array_push($absentStudents, $student);
 					}
-					$presentDate = $this->parseAppDate(Input::get('date'));
-					DB::beginTransaction();
-					try {
+					else {
+						array_push($stpresent, $st);
+					}
+				}
+				$presentDate = $this->parseAppDate(Input::get('date'));
+				DB::beginTransaction();
+				try {
 					foreach ($stpresent as $stp) {
-						$attenData= [
-							'date' => $presentDate,
-							'regiNo' => $stp['regiNo'],
-							'created_at' => Carbon::now()
-						];
-						Attendance::insert($attenData);
-
+					$attenData= [
+					'date' => $presentDate,
+					'regiNo' => $stp['regiNo'],
+					'created_at' => Carbon::now()
+					];
+					Attendance::insert($attenData);
 					}
 					DB::commit();
-				} catch (\Exception $e) {
+				}catch (\Exception $e) {
 					DB::rollback();
 					$errorMessages = new Illuminate\Support\MessageBag;
-					 $errorMessages->add('Error', 'Something went wrong!');
+					$errorMessages->add('Error', 'Something went wrong!');
 					return Redirect::to('/attendance/create')->withErrors($errorMessages);
 				}
-					//get sms format
-					//loop absent student and get father's no and send sms
-					$isSendSMS = Input::get('isSendSMS');
-					if ($isSendSMS == null) {
-						return Redirect::to('/attendance/create')->with("success", "Students attendance save Succesfully.");
-
-					} else {
-
-						if(count($absentStudents) > 0) {
-
-							foreach ($absentStudents as $absst) {
-								$student=	DB::table('Student')
-								->join('Class', 'Student.class', '=', 'Class.code')
-								->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Class.Name as class')
-								->where('Student.regiNo','=',$absst)
-								->where('class',Input::get('class'))
-								->first();
-								$msg = "Dear Parents your Child (Name-".$student->firstName." ".$student->middleName." ".$student->lastName.", Class- ".$student->class." , Roll- ".$student->rollNo." ) is Absent in School today.";
-								//  $fatherCellNo = Student::select('fatherCellNo','')->where('regiNo', $absst)->first();
-
-								$response = $this->sendSMS($student->fatherCellNo,"ShanixLab", $msg);
-								$smsLog = new SMSLog();
-								$smsLog->type = "Attendance";
-								$smsLog->sender = "SuperSoft";
-								$smsLog->message = $msg;
-								$smsLog->recipient = $student->fatherCellNo;
-								$smsLog->regiNo = $absst;
-								$smsLog->status = $response;
-								$smsLog->save();
-							}
-							return Redirect::to('/attendance/create')->with("success", "Students attendance saved and " . count($absentStudents) . " sms send to father numbers.");
-						}
-						else
-						{
-							return Redirect::to('/attendance/create')->with("success", "Students attendance save Succesfully.");
-
-						}
-
+				
+				$isSendSMS = Input::get('isSendSMS');
+				if ($isSendSMS == null) {
+					return Redirect::to('/attendance/create')->with("success", "Students attendance save Succesfully.");
+				} else {
+				if(count($absentStudents) > 0) {
+					$student=array();
+					///////////////////////////////////////////////////////////////////////////////////////////////message Create in ictcore////////////////////////////////////////////////////////////////////////////////////////////
+				/*	$message = Message::find(Input::get('message'));
+					$ict  = new ictcoreController();
+					$result = $ict->ictcore_api('messages/recordings','GET',$data=array() );
+					$array= array();
+					foreach($result as $res){
+						$array[]= $res->name;
+						$id[] = get_object_vars($res);
 					}
+					if(in_array($message->name, $array)){
+						$key = array_search($message->name, array_column($id, 'name'));
+						$recording_id = $id[$key]['recording_id'];
+					}else{
+						$data = array(
+						'name' => $message->name,
+						'description' => $message->description,
+						);
+						$recording_id= $ict->ictcore_api('messages/recordings','POST',$data );
+						$name = base_path() .'/public/recording/'.$message->recording;
+						$finfo = new \finfo(FILEINFO_MIME_TYPE);
+						$mimetype = $finfo->file($name);
+						$cfile = curl_file_create($name, $mimetype, basename($name));
+						$data = array( $cfile);
+						$result = $ict->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
+						$recording_id = $result ;
+					}
+					$data = array(
+					'name' => $message->name,
+					'recording_id' => $recording_id,
+					);
+					$program_id = $ict->ictcore_api('programs/voicemessage','POST',$data );*/
+
+					foreach ($absentStudents as $absst) {
+						$student=	DB::table('Student')
+						->join('Class', 'Student.class', '=', 'Class.code')
+						->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Class.Name as class')
+						->where('Student.regiNo','=',$absst)
+						->where('class',Input::get('class'))
+						->first();
+						/////////////////////////////////////////////////////////////////////////////////////////////Contact Create in ictcore//////////////////////////////////////////////////////////////////////////////////////////
+						 $ictcore_attendance= Ictcore_attendance::select("*")->first();
+						 $ictcore_integration = Ictcore_integration::select("*")->first();
+						if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
+							 $ict  = new ictcoreController();
+	                        if($ictcore_attendance->ictcore_program_id!=''){
+								$data = array(
+								'first_name' => $student->firstName,
+								'last_name' => $student->lastName,
+								'phone'     => $student->fatherCellNo,
+								'email'     => '',
+								);
+								$contact_id = $ict->ictcore_api('contacts','POST',$data );
+								$data = array(
+								'title' => 'Attendance',
+								'program_id' => $ictcore_attendance->ictcore_program_id,
+								'account_id'     => 1,
+								'contact_id'     => $contact_id,
+								'origin'     => 1,
+								'direction'     => 'outbound',
+								);
+								$transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+								//echo "================================================================transmission==========================================";
+								// print_r($transmission_id);
+								//GET transmissions/{transmission_id}/send
+								$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+								//echo "================================================================transmission send==========================================";
+								//print_r($transmission_send);
+								// exit;
+								//  $msg = "Dear Parents your Child (Name-".$student->firstName." ".$student->middleName." ".$student->lastName.", Class- ".$student->class." , Roll- ".$student->rollNo." ) is Absent in School today.";
+								//  $fatherCellNo = Student::select('fatherCellNo','')->where('regiNo', $absst)->first();
+								 if(!is_array($transmission_send)){
+
+	                                 	$status = "Completed";
+	                                 }else{
+	                                 	$status ="Pending";
+	                                 }
+								$msg =$ictcore_attendance->recording;
+								$smsLog = new SMSLog();
+								$smsLog->type      = "Attendance";
+								$smsLog->sender    = "ictcore";
+								$smsLog->message   = $msg;
+								$smsLog->recipient = $student->fatherCellNo;
+								$smsLog->regiNo    = $absst;
+								$smsLog->status    = $status;
+								$smsLog->save();
+							}else{
+								return Redirect::to('/attendance/create')->withErrors("Please Add Attendance Message in Setting Menu");
+							}
+						}else{
+							return Redirect::to('/attendance/create')->withErrors("Please Add ictcore integration in Setting Menu");
+						}
+					}
+					return Redirect::to('/attendance/create')->with("success", "Students attendance saved and " . count($absentStudents) . " sms send to father numbers.");
+				}
+				else
+				{
+				return Redirect::to('/attendance/create')->with("success", "Students attendance save Succesfully.");
+
+				}
+
 				}
 			}
+		}
 		/**
 		* Show the form for creating a new resource.
 		*
@@ -254,7 +324,6 @@ class attendanceController extends BaseController {
 		return $date[2].'-'.$date[1].'-'.$date[0];
 	}
 	private  function checkPresent($regiNo,$ids)
-
 	{
 
 		for($i=0;$i<count($ids);$i++)
@@ -297,7 +366,7 @@ class attendanceController extends BaseController {
 		$rules=[
 			'class' => 'required',
 			'section' => 'required',
-			'shift' => 'required',
+			//'shift' => 'required',
 			'session' => 'required',
 			'date' => 'required',
 
@@ -309,19 +378,29 @@ class attendanceController extends BaseController {
 		}
 		else {
 			$date = $this->parseAppDate(Input::get('date'));
-			
-			$attendance = \App\Student::with(['attendance' => function($query) use($date){
-			     $query->where('date','=',$date);
+
+
+			$attendance = Student::with(['attendance' => function($query) use($date){
+
+			     $query->where('date',$date);
 			}])
 			->where('class','=',Input::get('class'))
 			->where('section','=',Input::get('section'))
-			->Where('shift','=',Input::get('shift'))
+			->Where('shift','=','Morning')
 			->where('session','=',trim(Input::get('session')))
-			->where('isActive', '=', 'Yes')->with('attendance')
+			->where('isActive', '=', 'Yes')
 			->get();
-			
-			
-			/*$attendance = Student::with(['attendance' => function ($query) use($date) {
+
+
+
+			/*$student =	DB::table('Student')->leftJoin('Attendance', 'Student.regiNo', '=', 'Student.regiNo')
+					->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName ','Attendance.date as attendance')
+					// ->whereYear('stdBill.payDate', '=', 2017)
+					->where('Student.class','=',Input::get('class'))->where('Student.section','=',Input::get('section'))->where('Student.session','=',Input::get('session'))->where('Student.class','=',Input::get('class'))->whereYear('stdBill.payDate', '=', Input::get('year'))->where('billHistory.month','=',Input::get('month'))->where('billHistory.month','<>','-1')
+					//->orderby('stdBill.payDate')
+					->get();*/
+
+		 /*$attendance = Student::with(['attendance' => function ($query) use($date) {
           $query->where('date', '=',$date);
 
       }])->get();*/
@@ -340,6 +419,9 @@ class attendanceController extends BaseController {
 			$classes2 = ClassModel::select('code','name')->orderby('code','asc')->pluck('name','code');
 
 			//return View::Make('app.attendanceList',compact('classes2','attendance','formdata'));
+             //$attendance = $attendance->toArray();
+			//echo "<pre>";print_r($attendance);
+			//exit;
 			return View('app.attendanceList',compact('classes2','attendance','formdata'));
 		}
 	}
@@ -430,7 +512,8 @@ class attendanceController extends BaseController {
 		->where('Student.isActive', '=', 'Yes')
 		->first();
 
-		if($student->count()>0){
+		//if($student->count()>0){
+		if(sizeof($student)>0){
 			$student = Student::with('attendance')
 			->where('regiNo','=',Input::get('regiNo'))
 			->where('isActive', '=', 'Yes')

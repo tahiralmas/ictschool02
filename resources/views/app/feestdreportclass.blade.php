@@ -225,7 +225,7 @@
                   <td>{{$fee['firstName']}} {{$fee['lastName']}}</td>
                   <td>{{$fee['regiNo']}}</td>
                   <td>{{$fee['rollNo']}}</td>
-                  <td>{{$fee[0]}}</td>
+                  <td>@if($fee[0]=='Paid')<b style="color:green">{{$fee[0]}}</b> @else <b style="color:red">{{$fee[0]}}</b>@endif</td>
                   <td>@if($fee[0]=='Paid'){{$fee[1]}} @else  @endif</td>
                  <?php /*  <td>
                    <a title='Delete' class='btn btn-danger' href='{{url("/fees/delete")}}/{{$fee->billNo}}'> <i class="glyphicon glyphicon-trash icon-red"></i></a>
@@ -278,6 +278,11 @@
           <script src="/js/bootstrap-datepicker.js"></script>
           <script type="text/javascript">
           $( document ).ready(function() {
+
+             getsections();
+            $('#class').on('change',function() {
+              getsections();
+            });
             $('#feeList').dataTable();
             var session = $('#session').val().trim();
               getstudents();
@@ -460,6 +465,40 @@
 
           };
 
+
+ function getsections()
+            {
+                var aclass = $('#class').val();
+               // alert(aclass);
+                $.ajax({
+                  url: '/section/getList/'+aclass,
+                  data: {
+                    format: 'json'
+                  },
+                  error: function(error) {
+                    alert("Please fill all inputs correctly!");
+                  },
+                  dataType: 'json',
+                  success: function(data) {
+                    $('#section').empty();
+                   //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
+                    $.each(data, function(i, section) {
+                      //console.log(student);
+                     
+                      
+                        var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+                    
+                      //console.log(opt);
+                      $('#section').append(opt);
+
+                    });
+                    //console.log(data);
+
+                  },
+                  type: 'GET'
+                });
+            };
           </script>
 
           @stop

@@ -7,6 +7,7 @@ use App\Subject;
 use App\Student;
 use App\Marks;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
 class tabulationController extends BaseController {
 
 	public function __construct() {

@@ -37,7 +37,7 @@
                   <div class="row">
                   <div class="col-md-12">
 
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                       <div class="form-group">
                       <label class="control-label" for="class">Class</label>
 
@@ -54,24 +54,15 @@
                       </div>
                   </div>
                     </div>
-                      <div class="col-md-3">
+                      <div class="col-md-4">
                         <div class="form-group">
                         <label class="control-label" for="section">Section</label>
 
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <select id="section" name="section"  class="form-control" >
-                              <option value="A">A</option>
-                                <option value="B">B</option>
-                                  <option value="C">C</option>
-                                <option value="D">D</option>
-                                <option value="E">E</option>
-                                  <option value="F">F</option>
-                                    <option value="G">G</option>
-                                      <option value="H">H</option>
-                                          <option value="I">I</option>
-                                        <option value="J">J</option>
-
+                              <option value="">--Select Section--</option>
+                             
                            </select>
 
 
@@ -79,7 +70,7 @@
                       </div>
                         </div>
 
-                        <div class="col-md-3">
+                     <!--   <div class="col-md-3">
                           <div class="form-group">
                           <label class="control-label" for="shift">Shift</label>
 
@@ -92,7 +83,9 @@
 
                           </div>
                         </div>
-                          </div>
+                          </div>-->
+
+                          <input type="hidden" name="shift" value="Morning">
 
                   </div>
                 </div>
@@ -130,7 +123,7 @@
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                           <select name="exam" required="true" class="form-control" >
-                            	<option value="">-Slect Exam-</option>
+                            	<option value="">-Select Exam-</option>
                             <option value="Class Test">Class Test</option>
                             <option value="Model Test">Model Test</option>
                       			<option value="First Term">First Term</option>
@@ -255,6 +248,12 @@
 <script type="text/javascript">
 
     $( document ).ready(function() {
+
+
+     //  getsections();
+  $('#class').on('change',function() {
+    getsections();
+  });
        $('#btnsave').hide();
         $('#class').on('change', function (e) {
             var val = $(e.target).val();
@@ -283,7 +282,10 @@
 }).on('changeDate', function (ev) {
      var aclass = $('#class').val();
      var section =  $('#section').val();
-     var shift = $('#shift').val();
+    // var shift = $('#shift').val();
+
+    var shift =  "Morning";
+    
      var session = $('#session').val().trim();
      $.ajax({
            url: '/student/getList/'+aclass+'/'+section+'/'+shift+'/'+session,
@@ -347,6 +349,42 @@
 
 
     });
+
+
+function getsections()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        //alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section').empty();
+      // $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+        
+          //console.log(opt);
+          $('#section').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
+
     function addRow(data,index) {
      var table = document.getElementById('studentList');
      var rowCount = table.rows.length;

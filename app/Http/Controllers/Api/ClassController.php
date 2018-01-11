@@ -1,15 +1,11 @@
 <?php
 namespace App\Http\Controllers\Api;
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
-
+//use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
 //use App\Api_models\User;
-
-use Illuminate\Support\Facades\Auth;
-
+//use Illuminate\Support\Facades\Auth;
 use Validator;
 use App\ClassModel;
 use App\Subject;
@@ -17,10 +13,9 @@ use App\Attendance;
 use App\Student;
 use App\SectionModel;
 use DB;
-use Excel;
-use Illuminate\Support\Collection;
-use Carbon\Carbon;
-
+//use Excel;
+//use Illuminate\Support\Collection;
+//use Carbon\Carbon;
 class ClassController extends Controller
 {
 
@@ -56,6 +51,22 @@ class ClassController extends Controller
            return response()->json(['class'=>$classes]);
         }else{
         return response()->json(['error'=>'Class Not Found'], 401);
+       }
+    }
+
+    public function getclass_section($class_id)
+    {
+         $classes = ClassModel::find($class_id);
+       
+       
+         $section = DB::table('section')->select('name','description')->where('class_code',$classes->code)->get();
+
+
+
+        if(!is_null($classes) && $classes->count()>0){
+           return response()->json(['class_section'=>$section]);
+        }else{
+        return response()->json(['error'=>'Class Sections Not Found'], 401);
        }
     }
 

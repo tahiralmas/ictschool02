@@ -154,9 +154,8 @@ class gradesheetController extends BaseController {
 	*
 	* @return Response
 	*/
-	public function printsheet($regiNo,$exam,$class)
+	/*public function printsheet($regiNo,$exam,$class)
 	{
-
 		 $student = DB::table('Student')
 		->join('Class', 'Student.class', '=', 'Class.code')
 		->select( 'Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session','Student.extraActivity')
@@ -245,9 +244,16 @@ class gradesheetController extends BaseController {
 						$english = array($submarks->subcode, $submarks->subname, $submarks->written, $submarks->mcq, $submarks->ca, $submarks->practical);
 						array_push($englishArray, $english);
 
+						//array_push($subcollection, $submarks);
+
+
+
 					} else {
 						$totalHighest += $maxMarks->highest;
 						array_push($subcollection, $submarks);
+
+							//print_r($submarks);
+
 					}
 
 
@@ -302,15 +308,192 @@ class gradesheetController extends BaseController {
 
 
 				}
+				$extra = array($exam, $subgrpbl, $totalHighest, $subgrpen, $student->extraActivity);
+				$query="select left(MONTHNAME(STR_TO_DATE(m, '%m')),3) as month, count(regiNo) AS present from ( select 01 as m union all select 02 union all select 03 union all select 04 union all select 05 union all select 06 union all select 07 union all select 08 union all select 09 union all select 10 union all select 11 union all select 12 ) as months LEFT OUTER JOIN Attendance ON MONTH(Attendance.date)=m and Attendance.regiNo ='".$regiNo."' GROUP BY m";
+				$attendance=DB::select(DB::RAW($query));
+				//return View::Make('app.stdgradesheet', compact('student', 'extra', 'meritdata', 'subcollection', 'blextra', 'banglaArray', 'enextra', 'englishArray','attendance'));
+              //  dd($englishArray);
+
+				
+				
+
+			print_r($banglaArray);
+              return View('app.stdgradesheet', compact('student', 'extra', 'meritdata', 'subcollection', 'blextra', 'banglaArray', 'enextra', 'englishArray','attendance'));
+			
+			}
+		}
+		else
+		{
+			//echo "<h1 style='text-align: center;color: red'>Result Not Found</h1>";
+			return  Redirect::back()->with('noresult','Result Not Found!');
+
+		}
+	}*/
+
+
+	public function printsheet($regiNo,$exam,$class)
+	{
+
+		$student=	DB::table('Student')
+		->join('Class', 'Student.class', '=', 'Class.code')
+		->select( 'Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session','Student.extraActivity')
+		->where('Student.regiNo','=',$regiNo)
+		->where('Student.class','=',$class)
+		->where('Student.isActive', '=', 'Yes')
+		->first();
+
+		if(count($student)>0) {
+
+			$merit = DB::table('MeritList')
+			->select('regiNo', 'grade', 'point', 'totalNo')
+			->where('exam', $exam)
+			->where('class', $class)
+			->where('session', trim($student->session))
+			//->where('regiNo',$regiNo)
+			//->orderBy('point', 'DESC')
+			//->orderBy('point')
+			->orderBy('totalNo', 'DESC')->get();
+			//->orderBy('totalNo', 'DESC')->get();
+			if (count($student) < 1 || count($merit) < 1) {
+				return Redirect::back()->with('noresult', 'Result Not Found!');
+			} else {
+				$meritdata = new Meritdata();
+				$position = 0;
+				foreach ($merit as $m) {
+					$position++;
+					if ($m->regiNo === $regiNo) {
+						$meritdata->regiNo = $m->regiNo;
+						$meritdata->point = $m->point;
+						$meritdata->grade = $m->grade;
+						$meritdata->position = $position;
+						$meritdata->totalNo = $m->totalNo;
+						break;
+					}
+				}
+              //echo "<pre>";print_r($merit);
+              //print_r($meritdata);
+             // exit;
+				//sub group need to implement
+				$subjects = Subject::select('name', 'code', 'subgroup', 'totalfull')->where('class', '=', $student->classcode)->get();
+
+				$overallSubject = array();
+				$subcollection = array();
+
+				$banglatotal = 0;
+				$banglatotalhighest = 0;
+				$banglaArray = array();
+				$blextra = array();
+
+				$englishtotal = 0;
+				$englishtotalhighest = 0;
+				$englishArray = array();
+				$enextra = array();
+
+				$totalHighest = 0;
+				$isBanglaFail=false;
+				$isEnglishFail=false;
+				foreach ($subjects as $subject) {
+					$submarks = Marks::select('written', 'mcq', 'practical', 'ca', 'total', 'point', 'grade')->where('regiNo', '=', $student->regiNo)
+					->where('subject', '=', $subject->code)->where('exam', '=', $exam)->where('class', '=', $class)->first();
+					$maxMarks = Marks::select(DB::raw('max(total) as highest'))->where('class', '=', $class)->where('session', '=', $student->session)
+					->where('subject', '=', $subject->code)->where('exam', '=', $exam)->first();
+
+					$submarks["highest"] = $maxMarks->highest;
+					$submarks["subcode"] = $subject->code;
+
+					$submarks["subname"] = $subject->name;
+
+
+					if ($this->getSubGroup($subjects, $subject->code) === "Bangla") {
+
+						if($submarks->grade=="F")
+						{
+							$isBanglaFail=true;
+						}
+
+						$banglatotal += $submarks->total;
+						$banglatotalhighest += $submarks->highest;
+
+						$bangla = array($submarks->subcode, $submarks->subname, $submarks->written, $submarks->mcq, $submarks->ca, $submarks->practical);
+						array_push($banglaArray, $bangla);
+
+					} else if ($this->getSubGroup($subjects, $subject->code) === "English") {
+						if($submarks->grade==="F")
+						{
+							$isEnglishFail=true;
+						}
+						$englishtotal += $submarks->total;
+						$englishtotalhighest += $submarks->highest;
+
+						$english = array($submarks->subcode, $submarks->subname, $submarks->written, $submarks->mcq, $submarks->ca, $submarks->practical);
+						array_push($englishArray, $english);
+
+					} else {
+						$totalHighest += $maxMarks->highest;
+						array_push($subcollection, $submarks);
+					}
+
+
+				}
+				$gparules = GPA::select('gpa', 'grade', 'markfrom')->get();
+				$subgrpbl = false;
+
+				if ($banglatotal > 0) {
+
+					$blt = floor($banglatotal / 2);
+					$totalHighest += $banglatotalhighest;
+					$gcal = $this->gpaCalculator($blt, $gparules);
+
+					$subgrpbl = true;
+					array_push($blextra, $banglatotal);
+					array_push($blextra, $banglatotalhighest);
+                   // echo $gcal[1].'uuu';
+					if($isBanglaFail)
+					{
+						array_push($blextra, "0.00");
+						array_push($blextra, "F");
+					}
+					else {
+						array_push($blextra, $gcal[0]);
+						array_push($blextra, $gcal[1]);
+					}
+
+
+
+				}
+				$subgrpen = false;
+				if ($englishtotal > 0) {
+					$ent = floor($englishtotal / 2);
+					$totalHighest += $englishtotalhighest;
+					$gcal = $this->gpaCalculator($ent, $gparules);
+					$subgrpen = true;
+					array_push($enextra, $englishtotal);
+					array_push($enextra, $englishtotalhighest);
+
+					//echo $isEnglishFail.'uuu';
+					if($isEnglishFail)
+					{
+						array_push($enextra, "0.00");
+						array_push($enextra, "F");
+
+					}
+					else {
+						array_push($enextra, $gcal[0]);
+						array_push($enextra, $gcal[1]);
+
+					}
+
+
+				}
 
 
 				$extra = array($exam, $subgrpbl, $totalHighest, $subgrpen, $student->extraActivity);
 				$query="select left(MONTHNAME(STR_TO_DATE(m, '%m')),3) as month, count(regiNo) AS present from ( select 01 as m union all select 02 union all select 03 union all select 04 union all select 05 union all select 06 union all select 07 union all select 08 union all select 09 union all select 10 union all select 11 union all select 12 ) as months LEFT OUTER JOIN Attendance ON MONTH(Attendance.date)=m and Attendance.regiNo ='".$regiNo."' GROUP BY m";
 				$attendance=DB::select(DB::RAW($query));
-				//return View::Make('app.stdgradesheet', compact('student', 'extra', 'meritdata', 'subcollection', 'blextra', 'banglaArray', 'enextra', 'englishArray','attendance'));
-               // dd($englishArray);
-                return View('app.stdgradesheet', compact('student', 'extra', 'meritdata', 'subcollection', 'blextra', 'banglaArray', 'enextra', 'englishArray','attendance'));
-			
+				//echo "<pre>";print_r($subcollection);
+				//exit;
+				return View('app.stdgradesheet', compact('student', 'extra', 'meritdata', 'subcollection', 'blextra', 'banglaArray', 'enextra', 'englishArray','attendance'));
+
 			}
 		}
 		else
@@ -520,11 +703,16 @@ class gradesheetController extends BaseController {
 									$merit->point = $grandPoint;
 									$merit->grade = $grandGrade;
 
-
+                                // echo "<pre>";print_r($merit );
 									$merit->save();
+
+                                     $test[] = $merit;
 
 
 								}
+
+								 //echo "<pre>";print_r($test );
+									//exit;
 
 							}
 							else {

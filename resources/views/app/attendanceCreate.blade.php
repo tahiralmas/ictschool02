@@ -57,17 +57,9 @@
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                    <select id="section" name="section"  class="form-control" >
-                      <option value="A">A</option>
-                      <option value="B">B</option>
-                      <option value="C">C</option>
-                      <option value="D">D</option>
-                      <option value="E">E</option>
-                      <option value="F">F</option>
-                      <option value="G">G</option>
-                      <option value="H">H</option>
-                      <option value="I">I</option>
-                      <option value="J">J</option>
+                    <select id="section" name="section"  id="section" class="form-control" >
+                      <option value="1">A</option>
+                     
 
                     </select>
 
@@ -248,6 +240,12 @@
         });
       };
       $( document ).ready(function() {
+       
+      getsections();
+  $('#class').on('change',function() {
+    getsections();
+  });
+
         getStudent();
         $('#btnsave').hide();
         $(".datepicker").datepicker({autoclose:true,todayHighlight: true});
@@ -291,6 +289,42 @@
         });
 
       });
+
+
+
+function getsections()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section').empty();
+       //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+        
+          //console.log(opt);
+          $('#section').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
       function addRow(data,index) {
         var table = document.getElementById('studentList');
         var rowCount = table.rows.length;

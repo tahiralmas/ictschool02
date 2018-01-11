@@ -87,7 +87,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <div class="col-md-6">
+                                                    <!--<div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="control-label" for="shift">Shift</label>
 
@@ -100,7 +100,8 @@
 
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div>-->
+                                                <input type="hidden" value="Morning" name="shift" id="shift"> 
 
                                                     <div class="col-md-6">
                                                         <div class="form-group ">
@@ -138,7 +139,7 @@
 
                                                             <div class="input-group">
                                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
-                                                                <select id="class" name="nclass" class="form-control" >
+                                                                <select id="class1" name="nclass" class="form-control" >
                                                                     @foreach($classes as $class)
                                                                         <option value="{{$class->code}}">{{$class->name}}</option>
                                                                     @endforeach
@@ -153,7 +154,7 @@
 
                                                             <div class="input-group">
                                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                                                <select id="section" name="nsection"  class="form-control" >
+                                                                <select id="section1" name="nsection"  class="form-control" >
                                                                     <option value="A">A</option>
                                                                     <option value="B">B</option>
                                                                     <option value="C">C</option>
@@ -175,7 +176,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <div class="col-md-6">
+                                                    <!--<div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="control-label" for="shift">Shift</label>
 
@@ -188,8 +189,8 @@
 
                                                             </div>
                                                         </div>
-                                                    </div>
-
+                                                    </div>-->
+                                                        <input type="hidden" value="Morning" name="nshift" id="shift">
                                                     <div class="col-md-6">
                                                         <div class="form-group ">
                                                             <label for="session">session</label>
@@ -251,6 +252,16 @@
     <script type="text/javascript">
 
         $( document ).ready(function() {
+
+              getsections();
+              $('#class').on('change',function() {
+                getsections();
+              });
+
+              getsections2();
+              $('#class1').on('change',function() {
+                getsections2();
+              });
             $('#btnsave').hide();
             $(".datepicker").datepicker({
                 format: " yyyy", // Notice the Extra space at the beginning
@@ -345,7 +356,7 @@
             var table = document.getElementById('studentList');
             var rowCount = table.rows.length;
             var row = table.insertRow(rowCount);
-             var cell1 = row.insertCell(0);
+            var cell1 = row.insertCell(0);
             var chkbox = document.createElement("input");
              chkbox.type = "checkbox";
             chkbox.name="promot["+data['regiNo']+"]";
@@ -391,6 +402,74 @@
             cell5.appendChild(nrollno);
         };
 
+function getsections()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        //alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section').empty();
+      // $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+        
+          //console.log(opt);
+          $('#section').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
+
+
+function getsections2()
+{
+    var aclass = $('#class1').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        //alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section1').empty();
+      // $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+        
+          //console.log(opt);
+          $('#section1').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
     </script>
 
 @stop
