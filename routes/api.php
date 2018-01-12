@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('users/login', 'Api\UserController@login');
+Route::post('authenticate', 'Api\UserController@login');
 
 //Route::post('details', 'Api\UserController@details');
 
@@ -21,7 +21,7 @@ Route::post('users/login', 'Api\UserController@login');
 	Route::get('users/profile', 'Api\UserController@profile');
 	Route::get('users/{user_id}', 'Api\UserController@get_user');
 	Route::get('users', 'Api\UserController@get_alluser');
-	Route::get('users/logout','Api\UserController@logout');
+	Route::get('authenticate/cancel','Api\UserController@logout');
 	Route::put('users/{user_id}', 'Api\UserController@put_user');
 	
 // Attendance api routes
@@ -58,7 +58,14 @@ Route::post('users/login', 'Api\UserController@login');
   Route::get('section/{section_id}/students','Api\sectionController@getsectionstudent');
   Route::get('section/{section_id}/teachers','Api\sectionController@getsectionteacher');
 
-    
+  //Teachers
+   Route::get('teachers','Api\TeacherController@all_teachers');
+   Route::get('teachers/{teacher_id}','Api\TeacherController@getteacher');
+   Route::put('teachers/{teacher_id}','Api\TeacherController@update_teacher');
+   Route::get('teachers/{teacher_id}/sections','Api\TeacherController@getsectionteacher');
+   Route::get('teachers/{teacher_id}/subjects','Api\TeacherController@getsubjectteacher');
+   
+
 
   // Route::get('classes/{class_id}','Api\ClassController@getclass');
    //Route::put('classes/{class_id}','Api\ClassController@update_class');
