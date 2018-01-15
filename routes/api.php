@@ -66,9 +66,20 @@ Route::post('authenticate', 'Api\UserController@login');
    Route::get('teachers/{teacher_id}/subjects','Api\TeacherController@getsubjectteacher');
    
 
+//exam
 
+  Route::get('exams','Api\ExamController@getallexam');
+  Route::get('exams/{exam_id}','Api\ExamController@getexam');
   // Route::get('classes/{class_id}','Api\ClassController@getclass');
    //Route::put('classes/{class_id}','Api\ClassController@update_class');
+   
+//Notification
+   Route::get('notifications','Api\NotificationController@getallnotification');
+   Route::post('notifications','Api\NotificationController@postnotification');
+   Route::get('notifications/{notification_id}','Api\NotificationController@getnotification');
+   Route::put('notifications/{notification_id}','Api\NotificationController@putnotification');
+   
+   Route::delete('notifications/{notification_id}','Api\NotificationController@deletenotification');
 	
 });
 
