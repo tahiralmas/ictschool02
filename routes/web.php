@@ -135,6 +135,21 @@ Route::get('/attendance/printlist/{class}/{section}/{shift}/{session}/{date}','a
 Route::group(['middleware' => 'admin'], function(){ 
 Route::get('/attendance/report','attendanceController@report');
 Route::post('/attendance/report','attendanceController@getReport');
+
+
+
+
+//Exam
+
+Route::get('/exam/create','examController@index');
+Route::post('/exam/create','examController@create');
+Route::get('/exam/list','examController@show');
+Route::get('/exam/edit/{id}','examController@edit');
+Route::post('/exam/update','examController@update');
+Route::get('/exam/delete/{id}','examController@delete');
+
+
+
 });
 
 

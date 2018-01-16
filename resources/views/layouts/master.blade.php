@@ -257,7 +257,13 @@
                                <li><a href="/attendance/list">View</a></li>
                            </ul>
                        </li>
-                   
+                    <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-fire"></i><span> Exams</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="/exam/create">Add New</a></li>
+                                <li><a href="/exam/list">Exam List</a></li>
+                            </ul>
+                        </li>
                    
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-list-alt"></i><span> Mark Manage</span></a>

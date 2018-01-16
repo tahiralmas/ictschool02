@@ -37,14 +37,14 @@ Route::post('authenticate', 'Api\UserController@login');
    Route::get('students/{student_id}','Api\StudentController@getstudent');
    Route::put('students/{student_id}','Api\StudentController@update_student');
    Route::get('students/{student_id}/subjects','Api\StudentController@getstudentsubjects');
-
-   
+   Route::post('students/{student_id}/notifications','Api\StudentController@studentnotification');
 
    // classes
-   Route::get('classes','Api\ClassController@classes');
-   Route::get('classes/{class_id}','Api\ClassController@getclass');
+    Route::get('classes','Api\ClassController@classes');
+    Route::get('classes/{class_id}','Api\ClassController@getclass');
     Route::get('classes/{class_id}/section','Api\ClassController@getclass_section');
-   Route::put('classes/{class_id}','Api\ClassController@update_class');
+    Route::put('classes/{class_id}','Api\ClassController@update_class');
+    Route::post('classes/{class_id}/notifications','Api\ClassController@classwisenotification');
 
    // Levels
    Route::get('levels','Api\LevelController@levels');
@@ -57,6 +57,9 @@ Route::post('authenticate', 'Api\UserController@login');
   Route::get('section/{section_id}/subjects','Api\sectionController@getsectionsubject');
   Route::get('section/{section_id}/students','Api\sectionController@getsectionstudent');
   Route::get('section/{section_id}/teachers','Api\sectionController@getsectionteacher');
+  Route::post('section/{section_id}/notifications','Api\sectionController@sectionwisenotification');
+
+  
 
   //Teachers
    Route::get('teachers','Api\TeacherController@all_teachers');
@@ -80,7 +83,14 @@ Route::post('authenticate', 'Api\UserController@login');
    Route::put('notifications/{notification_id}','Api\NotificationController@putnotification');
    
    Route::delete('notifications/{notification_id}','Api\NotificationController@deletenotification');
-	
+   
+   //Result
+   Route::get('results','Api\ResultController@getallresult');
+   Route::get('results/{result_id}','Api\ResultController@getresult'); 
+   Route::delete('results/{result_id}','Api\ResultController@deleteresult');
+   Route::post('results','Api\ResultController@postresult');
+   Route::put('results/{result_id}','Api\ResultController@putresult');
+   	
 });
 
 /*Route::middleware('auth:api')->get('/user', function (Request $request) {

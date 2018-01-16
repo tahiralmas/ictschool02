@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\ictcoreController;
 
 //use App\Api_models\User;
 
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Validator;
 use App\ClassModel;
+use App\Message;
 use App\Subject;
 use App\Attendance;
 use App\Student;
@@ -74,7 +76,7 @@ class StudentController extends Controller
 		  ->get();
 		  if(count($students)<1)
 		  {
-		     return response()->json(['error'=>'No Students Found!'], 401);
+		     return response()->json(['error'=>'No Students Found!'], 404);
 		  }
 		  else {
 			  return response()->json(['students' => $students]);
@@ -92,7 +94,7 @@ class StudentController extends Controller
         if(!is_null($student) && count($student)>0){
            return response()->json(['studnet'=>$student]);
         }else{
-        return response()->json(['error'=>'Student Not Found'], 401);
+        return response()->json(['error'=>'Student Not Found'], 404);
        }
     }
 
@@ -112,7 +114,7 @@ class StudentController extends Controller
         if(!is_null($subject) && count($subject)>0){
            return response()->json(['subjects'=>$subject]);
         }else{
-        return response()->json(['error'=>'Subject Not Found'], 401);
+        return response()->json(['error'=>'Subject Not Found'], 404);
        }
     }
 
@@ -152,6 +154,123 @@ class StudentController extends Controller
 			$student->save();
 			return response()->json(['student' => $student]);
 		}
+	}
+
+	public function studentnotification($student_id){
+		 $rules=[
+            'name'        => 'required',
+            'recording'   =>'required'
+
+            ];
+        $validator = \Validator::make(Input::all(), $rules);
+        if ($validator->fails())
+        {
+         return response()->json($validator->errors(), 422);
+        }
+        else{
+
+                      $student = Student::find($student_id);
+
+                      if(is_null($student)){
+                         return response()->json(['error'=>'Student Not Found'], 404);
+                         exit;
+                      }
+                    $finfo = new \finfo(FILEINFO_MIME_TYPE);
+                    $mimetype      = $finfo->buffer(base64_decode(Input::get('recording')));
+
+                     if($mimetype =='audio/x-wav' || $mimetype=='audio/wav'){ 
+                         $ict  = new ictcoreController();
+                    // $headers = apache_request_headers();
+                     //dd($headers['Authorization']);
+                        $filename ='notification_class_'.time();//'recordingn5QzxE.wav';//tempnam(public_path('recording/'), 'recording'). ".wav";
+
+                      file_put_contents(public_path('recording/').$filename.'.wav', base64_decode(Input::get('recording')));
+
+                         //      unlink(public_path('recording/'.$filename));
+
+                    
+                        sleep(2);
+                        $data = array(
+                                     'name' => Input::get('name'),
+                                     'description' => Input::get('description'),
+                                     );
+
+                         $recording_id  =  $ict->ictcore_api('messages/recordings','POST',$data );
+                         $name          =  base_path() .'/public/recording/'.$filename.".wav";
+
+
+                         $finfo         =  new \finfo(FILEINFO_MIME_TYPE);
+                         $mimetype      =  $finfo->file($name);
+
+                         $cfile         =  curl_file_create($name, $mimetype, basename($name));
+                         $data          =  array( $cfile);
+                         $result        =  $ict->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
+                         $recording_id  =  $result ;
+                        if(!is_array($recording_id )){
+
+                          $data = array(
+                                     'name' => Input::get('title'),
+                                     'recording_id' => $recording_id,
+                                     );
+                         $program_id = $ict->ictcore_api('programs/voicemessage','POST',$data );
+                         if(!is_array( $program_id )){
+                          $program_id = $program_id;
+                         }else{
+                            return response()->json("ERROR: Program not Created" );
+                         
+                         }
+                        }else{
+                            return response()->json("ERROR: Recording not Created" );
+                                          
+                        }
+
+                    $notificationData= [
+                                    'name' => Input::get('name'),
+                                    'description' =>Input::get('description'),
+                                    'recording' => $filename.".wav",
+                                    'ictcore_program_id' => $program_id,
+                                    'ictcore_recording_id' => $recording_id,
+                                ];
+
+                              $notification_id = Message::insertGetId($notificationData);
+                                
+                    $student=   DB::table('Student')
+                        ->select('*')
+                        ->where('isActive','Yes')
+                        ->where('id', $student_id)
+                        ->first();
+                        
+                            $data = array(
+                            'first_name' => $student->firstName,
+                            'last_name' => $student->lastName,
+                            'phone'     => $student->fatherCellNo,
+                            'email'     => '',
+                            );
+
+
+                            $contact_id = $ict->ictcore_api('contacts','POST',$data );
+
+                       $data = array(
+								'title' => 'Attendance',
+								'program_id' => $program_id,
+								'account_id'     => 1,
+								'contact_id'     => $contact_id,
+								'origin'     => 1,
+								'direction'     => 'outbound',
+								);
+								$transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+								//echo "================================================================transmission==========================================";
+								// print_r($transmission_id);
+								//GET transmissions/{transmission_id}/send
+								$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+
+                return response()->json(['success'=>"Nofication Sended Succesfully."],200);
+
+            }else{
+                    return response()->json("ERROR:Please Upload Correct file",415 );
+
+            }
+        }
 	}   
 }
 
