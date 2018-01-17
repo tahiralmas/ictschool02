@@ -1,4 +1,4 @@
-School managment system attence REST APIs Guide
+School managment system REST APIs Guide
 ===============================================
 
 Overview
@@ -222,7 +222,9 @@ Replace {result_id} in url with valid result_id
 ### POST results
 Add result
 * __Parameters__  
+
   * A json encoded associative array containing key and value pairs based on following fields
+
 ```json
 {
     "class_id": "__String__",
@@ -243,9 +245,14 @@ Add result
 __Result_id__ of recently created result record
 
 ### PUT results
-Add result
-* __Parameters__  
+Update an existing result
+
+
+
+* __Parameters__ 
+
   * A json encoded associative array containing key and value pairs based on following fields
+
 ```json
 {
     "class_id": "__String__",

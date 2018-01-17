@@ -122,13 +122,14 @@
 
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                          <select name="exam" required="true" class="form-control" >
-                            	<option value="">-Select Exam-</option>
+                          <select name="exam" id="exam" required="true" class="form-control" >
+                          <option value="">-Select Exam-</option>
+                            	<!--<option value="">-Select Exam-</option>
                             <option value="Class Test">Class Test</option>
                             <option value="Model Test">Model Test</option>
                       			<option value="First Term">First Term</option>
                             	<option value="Mid Term">Mid Term</option>
-                      			<option value="Final Exam">Final Exam</option>
+                      			<option value="Final Exam">Final Exam</option>-->
 
                          </select>
 
@@ -253,6 +254,7 @@
      //  getsections();
   $('#class').on('change',function() {
     getsections();
+    getexam();
   });
        $('#btnsave').hide();
         $('#class').on('change', function (e) {
@@ -376,6 +378,40 @@ function getsections()
         
           //console.log(opt);
           $('#section').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
+
+ function getexam()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/exam/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#exam').empty();
+       $('#exam').append($('<option>').text("--Select Exam--").attr('value',""));
+        $.each(data, function(i, exam) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+exam.id+"'>"+exam.type + " </option>"
+
+        
+          //console.log(opt);
+          $('#exam').append(opt);
 
         });
         //console.log(data);

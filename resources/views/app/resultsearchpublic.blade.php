@@ -89,7 +89,7 @@
                           'Mid Term'=>'Mid Term',
                           'Final Exam'=>'Final Exam'
                         ];?>
-                        {{ Form::select('exam',$data,$formdata->exam,['class'=>'form-control','required'=>'true'])}}
+                        {{ Form::select('exam',$data,$formdata->exam,['class'=>'form-control','id'=>'exam','required'=>'true'])}}
 
 
                       </div>
@@ -137,10 +137,48 @@
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script type="text/javascript">
 
-  $( document ).ready(function() {
+  
+ $( document ).ready(function() {
+  $('#class').on('change', function (e) {
+       
+        getexam();
+      });
+     
+        getexam();
+    });
+function getexam()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/exam/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#exam').empty();
+       $('#exam').append($('<option>').text("--Select Exam--").attr('value',""));
+        $.each(data, function(i, exam) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+exam.id+"'>"+exam.type + " </option>"
 
+        
+          //console.log(opt);
+          $('#exam').append(opt);
 
-  });
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
 
   </script>
 </body>

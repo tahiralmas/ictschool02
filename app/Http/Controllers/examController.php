@@ -170,4 +170,12 @@ class examController extends BaseController {
 		return Redirect::to('/exam/list')->with("success","Exam Deleted Succesfully.");
 	}
 
+	public function getexams($class)
+	{
+		 $class_id = DB::table('Class')->select("*")->where('code','=',$class)->first();
+                
+		 $class_data = Exam::select('id','type')->where('class_id','=',$class_id->id)->get();
+	return $class_data;
+	}
+
 }

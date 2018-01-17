@@ -48,7 +48,7 @@
 
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
-                                            {{ Form::select('class',$classes,'',['class'=>'form-control','required'=>'true'])}}
+                                            {{ Form::select('class',$classes,'',['class'=>'form-control','id'=>'class','required'=>'true'])}}
                                         </div>
                                     </div>
                                 </div>
@@ -70,13 +70,10 @@
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                             <?php  $data=[
-                                                    'Class Test'=>'Class Test',
-                                                    'Model Test'=>'Model Test',
-                                                    'First Term'=>'First Term',
-                                                    'Mid Term'=>'Mid Term',
-                                                    'Final Exam'=>'Final Exam'
+                                                    ''=>'--Select Exam--',
+                                                    
                                             ];?>
-                                            {{ Form::select('exam',$data,'',['class'=>'form-control','required'=>'true'])}}
+                                            {{ Form::select('exam',$data,'',['class'=>'form-control','id'=>'exam','required'=>'true'])}}
 
 
                                         </div>
@@ -114,6 +111,47 @@
 
             });
             $('#markList').dataTable();
+            
+             $('#class').on('change', function (e) {
+       
+              getexam();
+               });
+        getexam();
         });
+        
+        
+function getexam()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/exam/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#exam').empty();
+       $('#exam').append($('<option>').text("--Select Exam--").attr('value',""));
+        $.each(data, function(i, exam) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+exam.id+"'>"+exam.type + " </option>"
+
+        
+          //console.log(opt);
+          $('#exam').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
     </script>
 @stop

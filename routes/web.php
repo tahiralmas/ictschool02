@@ -147,6 +147,8 @@ Route::get('/exam/list','examController@show');
 Route::get('/exam/edit/{id}','examController@edit');
 Route::post('/exam/update','examController@update');
 Route::get('/exam/delete/{id}','examController@delete');
+Route::get('/exam/getList/{class}','examController@getexams');
+
 
 
 
