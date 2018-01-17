@@ -42,7 +42,7 @@ Route::post('authenticate', 'Api\UserController@login');
    // classes
     Route::get('classes','Api\ClassController@classes');
     Route::get('classes/{class_id}','Api\ClassController@getclass');
-    Route::get('classes/{class_id}/section','Api\ClassController@getclass_section');
+    Route::get('classes/{class_id}/sections','Api\ClassController@getclass_section');
     Route::put('classes/{class_id}','Api\ClassController@update_class');
     Route::post('classes/{class_id}/notifications','Api\ClassController@classwisenotification');
 
@@ -51,13 +51,13 @@ Route::post('authenticate', 'Api\UserController@login');
    Route::get('levels/{level_id}','Api\LevelController@getlevel');
 
    //section
-  Route::get('section','Api\sectionController@section');
-  Route::get('section/{section_id}','Api\sectionController@getsection');
-  Route::put('section/{section_id}','Api\sectionController@putsection');
-  Route::get('section/{section_id}/subjects','Api\sectionController@getsectionsubject');
-  Route::get('section/{section_id}/students','Api\sectionController@getsectionstudent');
-  Route::get('section/{section_id}/teachers','Api\sectionController@getsectionteacher');
-  Route::post('section/{section_id}/notifications','Api\sectionController@sectionwisenotification');
+  Route::get('sections','Api\sectionController@section');
+  Route::get('sections/{section_id}','Api\sectionController@getsection');
+  Route::put('sections/{section_id}','Api\sectionController@putsection');
+  Route::get('sections/{section_id}/subjects','Api\sectionController@getsectionsubject');
+  Route::get('sections/{section_id}/students','Api\sectionController@getsectionstudent');
+  Route::get('sections/{section_id}/teachers','Api\sectionController@getsectionteacher');
+  Route::post('sections/{section_id}/notifications','Api\sectionController@sectionwisenotification');
 
   
 
