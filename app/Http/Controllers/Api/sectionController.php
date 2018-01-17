@@ -41,7 +41,16 @@ class sectionController extends Controller
      */
     public function section()
     {
-	  $section = DB::table('section')->get();
+	  $section = DB::table('section');
+       $section->when(request('class', false), function ($q, $class) { 
+            
+              $classc = DB::table('Class')->select('*')->where('id','=',$class)->first();
+
+            return $q->where('class_code',  $classc->code);
+
+            });
+
+           $section = $section->get();
 	  if(count($section)<1)
 	  {
 	     return response()->json(['error'=>'No Section Found!'], 404);

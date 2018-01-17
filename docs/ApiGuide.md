@@ -40,11 +40,37 @@ Teachers
 * __Response__  
 an array of teachers
 
+
 ### GET teacher/{teacher_id}
 Read / view complete teacher data
 
 * __Parameters__  
 Replace {teacher_id} in url with valid teacher_id
+
+* __Response__
+an array of specific teacher
+
+```json
+{
+"id": "teacher_id",
+      "firstName": "firstName",
+      "lastName": "lastName",
+      "gender": "gender",
+      "religion": "religion",
+      "bloodgroup": "bloodgroup",
+      "nationality": "nationality",
+      "dob": "dob",
+      "photo": "photo name",
+      "phone": "phone",
+      "email": "email",
+      "fatherName": "fatherName",
+      "fatherCellNo": "fatherCellNo",
+      "presentAddress": "presentAddress",
+      "parmanentAddress": "parmanentAddress",
+      "created_at": "created_at",
+      "updated_at": "updated_at"
+      }
+```
 
 ### PUT teachers/{teacher_id}
 Update an existing contact
@@ -83,6 +109,19 @@ Read / view complete class data
 * __Parameters__  
 Replace {class_id} in url with valid class_id
 
+* __Response__
+
+```json
+    {
+      "id": "class_id",
+      "code": "class code",
+      "name": "class name",
+      "description": "class description",
+      "created_at": "created_at",
+      "updated_at": "updated_at"
+    },
+```
+
 ### GET classes/{class_id}/sections
 Read / view complete classes data
 
@@ -91,6 +130,17 @@ Replace {class_id} in url with valid class_id
 
 * __Response__  
 Return  sections list assign to class as an json form
+
+```json
+{
+  "class_section": [
+    {
+      "name": "section name",
+      "description": "section description"
+    }
+  ]
+}
+```
 
 ### POST classes/{class_id}/notifications
 create call request class wise / dial 
@@ -120,6 +170,18 @@ Read / view complete sections data
 * __Parameters__  
 Replace {section_id} in url with valid section_id
 
+
+* __Response__
+
+```json
+{
+    "id": "section id",
+    "name": "section name",
+    "description": "section description",
+    "class_code": "class code"
+}
+```
+
 ### GET sections/{section_id}/subjects
 Read / view complete section subjects data
 
@@ -128,6 +190,20 @@ Replace {section_id} in url with valid section_id
 
 * __Response__  
 Return  section subjects list assign to class or section as an json form
+
+```json
+{
+  "subjects": [
+    {
+      "code": "subject code",
+      "name": "subject name",
+      "type": "type , like Comprehensive,core,electives,
+      "class": "class code",
+      "stdgroup": "student group , like science ,arts etc"
+    }
+  ]
+}
+```
 
 
 ### GET sections/{section_id}/students
@@ -139,6 +215,70 @@ Replace {section_id} in url with valid section_id
 * __Response__  
 Return  section students list assign to class or section as an json form
 
+```json
+{
+  "student": [
+    {
+      "id"               : "student id",
+      "regiNo"           : "student registration",
+      "rollNo"           : "student roll no",
+      "session"          : "session , like year which year student enter",
+      "class"            : "class code",
+      "group"            : "group ,like science ,arts etc",
+      "section"          : "section id",
+      "shift"            : "shift ,like Morning evening",
+      "firstName"        : "student firstName",
+      "middleName"       : "student middleName",
+      "lastName"         : "student lastName",
+      "gender"           : "gender ",
+      "religion"         : "religion",
+      "bloodgroup"       : "bloodgroup",
+      "nationality"      : "nationality",
+      "dob"              : "date of brith",
+      "photo"            : "photo name ",
+      "extraActivity"    : "extraActivity",
+      "remarks"          : "remarks",
+      "fatherName"       : "fatherName",
+      "fatherCellNo"     : "fatherCellNo",
+      "motherName"       : "motherName",
+      "motherCellNo"     : "motherCellNo",
+      "localGuardian"    : "localGuardian",
+      "localGuardianCell": "localGuardianCell",
+      "presentAddress"   : "presentAddress",
+      "parmanentAddress" : "parmanentAddress",
+      "isActive"         : "isActive , Yes or No",
+      "created_at"       : "created_at",
+      "updated_at"       : "updated_at"
+    },
+
+  ]
+}
+
+```
+### GET sections/{section_id}/teachers
+Read / view complete section teacher data
+
+* __Parameters__  
+Replace {teacher_id} in url with valid teacher_id
+
+* __Response__  
+Return  section teachers list assign to class or section as an json form
+
+```json
+{
+  "teacher": [
+    {
+      "id": "teacher id",
+      "firstName": "teacher firstName",
+      "lastName": "teacher lastName",
+      "fatherName": "fatherName",
+      "fatherCellNo": "fatherCellNo",
+      "presentAddress": "presentAddress",
+      "Subject": "subject Name"
+    },
+  ]
+}
+```
 ### POST sections/{section_id}/notifications
 create call request section wise / dial 
 
@@ -166,6 +306,32 @@ Read / view complete students data
 
 * __Parameters__  
 Replace {student_id} in url with valid student_id
+
+* __Response__
+
+```json
+{
+  "studnet": {
+    "id": "student id",
+    "regiNo": "student registration",
+    "rollNo": "student roll no",
+    firstName": "student firstName",
+    "middleName": "student middleName",
+    "lastName": "student lastName",
+    "fatherName": "fatherName",
+    "motherName": "motherName",
+    "fatherCellNo": "fatherCellNo",
+    "motherCellNo": "motherCellNo",
+    "localGuardianCell": "localGuardianCell",
+    "class": "class",
+    "section": "section",
+      "group": "group ,like science ,arts etc",
+     "presentAddress": "presentAddress",
+     "gender": "gender ",
+      "religion": "religion",
+  }
+}
+```
 
 ### GET students/{student_id}/subjects
 Read / view complete student subjects data
@@ -206,6 +372,18 @@ Read / view complete exam data
 * __Parameters__  
 Replace {exam_id} in url with valid exam_id
 
+* __Response__
+
+```json
+{
+  "exam": {
+    "type": "exam type like class test final term",
+    "class": "class name",
+    "section": "section name"
+  }
+}
+```
+
 Result
 -------
 ### GET results
@@ -218,6 +396,32 @@ Read / view complete result data
 
 * __Parameters__  
 Replace {result_id} in url with valid result_id
+
+* __Response__
+
+```json
+{
+  "result": {
+    "id": "result id",
+    "regiNo": "student registration number",
+    "rollNo": "student roll number",
+    "firstName": "student firstName",
+    "lastName": "student lastName",
+    "class": "class name",
+    "section": "section name",
+    "subject": "subject name",
+    "written": "marke",
+    "mcq": "marks",
+    "practical": "marks",
+    "ca": "marks",
+    "total": "marks",
+    "grade": "grade",
+    "point": "point",
+    "Absent": "No ,Yes"
+  }
+}
+
+```
 
 ### POST results
 Add result

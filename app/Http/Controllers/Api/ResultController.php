@@ -56,7 +56,29 @@ class ResultController extends Controller
 			->join('section', 'Marks.section', '=', 'section.id')
 			//->leftjoin('Subject', 'Marks.subject', '=', 'Subject.code')
 			->select('Marks.id','Marks.regiNo','Marks.subject','Student.rollNo','Student.firstName','Student.lastName', 'Class.name as class','section.name as section', 'Marks.written','Marks.mcq','Marks.practical','Marks.ca','Marks.total','Marks.grade','Marks.point','Marks.Absent')
-			->where('Student.isActive', '=', 'Yes')
+			->where('Student.isActive', '=', 'Yes');
+			 $marks->when(request('class', false), function ($q, $class) { 
+          	
+              $classc = DB::table('Class')->select('*')->where('id','=',$class)->first();
+
+            return $q->where('Student.class',  $classc->code);
+          });
+
+		 $marks->when(request('section', false), function ($q, $section) { 
+            return $q->where('Student.section', $section);
+          });
+		 $marks->when(request('regiNo', false), function ($q, $regiNo) { 
+            return $q->where('Student.regiNo', $regiNo);
+          });
+
+		 $marks->when(request('exam', false), function ($q, $exam) { 
+            return $q->where('Marks.exam', $exam);
+          });
+
+		 $marks->when(request('subject', false), function ($q, $subject) { 
+            return $q->where('Marks.subject',$subject);
+          });
+		 
 			 //->where('Student.class','=',Input::get('class'))
 			 //->where('Marks.class','=',Input::get('class'))
 			 //->where('Marks.section','=',Input::get('section'))
@@ -64,15 +86,15 @@ class ResultController extends Controller
 			//->where('Marks.session','=',trim(Input::get('session')))
 			//->where('Marks.subject','=',Input::get('subject'))
 			//->where('Marks.exam','=',Input::get('exam'))
-			->get();
-          return response()->json(['exams' => $marks]);
+		$marks=$marks->get();
+        //  return response()->json(['exams' => $marks]);
 
-		  if(count($exams)<1)
+		  if(count($marks)<1)
 		  {
-		     return response()->json(['error'=>'No exam Found!'], 404);
+		     return response()->json(['error'=>'No result Found!'], 404);
 		  }
 		  else {
-			  return response()->json(['exams' => $exams]);
+			  return response()->json(['Result' => $marks]);
 		  }
 	}
 

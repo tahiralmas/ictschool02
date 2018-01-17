@@ -42,17 +42,45 @@ class StudentController extends Controller
 	 */
 	public function all_students()
 	{
+
+		
 		 $students = DB::table('Student')
 		  ->join('Class', 'Student.class', '=', 'Class.code')
 		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		  'Class.Name as class','Student.section' ,'Student.group' ,'Student.presentAddress', 'Student.gender', 'Student.religion')
-		  ->get();
+		  'Class.Name as class','Student.section' ,'Student.group' ,'Student.presentAddress', 'Student.gender', 'Student.religion');
+
+		  $students->when(request('regiNo', false), function ($q, $regiNo) { 
+            return $q->where('regiNo', $regiNo);
+          });
+          $students->when(request('class', false), function ($q, $class) { 
+          	
+              $classc = DB::table('Class')->select('*')->where('id','=',$class)->first();
+
+            return $q->where('Student.class',  $classc->code);
+          });
+          $students->when(request('section', false), function ($q, $section) { 
+            return $q->where('Student.section', $section);
+          });
+          $students->when(request('session', false), function ($q, $session) { 
+            return $q->where('Student.session', $session);
+          });
+          $students->when(request('group', false), function ($q, $group) { 
+            return $q->where('Student.group', $group);
+          });
+
+          $students->when(request('name', false), function ($q, $name) { 
+            return $q->where('Student.firstName', 'like', '%' .$name.'%');
+          });
+         // ('name', 'like', '%' . Input::get('name') . '%')
+          $students = $students->get();
+		
+		 // ->get();
 		  if(count($students)<1)
 		  {
 		     return response()->json(['error'=>'No Students Found!'], 401);
 		  }
 		  else {
-			  return response()->json(['students' => $students]);
+			  return response()->json(['students' =>$students]);
 		  }
 	}
 
@@ -122,8 +150,8 @@ class StudentController extends Controller
 	{
 		//return response()->json(['student'=>$student_id]);
 		$rules=[
-		'fname' => 'required',
-		'lname' => 'required',
+		'firstName' => 'required',
+		'lastName' => 'required',
 		'gender' => 'required',
 		'session' => 'required',
 		'class' => 'required',
