@@ -52,23 +52,23 @@ an array of specific teacher
 
 ```json
 {
-"id": "teacher_id",
-      "firstName": "firstName",
-      "lastName": "lastName",
-      "gender": "gender",
-      "religion": "religion",
-      "bloodgroup": "bloodgroup",
-      "nationality": "nationality",
-      "dob": "dob",
-      "photo": "photo name",
-      "phone": "phone",
-      "email": "email",
-      "fatherName": "fatherName",
-      "fatherCellNo": "fatherCellNo",
-      "presentAddress": "presentAddress",
+      "id"              : "teacher_id",
+      "firstName"       : "firstName",
+      "lastName"        : "lastName",
+      "gender"          : "gender",
+      "religion"        : "religion",
+      "bloodgroup"      : "bloodgroup",
+      "nationality"     : "nationality",
+      "dob"             : "dob",
+      "photo"           : "photo name",
+      "phone"           : "phone",
+      "email"           : "email",
+      "fatherName"      : "fatherName",
+      "fatherCellNo"    : "fatherCellNo",
+      "presentAddress"  : "presentAddress",
       "parmanentAddress": "parmanentAddress",
-      "created_at": "created_at",
-      "updated_at": "updated_at"
+      "created_at"      : "created_at",
+      "updated_at"      : "updated_at"
       }
 ```
 
@@ -113,12 +113,12 @@ Replace {class_id} in url with valid class_id
 
 ```json
     {
-      "id": "class_id",
-      "code": "class code",
-      "name": "class name",
+      "id"         : "class_id",
+      "code"       : "class code",
+      "name"       : "class name",
       "description": "class description",
-      "created_at": "created_at",
-      "updated_at": "updated_at"
+      "created_at" : "created_at",
+      "updated_at" : "updated_at"
     },
 ```
 
@@ -135,7 +135,7 @@ Return  sections list assign to class as an json form
 {
   "class_section": [
     {
-      "name": "section name",
+      "name"       : "section name",
       "description": "section description"
     }
   ]
@@ -150,7 +150,7 @@ create call request class wise / dial
 ```json
 {
     "name": "__String__",
-    "recording": "__media file__, choise wav audio file",
+    "recording"  : "__media file__, choise wav audio file",
     "description":"__Optional__",
 }
 ```
@@ -178,10 +178,10 @@ Replace {section_id} in url with valid section_id
 
 ```json
 {
-    "id": "section id",
-    "name": "section name",
+    "id"         : "section id",
+    "name"       : "section name",
     "description": "section description",
-    "class_code": "class code"
+    "class_code" : "class code"
 }
 ```
 
@@ -198,10 +198,10 @@ Return  section subjects list assign to class or section as an json form
 {
   "subjects": [
     {
-      "code": "subject code",
-      "name": "subject name",
-      "type": "type , like Comprehensive,core,electives,
-      "class": "class code",
+      "code"    : "subject code",
+      "name"    : "subject name",
+      "type"    : "type , like Comprehensive,core,electives,
+      "class"   : "class code",
       "stdgroup": "student group , like science ,arts etc"
     }
   ]
@@ -271,13 +271,13 @@ Return  section teachers list assign to class or section as an json form
 {
   "teacher": [
     {
-      "id": "teacher id",
-      "firstName": "teacher firstName",
-      "lastName": "teacher lastName",
-      "fatherName": "fatherName",
-      "fatherCellNo": "fatherCellNo",
+      "id"            : "teacher id",
+      "firstName"     : "teacher firstName",
+      "lastName"      : "teacher lastName",
+      "fatherName"    : "fatherName",
+      "fatherCellNo"  : "fatherCellNo",
       "presentAddress": "presentAddress",
-      "Subject": "subject Name"
+      "Subject"       : "subject Name"
     },
   ]
 }
@@ -317,23 +317,23 @@ Replace {student_id} in url with valid student_id
 ```json
 {
   "studnet": {
-    "id": "student id",
-    "regiNo": "student registration",
-    "rollNo": "student roll no",
-    firstName": "student firstName",
-    "middleName": "student middleName",
-    "lastName": "student lastName",
-    "fatherName": "fatherName",
-    "motherName": "motherName",
-    "fatherCellNo": "fatherCellNo",
-    "motherCellNo": "motherCellNo",
+    "id"               : "student id",
+    "regiNo"           : "student registration",
+    "rollNo"           : "student roll no",
+    "firstName"        : "student firstName",
+    "middleName"       : "student middleName",
+    "lastName"         : "student lastName",
+    "fatherName"       : "fatherName",
+    "motherName"       : "motherName",
+    "fatherCellNo"     : "fatherCellNo",
+    "motherCellNo"     : "motherCellNo",
     "localGuardianCell": "localGuardianCell",
-    "class": "class",
-    "section": "section",
-      "group": "group ,like science ,arts etc",
-     "presentAddress": "presentAddress",
-     "gender": "gender ",
-      "religion": "religion",
+    "class"            : "class",
+    "section"          : "section",
+      "group"          : "group ,like science ,arts etc",
+     "presentAddress"  : "presentAddress",
+     "gender"          : "gender ",
+      "religion"       : "religion",
   }
 }
 ```
@@ -381,9 +381,9 @@ Replace {exam_id} in url with valid exam_id
 
 ```json
 {
-  "exam": {
-    "type": "exam type like class test final term",
-    "class": "class name",
+  "exam"     : {
+    "type"   : "exam type like class test final term",
+    "class"  : "class name",
     "section": "section name"
   }
 }
@@ -409,22 +409,22 @@ Replace {result_id} in url with valid result_id
 ```json
 {
   "result": {
-    "id": "result id",
-    "regiNo": "student registration number",
-    "rollNo": "student roll number",
-    "firstName": "student firstName",
-    "lastName": "student lastName",
-    "class": "class name",
-    "section": "section name",
-    "subject": "subject name",
-    "written": "marke",
-    "mcq": "marks",
-    "practical": "marks",
-    "ca": "marks",
-    "total": "marks",
-    "grade": "grade",
-    "point": "point",
-    "Absent": "No ,Yes"
+    "id"          : "result id",
+    "regiNo"      : "student registration number",
+    "rollNo"      : "student roll number",
+    "firstName"   : "student firstName",
+    "lastName"    : "student lastName",
+    "class"       : "class name",
+    "section"     : "section name",
+    "subject"     : "subject name",
+    "written"     : "marke",
+    "mcq"         : "marks",
+    "practical"   : "marks",
+    "ca"          : "marks",
+    "total"       : "marks",
+    "grade"       : "grade",
+    "point"       : "point",
+    "Absent"      : "No ,Yes"
   }
 }
 
@@ -438,17 +438,17 @@ Add result
 
 ```json
 {
-    "class_id": "__String__",
-    "section_id": "__String__, ",
-    "session":"__String__",
-    "regiNo": "__String__",
-    "exam_id": "__String__, ",
+    "class_id"    : "__String__",
+    "section_id"  : "__String__, ",
+    "session"     :"__String__",
+    "regiNo"      : "__String__",
+    "exam_id"     : "__String__, ",
     "subject_code":"__String__",
-    "written": "__String__",
-    "mcq": "__String__, ",
-    "practical":"__String__",
-    "ca": "__String__",
-    "absent": "__String__, Yes Or No",
+    "written"     : "__String__",
+    "mcq"         : "__String__, ",
+    "practical"   :"__String__",
+    "ca"          : "__String__",
+    "absent"      : "__String__, Yes Or No",
     
 }
 ```
@@ -466,17 +466,17 @@ Update an existing result
 
 ```json
 {
-    "class_id": "__String__",
-    "section_id": "__String__, ",
-    "session":"__String__",
-    "regiNo": "__String__",
-    "exam_id": "__String__, ",
-    "subject_code":"__String__",
-    "written": "__String__",
-    "mcq": "__String__, ",
-    "practical":"__String__",
-    "ca": "__String__",
-    "absent": "__String__, Yes Or No",
+    "class_id"     : "__String__",
+    "section_id"   : "__String__, ",
+    "session"      :"__String__",
+    "regiNo"       : "__String__",
+    "exam_id"      : "__String__, ",
+    "subject_code" :"__String__",
+    "written"      : "__String__",
+    "mcq"          : "__String__, ",
+    "practical"    :"__String__",
+    "ca"           : "__String__",
+    "absent"       : "__String__, Yes Or No",
     
 }
 ```
@@ -506,9 +506,9 @@ Create new Attendence
 A json encoded associative array containing key and value pairs based on following fields
 ```json
 {
-    "regiNo": "__String__", Student registration number
-    "date": "__String__",Date Formate day-month-year
-    "status":"__String__" Present,Absent
+    "regiNo" : "__String__", Student registration number
+    "date"   : "__String__",Date Formate date-month-year
+    "status" :"__String__" Present,Absent
 }
 ```
 * __Response__
@@ -544,8 +544,8 @@ create notification
   * A json encoded associative array containing key and value pairs based on following fields
 ```json
 {
-    "name": "__String__",
-    "recording": "__media file__, choise wav audio file",
+    "name"       : "__String__",
+    "recording"  : "__media file__, choise wav audio file",
     "description":"__Optional__",
 }
 ```
