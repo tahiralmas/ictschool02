@@ -161,6 +161,9 @@ Sections
 ---------
 ### GET sections
 
+also search by parameter(sections?class)    e.g class=class_id
+
+
 * __Response__  
 an array of sections
 
@@ -298,6 +301,8 @@ Student
 ---------
 ### GET students
 
+also search by parameter(studentsregiNo&class) or class,section,name,group   e.g class=class_id,section=section_id
+
 * __Response__  
 an array of all register students
 
@@ -387,6 +392,8 @@ Replace {exam_id} in url with valid exam_id
 Result
 -------
 ### GET results
+
+also search by parameter(results?regiNo&class) or class,section,name,exam,subject   e.g class=class_id,section=section_id,exam=exam_id,subject=subject_code
 
 * __Response__  
 an array of results
@@ -486,7 +493,8 @@ Success Message
 Attendance
 ----------
 ### GET api/attendances
-Read / view complete attendances data
+Read / view complete attendances data and also search by parameter(attendaces?regiNo&date) or class,section,name date formate:'year-month-date'
+
 
 * __Response__
 class and section in Json form
@@ -498,23 +506,13 @@ Create new Attendence
 A json encoded associative array containing key and value pairs based on following fields
 ```json
 {
-    "class": "__String__",
-    "section": "__String__",
-    "shift": "__String__, Day,morning",
-    "sessions": "__String__", year
     "regiNo": "__String__", Student registration number
-    "date": "__String__",Date
+    "date": "__String__",Date Formate day-month-year
+    "status":"__String__" Present,Absent
 }
 ```
 * __Response__
 students attendance save Succesfully.
-
-
-### POST api/attendances/{attendance_id}
-Read / view complete attendance data
-
-* __Parameters__
-Replace {attendance_id} in url with valid attendance_id
 
 ### PUT attendances/{attendance_id}
 Update an existing attendance

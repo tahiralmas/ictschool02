@@ -167,7 +167,7 @@
                                             <td>{{$atd->rollNo}}</td>
                                             <td>{{$atd->firstName}} {{$atd->middleName}} {{$atd->lastName}}</td>
                                             <td>
-                                              @if(count($atd->attendance))
+                                              @if($atd->status=="Present")
                                               <span class="text-success">Present</span>
                                               @else
 

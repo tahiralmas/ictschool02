@@ -90,18 +90,46 @@ class attendanceController extends BaseController {
 				$presentDate = $this->parseAppDate(Input::get('date'));
 				DB::beginTransaction();
 				try {
+					$i=0;
 					foreach ($stpresent as $stp) {
-					$attenData= [
-					'date' => $presentDate,
-					'regiNo' => $stp['regiNo'],
-					'created_at' => Carbon::now()
-					];
-					Attendance::insert($attenData);
+						 $atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$stp['regiNo'])->first();
+		                if(is_null($atten)){
+
+							$attenData= [
+							'date' => $presentDate,
+							'regiNo' => $stp['regiNo'],
+							'status' => "Present",
+							'created_at' => Carbon::now()
+							];
+							Attendance::insert($attenData);
+
+							$i++;
+						}
+					}
+					foreach ($absentStudents as $absst) {
+					   $atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$absst)->first();
+	                    if(is_null($atten)){
+							$attenDataabsnt= [
+							'date' => $presentDate,
+							'regiNo' => $absst,
+							'status' => "Absent",
+							'created_at' => Carbon::now()
+							];
+						    Attendance::insert($attenDataabsnt);
+
+						    $i++;
+						}
+					}
+
+					if($i==0){
+                       $errorMessages = new \Illuminate\Support\MessageBag;
+					$errorMessages->add('Error', 'Attendance already added by this Date Please Select Other Date');
+					return Redirect::to('/attendance/create')->withErrors($errorMessages);
 					}
 					DB::commit();
 				}catch (\Exception $e) {
 					DB::rollback();
-					$errorMessages = new Illuminate\Support\MessageBag;
+					$errorMessages = new \Illuminate\Support\MessageBag;
 					$errorMessages->add('Error', 'Something went wrong!');
 					return Redirect::to('/attendance/create')->withErrors($errorMessages);
 				}
@@ -145,6 +173,7 @@ class attendanceController extends BaseController {
 					$program_id = $ict->ictcore_api('programs/voicemessage','POST',$data );*/
 
 					foreach ($absentStudents as $absst) {
+
 						$student=	DB::table('Student')
 						->join('Class', 'Student.class', '=', 'Class.code')
 						->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Class.Name as class')
@@ -243,7 +272,8 @@ class attendanceController extends BaseController {
 										$attenData= [
 											'date' => $raw['date_and_time'],
 											'regiNo' => $raw['personnel_id'],
-											'created_at' => Carbon::now()
+											'status' =>$raw['status'],
+ 											'created_at' => Carbon::now()
 										];
 										Attendance::insert($attenData);
 										$toInsert++;
@@ -380,15 +410,19 @@ class attendanceController extends BaseController {
 			$date = $this->parseAppDate(Input::get('date'));
 
 
-			$attendance = Student::with(['attendance' => function($query) use($date){
+			/*$attendance = Student::with(['attendance' => function($query) use($date){
 
 			     $query->where('date',$date);
-			}])
-			->where('class','=',Input::get('class'))
-			->where('section','=',Input::get('section'))
-			->Where('shift','=','Morning')
-			->where('session','=',trim(Input::get('session')))
-			->where('isActive', '=', 'Yes')
+			}])*/
+         $attendance = DB::table('Student')
+		->join('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
+		->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status')
+			->where('Student.class','=',Input::get('class'))
+			->where('Student.section','=',Input::get('section'))
+			->Where('Student.shift','=','Morning')
+			->where('Student.session','=',trim(Input::get('session')))
+			->where('Student.isActive', '=', 'Yes')
+			->where('Attendance.date', '=', $date)
 			->get();
 
 
@@ -419,7 +453,7 @@ class attendanceController extends BaseController {
 			$classes2 = ClassModel::select('code','name')->orderby('code','asc')->pluck('name','code');
 
 			//return View::Make('app.attendanceList',compact('classes2','attendance','formdata'));
-             //$attendance = $attendance->toArray();
+            // $attendance = $attendance->toArray();
 			//echo "<pre>";print_r($attendance);
 			//exit;
 			return View('app.attendanceList',compact('classes2','attendance','formdata'));
