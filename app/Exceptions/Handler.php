@@ -48,6 +48,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+       if ($request->ajax()) {
+           return response()->json(['error' => 'Page Not Found'], 404);
+       }
+
         return parent::render($request, $exception);
     }
 }
