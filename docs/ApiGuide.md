@@ -33,6 +33,73 @@ give token
                          
 }
 ```
+Users
+-----
+### GET users
+
+* __Response__  
+an array of teachers
+
+
+### GET users/{user_id}
+Read / view complete user data
+
+* __Parameters__  
+Replace {user_id} in url with valid user_id
+
+* __Response__
+an array of specific user
+
+```json
+{
+  "user": {
+    "id": "user_id",
+    "firstname": "firstname.",
+    "lastname": "lastname",
+    "desc": "description",
+    "login": "login" username,
+    "email": "email",
+    "group": "group" Admin,Student,Teacher
+  }
+}
+
+```
+
+### PUT users/{user_id}
+Update an existing user
+
+* __Parameters__  
+Replace {user_id} in url with valid user_id, fields require modifications will be
+
+```json
+{
+"firstname": "__String__",
+"lastname": "__Strring__",
+"password": "__String__",
+
+}
+```
+* __Response__  
+Return updated user data as an json
+
+### GET teacher/{teacher_id}/sections
+Read / view complete teacher data
+
+* __Parameters__  
+Replace {teacher_id} in url with valid teacher_id
+
+### GET teacher/{teacher_id}/subjects
+Read / view complete teacher data
+
+* __Parameters__  
+Replace {teacher_id} in url with valid teacher_id
+
+* __Response__  
+Return  teacher data with subjects who's assign teacher as an json form
+
+
+
+
 Teachers
 ---------
 ### GET teachers
@@ -73,7 +140,7 @@ an array of specific teacher
 ```
 
 ### PUT teachers/{teacher_id}
-Update an existing contact
+Update an existing teacher
 
 * __Parameters__  
 Replace {teacher_id} in url with valid teacher_id, fields require modifications will be POSTed in same way as `teachers`
