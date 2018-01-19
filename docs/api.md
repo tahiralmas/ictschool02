@@ -63,22 +63,29 @@ API List
 A complete list of available APIs only for overview and analysis, for full documentation please see ApiGuide.md
 
 Authentication
----------------
+--------------
 * POST authenticate
+* ~~POST authenticate/cancel~~
 
-Users (Admin,staff,student)
-----------------------------
+Admin / Staff / Students
+------------------------
+* ~~GET users~~
 * POST users
-* GET users
-* PUT users/{user_id}
 * GET users/{user_id}
+* PUT users/{user_id}
+* ~~DELETE users/{user_id}~~
 
 Teachers
----------
+--------
 * GET teachers
+* ~~POST teachers~~
 * GET teachers/{teacher_id}
-* GET teachers/{teacher_id}/section
-* GET teachers/{teacher_id}/subjeccts
+* PUT teachers/{teacher_id}
+* ~~DELETE teachers/{teacher_id}~~
+* ~~GET teachers/{teacher_id}/classes~~
+* GET teachers/{teacher_id}/sections
+* ~~GET teachers/{teacher_id}/students~~
+* GET teachers/{teacher_id}/subjects
 
 Classes
 -------
@@ -86,15 +93,20 @@ Classes
 * GET classes/{class_id}
 * PUT classes/{class_id}
 * GET classes/{class_id}/sections
+* ~~GET classes/{class_id}/subjects~~
+* ~~GET classes/{class_id}/teachers~~
+* ~~GET classes/{class_id}/exams~~
 * POST classes/{class_id}/notifications
 
-sections
----------
+Sections
+--------
 * GET sections
 * GET sections/{section_id}
+* ~~PUT sections/{section_id}~~
 * GET sections/{section_id}/subjects
-* GET sections/{section_id}/student
-* GET sections/{section_id}/teachers
+* GET sections/{section_id}/students
+* GET sections/{section_id}/teachers ; i.e associated teachers
+* ~~GET sections/{section_id}/exams~~
 * POST sections/{section_id}/notifications
 
 Students
@@ -102,29 +114,42 @@ Students
 * GET students
 * GET students/{student_id}
 * PUT students/{student_id}
+* ~~GET students/{student_id}/subjects~~
+* ~~GET students/{student_id}/exams~~
+* ~~GET students/{student_id}/teachers~~
 * POST students/{student_id}/notifications
 
+Subjects
+--------
+* ~~GET subjects~~
+* ~~POST subjects~~
+* ~~GET subjects/{subject_id}~~
+* ~~PUT subjects/{subject_id}~~
+* ~~DELETE subjects/{subject_id}~~
 
 Exams
---------
+-----
 * GET exams
+* ~~POST exams~~
 * GET exams/{exam_id}
+* ~~PUT exams/{exam_id}~~
+* ~~DELETE exams/{exam_id}~~
 
 Results
---------
+-------
 * GET results
-* GET results/{result_id}
 * POST results
+* GET results/{result_id}
 * PUT results/{result_id}
 * DELETE results/{result_id}
 
-Notification
---------
-* GET notification
-* GET notification/{notification_id}
-* POST notification
-* PUT notification/{notification_id}
-* DELETE notification/{notification_id}
+Notifications
+-------------
+* GET notifications
+* POST notifications
+* GET notifications/{notification_id}
+* PUT notifications/{notification_id}
+* DELETE notifications/{notification_id}
 
 Attendence
 ----------
