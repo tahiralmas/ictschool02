@@ -36,10 +36,10 @@ class LevelController extends Controller
 	  $level = DB::table('level')->select('id','name','description')->get();
 	  if(count($level)<1)
 	  {
-	     return response()->json(['error'=>'No level Found!'], 401);
+	     return response()->json(['error'=>'No level Found!'], 404);
 	  }
 	  else {
-		  return response()->json(['levels' => $level]);
+		  return response()->json(['levels' => $level],200);
 	  }
     }
 
@@ -49,7 +49,7 @@ class LevelController extends Controller
         if(!is_null($levels) && $levels->count()>0){
            return response()->json(['level'=>$levels]);
         }else{
-        return response()->json(['error'=>'Level Not Found'], 401);
+        return response()->json(['error'=>'Level Not Found'], 404);
        }
     }    
 }

@@ -56,7 +56,7 @@ class sectionController extends Controller
 	     return response()->json(['error'=>'No Section Found!'], 404);
 	  }
 	  else {
-		  return response()->json(['section' => $section]);
+		  return response()->json($section,200);
 	  }
     }
 
@@ -64,7 +64,7 @@ class sectionController extends Controller
     {
          $section = SectionModel::find($section_id);
         if(!is_null($section) && $section->count()>0){
-           return response()->json(['section'=>$section]);
+           return response()->json($section,200);
         }else{
         return response()->json(['error'=>'Section Not Found'], 404);
        }
@@ -78,7 +78,7 @@ class sectionController extends Controller
             $section->name= Input::get('name');
             $section->description=Input::get('description');
             $section->save();
-           return response()->json(['section'=>$section]);
+           return response()->json($section,200);
         }else{
         return response()->json(['error'=>'Section Not Found'], 404);
        }
@@ -114,7 +114,7 @@ class sectionController extends Controller
           'Class.Name as class','Student.section' ,'Student.presentAddress', 'Student.gender', 'Student.religion')
             ->where('Student.id',$student_id)->first();*/
         if(!is_null($subject) && count($subject)>0){
-           return response()->json(['subjects'=>$subject]);
+           return response()->json($subject);
         }else{
         return response()->json(['error'=>'Subject Not Found'], 401);
        }
@@ -129,7 +129,7 @@ class sectionController extends Controller
             ->where('Student.id',$student_id)->first();*/
         if(!is_null($student) && count($student)>0){
 
-           return response()->json(['student'=>$student]);
+           return response()->json($student,200);
         }else{
         return response()->json(['error'=>'Student Not Found'], 404);
        }
@@ -151,7 +151,7 @@ class sectionController extends Controller
           'Class.Name as class','Student.section' ,'Student.presentAddress', 'Student.gender', 'Student.religion')
             ->where('Student.id',$student_id)->first();*/
         if(!is_null($teacher) && count($teacher)>0){
-           return response()->json(['teacher'=>$teacher]);
+           return response()->json($teacher,200);
         }else{
         return response()->json(['error'=>'Teacher Not Found'], 404);
        }

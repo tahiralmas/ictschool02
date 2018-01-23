@@ -2,13 +2,9 @@
 namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-
 use App\Http\Controllers\Controller;
-
 //use App\Api_models\User;
-
 use Illuminate\Support\Facades\Auth;
-
 use Validator;
 use App\Exam;
 use DB;
@@ -26,9 +22,6 @@ class ExamController extends Controller
 
     }
    public $successStatus = 200;
-
-
-
    /**
 	 * student_classwise api
 	 *
@@ -36,42 +29,34 @@ class ExamController extends Controller
 	 */
 	public function getallexam()
 	{
-		  $exams = DB::table('exam')->select('*')->get();
-		/*  ->join('Class', 'Student.class', '=', 'Class.code')
-		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		  'Class.Name as class','Student.section' ,'Student.group' ,'Student.presentAddress', 'Student.gender', 'Student.religion')
-		  ->get();*/
+
+           $exams = DB::table('exam')
+          ->join('Class', 'exam.class_id', '=', 'Class.id')
+          ->join('section', 'exam.section_id', '=', 'section.id')
+          ->select('exam.id','exam.type','Class.name as class','section.name as section')
+    	  ->get();
+		
 		  if(count($exams)<1)
 		  {
 		     return response()->json(['error'=>'No exam Found!'], 404);
 		  }
 		  else {
-			  return response()->json(['exams' => $exams]);
+			  return response()->json($exams);
 		  }
 	}
-
-
     public function getexam($exam_id)
     {
-         //$student = Student::find($student_id);
     	  $exam = DB::table('exam')
           ->join('Class', 'exam.class_id', '=', 'Class.id')
           ->join('section', 'exam.section_id', '=', 'section.id')
-          ->select('exam.type','Class.name as class','section.name as section')
+          ->select('exam.id','exam.type','Class.name as class','section.name as section')
     	  ->where('exam.id','=',$exam_id)->first();
-    	/* ->join('Class', 'Student.class', '=', 'Class.code')
-		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		  'Class.Name as class','Student.section' ,'Student.group','Student.presentAddress', 'Student.gender', 'Student.religion')
-		    ->where('Student.id',$student_id)->first();*/
-
         if(!is_null($exam) && count($exam)>0){
-           return response()->json(['exam'=>$exam]);
+           return response()->json($exam);
         }else{
         return response()->json(['error'=>'exam Not Found'], 404);
        }
-    }
-
-   
+    }  
 }
 
 

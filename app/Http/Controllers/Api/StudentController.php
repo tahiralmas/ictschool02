@@ -80,7 +80,7 @@ class StudentController extends Controller
 		     return response()->json(['error'=>'No Students Found!'], 401);
 		  }
 		  else {
-			  return response()->json(['students' =>$students]);
+			  return response()->json($students,200);
 		  }
 	}
 
@@ -107,7 +107,7 @@ class StudentController extends Controller
 		     return response()->json(['error'=>'No Students Found!'], 404);
 		  }
 		  else {
-			  return response()->json(['students' => $students]);
+			  return response()->json($students,200);
 		  }
 	}
     public function getstudent($student_id)
@@ -120,7 +120,7 @@ class StudentController extends Controller
 		    ->where('Student.id',$student_id)->first();
 
         if(!is_null($student) && count($student)>0){
-           return response()->json(['studnet'=>$student]);
+           return response()->json($student,200);
         }else{
         return response()->json(['error'=>'Student Not Found'], 404);
        }
@@ -140,7 +140,7 @@ class StudentController extends Controller
 		    ->where('Student.id',$student_id)->first();*/
 
         if(!is_null($subject) && count($subject)>0){
-           return response()->json(['subjects'=>$subject]);
+           return response()->json($subject,200);
         }else{
         return response()->json(['error'=>'Subject Not Found'], 404);
        }
@@ -180,7 +180,7 @@ class StudentController extends Controller
 		    $student->fatherCellNo= Input::get('fatherCellNo');
 			$student->fatherName= Input::get('fatherName');
 			$student->save();
-			return response()->json(['student' => $student]);
+			return response()->json($student,200);
 		}
 	}
 

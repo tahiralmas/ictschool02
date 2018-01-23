@@ -38,21 +38,21 @@ class ClassController extends Controller
      */
     public function classes()
     {
-	  $class = DB::table('Class')->get();
-	  if(count($class)<1)
+	  $classes = DB::table('Class')->get();
+	  if(count($classes)<1)
 	  {
 	     return response()->json(['error'=>'No Class Found!'], 404);
 	  }
 	  else {
-		  return response()->json(['classes' => $class]);
+		  return response()->json($classes,200);
 	  }
     }
 
     public function getclass($class_id)
     {
-         $classes = ClassModel::find($class_id);
-        if(!is_null($classes) && $classes->count()>0){
-           return response()->json(['class'=>$classes]);
+         $class = ClassModel::find($class_id);
+        if(!is_null($class) && $class->count()>0){
+           return response()->json($class);
         }else{
         return response()->json(['error'=>'Class Not Found'], 404);
        }
@@ -68,7 +68,7 @@ class ClassController extends Controller
 
 
         if(!is_null($classes) && $classes->count()>0){
-           return response()->json(['class_section'=>$section]);
+           return response()->json($section,200);
         }else{
         return response()->json(['error'=>'Class Sections Not Found'], 404);
        }
@@ -90,7 +90,7 @@ class ClassController extends Controller
 			$class->name= Input::get('name');
 			$class->description=Input::get('description');
 			$class->save();
-          return response()->json(['success'=>"Class Updated Succesfully."]);
+          return response()->json($class,200);
 
 		}
 
@@ -131,11 +131,8 @@ class ClassController extends Controller
 
                          $recording_id  =  $ict->ictcore_api('messages/recordings','POST',$data );
                          $name          =  base_path() .'/public/recording/'.$filename.".wav";
-
-
                          $finfo         =  new \finfo(FILEINFO_MIME_TYPE);
                          $mimetype      =  $finfo->file($name);
-
                          $cfile         =  curl_file_create($name, $mimetype, basename($name));
                          $data          =  array( $cfile);
                          $result        =  $ict->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );

@@ -17,8 +17,8 @@ Authentication
 A json encoded associative array containing key and value pairs based on following fields
 ```json
 {
-    "email": "__String__",
-    "password": "__String__",
+	"email": "__String__",
+	"password": "__String__",
 }
 ```
 * __Response__
@@ -27,10 +27,10 @@ give token
 ## Header Parameter
 ```json
 {
-     'Accept' => 'application/json',
-     'Authorization' => 'Bearer '.$accessToken,
-     'X-Requested-With' => 'XMLHttpRequest'
-                         
+	 'Accept' => 'application/json',
+	 'Authorization' => 'Bearer '.$accessToken,
+	 'X-Requested-With' => 'XMLHttpRequest'
+						 
 }
 ```
 Users
@@ -53,13 +53,13 @@ an array of specific user
 ```json
 {
   "user": {
-    "id": "user_id",
-    "firstname": "firstname.",
-    "lastname": "lastname",
-    "desc": "description",
-    "login": "login" username,
-    "email": "email",
-    "group": "group" Admin,Student,Teacher
+	"id": "user_id",
+	"firstname": "firstname.",
+	"lastname": "lastname",
+	"desc": "description",
+	"login": "login" username,
+	"email": "email",
+	"group": "group" Admin,Student,Teacher
   }
 }
 
@@ -119,31 +119,45 @@ an array of specific teacher
 
 ```json
 {
-      "id"              : "teacher_id",
-      "firstName"       : "firstName",
-      "lastName"        : "lastName",
-      "gender"          : "gender",
-      "religion"        : "religion",
-      "bloodgroup"      : "bloodgroup",
-      "nationality"     : "nationality",
-      "dob"             : "dob",
-      "photo"           : "photo name",
-      "phone"           : "phone",
-      "email"           : "email",
-      "fatherName"      : "fatherName",
-      "fatherCellNo"    : "fatherCellNo",
-      "presentAddress"  : "presentAddress",
-      "parmanentAddress": "parmanentAddress",
-      "created_at"      : "created_at",
-      "updated_at"      : "updated_at"
-      }
-```
+	  "id"              : "teacher_id",
+	  "firstName"       : "firstName",
+	  "lastName"        : "lastName",
+	  "gender"          : "gender",
+	  "religion"        : "religion",
+	  "bloodgroup"      : "bloodgroup",
+	  "nationality"     : "nationality",
+	  "dob"             : "dob",
+	  "photo"           : "photo name",
+	  "phone"           : "phone",
+	  "email"           : "email",
+	  "fatherName"      : "fatherName",
+	  "fatherCellNo"    : "fatherCellNo",
+	  "presentAddress"  : "presentAddress",
+	  "parmanentAddress": "parmanentAddress",
+	  "created_at"      : "created_at",
+	  "updated_at"      : "updated_at"
+	  }
+
 
 ### PUT teachers/{teacher_id}
 Update an existing teacher
 
 * __Parameters__  
-Replace {teacher_id} in url with valid teacher_id, fields require modifications will be POSTed in same way as `teachers`
+Replace {teacher_id} in url with valid teacher_id, fields require modifications will be
+
+```json
+{
+  "firstname": "firstname",
+  "lastname": "lastname",
+  "gender": "gender",
+  "dob": "date of brith",
+  "phone": "phone",
+  "email": "email",
+  "fatherName": "fatherName",
+  "presentAddress": "presentAddress",
+}
+
+```
 
 * __Response__  
 Return updated teacher data as an json
@@ -179,14 +193,14 @@ Replace {class_id} in url with valid class_id
 * __Response__
 
 ```json
-    {
-      "id"         : "class_id",
-      "code"       : "class code",
-      "name"       : "class name",
-      "description": "class description",
-      "created_at" : "created_at",
-      "updated_at" : "updated_at"
-    },
+	{
+	  "id"         : "class_id",
+	  "code"       : "class code",
+	  "name"       : "class name",
+	  "description": "class description",
+	  "created_at" : "created_at",
+	  "updated_at" : "updated_at"
+	},
 ```
 
 ### GET classes/{class_id}/sections
@@ -201,10 +215,10 @@ Return  sections list assign to class as an json form
 ```json
 {
   "class_section": [
-    {
-      "name"       : "section name",
-      "description": "section description"
-    }
+	{
+	  "name"       : "section name",
+	  "description": "section description"
+	}
   ]
 }
 ```
@@ -216,9 +230,9 @@ create call request class wise / dial
   * A json encoded associative array containing key and value pairs based on following fields
 ```json
 {
-    "name": "__String__",
-    "recording"  : "__media file__, choise wav audio file",
-    "description":"__Optional__",
+	"name": "__String__",
+	"recording"  : "__media file__, choise wav audio file",
+	"description":"__Optional__",
 }
 ```
 * __Response__  
@@ -245,10 +259,10 @@ Replace {section_id} in url with valid section_id
 
 ```json
 {
-    "id"         : "section id",
-    "name"       : "section name",
-    "description": "section description",
-    "class_code" : "class code"
+	"id"         : "section id",
+	"name"       : "section name",
+	"description": "section description",
+	"class_code" : "class code"
 }
 ```
 
@@ -264,13 +278,13 @@ Return  section subjects list assign to class or section as an json form
 ```json
 {
   "subjects": [
-    {
-      "code"    : "subject code",
-      "name"    : "subject name",
-      "type"    : "type , like Comprehensive,core,electives,
-      "class"   : "class code",
-      "stdgroup": "student group , like science ,arts etc"
-    }
+	{
+	  "code"    : "subject code",
+	  "name"    : "subject name",
+	  "type"    : "type , like Comprehensive,core,electives,
+	  "class"   : "class code",
+	  "stdgroup": "student group , like science ,arts etc"
+	}
   ]
 }
 ```
@@ -288,38 +302,38 @@ Return  section students list assign to class or section as an json form
 ```json
 {
   "student": [
-    {
-      "id"               : "student id",
-      "regiNo"           : "student registration",
-      "rollNo"           : "student roll no",
-      "session"          : "session , like year which year student enter",
-      "class"            : "class code",
-      "group"            : "group ,like science ,arts etc",
-      "section"          : "section id",
-      "shift"            : "shift ,like Morning evening",
-      "firstName"        : "student firstName",
-      "middleName"       : "student middleName",
-      "lastName"         : "student lastName",
-      "gender"           : "gender ",
-      "religion"         : "religion",
-      "bloodgroup"       : "bloodgroup",
-      "nationality"      : "nationality",
-      "dob"              : "date of brith",
-      "photo"            : "photo name ",
-      "extraActivity"    : "extraActivity",
-      "remarks"          : "remarks",
-      "fatherName"       : "fatherName",
-      "fatherCellNo"     : "fatherCellNo",
-      "motherName"       : "motherName",
-      "motherCellNo"     : "motherCellNo",
-      "localGuardian"    : "localGuardian",
-      "localGuardianCell": "localGuardianCell",
-      "presentAddress"   : "presentAddress",
-      "parmanentAddress" : "parmanentAddress",
-      "isActive"         : "isActive , Yes or No",
-      "created_at"       : "created_at",
-      "updated_at"       : "updated_at"
-    },
+	{
+	  "id"               : "student id",
+	  "regiNo"           : "student registration",
+	  "rollNo"           : "student roll no",
+	  "session"          : "session , like year which year student enter",
+	  "class"            : "class code",
+	  "group"            : "group ,like science ,arts etc",
+	  "section"          : "section id",
+	  "shift"            : "shift ,like Morning evening",
+	  "firstName"        : "student firstName",
+	  "middleName"       : "student middleName",
+	  "lastName"         : "student lastName",
+	  "gender"           : "gender ",
+	  "religion"         : "religion",
+	  "bloodgroup"       : "bloodgroup",
+	  "nationality"      : "nationality",
+	  "dob"              : "date of brith",
+	  "photo"            : "photo name ",
+	  "extraActivity"    : "extraActivity",
+	  "remarks"          : "remarks",
+	  "fatherName"       : "fatherName",
+	  "fatherCellNo"     : "fatherCellNo",
+	  "motherName"       : "motherName",
+	  "motherCellNo"     : "motherCellNo",
+	  "localGuardian"    : "localGuardian",
+	  "localGuardianCell": "localGuardianCell",
+	  "presentAddress"   : "presentAddress",
+	  "parmanentAddress" : "parmanentAddress",
+	  "isActive"         : "isActive , Yes or No",
+	  "created_at"       : "created_at",
+	  "updated_at"       : "updated_at"
+	},
 
   ]
 }
@@ -337,15 +351,15 @@ Return  section teachers list assign to class or section as an json form
 ```json
 {
   "teacher": [
-    {
-      "id"            : "teacher id",
-      "firstName"     : "teacher firstName",
-      "lastName"      : "teacher lastName",
-      "fatherName"    : "fatherName",
-      "fatherCellNo"  : "fatherCellNo",
-      "presentAddress": "presentAddress",
-      "Subject"       : "subject Name"
-    },
+	{
+	  "id"            : "teacher id",
+	  "firstName"     : "teacher firstName",
+	  "lastName"      : "teacher lastName",
+	  "fatherName"    : "fatherName",
+	  "fatherCellNo"  : "fatherCellNo",
+	  "presentAddress": "presentAddress",
+	  "Subject"       : "subject Name"
+	},
   ]
 }
 ```
@@ -356,9 +370,9 @@ create call request section wise / dial
   * A json encoded associative array containing key and value pairs based on following fields
 ```json
 {
-    "name": "__String__",
-    "recording": "__media file__, choise wav audio file",
-    "description":"__Optional__",
+	"name": "__String__",
+	"recording": "__media file__, choise wav audio file",
+	"description":"__Optional__",
 }
 ```
 * __Response__  
@@ -384,23 +398,23 @@ Replace {student_id} in url with valid student_id
 ```json
 {
   "studnet": {
-    "id"               : "student id",
-    "regiNo"           : "student registration",
-    "rollNo"           : "student roll no",
-    "firstName"        : "student firstName",
-    "middleName"       : "student middleName",
-    "lastName"         : "student lastName",
-    "fatherName"       : "fatherName",
-    "motherName"       : "motherName",
-    "fatherCellNo"     : "fatherCellNo",
-    "motherCellNo"     : "motherCellNo",
-    "localGuardianCell": "localGuardianCell",
-    "class"            : "class",
-    "section"          : "section",
-      "group"          : "group ,like science ,arts etc",
-     "presentAddress"  : "presentAddress",
-     "gender"          : "gender ",
-      "religion"       : "religion",
+	"id"               : "student id",
+	"regiNo"           : "student registration",
+	"rollNo"           : "student roll no",
+	"firstName"        : "student firstName",
+	"middleName"       : "student middleName",
+	"lastName"         : "student lastName",
+	"fatherName"       : "fatherName",
+	"motherName"       : "motherName",
+	"fatherCellNo"     : "fatherCellNo",
+	"motherCellNo"     : "motherCellNo",
+	"localGuardianCell": "localGuardianCell",
+	"class"            : "class",
+	"section"          : "section",
+	  "group"          : "group ,like science ,arts etc",
+	 "presentAddress"  : "presentAddress",
+	 "gender"          : "gender ",
+	  "religion"       : "religion",
   }
 }
 ```
@@ -421,9 +435,9 @@ create call request section wise / dial
   * A json encoded associative array containing key and value pairs based on following fields
 ```json
 {
-    "name": "__String__",
-    "recording": "__media file__, choise wav audio file",
-    "description":"__Optional__",
+	"name": "__String__",
+	"recording": "__media file__, choise wav audio file",
+	"description":"__Optional__",
 }
 ```
 also Replace {student_id} in url with valid student_id
@@ -449,9 +463,9 @@ Replace {exam_id} in url with valid exam_id
 ```json
 {
   "exam"     : {
-    "type"   : "exam type like class test final term",
-    "class"  : "class name",
-    "section": "section name"
+	"type"   : "exam type like class test final term",
+	"class"  : "class name",
+	"section": "section name"
   }
 }
 ```
@@ -476,22 +490,22 @@ Replace {result_id} in url with valid result_id
 ```json
 {
   "result": {
-    "id"          : "result id",
-    "regiNo"      : "student registration number",
-    "rollNo"      : "student roll number",
-    "firstName"   : "student firstName",
-    "lastName"    : "student lastName",
-    "class"       : "class name",
-    "section"     : "section name",
-    "subject"     : "subject name",
-    "written"     : "marke",
-    "mcq"         : "marks",
-    "practical"   : "marks",
-    "ca"          : "marks",
-    "total"       : "marks",
-    "grade"       : "grade",
-    "point"       : "point",
-    "Absent"      : "No ,Yes"
+	"id"          : "result id",
+	"regiNo"      : "student registration number",
+	"rollNo"      : "student roll number",
+	"firstName"   : "student firstName",
+	"lastName"    : "student lastName",
+	"class"       : "class name",
+	"section"     : "section name",
+	"subject"     : "subject name",
+	"written"     : "marke",
+	"mcq"         : "marks",
+	"practical"   : "marks",
+	"ca"          : "marks",
+	"total"       : "marks",
+	"grade"       : "grade",
+	"point"       : "point",
+	"Absent"      : "No ,Yes"
   }
 }
 
@@ -505,18 +519,18 @@ Add result
 
 ```json
 {
-    "class_id"    : "__String__",
-    "section_id"  : "__String__, ",
-    "session"     :"__String__",
-    "regiNo"      : "__String__",
-    "exam_id"     : "__String__, ",
-    "subject_code":"__String__",
-    "written"     : "__String__",
-    "mcq"         : "__String__, ",
-    "practical"   :"__String__",
-    "ca"          : "__String__",
-    "absent"      : "__String__, Yes Or No",
-    
+	"class_id"    : "__String__",
+	"section_id"  : "__String__, ",
+	"session"     :"__String__",
+	"regiNo"      : "__String__",
+	"exam_id"     : "__String__, ",
+	"subject_code":"__String__",
+	"written"     : "__String__",
+	"mcq"         : "__String__, ",
+	"practical"   :"__String__",
+	"ca"          : "__String__",
+	"absent"      : "__String__, Yes Or No",
+	
 }
 ```
 * __Response__  
@@ -533,18 +547,18 @@ Update an existing result
 
 ```json
 {
-    "class_id"     : "__String__",
-    "section_id"   : "__String__, ",
-    "session"      :"__String__",
-    "regiNo"       : "__String__",
-    "exam_id"      : "__String__, ",
-    "subject_code" :"__String__",
-    "written"      : "__String__",
-    "mcq"          : "__String__, ",
-    "practical"    :"__String__",
-    "ca"           : "__String__",
-    "absent"       : "__String__, Yes Or No",
-    
+	"class_id"     : "__String__",
+	"section_id"   : "__String__, ",
+	"session"      :"__String__",
+	"regiNo"       : "__String__",
+	"exam_id"      : "__String__, ",
+	"subject_code" :"__String__",
+	"written"      : "__String__",
+	"mcq"          : "__String__, ",
+	"practical"    :"__String__",
+	"ca"           : "__String__",
+	"absent"       : "__String__, Yes Or No",
+	
 }
 ```
 * __Response__  
@@ -573,9 +587,12 @@ Create new Attendence
 A json encoded associative array containing key and value pairs based on following fields
 ```json
 {
-    "regiNo" : "__String__", Student registration number
-    "date"   : "__String__",Date Formate date-month-year
-    "status" :"__String__" Present,Absent
+	"regiNo" : "__String__", Student registration number
+	"date"   : "__String__",Date Formate date-month-year
+	"class_id":"__class id__",
+	"section_id":"__section id__",
+    "session":"__String__", Admission Year
+	"status" :"__String__" Present,Absent
 }
 ```
 * __Response__
@@ -611,9 +628,9 @@ create notification
   * A json encoded associative array containing key and value pairs based on following fields
 ```json
 {
-    "name"       : "__String__",
-    "recording"  : "__media file__, choise wav audio file",
-    "description":"__Optional__",
+	"name"       : "__String__",
+	"recording"  : "__media file__, choise wav audio file",
+	"description":"__Optional__",
 }
 ```
 * __Response__  

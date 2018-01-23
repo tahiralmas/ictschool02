@@ -21,6 +21,7 @@ use App\Attendance;
 use App\Student;
 use App\SectionModel;
 use DB;
+use Hash;
 use Excel;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
@@ -74,7 +75,7 @@ class UserController extends Controller
        // $user = Auth::user();
         $user = DB::table('users')->select('id','firstname','lastname','desc','login','email','group')->where('id','=',$user_id)->first();
         if(!is_null($user)){
-       	 return response()->json(['user' => $user], $this->successStatus);
+       	 return response()->json($user, $this->successStatus);
         }else{
            return response()->json(['error'=>'Student not found'], 404);
         }   
@@ -89,9 +90,15 @@ class UserController extends Controller
     {
     	//dd($user_id);
        // $user = Auth::user();
-        $user = DB::table('users')->select('id','firstname','lastname','desc','login','email','group')->get();
-        if(!is_null($user)){
-       	 return response()->json(['user' => $user], $this->successStatus);
+        $user = DB::table('users')->select('id','firstname','lastname','desc','login','group');
+        
+        $user->when(request('group', false), function ($q, $group) { 
+			return $q->where('group', $group);
+			});
+        
+        $user=$user->get();
+        if(count($user)>0){
+       	 return response()->json($user, $this->successStatus);
         }else{
 
            return response()->json(['error'=>'Student not found'], 404);
@@ -103,6 +110,8 @@ class UserController extends Controller
        $rules=[
 		'firstname' => 'required',
 		'lastname' => 'required',
+		'phone'=>'required',
+		'loginname'=>'required',
 		'password'=>  'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
@@ -114,9 +123,12 @@ class UserController extends Controller
 		 $user = User::find($user_id);
           $user->firstname = Input::get('firstname');
           $user->lastname = Input::get('lastname');
+          $user->login = Input::get('loginname');
+        //  $user->email = Input::get('email');
+          $user->phone = Input::get('phone');
           $user->password = Hash::make(Input::get('password'));
           $user->save();
-          return response()->json(['user'=>$user],200);
+          return response()->json($user,$this->successStatus);
 
 		}
 
