@@ -25,6 +25,7 @@ Route::post('authenticate', 'Api\UserController@login');
 	Route::put('users/{user_id}', 'Api\UserController@put_user');
 	
 // Attendance api routes
+       Route::get('attendances','Api\AttendanceController@getallattendance');
 	Route::get('attendances/{class_level}/{section}/{shift}/{session}/{date}','Api\AttendanceController@attendance_view');
 	Route::post('attendances','Api\AttendanceController@attendance_create');
 	Route::get('attendances/{attendance_id}','Api\AttendanceController@get_attendance');
@@ -75,8 +76,7 @@ Route::post('authenticate', 'Api\UserController@login');
   Route::get('exams/{exam_id}','Api\ExamController@getexam');
   // Route::get('classes/{class_id}','Api\ClassController@getclass');
    //Route::put('classes/{class_id}','Api\ClassController@update_class');
-  
-  //message
+   //message
    Route::get('messages','Api\MessageController@getallmessages');
    Route::post('messages','Api\MessageController@postmessage');
    Route::get('messages/{message_name}','Api\MessageController@getmessage');
