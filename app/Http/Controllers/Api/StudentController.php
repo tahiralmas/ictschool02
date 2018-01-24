@@ -198,9 +198,9 @@ class StudentController extends Controller
          return response()->json($validator->errors(), 422);
         }
         else{
-    		$drctry = storage_path('app/public/messages/');
+    		/*$drctry = storage_path('app/public/messages/');
              $mimetype      = mime_content_type($drctry.Input::get('message'));
-            if($mimetype =='audio/x-wav' || $mimetype=='audio/wav'){ 
+            if($mimetype =='audio/x-wav' || $mimetype=='audio/wav'){ */
 
                 $ict         = new ictcoreController();
                 $postmethod  = new NotificationController();
@@ -219,9 +219,9 @@ class StudentController extends Controller
                 $contact_id = $ict->ictcore_api('contacts','POST',$data );
                 return $postmethod->postnotificationmethod(Input::get('name'),Input::get('type'),Input::get('message'),'single',$contact_id);
 
-       		 }else{
+       		/* }else{
                  return response()->json("ERROR:Please Upload Correct file",415 );
-             }
+             }*/
         }
     }
 	/*public function studentnotification($student_id){

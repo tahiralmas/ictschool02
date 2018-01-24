@@ -84,16 +84,13 @@ class NotificationController extends Controller
 
     public function postnotificationmethod($name,$type,$message,$creatnotication,$id)
     {
-          // return response()->json("hghhgh",404 );
-
+          $ict  = new ictcoreController();
         if($type=='voice' || $type=='Voice'){
             $drctry = storage_path('app/public/messages/');
             if(File::exists($drctry.$message)){
-
-               
                 $mimetype      = mime_content_type($drctry.$message);
                  if($mimetype =='audio/x-wav' || $mimetype=='audio/wav'){ 
-                     	 $ict  = new ictcoreController();
+                     	
                 		    
                         $data = array(
                                      'name' => $name,
@@ -122,7 +119,6 @@ class NotificationController extends Controller
                         	return response()->json("ERROR: Recording not Created" );
                                           
                         }
- 
             			$notificationData= [
             							'name' => $name,
             							'description' =>$message,
@@ -131,55 +127,52 @@ class NotificationController extends Controller
             							'ictcore_program_id' => $program_id,
             							'ictcore_recording_id' => $recording_id,
             						];
-
-        					  $notification_id = Message::insertGetId($notificationData);
-
-
-                          if($creatnotication=='group'){
-
-                            $data = array(
-                                'program_id' => $program_id,
-                                'group_id' => $id,
-                                'delay' => '',
-                                'try_allowed' => '',
-                                'account_id' => 1,
-                                'status' => '',
-                            );
-
-                            $campaign_id = $ict->ictcore_api('campaigns','POST',$data );
-
-                            return response()->json(['success'=>"Nofication Sended Succesfully."],200);
-
-                          }elseif($creatnotication=='single'){
-
-                             $data = array(
-                                'title' => 'Attendance',
-                                'program_id' => $program_id,
-                                'account_id'     => 1,
-                                'contact_id'     => $id,
-                                'origin'     => 1,
-                                'direction'     => 'outbound',
-                                );
-                                $transmission_id = $ict->ictcore_api('transmissions','POST',$data );
-
-                                $transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
-
-                                return response()->json(['success'=>"Nofication Sended Succesfully."],200);
-                          }
-         
-
-        		      return response()->json(['success'=>"Nofication save Succesfully.",'id' => $notification_id]);
+        				$notification_id = Message::insertGetId($notificationData);
         	    }else{
                     return response()->json("ERROR:Please Upload Correct file",415 );
         	    }
             }else{
-
                 return response()->json("ERROR:file not found",404 );
             }
-        }else{
-
-             return response()->json("ERROR:type not exist",404 );
+        }elseif($type=='sms' || $type=='Sms' || $type=='SMS'){
+            $data = array(
+                'name' => $name,
+                'data' =>$message,
+                'type' => 'plain',
+                'description' =>'',
+            );
+            $text_id  =  $ict->ictcore_api('messages/texts','POST',$data );
+            $data = array(
+                'name' => $name,
+                'text_id' =>$text_id,
+            );
+            $program_id  =  $ict->ictcore_api('programs/sendsms','POST',$data );
         }
+        if($creatnotication=='group'){
+            $data = array(
+            'program_id' => $program_id,
+            'group_id' => $id,
+            'delay' => '',
+            'try_allowed' => '',
+            'account_id' => 1,
+            'status' => '',
+            );
+            $campaign_id = $ict->ictcore_api('campaigns','POST',$data );
+            return response()->json(['success'=>"Nofication Sended Succesfully."],200);
+        }elseif($creatnotication=='single'){
+            $data = array(
+            'title' => 'Attendance',
+            'program_id' => $program_id,
+            'account_id'     => 1,
+            'contact_id'     => $id,
+            'origin'     => 1,
+            'direction'     => 'outbound',
+            );
+            $transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+            $transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+            return response()->json(['success'=>"Nofication Sended Succesfully."],200);
+        }
+        return response()->json(['success'=>"Nofication save Succesfully.",'id' => $notification_id]);
     }
 
 
