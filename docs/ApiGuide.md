@@ -52,7 +52,7 @@ an array of specific user
 
 ```json
 {
-  "user": {
+  {
 	"id": "user_id",
 	"firstname": "firstname.",
 	"lastname": "lastname",
@@ -73,10 +73,11 @@ Replace {user_id} in url with valid user_id, fields require modifications will b
 
 ```json
 {
-"firstname": "__String__",
-"lastname": "__Strring__",
-"password": "__String__",
-
+	"firstname": "__String__",
+    "lastname": "__Strring__",
+    "loginname": "__String__",
+    "phone":"__String__",0300xxxxxxx
+    "password": "__String__"
 }
 ```
 * __Response__  
@@ -138,7 +139,7 @@ an array of specific teacher
 	  "updated_at"      : "updated_at"
 	  }
 
-
+```
 ### PUT teachers/{teacher_id}
 Update an existing teacher
 
@@ -177,6 +178,45 @@ Replace {teacher_id} in url with valid teacher_id
 * __Response__  
 Return  teacher data with subjects who's assign teacher as an json form
 
+
+Message
+--------
+### GET messages
+
+* __Response__  
+an list of all wav file in message directory
+
+### GET message/{file_name}
+
+* __Parameters__  
+Replace {file_name} in url with valid file_name.wav
+
+*__response__
+Return Riffc string
+
+### POST messages
+
+create message 
+
+* __Parameters__  
+Upload media / wave file
+
+* __Response__  
+Return media file name (filename.wav)
+
+### PUT messages/{filename}
+Update an existing upload media file
+
+* __Parameters__  
+Replace {filename} in url with valid filename, fields require modifications will be POSTed in same way as `messages`
+
+* __Response__  
+Return updated notification data as an  json
+
+### DELETE messsages/{filename}
+* __Parameters__  
+Replace {file_name} in url with valid file_name.wav
+
 Classes
 -------
 ### GET classes
@@ -214,7 +254,7 @@ Return  sections list assign to class as an json form
 
 ```json
 {
-  "class_section": [
+   [
 	{
 	  "name"       : "section name",
 	  "description": "section description"
@@ -226,13 +266,15 @@ Return  sections list assign to class as an json form
 ### POST classes/{class_id}/notifications
 create call request class wise / dial 
 
+##### first creat message then use this method 
+
 * __Parameters__  
   * A json encoded associative array containing key and value pairs based on following fields
 ```json
 {
 	"name": "__String__",
-	"recording"  : "__media file__, choise wav audio file",
-	"description":"__Optional__",
+	"type"  : "__String__",voice or sms,
+	"message":"__String__", if voice send file name or if sms send message text
 }
 ```
 * __Response__  
@@ -277,7 +319,7 @@ Return  section subjects list assign to class or section as an json form
 
 ```json
 {
-  "subjects": [
+   [
 	{
 	  "code"    : "subject code",
 	  "name"    : "subject name",
@@ -301,7 +343,7 @@ Return  section students list assign to class or section as an json form
 
 ```json
 {
-  "student": [
+  [
 	{
 	  "id"               : "student id",
 	  "regiNo"           : "student registration",
@@ -350,7 +392,7 @@ Return  section teachers list assign to class or section as an json form
 
 ```json
 {
-  "teacher": [
+   [
 	{
 	  "id"            : "teacher id",
 	  "firstName"     : "teacher firstName",
@@ -366,17 +408,19 @@ Return  section teachers list assign to class or section as an json form
 ### POST sections/{section_id}/notifications
 create call request section wise / dial 
 
+#### first creat message in Post messages portion then use this api
+
 * __Parameters__  
   * A json encoded associative array containing key and value pairs based on following fields
 ```json
 {
 	"name": "__String__",
-	"recording": "__media file__, choise wav audio file",
-	"description":"__Optional__",
+	"type"  : "__String__",voice or sms,
+	"message":"__String__", if voice send file name or if sms send message text
 }
 ```
 * __Response__  
-__notification_id__ of recently created notification record
+    Success message 
 
 Student
 ---------
@@ -397,7 +441,7 @@ Replace {student_id} in url with valid student_id
 
 ```json
 {
-  "studnet": {
+  
 	"id"               : "student id",
 	"regiNo"           : "student registration",
 	"rollNo"           : "student roll no",
@@ -415,7 +459,7 @@ Replace {student_id} in url with valid student_id
 	 "presentAddress"  : "presentAddress",
 	 "gender"          : "gender ",
 	  "religion"       : "religion",
-  }
+  
 }
 ```
 
@@ -431,13 +475,17 @@ Return   subjects list of student as an json form
 ### POST students/{student_id}/notifications
 create call request section wise / dial 
 
+#### first creat message in Post messages portion then use this api
+
 * __Parameters__  
   * A json encoded associative array containing key and value pairs based on following fields
+
+ 
 ```json
 {
 	"name": "__String__",
-	"recording": "__media file__, choise wav audio file",
-	"description":"__Optional__",
+	"type"  : "__String__",voice or sms,
+	"message":"__String__", if voice send file name or if sms send message text
 }
 ```
 also Replace {student_id} in url with valid student_id
@@ -488,8 +536,8 @@ Replace {result_id} in url with valid result_id
 * __Response__
 
 ```json
-{
-  "result": {
+
+   {
 	"id"          : "result id",
 	"regiNo"      : "student registration number",
 	"rollNo"      : "student roll number",
@@ -507,7 +555,7 @@ Replace {result_id} in url with valid result_id
 	"point"       : "point",
 	"Absent"      : "No ,Yes"
   }
-}
+
 
 ```
 
@@ -623,16 +671,16 @@ Replace {notification_id} in url with valid notification_id
 
 ### POST notifications
 create notification 
+#### first creat message in Post messages portion then use this api
 
 * __Parameters__  
   * A json encoded associative array containing key and value pairs based on following fields
 ```json
 {
-	"name"       : "__String__",
-	"recording"  : "__media file__, choise wav audio file",
-	"description":"__Optional__",
+	"name": "__String__",
+	"type"  : "__String__",voice or sms,
+	"message":"__String__", if voice send file name or if sms send message text
 }
-```
 * __Response__  
 __notification_id__ of recently created notification record
 

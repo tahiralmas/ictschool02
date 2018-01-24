@@ -304,7 +304,9 @@ function ictcore_api($method,$req, $arguments = array()) {
         }
       }
 	 $postData = json_encode($post_data); // Only USE this when request JSON data
-	  if($requestType =="PUT"  && $urlaray[3]=='media'){
+	  //if($requestType =="PUT"  && $urlaray[3]=='media'){
+	   if($requestType =="PUT"  && in_array("media", $urlaray)){
+	  
 		$fil = file_get_contents($post_data[0]->name);
 	    curl_setopt($curl, CURLOPT_POSTFIELDS, $fil);
 	    curl_setopt($curl, CURLOPT_HTTPHEADER, array("X-HTTP-Method-Override: " . $requestType,'Content-Type: audio/x-wav'));

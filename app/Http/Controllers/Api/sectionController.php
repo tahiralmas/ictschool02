@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers\Api;
-
+use App\Http\Controllers\Api\NotificationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
@@ -157,9 +157,56 @@ class sectionController extends Controller
        }
     }
 
+    public function sectionwisenotification($section_id){
 
+        $rules=[
+            'name'    =>'required',
+            'type'    => 'required',
+            'message' =>'required'
 
-     public function sectionwisenotification($section_id){
+            ];
+        $validator = \Validator::make(Input::all(), $rules);
+        if ($validator->fails())
+        {
+         return response()->json($validator->errors(), 422);
+        }
+        else{
+                 $drctry = storage_path('app/public/messages/');
+                 $mimetype      = mime_content_type($drctry.Input::get('message'));
+                if($mimetype =='audio/x-wav' || $mimetype=='audio/wav'){ 
+
+                    $ict  = new ictcoreController();
+                    $postmethod  = new NotificationController();
+                    $data = array(
+                    'name' => Input::get('name'),
+                    'description' => 'this is section wise group',
+                    );
+                    $group_id= $ict->ictcore_api('groups','POST',$data );
+
+                    $student=   DB::table('Student')
+                    ->select('*')
+                    ->where('isActive','Yes')
+                    ->where('section', $section_id)
+                    ->get();
+
+                    foreach($student as $std){
+                        $data = array(
+                        'first_name' => $std->firstName,
+                        'last_name' => $std->lastName,
+                        'phone'     => $std->fatherCellNo,
+                        'email'     => '',
+                        );
+                        $contact_id = $ict->ictcore_api('contacts','POST',$data );
+                        $group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+                    }
+                        return $postmethod->postnotificationmethod(Input::get('name'),Input::get('type'),Input::get('message'),'group',$group_id);
+                }else{
+                     return response()->json("ERROR:Please Upload Correct file",415 );
+                 }
+        }
+    }
+
+     /*public function sectionwisenotification($section_id){
 
         $rules=[
             'name'        => 'required',
@@ -286,7 +333,7 @@ class sectionController extends Controller
 
             }
         }
-    }         
+    } */        
 }
 
 

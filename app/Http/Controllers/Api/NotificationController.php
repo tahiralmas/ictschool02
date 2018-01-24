@@ -35,7 +35,7 @@ class NotificationController extends Controller
 	 */
 	public function getallnotification()
 	{
-		  $messages = DB::table('message')->select('name','description','recording','ictcore_program_id','ictcore_recording_id')->get();
+		  $messages = DB::table('message')->select('id','name','description','recording','ictcore_program_id','ictcore_recording_id')->get();
 		/*  ->join('Class', 'Student.class', '=', 'Class.code')
 		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
 		  'Class.Name as class','Student.section' ,'Student.group' ,'Student.presentAddress', 'Student.gender', 'Student.religion')
@@ -61,21 +61,145 @@ class NotificationController extends Controller
         return response()->json(['error'=>'Notification Not Found'], 404);
        }
     }
-     public function postnotification(Request $request)
+
+    public function postnotification(Request $request)
     {
          
-	 $rules=[
+     $rules=[
             'name'    =>'required',
-			'type'    => 'required',
-			'message' =>'required'
+            'type'    => 'required',
+            'message' =>'required'
 
-			];
-		$validator = \Validator::make(Input::all(), $rules);
-		if ($validator->fails())
-		{
-		 return response()->json($validator->errors(), 422);
-		}
-		else {
+            ];
+        $validator = \Validator::make(Input::all(), $rules);
+        if ($validator->fails())
+        {
+         return response()->json($validator->errors(), 422);
+        }
+        else {
+
+             return $this->postnotificationmethod(Input::get('name'),Input::get('type'),Input::get('message'),'','');
+        }
+    }
+
+    public function postnotificationmethod($name,$type,$message,$creatnotication,$id)
+    {
+          // return response()->json("hghhgh",404 );
+
+        if($type=='voice' || $type=='Voice'){
+            $drctry = storage_path('app/public/messages/');
+            if(File::exists($drctry.$message)){
+
+               
+                $mimetype      = mime_content_type($drctry.$message);
+                 if($mimetype =='audio/x-wav' || $mimetype=='audio/wav'){ 
+                     	 $ict  = new ictcoreController();
+                		    
+                        $data = array(
+                                     'name' => $name,
+        				             'description' =>'',
+        							 );
+                         $recording_id  =  $ict->ictcore_api('messages/recordings','POST',$data );
+                         $file_name     =  $drctry.$message;
+                         $mimetype      =  mime_content_type($file_name);
+                         $cfile         =  curl_file_create($file_name, $mimetype, basename($file_name));
+                         $data          =  array( $cfile);
+        				 $result        =  $ict->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
+                         $recording_id  =  $result ;
+                        if(!is_array($recording_id )){
+                            $data = array(
+                                     'name' => $name,
+        				             'recording_id' => $recording_id,
+        							 );
+                         $program_id = $ict->ictcore_api('programs/voicemessage','POST',$data );
+                         if(!is_array( $program_id )){
+                          $program_id = $program_id;
+                         }else{
+                         	return response()->json("ERROR: Program not Created" );
+                         
+                         }
+                        }else{
+                        	return response()->json("ERROR: Recording not Created" );
+                                          
+                        }
+ 
+            			$notificationData= [
+            							'name' => $name,
+            							'description' =>$message,
+            							'recording' =>  basename($file_name),
+                                        'type'     => $type,
+            							'ictcore_program_id' => $program_id,
+            							'ictcore_recording_id' => $recording_id,
+            						];
+
+        					  $notification_id = Message::insertGetId($notificationData);
+
+
+                          if($creatnotication=='group'){
+
+                            $data = array(
+                                'program_id' => $program_id,
+                                'group_id' => $id,
+                                'delay' => '',
+                                'try_allowed' => '',
+                                'account_id' => 1,
+                                'status' => '',
+                            );
+
+                            $campaign_id = $ict->ictcore_api('campaigns','POST',$data );
+
+                            return response()->json(['success'=>"Nofication Sended Succesfully."],200);
+
+                          }elseif($creatnotication=='single'){
+
+                             $data = array(
+                                'title' => 'Attendance',
+                                'program_id' => $program_id,
+                                'account_id'     => 1,
+                                'contact_id'     => $id,
+                                'origin'     => 1,
+                                'direction'     => 'outbound',
+                                );
+                                $transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+
+                                $transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+
+                                return response()->json(['success'=>"Nofication Sended Succesfully."],200);
+                          }
+         
+
+        		      return response()->json(['success'=>"Nofication save Succesfully.",'id' => $notification_id]);
+        	    }else{
+                    return response()->json("ERROR:Please Upload Correct file",415 );
+        	    }
+            }else{
+
+                return response()->json("ERROR:file not found",404 );
+            }
+        }else{
+
+             return response()->json("ERROR:type not exist",404 );
+        }
+    }
+
+
+
+
+/* public function postnotificationmethod($name,$type,$message)
+    {
+         
+     $rules=[
+            'name'    =>'required',
+            'type'    => 'required',
+            'message' =>'required'
+
+            ];
+        $validator = \Validator::make(Input::all(), $rules);
+        if ($validator->fails())
+        {
+         return response()->json($validator->errors(), 422);
+        }
+        else {
                  
             if(Input::get('type')=='voice' || Input::get('type')=='Voice'){
 
@@ -86,21 +210,21 @@ class NotificationController extends Controller
                    
                     $mimetype      = mime_content_type($drctry.Input::get('message'));
                      if($mimetype =='audio/x-wav' || $mimetype=='audio/wav'){ 
-                         	 $ict  = new ictcoreController();
-                    		    // $headers = apache_request_headers();
+                             $ict  = new ictcoreController();
+                                // $headers = apache_request_headers();
                                  //dd($headers['Authorization']);
-                         //	$filename ='notification_'.time();//'recordingn5QzxE.wav';//tempnam(public_path('recording/'), 'recording'). ".wav";
+                         // $filename ='notification_'.time();//'recordingn5QzxE.wav';//tempnam(public_path('recording/'), 'recording'). ".wav";
 
                          // file_put_contents(public_path('recording/').$filename.'.wav', $drctry.Input::get('message'));
 
                              //      unlink(public_path('recording/'.$filename));
 
-            		    
+                        
                             sleep(3);
                             $data = array(
                                          'name' => Input::get('name'),
-            				             'description' => Input::get('description'),
-            							 );
+                                         'description' => Input::get('description'),
+                                         );
 
                              $recording_id  =  $ict->ictcore_api('messages/recordings','POST',$data );
                              $name          =  $drctry.Input::get('message');
@@ -109,146 +233,132 @@ class NotificationController extends Controller
 
                              $cfile         =  curl_file_create($name, $mimetype, basename($name));
                              $data          =  array( $cfile);
-            				 $result        =  $ict->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
+                             $result        =  $ict->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
                              $recording_id  =  $result ;
                             if(!is_array($recording_id )){
 
                               $data = array(
                                          'name' => Input::get('title'),
-            				             'recording_id' => $recording_id,
-            							 );
+                                         'recording_id' => $recording_id,
+                                         );
                              $program_id = $ict->ictcore_api('programs/voicemessage','POST',$data );
                              if(!is_array( $program_id )){
                               $program_id = $program_id;
                              }else{
-                             	return response()->json("ERROR: Program not Created" );
+                                return response()->json("ERROR: Program not Created" );
                              
                              }
                             }else{
-                            	return response()->json("ERROR: Recording not Created" );
+                                return response()->json("ERROR: Recording not Created" );
                                               
                             }
 
-            			$notificationData= [
-            							'name' => Input::get('name'),
-            							'description' =>Input::get('message'),
-            							'recording' =>  basename($name),
-            							'ictcore_program_id' => $program_id,
-            							'ictcore_recording_id' => $recording_id,
-            						];
+                        $notificationData= [
+                                        'name' => Input::get('name'),
+                                        'description' =>Input::get('message'),
+                                        'recording' =>  basename($name),
+                                        'ictcore_program_id' => $program_id,
+                                        'ictcore_recording_id' => $recording_id,
+                                    ];
 
-            					  $notification_id = Message::insertGetId($notificationData);
+                                  $notification_id = Message::insertGetId($notificationData);
 
 
-            		      return response()->json(['success'=>"Nofication save Succesfully.",'id' => $notification_id]);
-            	    }else{
+                          return response()->json(['success'=>"Nofication save Succesfully.",'id' => $notification_id]);
+                    }else{
                         return response()->json("ERROR:Please Upload Correct file". $drctry.Input::get('message'),415 );
-            	    }
+                    }
                 }
             }
 
-		}
+        }
       
-    }
-
+    }*/
     public function putnotification($notification_id)
     {
         // return response()->json(Input::all());
+        $rules=[
+        'name'    =>'required',
+        'type'    => 'required',
+        'message' =>'required'
+        ];
 
+        $validator = \Validator::make(Input::all(), $rules);
+        if ($validator->fails())
+        {
+        return response()->json($validator->errors(), 422);
+        }
+        else{
+            $type=Input::get('type');
+            $message = Message::find($notification_id);
+            if($type=='voice' || $type=='Voice'){
+                $drctry = storage_path('app/public/messages/');
+                 //return $drctry.Input::get('message');
+                if(File::exists($drctry.Input::get('message'))){
 
-         $rules=[
-		'name'        => 'required',
-        'message'     =>'required',
-		'recording'   =>'required'
-		];
-		$validator = \Validator::make(Input::all(), $rules);
-		if ($validator->fails())
-		{
-		 return response()->json($validator->errors(), 422);
-		}
-		else {
-                 $message = Message::find($notification_id);
-                  unlink(base_path().'/public/recording/'.$message->recording);
+                    $mimetype      = mime_content_type($drctry.Input::get('message'));
 
-            $finfo = new \finfo(FILEINFO_MIME_TYPE);
-            $mimetype      = $finfo->buffer(base64_decode(Input::get('recording')));
-             if($mimetype =='audio/x-wav' || $mimetype=='audio/wav'){ 
-             	 $ict  = new ictcoreController();
-		    
-             	 $filename ='notification_'.time();//'recordingn5QzxE.wav';//tempnam(public_path('recording/'), 'recording'). ".wav";
-
-              file_put_contents(public_path('recording/').$filename.'.wav', base64_decode(Input::get('recording')));
-
-                sleep(3);
-                $data = array(
-                             'name' => Input::get('name'),
-				             'description' => Input::get('description'),
-							 );
-
-                 $recording_id  =  $ict->ictcore_api('messages/recordings','POST',$data );
-                 $name          =  base_path() .'/public/recording/'.$filename.".wav";
-
-
-                 $finfo         =  new \finfo(FILEINFO_MIME_TYPE);
-                 $mimetype      =  $finfo->file($name);
-
-                 $cfile         =  curl_file_create($name, $mimetype, basename($name));
-                 $data          =  array( $cfile);
-				 $result        =  $ict->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
-                 $recording_id  =  $result ;
-                if(!is_array($recording_id )){
-
-                  $data = array(
-                             'name' => Input::get('title'),
-                             'message'=>
-				             'recording_id' => $recording_id,
-							 );
-                 $program_id = $ict->ictcore_api('programs/voicemessage','POST',$data );
-                 if(!is_array( $program_id )){
-                  $program_id = $program_id;
-                 }else{
-                 	return response()->json("ERROR: Program not Created" );
-                 
-                 }
+                    if($mimetype =='audio/x-wav' || $mimetype=='audio/wav'){ 
+                        $drctry = storage_path('app/public/messages/');
+                       // unlink($drctry.$message->recording);
+                        $ict  = new ictcoreController();
+                        $filename ='notification_'.time();//'recordingn5QzxE.wav';//tempnam(public_path('recording/'), 'recording'). ".wav";
+                        $data = array(
+                        'name' => Input::get('name'),
+                        'description' =>'',
+                        );
+                        $recording_id  =  $ict->ictcore_api('messages/recordings','PUT',$data );
+                        $name          =  $drctry.Input::get('message');
+                        $cfile         =  curl_file_create($name, $mimetype, basename($name));
+                        $data          =  array( $cfile);
+                        $result        =  $ict->ictcore_api('messages/recordings/'.$message->ictcore_recording_id.'/media','PUT',$data );
+                        $recording_id  =  $result ;
+                        if(!is_array($recording_id )){
+                           /* $data = array(
+                            'name' => Input::get('title'),
+                            'recording_id' => $recording_id,
+                            );
+                            $program_id = $ict->ictcore_api('programs/voicemessage','POST',$data );
+                            if(!is_array( $program_id )){
+                             $program_id = $program_id;
+                            }else{
+                             return response()->json("ERROR: Program not Created" );
+                            }*/
+                        }else{
+                         return response()->json("ERROR: Recording not Created" );
+                        }
+                        $message->name         = Input::get('name');
+                        $message->description  = Input::get('message');
+                        $message->recording    = Input::get('message');
+                        $message->type         = Input::get('type');
+                        //$message->ictcore_program_id = $program_id;
+                        //$message->ictcore_recording_id = $recording_id;
+                        if(!is_null($message) && count($message)>0){
+                            $message->save();
+                            return response()->json(['nofication'=>$message]);
+                        }else{
+                            return response()->json(['error'=>'Notification Not Found'], 404);
+                        }
+                    }else{
+                         return response()->json("ERROR:Please Upload Correct file",415 );
+                    }
                 }else{
-                	return response()->json("ERROR: Recording not Created" );
-                                  
+
+                     return response()->json("ERROR:file not found",404 );
                 }
-
-
-		   
-			$message->name= Input::get('name');
-			$message->description=Input::get('description');
-			$message->recording=$filename.'.wav';
-			$message->ictcore_program_id = $program_id;
-			$message->ictcore_recording_id = $recording_id;
-
-			
-
-
-
-
-
-        if(!is_null($message) && count($message)>0){
-        	$message->save();
-           return response()->json(['nofication'=>$message]);
-        }else{
-        return response()->json(['error'=>'Notification Not Found'], 404);
-       }
-    }else{
-    	return response()->json("ERROR:Please Upload Correct file",415 );
-
+            }else{
+                return response()->json("ERROR:type not found",404 );
+            }
+        }
     }
-}
-}
      public function deletenotification($notification_id)
     {
           $notification = Message::find($notification_id);
 		    if(!is_null($notification) && $notification->count()>0){
 
                DB::table('message')->where('id','=',$notification_id)->delete();
-
-               unlink(base_path().'/public/recording/'.$message->recording);
+             $drctry = storage_path('app/public/messages/');
+               unlink($drctry.$message->recording);
 
                   return response()->json(['success'=>"notification deleted Succesfully."],200);
 		    }else{

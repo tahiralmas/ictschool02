@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Api;
+use App\Http\Controllers\Api\NotificationController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ictcoreController;
@@ -96,7 +97,61 @@ class ClassController extends Controller
 
     }
 
+
     public function classwisenotification($class_id){
+
+        $rules=[
+            'name'    =>'required',
+            'type'    => 'required',
+            'message' =>'required'
+            ];
+
+        $validator = \Validator::make(Input::all(), $rules);
+        if ($validator->fails())
+        {
+         return response()->json($validator->errors(), 422);
+        }
+        else{
+                 $drctry = storage_path('app/public/messages/');
+                 $mimetype      = mime_content_type($drctry.Input::get('message'));
+                if($mimetype =='audio/x-wav' || $mimetype=='audio/wav'){ 
+
+                    $ict  = new ictcoreController();
+                    $postmethod  = new NotificationController();
+                    $classes = ClassModel::find($class_id);
+                    $class_code = $classes->code;
+
+                    $data = array(
+                    'name' => Input::get('name'),
+                    'description' => 'this is class '. $class_code.' group',
+                    );
+                    $group_id= $ict->ictcore_api('groups','POST',$data );
+                    
+                    $student=   DB::table('Student')
+                    ->select('*')
+                    ->where('isActive','Yes')
+                    ->where('class', $class_code)
+                    ->get();
+                    foreach($student as $std){
+                        $data = array(
+                            'first_name' => $std->firstName,
+                            'last_name' => $std->lastName,
+                            'phone'     => $std->fatherCellNo,
+                            'email'     => '',
+                        );
+                        $contact_id = $ict->ictcore_api('contacts','POST',$data );
+                        $group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+
+
+                    }
+                      return $postmethod->postnotificationmethod(Input::get('name'),Input::get('type'),Input::get('message'),'group',$group_id);
+                }else{
+                     return response()->json("ERROR:Please Upload Correct file",415 );
+                 }
+            }
+    }    
+
+   /* public function classwisenotification($class_id){
 
         $rules=[
             'name'        => 'required',
@@ -213,7 +268,7 @@ class ClassController extends Controller
 
             }
         }
-    }	    
+    }*/	    
 }
 
 

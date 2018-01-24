@@ -19,6 +19,7 @@ class CreateMessageTable extends Migration
              $table->string('name',30);
 	    $table->text('description');
             $table->string('recording',255);
+            $table->string('type',30); 
             $table->timestamps();
         });
     }

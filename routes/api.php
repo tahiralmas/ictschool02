@@ -75,13 +75,19 @@ Route::post('authenticate', 'Api\UserController@login');
   Route::get('exams/{exam_id}','Api\ExamController@getexam');
   // Route::get('classes/{class_id}','Api\ClassController@getclass');
    //Route::put('classes/{class_id}','Api\ClassController@update_class');
+  
+  //message
+   Route::get('messages','Api\MessageController@getallmessages');
+   Route::post('messages','Api\MessageController@postmessage');
+   Route::get('messages/{message_name}','Api\MessageController@getmessage');
+   Route::put('messages/{message_name}','Api\MessageController@putmessage');
+   Route::delete('messages/{message_name}','Api\MessageController@deletemessage');
    
 //Notification
    Route::get('notifications','Api\NotificationController@getallnotification');
    Route::post('notifications','Api\NotificationController@postnotification');
    Route::get('notifications/{notification_id}','Api\NotificationController@getnotification');
    Route::put('notifications/{notification_id}','Api\NotificationController@putnotification');
-   
    Route::delete('notifications/{notification_id}','Api\NotificationController@deletenotification');
    
    //Result
@@ -90,6 +96,8 @@ Route::post('authenticate', 'Api\UserController@login');
    Route::delete('results/{result_id}','Api\ResultController@deleteresult');
    Route::post('results','Api\ResultController@postresult');
    Route::put('results/{result_id}','Api\ResultController@putresult');
+   
+   
    	
 });
 

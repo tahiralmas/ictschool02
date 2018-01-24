@@ -17,6 +17,9 @@ class CreateTableAttendance extends Migration {
 
 					$table->increments('id');
 					$table->string('regiNo',20);
+					$table->string('class_id',20);
+					$table->string('section_id',20);
+					$table->string('session',20);
 					$table->date('date');
 					$table->string('status',20);
 					$table->dateTime('created_at');
