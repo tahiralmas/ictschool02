@@ -1,699 +1,800 @@
-School managment system REST APIs Guide
-===============================================
-
-Overview
---------
-* __API Access__ : Any valid combination of username and password created in usr table.
-* __POST Method__: Any data submitted to POST method based APIs must be encoded as json.
-* __GET Method__: user can use  GET methods for  APIs.
-* __List APIs__: All list APIs support optional search filter, to search Attendence and Student need to use search parameters in url as query string using key value pair.
-
-Authentication
----------------
-### POST api/authenticate
-
-
-* __Parameters__
-A json encoded associative array containing key and value pairs based on following fields
-```json
-{
-	"email": "__String__",
-	"password": "__String__",
-}
-```
-* __Response__
-give token 
-
-## Header Parameter
-```json
-{
-	 'Accept' => 'application/json',
-	 'Authorization' => 'Bearer '.$accessToken,
-	 'X-Requested-With' => 'XMLHttpRequest'
-						 
-}
-```
-Users
------
-### GET users
-
-* __Response__  
-an array of teachers
-
-
-### GET users/{user_id}
-Read / view complete user data
-
-* __Parameters__  
-Replace {user_id} in url with valid user_id
-
-* __Response__
-an array of specific user
-
-```json
-{
-  {
-	"id": "user_id",
-	"firstname": "firstname.",
-	"lastname": "lastname",
-	"desc": "description",
-	"login": "login" username,
-	"email": "email",
-	"group": "group" Admin,Student,Teacher
-  }
-}
-
-```
-
-### PUT users/{user_id}
-Update an existing user
-
-* __Parameters__  
-Replace {user_id} in url with valid user_id, fields require modifications will be
-
-```json
-{
-	"firstname": "__String__",
-    "lastname": "__Strring__",
-    "loginname": "__String__",
-    "phone":"__String__",0300xxxxxxx
-    "password": "__String__"
-}
-```
-* __Response__  
-Return updated user data as an json
-
-### GET teacher/{teacher_id}/sections
-Read / view complete teacher data
-
-* __Parameters__  
-Replace {teacher_id} in url with valid teacher_id
-
-### GET teacher/{teacher_id}/subjects
-Read / view complete teacher data
-
-* __Parameters__  
-Replace {teacher_id} in url with valid teacher_id
-
-* __Response__  
-Return  teacher data with subjects who's assign teacher as an json form
-
-
+FORMAT: 1A
+HOST: http://demo.ictschool.com/api/
 
 
-Teachers
----------
-### GET teachers
+# ICT School System Apis
 
-* __Response__  
-an array of teachers
+# Data Structures
 
+## User (object)
++ id: 1 (number)
++ firstname: adeel (string) 
++ lastname: sharif (string)
++ phone: 03001234567 (number)
++ desc: Description (string)
++ login: username (string)
++ group: usertype like,Admin,Teacher and Student (string)
 
-### GET teacher/{teacher_id}
-Read / view complete teacher data
 
-* __Parameters__  
-Replace {teacher_id} in url with valid teacher_id
 
-* __Response__
-an array of specific teacher
+## RequestUser (object)
 
-```json
-{
-	  "id"              : "teacher_id",
-	  "firstName"       : "firstName",
-	  "lastName"        : "lastName",
-	  "gender"          : "gender",
-	  "religion"        : "religion",
-	  "bloodgroup"      : "bloodgroup",
-	  "nationality"     : "nationality",
-	  "dob"             : "dob",
-	  "photo"           : "photo name",
-	  "phone"           : "phone",
-	  "email"           : "email",
-	  "fatherName"      : "fatherName",
-	  "fatherCellNo"    : "fatherCellNo",
-	  "presentAddress"  : "presentAddress",
-	  "parmanentAddress": "parmanentAddress",
-	  "created_at"      : "created_at",
-	  "updated_at"      : "updated_at"
-	  }
++ firstname: firstname (string , required) 
++ lastname: lastname (string , required)
++ phone: phone (string , required)
++ login: username (string , required)
++ password: password (string , required) 
++ group: usertype like,Admin,Teacher and Student (string , required)
 
-```
-### PUT teachers/{teacher_id}
-Update an existing teacher
 
-* __Parameters__  
-Replace {teacher_id} in url with valid teacher_id, fields require modifications will be
 
-```json
-{
-  "firstname": "firstname",
-  "lastname": "lastname",
-  "gender": "gender",
-  "dob": "date of brith",
-  "phone": "phone",
-  "email": "email",
-  "fatherName": "fatherName",
-  "presentAddress": "presentAddress",
-}
+## Teachers (object)
++ id: 1 (number,default)
++ firstname: firstname (string , required)
++ lastname: lastname (string , required)
++ gender: Male,Female (string, required)
++ dob: date of brith (string, required)
++ email: email (string, required)
++ phone: phone (string , required)
++ fathername: father name (string, required)
++ fathercellno: 03001234567 (number, required)
++ presentaddress: presentAddress (string, required)
 
-```
 
-* __Response__  
-Return updated teacher data as an json
 
-### GET teacher/{teacher_id}/sections
-Read / view complete teacher data
+## Teacherssection (object)
 
-* __Parameters__  
-Replace {teacher_id} in url with valid teacher_id
++ class: class name (string)
++ section: section name (string)
 
-### GET teacher/{teacher_id}/subjects
-Read / view complete teacher data
 
-* __Parameters__  
-Replace {teacher_id} in url with valid teacher_id
 
-* __Response__  
-Return  teacher data with subjects who's assign teacher as an json form
+## Teacherssubjects (object)
 
++ subject: subject name (string)
++ class: class name (string)
 
-Message
---------
-### GET messages
 
-* __Response__  
-an list of all wav file in message directory
+## Messages (object)
 
-### GET message/{file_name}
++ filename: filename.wav (string ) - return wav file
 
-* __Parameters__  
-Replace {file_name} in url with valid file_name.wav
+## Classes (object)
 
-*__response__
-Return Riffc string
++ id: 1 (number ,default)
++ code: class code (string,required)
++ name: class name (string,required)
++ description: class name (string,optional)
 
-### POST messages
 
-create message 
 
-* __Parameters__  
-Upload media / wave file
+## sections (object)
 
-* __Response__  
-Return media file name (filename.wav)
++ id: 1 (number ,default)
++ name: section name (string,required)
++ description: description (string,required)
++ class_code: class code (string,required)
 
-### PUT messages/{filename}
-Update an existing upload media file
 
-* __Parameters__  
-Replace {filename} in url with valid filename, fields require modifications will be POSTed in same way as `messages`
 
-* __Response__  
-Return updated notification data as an  json
+## Students (object)
++ id: 1 (number,default)
++ regiNo: regiNo (string , required) 
++ rollNo: rolNo (string , required)
++ firstname: firstname (string , required)
++ lastname: lastname (string , required)
++ gender: Male,Female (string, required)
++ dob: date of brith (string, required)
++ religion: religion (string , required)
++ fathername: father name (string, required)
++ fathercellno: 03001234567 (number, required)
++ mothername: Mother Name (string , required) 
++ mothercellno: 03001234567 (number , required)
++ class: class (string, required)
++ section: section (string, required)
++ group: group,sicence,art (string, required)
++ session: year (string , required)
++ presentaddress: presentAddress (string, required)
 
-### DELETE messsages/{filename}
-* __Parameters__  
-Replace {file_name} in url with valid file_name.wav
 
-Classes
--------
-### GET classes
+## Notifications (object)
 
-* __Response__  
-an array of classes
++ name: notification name (string , required)
++ type: voice or sms  (string , required)
++ message: if voice send file name or if sms send message text (string , required)
 
-### GET classes/{class_id}
-Read / view complete class data
+## Exams (object)
++ id: 1 (number) - exam id auto incremented
++ type: class test,final exam,middle term,first term (string) - exam type
++ class: one,two etc (string ) - class name
++ section: A,B,C (string) - section name
 
-* __Parameters__  
-Replace {class_id} in url with valid class_id
+## Results (object)
 
-* __Response__
++ id: 1 (number) - result id
++ regiNo: 1234 (number) - registration number
++ subject: 001 (string) - subject code
++ rollNo: 02 (number) - rollNo
++ firstName: abc (string) - first name
++ lastName: def (string) - last name
++ class: one (string) - class name
++ section: A (string) - section name
++ written: 25 (number) - obtain written subject marks
++ mcq: 25 (number) - obtain mcq subject marks
++ practical: 25 (number) - obtain practical subject marks
++ ca: 25 (number) - obtain ca subject marks
++ total: 100 (number) - obtain total subject marks
++ grade: A (string) - pre define grade
++ point: 4 (number) - pre define point
++ Absent: No (string) - Yes,NO
 
-```json
-	{
-	  "id"         : "class_id",
-	  "code"       : "class code",
-	  "name"       : "class name",
-	  "description": "class description",
-	  "created_at" : "created_at",
-	  "updated_at" : "updated_at"
-	},
-```
+## Resultsrequest (object)
 
-### GET classes/{class_id}/sections
-Read / view complete classes data
++ class_id: 1 (number) - class id 
++ section_id: 1 (number) -section id 
++ session: 2018 (number) - year
++ regiNo: 222 (number) - student registration number
++ exam_id: 1 (number) - exam id 
++ subject_code: subject code (string)
++ written: 25 (number) - obtain marks
++ mcq: 25 (number) - obtain marks
++ practical:25 (number) - obtain marks
++ ca: 25 (number) - obtain marks
++ absent: NO (string) - Yes , NO
 
-* __Parameters__  
-Replace {class_id} in url with valid class_id
+## Attendances (object)
 
-* __Response__  
-Return  sections list assign to class as an json form
++ id: 1 (number) -  attendance id
++ regiNo: 170101 (number) - student registration number
++ rollNo: 01 (number) - student roll number
++ firstName: abc (string) - student first name
++ middleName: def (string) - middle name
++ lastName: ghi (string) - last name
++ class: class (string) 
++ status: Present (string) - Absent,Present,
++ date: 2018-01-18 (string) - attendance date
 
-```json
-{
-   [
-	{
-	  "name"       : "section name",
-	  "description": "section description"
-	}
-  ]
-}
-```
-
-### POST classes/{class_id}/notifications
-create call request class wise / dial 
-
-##### first creat message then use this method 
-
-* __Parameters__  
-  * A json encoded associative array containing key and value pairs based on following fields
-```json
-{
-	"name": "__String__",
-	"type"  : "__String__",voice or sms,
-	"message":"__String__", if voice send file name or if sms send message text
-}
-```
-* __Response__  
-__notification_id__ of recently created notification record
-
-Sections
----------
-### GET sections
-
-also search by parameter(sections?class)    e.g class=class_id
-
-
-* __Response__  
-an array of sections
-
-### GET sections/{section_id}
-Read / view complete sections data
-
-* __Parameters__  
-Replace {section_id} in url with valid section_id
-
-
-* __Response__
-
-```json
-{
-	"id"         : "section id",
-	"name"       : "section name",
-	"description": "section description",
-	"class_code" : "class code"
-}
-```
-
-### GET sections/{section_id}/subjects
-Read / view complete section subjects data
-
-* __Parameters__  
-Replace {section_id} in url with valid section_id
-
-* __Response__  
-Return  section subjects list assign to class or section as an json form
-
-```json
-{
-   [
-	{
-	  "code"    : "subject code",
-	  "name"    : "subject name",
-	  "type"    : "type , like Comprehensive,core,electives,
-	  "class"   : "class code",
-	  "stdgroup": "student group , like science ,arts etc"
-	}
-  ]
-}
-```
-
-
-### GET sections/{section_id}/students
-Read / view complete section student data
-
-* __Parameters__  
-Replace {section_id} in url with valid section_id
-
-* __Response__  
-Return  section students list assign to class or section as an json form
-
-```json
-{
-  [
-	{
-	  "id"               : "student id",
-	  "regiNo"           : "student registration",
-	  "rollNo"           : "student roll no",
-	  "session"          : "session , like year which year student enter",
-	  "class"            : "class code",
-	  "group"            : "group ,like science ,arts etc",
-	  "section"          : "section id",
-	  "shift"            : "shift ,like Morning evening",
-	  "firstName"        : "student firstName",
-	  "middleName"       : "student middleName",
-	  "lastName"         : "student lastName",
-	  "gender"           : "gender ",
-	  "religion"         : "religion",
-	  "bloodgroup"       : "bloodgroup",
-	  "nationality"      : "nationality",
-	  "dob"              : "date of brith",
-	  "photo"            : "photo name ",
-	  "extraActivity"    : "extraActivity",
-	  "remarks"          : "remarks",
-	  "fatherName"       : "fatherName",
-	  "fatherCellNo"     : "fatherCellNo",
-	  "motherName"       : "motherName",
-	  "motherCellNo"     : "motherCellNo",
-	  "localGuardian"    : "localGuardian",
-	  "localGuardianCell": "localGuardianCell",
-	  "presentAddress"   : "presentAddress",
-	  "parmanentAddress" : "parmanentAddress",
-	  "isActive"         : "isActive , Yes or No",
-	  "created_at"       : "created_at",
-	  "updated_at"       : "updated_at"
-	},
-
-  ]
-}
-
-```
-### GET sections/{section_id}/teachers
-Read / view complete section teacher data
-
-* __Parameters__  
-Replace {teacher_id} in url with valid teacher_id
-
-* __Response__  
-Return  section teachers list assign to class or section as an json form
-
-```json
-{
-   [
-	{
-	  "id"            : "teacher id",
-	  "firstName"     : "teacher firstName",
-	  "lastName"      : "teacher lastName",
-	  "fatherName"    : "fatherName",
-	  "fatherCellNo"  : "fatherCellNo",
-	  "presentAddress": "presentAddress",
-	  "Subject"       : "subject Name"
-	},
-  ]
-}
-```
-### POST sections/{section_id}/notifications
-create call request section wise / dial 
-
-#### first creat message in Post messages portion then use this api
-
-* __Parameters__  
-  * A json encoded associative array containing key and value pairs based on following fields
-```json
-{
-	"name": "__String__",
-	"type"  : "__String__",voice or sms,
-	"message":"__String__", if voice send file name or if sms send message text
-}
-```
-* __Response__  
-    Success message 
-
-Student
----------
-### GET students
-
-also search by parameter(studentsregiNo&class) or class,section,name,group   e.g class=class_id,section=section_id
-
-* __Response__  
-an array of all register students
-
-### GET students/{student_id}
-Read / view complete students data
-
-* __Parameters__  
-Replace {student_id} in url with valid student_id
-
-* __Response__
-
-```json
-{
+## Attendancerequest (object)
+
++ regiNo: 123 (number, required) - Student registration number
++ date: date (string, required)- Date Formate date-month-year
++ class_id: 1 (number, required) - class id
++ section_id: 1 (number, required) - section id
++ session: 2018 (number, required) - Admission Year
++ status: Present (string, required)- Present,Absent
+
+# Group Authentication
+
+Authentication return token use this token to acess the apilacation user enter user name or password this api return token.
+
+## Authentication [/authentication]
+
+### Authentication parameter [POST]
+
++ Request (application/json)
+
+        {
+            "email": "Enter user email",
+            "password":"Enter user password",
+        }
++ Response 200 (application/json)
+
+            {
+                "token": "string"
+            }
+            
+# Group Users 
+
+testing user
+
+
+
+## Users Collection [/users]
+
+### List of all Users [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (array[User])
+
+### Create a New User [POST]
+
+You may create user using this action. It takes a JSON
+object containing a user information.
+
++ Request (application/json)
+
+    + Attributes (array[RequestUser])
+
++ Response 200 (application/json)
+
   
-	"id"               : "student id",
-	"regiNo"           : "student registration",
-	"rollNo"           : "student roll no",
-	"firstName"        : "student firstName",
-	"middleName"       : "student middleName",
-	"lastName"         : "student lastName",
-	"fatherName"       : "fatherName",
-	"motherName"       : "motherName",
-	"fatherCellNo"     : "fatherCellNo",
-	"motherCellNo"     : "motherCellNo",
-	"localGuardianCell": "localGuardianCell",
-	"class"            : "class",
-	"section"          : "section",
-	  "group"          : "group ,like science ,arts etc",
-	 "presentAddress"  : "presentAddress",
-	 "gender"          : "gender ",
-	  "religion"       : "religion",
+    + Body
+
+            {
+                "user_id": "Integer"
+            }
+            
+
+## Single User [/users/{user_id}]
++ Parameters
+    + user_id (number) - ID of the user in the form of an integer
+
+### View a User Detail [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (array[User])
+
+    
+### Update User [PUT]
+
++ Request (application/json)
+
+    + Attributes (array[RequestUser])
+
++ Response 200 (application/json)
+
+    + Attributes (array[RequestUser])
+
+            
+### User Delete [DELETE]
+
++ Response 200
+
+
+
+# Group Teachers
+
+## Teachers Collection [/teachers]
+
+
+
+### Get All Teachers [GET]
+
++ Response 200
+
+    + Attributes (array[Teachers])
+
+### Create New Teacher [POST]
+
++ Request (application/json) 
+
+    + Attributes (array[Teachers])
+
++ Response 200 (application/json)
+
   
-}
-```
+    + Body
 
-### GET students/{student_id}/subjects
-Read / view complete student subjects data
+            {
+                "teacherid": "Integer"
+            }
+## Single Teacher [/teachers/{teacher_id}]
++ Parameters
+    + teacher_id (number) - ID of the teacher in the form of an integer
 
-* __Parameters__  
-Replace {student_id} in url with valid student_id
+### View a Teacher Detail [GET]
 
-* __Response__  
-Return   subjects list of student as an json form
++ Response 200 (application/json)
 
-### POST students/{student_id}/notifications
-create call request section wise / dial 
+    + Attributes (array[Teachers])
 
-#### first creat message in Post messages portion then use this api
+    
+### Update Teacher [PUT]
 
-* __Parameters__  
-  * A json encoded associative array containing key and value pairs based on following fields
++ Request (application/json)  
+    
+    + Attributes (array[Teachers])
 
- 
-```json
-{
-	"name": "__String__",
-	"type"  : "__String__",voice or sms,
-	"message":"__String__", if voice send file name or if sms send message text
-}
-```
-also Replace {student_id} in url with valid student_id
-* __Response__  
-__notification_id__ of recently created notification record
++ Response 200 (application/json)
 
+    + Attributes (array[Teachers])
 
-Exam
------
-### GET exams
+    
+##Teachers Sections [/teachers/{teacher_id}/sections]
 
-* __Response__  
-an array of exams
+List of all class and section assign to teacher
 
-### GET exams/{exam_id}
-Read / view complete exam data
+### View Teachers Assign Sections  [GET]
 
-* __Parameters__  
-Replace {exam_id} in url with valid exam_id
++ Response 200
 
-* __Response__
+    + Attributes (array[Teacherssection])
 
-```json
-{
-  "exam"     : {
-	"type"   : "exam type like class test final term",
-	"class"  : "class name",
-	"section": "section name"
-  }
-}
-```
+## Teachers Subjects [/teachers/{teacher_id}/subjects]
 
-Result
--------
-### GET results
+List of all subjects assign to teacher
 
-also search by parameter(results?regiNo&class) or class,section,name,exam,subject   e.g class=class_id,section=section_id,exam=exam_id,subject=subject_code
+### View Teacher Subjects [GET]
 
-* __Response__  
-an array of results
++ Response 200
 
-### GET results/{result_id}
-Read / view complete result data
+    + Attributes (array[Teacherssubjects])
 
-* __Parameters__  
-Replace {result_id} in url with valid result_id
+# Group Message
 
-* __Response__
+## Collaction of Messages [/messages]
 
-```json
+Upload a wav file 
 
-   {
-	"id"          : "result id",
-	"regiNo"      : "student registration number",
-	"rollNo"      : "student roll number",
-	"firstName"   : "student firstName",
-	"lastName"    : "student lastName",
-	"class"       : "class name",
-	"section"     : "section name",
-	"subject"     : "subject name",
-	"written"     : "marke",
-	"mcq"         : "marks",
-	"practical"   : "marks",
-	"ca"          : "marks",
-	"total"       : "marks",
-	"grade"       : "grade",
-	"point"       : "point",
-	"Absent"      : "No ,Yes"
-  }
+### Create New  Messages [POST]
 
++ Request (audio/wav)
 
-```
+     + Body 
+     
+             wav file content here
+    
++ Response 200
 
-### POST results
-Add result
-* __Parameters__  
+    + Body
 
-  * A json encoded associative array containing key and value pairs based on following fields
+            {
+                "File name": "filename.wav"
+            }
 
-```json
-{
-	"class_id"    : "__String__",
-	"section_id"  : "__String__, ",
-	"session"     :"__String__",
-	"regiNo"      : "__String__",
-	"exam_id"     : "__String__, ",
-	"subject_code":"__String__",
-	"written"     : "__String__",
-	"mcq"         : "__String__, ",
-	"practical"   :"__String__",
-	"ca"          : "__String__",
-	"absent"      : "__String__, Yes Or No",
-	
-}
-```
-* __Response__  
-__Result_id__ of recently created result record
+### Get All Messages [GET]
 
-### PUT results
-Update an existing result
++ Response 200
+    
+    + Attributes (array[Messages])
 
 
 
-* __Parameters__ 
+## Single Message [/messages/{file_name}]
 
-  * A json encoded associative array containing key and value pairs based on following fields
+### View a  Message [GET]
 
-```json
-{
-	"class_id"     : "__String__",
-	"section_id"   : "__String__, ",
-	"session"      :"__String__",
-	"regiNo"       : "__String__",
-	"exam_id"      : "__String__, ",
-	"subject_code" :"__String__",
-	"written"      : "__String__",
-	"mcq"          : "__String__, ",
-	"practical"    :"__String__",
-	"ca"           : "__String__",
-	"absent"       : "__String__, Yes Or No",
-	
-}
-```
-* __Response__  
-Return updated result data as an json
++ Response 200
+    
+    + Attributes (array[Messages])
 
-### DELETE results
+### Update Message [PUT]
 
-* __Response__  
-Success Message
++ Request (audio/wav)
 
+    + Attributes (array[Messages])
 
++ Response 200
+   
+   + Body
 
-Attendance
-----------
-### GET api/attendances
-Read / view complete attendances data and also search by parameter(attendaces?regiNo&date) or class,section,name date formate:'year-month-date'
+            {
+                "File name": "filename.wav"
+            }
+
+### Delete a Message [DELETE]
+
++ Response 200
+
+# Group Classes
+
+## Classes Collection [/classes]
 
 
-* __Response__
-class and section in Json form
 
-### POST api/attendances
-Create new Attendence
+### Get All Classes [GET]
 
-* __Parameters__
-A json encoded associative array containing key and value pairs based on following fields
-```json
-{
-	"regiNo" : "__String__", Student registration number
-	"date"   : "__String__",Date Formate date-month-year
-	"class_id":"__class id__",
-	"section_id":"__section id__",
-    "session":"__String__", Admission Year
-	"status" :"__String__" Present,Absent
-}
-```
-* __Response__
-students attendance save Succesfully.
++ Response 200
 
-### PUT attendances/{attendance_id}
-Update an existing attendance
-
-* __Parameters__  
-Replace {attendance_id} in url with valid attendance_id, fields require modifications will be POSTed in same way as `attendances`
-
-* __Response__  
-Return updated attendance data as an  json
+    + Attributes (array[Classes])
 
 
-Notification
----------
-### GET notications
+### Create New Class [POST]
 
-* __Response__  
-an array of all register students
++ Request (application/json) 
 
-### GET notications/{notification_id}
-Read / view complete notications data
+    + Attributes (array[Classes])
 
-* __Parameters__  
-Replace {notification_id} in url with valid notification_id
++ Response 200 (application/json)
 
-### POST notifications
-create notification 
-#### first creat message in Post messages portion then use this api
+  
+    + Body
 
-* __Parameters__  
-  * A json encoded associative array containing key and value pairs based on following fields
-```json
-{
-	"name": "__String__",
-	"type"  : "__String__",voice or sms,
-	"message":"__String__", if voice send file name or if sms send message text
-}
-* __Response__  
-__notification_id__ of recently created notification record
+            {
+                "classid": "Integer"
+            }
 
-### PUT notifications/{notification_id}
-Update an existing notification
+## Single Class [/classes/{class_id}]
++ Parameters
+    + class_id (number) - ID of the class in the form of an integer
 
-* __Parameters__  
-Replace {notification_id} in url with valid notification_id, fields require modifications will be POSTed in same way as `notification`
+### View a Class Detail [GET]
 
-* __Response__  
-Return updated notification data as an  json
++ Response 200 (application/json)
+
+    + Attributes (array[Classes])
+
+    
+### Update Class [PUT]
+
++ Request (application/json)  
+    
+    + Attributes (array[Classes])
+
++ Response 200 (application/json)
+
+    + Attributes (array[Classes])
+
+    
+## Class Sections [/classes/{class_id}/sections]
+
+List of all class and section assign to teacher
+
+### View Class Assign Sections  [GET]
+
++ Response 200
+
+    + Attributes (array[Teacherssection])
+
+## Class Notification [/classes/{class_id}/notification]
+
+create call request class wise / dial
+
+### Send Class wise Notification [POST]
+
+first creat message then use this method
+
++ Request (application/json)
+
+    + Attributes (array[Notifications])
+
++ Response 200
+
+    + Body
+    
+    
+            {
+                "Success message"
+            }
+
+# Group Sections
+
+## Sections Collection [/sections]
+
+Also search by parameter(sections?class) e.g class=class_id
+
+### Get All Sectionds [GET]
+
++ Response 200
+
+    + Attributes (array[Sections])
 
 
+### Create New Section [POST]
+
++ Request (application/json) 
+
+    + Attributes (array[Sections])
+
++ Response 200 (application/json)
+
+  
+    + Body
+
+            {
+                "section": "Integer"
+            }
+
+## Single Section [/section/{section_id}]
++ Parameters
+    + section_id (number) - ID of the section in the form of an integer
+
+### View a Section Detail [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (array[Sections])
+
+    
+### Update Section [PUT]
+
++ Request (application/json)  
+    
+    + Attributes (array[Sections])
+
++ Response 200 (application/json)
+
+    + Attributes (array[Sections])
+
+    
+## Section Students [/section/{section_id}/students]
+
+List of all student according section id
+
+### View Students Accoring to Section  [GET]
+
++ Response 200
+
+    + Attributes (array[Students])
+
+## Section Subjects [/section/{section_id}/subjects]
+
+List of all student according section id
+
+### View Students Accoring to Section  [GET]
+
++ Response 200
+
+    + Attributes (array[Teacherssection])
+
+
+## Section Notification [/section/{section_id}/notification]
+
+create call request section wise / dial
+
+### Send Section wise Notification [POST]
+
+first creat message then use this method
+
++ Request (application/json)
+
+    + Attributes (array[Notifications])
+
++ Response 200
+
+    + Body
+    
+    
+            {
+                "Success message"
+            }
+
+# Group Students
+
+## Students Collection [/students]
+
+Also search by parameter(students?regiNo&class) or class,section,name,group e.g class=class_id,section=section_id
+
+### Get All Students [GET]
+
++ Response 200
+
+    + Attributes (array[Students])
+
+
+
+## Single Student [/students/{studnet_id}]
++ Parameters
+    + studnet_id (number) - ID of the student in the form of an integer
+
+### View a Student Detail [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (array[Students])
+
+    
+### Update Student [PUT]
+
++ Request (application/json)  
+    
+    + Attributes (array[Students])
+
++ Response 200 (application/json)
+
+    + Attributes (array[Students])
+
+## Student Notification [/students/{student_id}/notification]
+
+create call request section wise / dial
+
+### Send Student Notification [POST]
+
+first creat message then use this method
+
++ Request (application/json)
+
+    + Attributes (array[Notifications])
+
++ Response 200
+
+    + Body
+    
+    
+            {
+                "Success message"
+            }
+
+# Group Exam
+
+##  Exam Collection [/exams]
+
+### Get all Exams List [GET]
+
++ Response 200
+
+    + Attributes (array[Exams])
+
+## Single Exam [/exams/{exam_id}]
++ Parameters
+    + exam_id (number) - ID of the exam in the form of an integer
+
+### View a Exam Detail [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (array[Exams])
+
+# Group Results 
+
+## Results Collection [/results]
+
+also search by parameter(results?regiNo&class) or class,section,name,exam,subject e.g class=class_id,section=section_id,exam=exam_id,subject=subject_code
+
+### List of all results [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (array[Results])
+
+### Create a New Result [POST]
+
+
++ Request (application/json)
+
+    + Attributes (array[Resultsrequest])
+
++ Response 200 (application/json)
+
+  
+    + Body
+
+            {
+                "result_id": "Integer"
+            }
+            
+
+## Single Result [/results/{result_id}]
++ Parameters
+    + result_id (number) - ID of the result in the form of an integer
+
+### View a Result Detail [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (array[Results])
+
+    
+### Update Result [PUT]
+
++ Request (application/json)
+
+    + Attributes (array[Resultsrequest])
+
++ Response 200 (application/json)
+
+    + Attributes (array[Resultsrequest])
+
+            
+### Result Delete [DELETE]
+
++ Response 200
+
+# Group Attendance 
+
+## Attendance Collection [/attendances]
+
+Read / view complete attendances data and also search by parameter(attendaces?regiNo&date) or class,section,name date formate:`year-month-date`
+
+### List of all Attendace [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (array[Attendances])
+
+### Create a New Attendance [POST]
+
+
++ Request (application/json)
+
+    + Attributes (array[Attendancerequest])
+
++ Response 200 (application/json)
+
+  
+    + Body
+
+            {
+                "attendance_id": "Integer"
+            }
+            
+
+## Single Attendance [/attendances/{attendance_id}]
++ Parameters
+    + attendance_id (number) - ID of the attendance in the form of an integer
+
+### View a Attendance Detail [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (array[Attendances])
+
+    
+### Update Attendance [PUT]
+
++ Request (application/json)
+
+    + Attributes (array[Attendancerequest])
+
++ Response 200 (application/json)
+
+    + Attributes (array[Attendancerequest])
+
+            
+### Attendance Delete [DELETE]
+
++ Response 200
+
+# Group Notifications 
+
+## Notifications Collection [/notifications]
+
+
+### List of all Notifications [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (array[Notifications])
+
+### Create a New Notification [POST]
+
+
++ Request (application/json)
+
+    + Attributes (array[Notifications])
+
++ Response 200 (application/json)
+
+  
+    + Body
+
+            {
+                "notification_id": "Integer"
+            }
+            
+
+## Single Notification [/notifications/{notification_id}]
++ Parameters
+    + notification_id (number) - ID of the notification in the form of an integer
+
+### View a Notification Detail [GET]
+
++ Response 200 (application/json)
+
+    + Attributes (array[Notifications])
+
+    
+### Update Notification [PUT]
+
++ Request (application/json)
+
+    + Attributes (array[Notifications])
+
++ Response 200 (application/json)
+
+    + Attributes (array[Notifications])
+
+            
+### Notification Delete [DELETE]
+
++ Response 200
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+    
 
 
 

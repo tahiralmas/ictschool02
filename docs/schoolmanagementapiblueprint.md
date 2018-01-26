@@ -185,10 +185,6 @@ Authentication return token use this token to acess the apilacation user enter u
             
 # Group Users 
 
-testing user
-
-
-
 ## Users Collection [/users]
 
 ### List of all Users [GET]
