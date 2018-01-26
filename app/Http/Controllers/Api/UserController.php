@@ -90,7 +90,7 @@ class UserController extends Controller
     {
     	//dd($user_id);
        // $user = Auth::user();
-        $user = DB::table('users')->select('id','firstname','lastname','desc','login','group');
+        $user = DB::table('users')->select('id','firstname','lastname','phone','desc','login','group');
         
         $user->when(request('group', false), function ($q, $group) { 
 			return $q->where('group', $group);
@@ -111,8 +111,9 @@ class UserController extends Controller
 		'firstname' => 'required',
 		'lastname' => 'required',
 		'phone'=>'required',
-		'loginname'=>'required',
-		'password'=>  'required'
+		'login'=>'required',
+		'password'=>  'required',
+		'group'   => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
@@ -120,13 +121,15 @@ class UserController extends Controller
 		 return response()->json( $validator->errors(), 422);
 		}
 		else {
-		 $user = User::find($user_id);
+		 //$user = User::find($user_id);
+		  $user = User::select('id','firstname','lastname','phone','desc','login','group')->where('id',$user_id)->first();
           $user->firstname = Input::get('firstname');
           $user->lastname = Input::get('lastname');
-          $user->login = Input::get('loginname');
+          $user->login = Input::get('login');
         //  $user->email = Input::get('email');
           $user->phone = Input::get('phone');
           $user->password = Hash::make(Input::get('password'));
+          $user->group = Input::get('group');
           $user->save();
           return response()->json($user,$this->successStatus);
 

@@ -4,7 +4,7 @@
 
 <div class="alert alert-success">
   <button data-dismiss="alert" class="close" type="button">×</button>
-    <strong>Process Success.</strong> {{ Session::get('success')}}<br><a href="/template/list">View List</a><br>
+    <strong>Process Success.</strong> {{ Session::get('success')}}><br>
 
 </div>
 @endif
@@ -44,7 +44,7 @@
                                         @if($ictcore_attendance->recording !='')
                                        <div style="line-height:72px;">
                                         <audio controls>
-                                          <source src=" {{'/recording/'.$ictcore_attendance->recording}}" type="audio/wav">
+                                          <source src=" {{'/storage/messages/'.$ictcore_attendance->recording}}" type="audio/wav">
                                             Your browser does not support the audio element.
                                         </audio>
                                         </div>

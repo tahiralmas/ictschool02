@@ -44,7 +44,7 @@
                                         @if($ictcore_fees->recording !='')
                                        <div style="line-height:72px;">
                                         <audio controls>
-                                          <source src=" {{'/recording/'.$ictcore_fees->recording}}" type="audio/wav">
+                                          <source src=" {{'/storage/messages/'.$ictcore_fees->recording}}" type="audio/wav">
                                             Your browser does not support the audio element.
                                         </audio>
                                         </div>

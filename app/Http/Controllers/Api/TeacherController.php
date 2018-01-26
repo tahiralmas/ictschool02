@@ -34,7 +34,7 @@ class TeacherController extends Controller
 	 */
 	public function all_teachers()
 	{
-	  $teachers = DB::table('teacher')->select('id','firstName','lastName','gender','religion','bloodgroup','nationality','dob','photo','email','fatherName','fatherCellNo','presentAddress')->get();
+	  $teachers = DB::table('teacher')->select('id','firstName','lastName','gender','dob','email','phone','fatherName','fatherCellNo','presentAddress')->get();
 	  
 	  if(count($teachers)<1)
 	  {
@@ -72,7 +72,7 @@ class TeacherController extends Controller
 	}*/
 	public function getteacher($teacher_id)
 	{
-		  $teacher = DB::table('teacher')->where('id','=',$teacher_id)->first();
+		  $teacher = DB::table('teacher')->select('id','firstName','lastName','gender','dob','email','phone','fatherName','fatherCellNo','presentAddress')->where('id','=',$teacher_id)->first();
 		
 		if(!is_null($teacher) && count($teacher)>0){
 		   return response()->json($teacher,200);
@@ -102,10 +102,11 @@ class TeacherController extends Controller
 		'lastname'  => 'required',
 		'gender'    => 'required',
 		'dob'       => 'required',
-		'phone'     => 'required',
 		'email'     => 'required',
-		'presentAddress' => 'required',
-		'fatherName'  =>'required'
+		'phone'     => 'required',
+		'presentaddress' => 'required',
+		'fathername'  =>'required',
+		'fathercellno'=> 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
@@ -113,15 +114,16 @@ class TeacherController extends Controller
 			return response()->json($validator->errors(), 422);
 		}
 		else{
-			$teacher = Teacher::find($teacher_id);
+			$teacher = Teacher::select('id','firstName','lastName','gender','dob','email','phone','fatherName','fatherCellNo','presentAddress')->where('id',$teacher_id);
 			$teacher->firstName = Input::get('firstname');
 			$teacher->lastName= Input::get('lastname');
 			$teacher->gender= Input::get('gender');
 			$teacher->dob= Input::get('dob');
 			$teacher->phone= Input::get('phone');
 			$teacher->email= Input::get('email');
-			$teacher->presentAddress= Input::get('presentAddress');
-			$teacher->fatherName= Input::get('fatherName');
+			$teacher->presentAddress= Input::get('presentaddress');
+			$teacher->fatherName= Input::get('fathername');
+			$teacher->fatherName= Input::get('fathercellno');
 			$teacher->save();
 			return response()->json($teacher,200);
 		}

@@ -39,7 +39,7 @@ class ClassController extends Controller
      */
     public function classes()
     {
-	  $classes = DB::table('Class')->get();
+	  $classes = DB::table('Class')->select('id','code','name','description')->get();
 	  if(count($classes)<1)
 	  {
 	     return response()->json(['error'=>'No Class Found!'], 404);
@@ -51,7 +51,8 @@ class ClassController extends Controller
 
     public function getclass($class_id)
     {
-         $class = ClassModel::find($class_id);
+         $class = ClassModel::select('id','code','name','description')->where('id',$class_id)->first();
+
         if(!is_null($class) && $class->count()>0){
            return response()->json($class);
         }else{
@@ -78,6 +79,7 @@ class ClassController extends Controller
     public function update_class($class_id)
     {
         $rules=[
+        'code' => 'required'
 		'name' => 'required',
 		'description' => 'required'
 		];
@@ -87,7 +89,8 @@ class ClassController extends Controller
 		 return response()->json($validator->errors(), 422);
 		}
 		else {
-			$class = ClassModel::find($class_id);
+			$class = ClassModel::select('id','code','name','description')->where('id',$class_id)->first();
+            $class->code= Input::get('code');
 			$class->name= Input::get('name');
 			$class->description=Input::get('description');
 			$class->save();

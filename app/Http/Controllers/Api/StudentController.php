@@ -116,7 +116,7 @@ class StudentController extends Controller
     	  $student = DB::table('Student')
     	 ->join('Class', 'Student.class', '=', 'Class.code')
 		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		  'Class.Name as class','Student.section' ,'Student.group','Student.presentAddress', 'Student.gender', 'Student.religion')
+		  'Class.Name as class','Student.section' ,'Student.group','Student.session','Student.presentAddress','Student.dob','Student.gender', 'Student.religion')
 		    ->where('Student.id',$student_id)->first();
 
         if(!is_null($student) && count($student)>0){
@@ -150,16 +150,22 @@ class StudentController extends Controller
 	{
 		//return response()->json(['student'=>$student_id]);
 		$rules=[
-		'firstName' => 'required',
-		'lastName' => 'required',
+		'firstname' => 'required',
+		'lastname' => 'required',
+         'dob'   => 'required',
+         'regiNo'  => 'required',
+         'rollNo' => 'required',
+        'gender' => 'required',
+         'religion' => 'required',
 		'gender' => 'required',
 		'session' => 'required',
 		'class' => 'required',
 		'section' => 'required',
-		'presentAddress' => 'required',
-		'parmanentAddress' => 'required',
-		'fatherCellNo'  =>'required',
-		'fatherName'  =>'required'
+		'presentaddress' => 'required',
+		'fathercellno'  =>'required',
+		'fathername'  =>'required',
+        'mothername' => 'required',
+        'mothercellno' => 'required',
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
@@ -167,18 +173,24 @@ class StudentController extends Controller
             return response()->json($validator->errors(), 422);
 		}
 		else{
-			$student = Student::find($student_id);
-			$student->firstName = Input::get('fname');
-			$student->lastName= Input::get('lname');
-			$student->gender= Input::get('gender');
+			$student = Student::select('id', 'regiNo', 'rollNo', 'firstName', 'middleName', 'lastName', 'fatherName', 'motherName', 'fatherCellNo', 'motherCellNo', 'localGuardianCell',
+          'class','section' ,'group','session','presentAddress','dob','gender', 'religion')->where('Student.id',$student_id)->first();
+			$student->firstName = Input::get('firstname');
+			$student->lastName= Input::get('lastname');
+            $student->dob= Input::get('dob');
+            $student->regiNo= Input::get('regiNo');
+            $student->rollNo= Input::get('rollNo');
+            $student->gender= Input::get('gender');
+			$student->religion= Input::get('religion');
 			$student->session= trim(Input::get('session'));
 			$student->class= Input::get('class');
 			$student->section= Input::get('section');
 			$student->group= Input::get('group');
-			$student->presentAddress= Input::get('presentAddress');
-			$student->parmanentAddress= Input::get('parmanentAddress');
-		    $student->fatherCellNo= Input::get('fatherCellNo');
-			$student->fatherName= Input::get('fatherName');
+			$student->presentAddress= Input::get('presentaddress');
+		    $student->fatherCellNo= Input::get('fathercellno');
+			$student->fatherName= Input::get('fathername');
+            $student->motherName= Input::get('mothername');
+            $student->motherCellNo= Input::get('mothercellno');
 			$student->save();
 			return response()->json($student,200);
 		}

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\ClassModel;
 use App\Ictcore_integration;
 use App\Message;
+use Storage;
 use DB;
 use App\Http\Controllers\ictcoreController;
 
@@ -81,7 +82,10 @@ class templateController extends BaseController {
 				$sname = Input::get('title');
                 $remove_spaces =  str_replace(" ","_",Input::get('title'));
 				$fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
-                Input::file('message')->move(base_path() .'/public/recording',$fileName);
+
+				 $drctry = storage_path('app/public/messages/');
+
+                Input::file('message')->move($drctry,$fileName);
                 sleep(3);
 
                 $data = array(
@@ -90,7 +94,7 @@ class templateController extends BaseController {
 							 );
 
                  $recording_id  =  $ictcore_api->ictcore_api('messages/recordings','POST',$data );
-                 $name          =  base_path() .'/public/recording/'.$fileName;
+                 $name          =   $drctry .$fileName;
                  $finfo         =  new \finfo(FILEINFO_MIME_TYPE);
                  $mimetype      =  $finfo->file($name);
                  $cfile         =  curl_file_create($name, $mimetype, basename($name));
@@ -143,6 +147,12 @@ class templateController extends BaseController {
 		$messages = DB::table('message')
 		->select(DB::raw('message.id,message.name,message.description,message.recording'))
 		->get();
+
+   //$path = Storage::disk('public')->getDriver();
+   //print_r($path);
+
+		////echo Storage::get('app/public');
+	//	exit;
 		//dd($sections);
 		//return View::Make('app.classList',compact('Classes'));
 		return View('app.messageList',compact('messages'));
@@ -200,7 +210,8 @@ class templateController extends BaseController {
 				$fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
 
 				//$student->photo = $fileName;
-				Input::file('message')->move(base_path() .'/public/recording',$fileName);
+				$drctry = storage_path('app/public/messages/');
+				Input::file('message')->move($drctry,$fileName);
 			}
 
 		}
@@ -237,7 +248,8 @@ class templateController extends BaseController {
 
 		$message = Message::find($id);
 		$message->delete();
-		unlink(base_path().'/public/recording/'.$message->recording);
+		$drctry = storage_path('app/public/messages/');
+		unlink($drctry.$message->recording);
 		return Redirect::to('/template/list')->with("success","Message Deleted Succesfully.");
 	}
 

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Student;
+use File;
 use App\Ictcore_integration;
 use App\Ictcore_attendance;
 use App\Ictcore_fees;
@@ -98,15 +99,18 @@ class ictcoreController {
 		}
 		else {
             // echo "<pre>";print_r(Input::file('message'));exit;
-            $ictcore_attendance =	DB::table('ictcore_attendance')->select('*')->get();
-            unlink(base_path().'/public/recording/'.$ictcore_attendance[0]->recording);
+             $drctry = storage_path('app/public/messages/');
+            $ictcore_attendance =	DB::table('ictcore_attendance')->select('*')->first();
+            if(File::exists($drctry.$ictcore_attendance->recording)){
+            	unlink($drctry .$ictcore_attendance->recording);
+		 	}
             DB::table("ictcore_attendance")->delete();
           
 			$sname = Input::get('title');
 			
                 $remove_spaces =  str_replace(" ","_",Input::get('title'));
 				$fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
-                Input::file('message')->move(base_path() .'/public/recording',$fileName);
+                Input::file('message')->move($drctry ,$fileName);
                 sleep(3);
                 $data = array(
                              'name' => Input::get('title'),
@@ -114,7 +118,7 @@ class ictcoreController {
 							 );
 
                  $recording_id  =  $this->ictcore_api('messages/recordings','POST',$data );
-                 $name          =  base_path() .'/public/recording/'.$fileName;
+                 $name          =  $drctry .$fileName;
                  $finfo         =  new \finfo(FILEINFO_MIME_TYPE);
                  $mimetype      =  $finfo->file($name);
                  $cfile         =  curl_file_create($name, $mimetype, basename($name));
@@ -178,10 +182,15 @@ class ictcoreController {
 		}
 		else {
             // echo "<pre>";print_r(Input::file('message'));exit;
-            $ictcore_fees =	DB::table('ictcore_fees')->select('*')->get();
+            $ictcore_fees =	DB::table('ictcore_fees')->select('*')->first();
+             $drctry = storage_path('app/public/messages/');
+            if(count($ictcore_fees) > 0 && File::exists($drctry.$ictcore_fees->recording)){
 
-            if(count($ictcore_fees) > 0 ){
-            unlink(base_path().'/public/recording/'.$ictcore_fees[0]->recording);
+            unlink($drctry.$ictcore_fees->recording);
+            // $this->ictcore_api('messages/recordings/'.$ictcore_fees->ictcore_recording_id,'DELETE',$data =array());
+
+
+
         }
             DB::table("ictcore_fees")->delete();
           
@@ -189,7 +198,7 @@ class ictcoreController {
 			
                 $remove_spaces =  str_replace(" ","_",Input::get('title'));
 				$fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
-                Input::file('message')->move(base_path() .'/public/recording',$fileName);
+                Input::file('message')->move($drctry,$fileName);
                 sleep(3);
                 $data = array(
                              'name' => Input::get('title'),
@@ -197,7 +206,7 @@ class ictcoreController {
 							 );
 
                  $recording_id  =  $this->ictcore_api('messages/recordings','POST',$data );
-                 $name          =  base_path() .'/public/recording/'.$fileName;
+                 $name          =   $drctry.$fileName;
                  $finfo         =  new \finfo(FILEINFO_MIME_TYPE);
                  $mimetype      =  $finfo->file($name);
                  $cfile         =  curl_file_create($name, $mimetype, basename($name));

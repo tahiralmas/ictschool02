@@ -122,7 +122,12 @@ class sectionController extends Controller
     public function getsectionstudent($section_id){
 
         $section = SectionModel::find($section_id);
-         $student = DB::table('Student')->select('*')->where('class',$section->class_code)->where('section',$section_id)->get();
+        // $student = DB::table('Student')->select('*')->where('class',$section->class_code)->where('section',$section_id)->get();
+          $student = DB::table('Student')
+          ->join('Class', 'Student.class', '=', 'Class.code')
+          ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+          'Class.Name as class','Student.section' ,'Student.group' ,'Student.session','Student.presentAddress', 'Student.gender', 'Student.religion')->get();
+
          /*->join('Class', 'Student.class', '=', 'Class.code')
           ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
           'Class.Name as class','Student.section' ,'Student.presentAddress', 'Student.gender', 'Student.religion')

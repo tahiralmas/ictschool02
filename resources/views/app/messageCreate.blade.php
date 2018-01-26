@@ -25,6 +25,7 @@
                     <div class="tab-pane active" id="email">
                         <form role="form" action="/message" method="post">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="type" value="voice">
                                 <br >
                                 <div class="form-group col-md-12 row">
                                     <label for="name"  class="col-sm-2 col-form-label">Role</label>
@@ -41,7 +42,9 @@
                                 <div class="form-group row" id="class" >
                                     <label for="name"  class="col-sm-2 col-form-label">Class</label>
                                     <div class="input-group col-md-6">
-                                        <select  name="class[]" class="form-control selectpicker" multiple="" data-hide-disabled="true"  data-actions-box="true" data-size="5" tabindex="-98">
+                                        <!--<select  name="class" id="class" class="form-control selectpicker" multiple="" data-hide-disabled="true"  data-actions-box="true" data-size="5" tabindex="-98">-->
+                                        <select  name="class" id="classa" class="form-control">
+
                                             <option value="">Select Classes</option>
                                         @foreach($classes as $class)
                                             <option value="{{$class->code}}">{{$class->name }}</option>
@@ -53,18 +56,9 @@
                                 <div class="form-group row" id="class" >
                                     <label for="name"  class="col-sm-2 col-form-label">Section</label>
                                     <div class="input-group col-md-6">
-                                        <select  name="section[]" class="form-control selectpicker" multiple="" data-hide-disabled="true" data-actions-box="true" data-size="5" tabindex="-99">
+                                        <!--<select  name="section[]" id="section" class="form-control selectpicker" multiple="" data-hide-disabled="true" data-actions-box="true" data-size="5" tabindex="-99">-->
+                                        <select  name="section" id="section" class="form-control">
                                              <option value="">Select Sections</option>
-                                             <option value="A">A</option>
-                                              <option value="B">B</option>
-                                              <option value="C">C</option>
-                                              <option value="D">D</option>
-                                              <option value="E">E</option>
-                                              <option value="F">F</option>
-                                              <option value="G">G</option>
-                                              <option value="H">H</option>
-                                              <option value="I">I</option>
-                                              <option value="J">J</option>
                                         </select>
                                     </div>
                                 </div>
@@ -122,12 +116,82 @@
 
 
                     <div class="tab-pane" id="sms">
-                        <h3>Custom
-                            <small>small text</small>
-                        </h3>
-                        <p>Sample paragraph.</p>
+                       <form role="form" action="/message" method="post">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                 <input type="hidden" name="type" value="sms">
+                                <br >
+                                <div class="form-group col-md-12 row">
+                                    <label for="name"  class="col-sm-2 col-form-label">Role</label>
+                                    <div class="input-group col-md-6">
+                                        <select name="role" id="role" class="form-control selectpicker" tabindex="-1">
+                                            <option value="">Select Users Type</option>
+                                            <option value="student">Student</option>
+                                            <option value="teacher">Teacher</option>
+                                             <option value="parent">Parent</option>
+                                        </select>
+                                    </div>
+                                </div>
+                             <div id="studen" >
+                                <div class="form-group row" id="class" >
+                                    <label for="name"  class="col-sm-2 col-form-label">Class</label>
+                                    <div class="input-group col-md-6">
+                                        <select  name="class" id="class1" class="form-control" >
+                                            <option value="">Select Classes</option>
+                                        @foreach($classes as $class)
+                                            <option value="{{$class->code}}">{{$class->name }}</option>
+                                        @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="class" >
+                                    <label for="name"  class="col-sm-2 col-form-label">Section</label>
+                                    <div class="input-group col-md-6">
+                                        <select  name="section" id="section1" class="form-control">
+                                             <option value="">Select Sections</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <p>Your custom text.</p>
+
+
+                              <div class="form-group row" id="class" >
+                                <label for="name"  class="col-sm-2 col-form-label">Message Title</label>
+                                <div class="input-group col-md-6">
+                                    <input  name="mess_name" required class="form-control">
+
+                                </div>
+
+                            </div>
+
+
+
+                                <div class="form-group row">
+                                    <label for="name" class="col-sm-2 col-form-label">Message</label>
+                                    <div class="input-group col-md-6">
+
+                                     <textarea class="from-control" id="textarea" name="message" style="width: 684px; height: 209px;"></textarea>   
+                                   <!--  <div id="textarea_feedback"></div>  -->                       
+                                 </div>
+                                </div>
+
+                                
+                                <div class="clearfix"></div>
+                                @if (count($errors) > 0)
+                                      <div class="alert alert-danger">
+                                          <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                                          <ul>
+                                              @foreach ($errors->all() as $error)
+                                                  <li>{{ $error }}</li>
+                                              @endforeach
+                                          </ul>
+                                      </div>
+                                @endif
+                                    <div class="form-group">
+                                        <button class="btn btn-primary pull-right" type="submit"><i class="glyphicon glyphicon-send"></i>Send Sms</button>
+                                        <br>
+                                    </div>
+                         </form>
                     </div>
 
                 </div>
@@ -152,7 +216,92 @@ $(document).ready(function()
         }
 
     });
+
+    var text_max = 99;
+$('#textarea_feedback').html(text_max + ' characters remaining');
+
+$('#textarea').keyup(function() {
+    var text_length = $('#textarea').val().length;
+    var text_remaining = text_length;
+
+    $('#textarea_feedback').html(text_remaining + ' characters remaining');
 });
+
+    $('#classa').on('change',function() {
+    getsections();
+  });
+  $('#class1').on('change',function() {
+    getsections1();
+  });
+});
+
+function getsections()
+{
+    var aclass = $('#classa').val();
+    //alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section').empty();
+       //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+        
+          //console.log(opt);
+          $('#section').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
+
+function getsections1()
+{
+    var aclass = $('#class1').val();
+    //alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section1').empty();
+       //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+        
+          //console.log(opt);
+          $('#section1').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
 </script>
 @stop
 

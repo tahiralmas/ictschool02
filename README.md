@@ -89,8 +89,9 @@ $ php artisan db:seed
 $ php artisan serve --port 8080
 ```
 **  http://localhost:8080 **
-
-
+```
+$ php artisan storage:link
+```
 # Screenshot
 
 <img src="screenshot/1.png" >

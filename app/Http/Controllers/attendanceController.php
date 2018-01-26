@@ -91,6 +91,12 @@ class attendanceController extends BaseController {
 				DB::beginTransaction();
 				try {
 					$i=0;
+
+                      $classc = DB::table('Class')->select('*')->where('code','=',Input::get('class'))->first();
+
+                      $class_id =  $classc->id;
+
+
 					foreach ($stpresent as $stp) {
 						 $atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$stp['regiNo'])->first();
 		                if(is_null($atten)){
@@ -99,6 +105,9 @@ class attendanceController extends BaseController {
 							'date' => $presentDate,
 							'regiNo' => $stp['regiNo'],
 							'status' => "Present",
+							'class_id'=>$class_id,
+							'section_id'=>Input::get('section'),
+							'session'=>Input::get('session'),
 							'created_at' => Carbon::now()
 							];
 							Attendance::insert($attenData);
@@ -113,6 +122,9 @@ class attendanceController extends BaseController {
 							'date' => $presentDate,
 							'regiNo' => $absst,
 							'status' => "Absent",
+							'class_id'=>$class_id,
+							'section_id'=>Input::get('section'),
+							'session'=>Input::get('session'),
 							'created_at' => Carbon::now()
 							];
 						    Attendance::insert($attenDataabsnt);
@@ -130,7 +142,7 @@ class attendanceController extends BaseController {
 				}catch (\Exception $e) {
 					DB::rollback();
 					$errorMessages = new \Illuminate\Support\MessageBag;
-					$errorMessages->add('Error', 'Something went wrong!');
+					$errorMessages->add('Error', 'Something went wrong!'.$e);
 					return Redirect::to('/attendance/create')->withErrors($errorMessages);
 				}
 				
