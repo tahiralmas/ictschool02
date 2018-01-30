@@ -90,22 +90,22 @@ class studentController extends BaseController {
 		'fname' => 'required',
 		'lname' => 'required',
 		'gender' => 'required',
-		'religion' => 'required',
-		'bloodgroup' => 'required',
-		'nationality' => 'required',
+		//'religion' => 'required',
+		//'bloodgroup' => 'required',
+		//'nationality' => 'required',
 		'dob' => 'required',
 		'session' => 'required',
 		'class' => 'required',
 		'section' => 'required',
 		'rollNo' => 'required',
 		'shift' => 'required',
-		'photo' => 'required|mimes:jpeg,jpg,png',
+		'photo' => 'mimes:jpeg,jpg,png',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
 		//'motherName' => 'required',
 		//'motherCellNo' => 'required',
 		'presentAddress' => 'required',
-		'parmanentAddress' => 'required'
+		//'parmanentAddress' => 'required'
 	];
 	$validator = \Validator::make(Input::all(), $rules);
 	if ($validator->fails())
@@ -113,8 +113,15 @@ class studentController extends BaseController {
 		return Redirect::to('/student/create')->withErrors($validator);
 	}
 	else {
-		$fileName=Input::get('regiNo').'.'.Input::file('photo')->getClientOriginalExtension();
 
+		if(Input::file('photo')!=''){
+
+		$fileName=Input::get('regiNo').'.'.Input::file('photo')->getClientOriginalExtension();
+		
+		}else{
+			$fileName='';
+		}
+        
 		$student = new Student;
 		$student->regiNo = Input::get('regiNo');
 		$student->firstName = Input::get('fname');
@@ -125,9 +132,18 @@ class studentController extends BaseController {
 		}
 		$student->lastName = Input::get('lname');
 		$student->gender= Input::get('gender');
+		
 		$student->religion= Input::get('religion');
+
+		if(Input::get('religion') ==''){
+			$student->religion = "";
+		}
 		$student->bloodgroup= Input::get('bloodgroup');
-		$student->nationality= Input::get('nationality');
+
+		if(Input::get('bloodgroup')==''){
+		$student->bloodgroup="";
+
+		}
 		$student->dob= Input::get('dob');
 		$student->session= trim(Input::get('session'));
 		$student->class= Input::get('class');
@@ -138,23 +154,43 @@ class studentController extends BaseController {
 
 		$student->photo= $fileName;
 		$student->nationality= Input::get('nationality');
+		if(Input::get('nationality') ==''){
+			$student->nationality="";
+		}
 		$student->extraActivity= Input::get('extraActivity');
 		if(Input::get('extraActivity') ==''){
 			$student->extraActivity = "";
 		}
 		$student->remarks= Input::get('remarks');
-        if(Input::get('remarks') ==''){
+       if(Input::get('remarks') ==''){
 			$student->remarks = "";
 		}
 		$student->fatherName= Input::get('fatherName');
 		$student->fatherCellNo= Input::get('fatherCellNo');
-		$student->motherName= Input::get('motherName');
+		
+		$student->motherName= Input::get('motherName' );
+		if(Input::get('motherName')==''){
+			$student->motherName= "";
+			
+		}
 		$student->motherCellNo= Input::get('motherCellNo');
-		//$student->localGuardian= Input::get('localGuardian');
-		//$student->localGuardianCell= Input::get('localGuardianCell');
+		if(Input::get('motherCellNo')==''){
+			$student->motherCellNo="";
+		}
+		$student->localGuardian= Input::get('localGuardian');
+		if(Input::get('localGuardian')==''){
+			$student->localGuardian="";
+		}
+		$student->localGuardianCell= Input::get('localGuardianCell');
+		if(Input::get('localGuardianCell') ==''){
+			$student->localGuardianCell="";
+		}
 
 		$student->presentAddress= Input::get('presentAddress');
 		$student->parmanentAddress= Input::get('parmanentAddress');
+		if(Input::get('parmanentAddress')==''){
+			$student->parmanentAddress='';
+		}
 		$student->isActive= "Yes";
 
 		$hasStudent = Student::where('regiNo','=',Input::get('regiNo'))->where('class','=',Input::get('class'))->first();
@@ -166,8 +202,9 @@ class studentController extends BaseController {
 		}
 		else {
 			$student->save();
-			Input::file('photo')->move(base_path() .'/public/images',$fileName);
-             
+			if( Input::file('photo')!=''){
+             Input::file('photo')->move(base_path() .'/public/images',$fileName);
+         	}
                  $user = new User;
 
                 $user->firstname = Input::get('fname');
@@ -346,9 +383,9 @@ public function update()
 		'fname' => 'required',
 		'lname' => 'required',
 		'gender' => 'required',
-		'religion' => 'required',
-		'bloodgroup' => 'required',
-		'nationality' => 'required',
+		//'religion' => 'required',
+		//'bloodgroup' => 'required',
+		//'nationality' => 'required',
 		'dob' => 'required',
 		'session' => 'required',
 		'class' => 'required',
@@ -357,10 +394,10 @@ public function update()
 		'shift' => 'required',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
-		'motherName' => 'required',
-		'motherCellNo' => 'required',
+		//'motherName' => 'required',
+		//'motherCellNo' => 'required',
 		'presentAddress' => 'required',
-		'parmanentAddress' => 'required'
+		//'parmanentAddress' => 'required'
 	];
 	$validator = \Validator::make(Input::all(), $rules);
 	if ($validator->fails())
@@ -394,7 +431,7 @@ public function update()
 		}
 		//$student->regiNo=Input::get('regiNo');
 		//$student->rollNo=Input::get('rollNo');
-		$student->firstName= Input::get('fname');
+		/*$student->firstName= Input::get('fname');
 		$student->middleName= Input::get('mname');
 		$student->lastName= Input::get('lname');
 		$student->gender= Input::get('gender');
@@ -419,7 +456,75 @@ public function update()
 		$student->shift= Input::get('shift');
 
 		$student->presentAddress= Input::get('presentAddress');
+		$student->parmanentAddress= Input::get('parmanentAddress');*/
+
+		$student->firstName = Input::get('fname');
+
+		$student->middleName = Input::get('mname');
+		if(Input::get('mname') ==''){
+			$student->middleName = "";
+		}
+		$student->lastName = Input::get('lname');
+		$student->gender= Input::get('gender');
+		
+		$student->religion= Input::get('religion');
+
+		if(Input::get('religion') ==''){
+			$student->religion = "";
+		}
+		$student->bloodgroup= Input::get('bloodgroup');
+
+		if(Input::get('bloodgroup')==''){
+		$student->bloodgroup="";
+
+		}
+		$student->dob= Input::get('dob');
+		$student->session= trim(Input::get('session'));
+		$student->class= Input::get('class');
+		$student->section= Input::get('section');
+		$student->group= Input::get('group');
+		//$student->rollNo= Input::get('rollNo');
+		$student->shift= Input::get('shift');
+
+		//$student->photo= $fileName;
+		$student->nationality= Input::get('nationality');
+		if(Input::get('nationality') ==''){
+			$student->nationality="";
+		}
+		$student->extraActivity= Input::get('extraActivity');
+		if(Input::get('extraActivity') ==''){
+			$student->extraActivity = "";
+		}
+		$student->remarks= Input::get('remarks');
+       if(Input::get('remarks') ==''){
+			$student->remarks = "";
+		}
+		$student->fatherName= Input::get('fatherName');
+		$student->fatherCellNo= Input::get('fatherCellNo');
+		
+		$student->motherName= Input::get('motherName' );
+		if(Input::get('motherName')==''){
+			$student->motherName= "";
+			
+		}
+		$student->motherCellNo= Input::get('motherCellNo');
+		if(Input::get('motherCellNo')==''){
+			$student->motherCellNo="";
+		}
+		$student->localGuardian= Input::get('localGuardian');
+		if(Input::get('localGuardian')==''){
+			$student->localGuardian="";
+		}
+		$student->localGuardianCell= Input::get('localGuardianCell');
+		if(Input::get('localGuardianCell') ==''){
+			$student->localGuardianCell="";
+		}
+
+		$student->presentAddress= Input::get('presentAddress');
 		$student->parmanentAddress= Input::get('parmanentAddress');
+		if(Input::get('parmanentAddress')==''){
+			$student->parmanentAddress='';
+		}
 
 		$student->save();
 

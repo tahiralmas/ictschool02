@@ -231,8 +231,8 @@
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                    <select name="religion" class="form-control" required >
-                      <option value="Islam">Islam</option>
+                    <select name="religion" class="form-control"  >
+                      <option value="Islam" selected>Islam</option>
                       <option value="Hindu">Hindu</option>
                       <option value="Cristian">Cristian</option>
                       <option value="Buddhist">Buddhist</option>
@@ -247,7 +247,7 @@
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                    <select name="bloodgroup" class="form-control" required >
+                    <select name="bloodgroup" class="form-control"  >
                       <option value="A+">A+</option>
                       <option value="A-">A-</option>
                       <option value="B+">B+</option>
@@ -272,7 +272,7 @@
                 <label for="nationality">Nationality</label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control" value="Pakistani" required  name="nationality" placeholder="Nationality">
+                  <input type="text" class="form-control" value="Pakistani"   name="nationality" placeholder="Nationality">
                 </div>
               </div>
             </div>
@@ -293,7 +293,7 @@
             <div class="col-md-4">
               <div class="form-group ">
                 <label for="photo">Photo</label>
-                <input id="photo" name="photo" required type="file">
+                <input id="photo" name="photo"  type="file">
               </div>
             </div>
 
@@ -357,7 +357,7 @@
                 <label for="motherName">Mother's Name </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control" required  name="motherName" placeholder="Name">
+                  <input type="text" class="form-control"   name="motherName" placeholder="Name">
                 </div>
               </div>
             </div>
@@ -371,7 +371,7 @@
                 <label for="motherCellNo">Mother's Mobile No </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control" required name="motherCellNo" placeholder="+8801xxxxxxxxx">
+                  <input type="text" class="form-control"  name="motherCellNo" placeholder="+8801xxxxxxxxx">
                 </div>
               </div>
             </div>
@@ -417,7 +417,7 @@
                 <label for="parmanentAddress">Parmanent Address</label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
-                  <textarea type="text" class="form-control" required name="parmanentAddress" placeholder="Address"></textarea>
+                  <textarea type="text" class="form-control"  name="parmanentAddress" placeholder="Address"></textarea>
                 </div>
               </div>
             </div>

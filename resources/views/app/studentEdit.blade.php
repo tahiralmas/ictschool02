@@ -40,7 +40,7 @@
                       <label for="regiNo">Registration No</label>
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                          <input type="text" class="form-control" readyonly="true" required name="regiNo" value="{{$student->regiNo}}" placeholder="">
+                          <input type="text" class="form-control" readyonly="true" required name="regiNo" value="{{$student->regiNo}}" placeholder="" readonly>
                       </div>
                   </div>
                     </div>
@@ -49,7 +49,7 @@
                       <label for="rollNo">Card/Roll No</label>
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                          <input type="text" class="form-control" required name="rollNo" value="{{$student->rollNo}}" placeholder="Class roll no">
+                          <input type="text" class="form-control" required name="rollNo" value="{{$student->rollNo}}" placeholder="Class roll no" readonly>
                       </div>
                   </div>
                     </div>
@@ -229,7 +229,7 @@
                                   'Other'=>'Other'
 
                                 ];?>
-                                {{ Form::select('religion',$data,$student->religion,['class'=>'form-control','required'=>'true'])}}
+                                {{ Form::select('religion',$data,$student->religion,['class'=>'form-control'])}}
 
                           </div>
                         </div>
@@ -251,7 +251,7 @@
                                     'O-'=>'O-',
 
                               ];?>
-                              {{ Form::select('bloodgroup',$data,$student->bloodgroup,['class'=>'form-control','required'=>'true'])}}
+                              {{ Form::select('bloodgroup',$data,$student->bloodgroup,['class'=>'form-control'])}}
 
                         </div>
                       </div>
@@ -266,7 +266,7 @@
                               <label for="nationality">Nationality</label>
                               <div class="input-group">
                                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                  <input type="text" class="form-control" value="{{$student->nationality}}" required  name="nationality" placeholder="Nationality">
+                                  <input type="text" class="form-control" value="{{$student->nationality}}"   name="nationality" placeholder="Nationality">
                               </div>
                           </div>
                         </div>
@@ -351,7 +351,7 @@
                                   <label for="motherName">Mother's Name </label>
                                   <div class="input-group">
                                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                      <input type="text" class="form-control" required  value="{{$student->motherName}}"  name="motherName" placeholder="Name">
+                                      <input type="text" class="form-control"   value="{{$student->motherName}}"  name="motherName" placeholder="Name">
                                   </div>
                               </div>
                               </div>
@@ -365,7 +365,7 @@
                             <label for="motherCellNo">Mother's Mobile No </label>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                <input type="text" class="form-control" value="{{$student->motherCellNo}}"  required name="motherCellNo" placeholder="+8801xxxxxxxxx">
+                                <input type="text" class="form-control" value="{{$student->motherCellNo}}"   name="motherCellNo" placeholder="+8801xxxxxxxxx">
                             </div>
                         </div>
                         </div>
@@ -411,7 +411,7 @@
                               <label for="parmanentAddress">Parmanent Address</label>
                               <div class="input-group">
                                   <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
-                                  <textarea type="text" class="form-control" required name="parmanentAddress" placeholder="Address">{{$student->parmanentAddress}}</textarea>
+                                  <textarea type="text" class="form-control"  name="parmanentAddress" placeholder="Address">{{$student->parmanentAddress}}</textarea>
                               </div>
                           </div>
                           </div>

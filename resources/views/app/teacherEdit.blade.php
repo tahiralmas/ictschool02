@@ -91,7 +91,7 @@
                                   'Other'=>'Other'
 
                                 ];?>
-                                {{ Form::select('religion',$data,$teacher->religion,['class'=>'form-control','required'=>'true'])}}
+                                {{ Form::select('religion',$data,$teacher->religion,['class'=>'form-control'])}}
 
                           </div>
                         </div>
@@ -103,6 +103,7 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <?php  $data=[
+                             '' =>'--- Select Bloodgroup---',
                               'A+'=>'A+',
                               'A-'=>'A-',
                               'B+'=>'B+',
@@ -113,7 +114,7 @@
                                     'O-'=>'O-',
 
                               ];?>
-                              {{ Form::select('bloodgroup',$data,$teacher->bloodgroup,['class'=>'form-control','required'=>'true'])}}
+                              {{ Form::select('bloodgroup',$data,$teacher->bloodgroup,['class'=>'form-control'])}}
 
                         </div>
                       </div>
@@ -128,7 +129,7 @@
                               <label for="nationality">Nationality</label>
                               <div class="input-group">
                                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                  <input type="text" class="form-control" value="{{$teacher->nationality}}" required  name="nationality" placeholder="Nationality">
+                                  <input type="text" class="form-control" value="{{$teacher->nationality}}"   name="nationality" placeholder="Nationality">
                               </div>
                           </div>
                         </div>
@@ -234,7 +235,7 @@
                               <label for="parmanentAddress">Parmanent Address</label>
                               <div class="input-group">
                                   <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
-                                  <textarea type="text" class="form-control" required name="parmanentAddress" placeholder="Address">{{$teacher->parmanentAddress}}</textarea>
+                                  <textarea type="text" class="form-control"  name="parmanentAddress" placeholder="Address">{{$teacher->parmanentAddress}}</textarea>
                               </div>
                           </div>
                           </div>

@@ -86,24 +86,24 @@ class teacherController extends BaseController {
 		'fname' => 'required',
 		'lname' => 'required',
 		'gender' => 'required',
-		'religion' => 'required',
-		'bloodgroup' => 'required',
-		'nationality' => 'required',
+		//'religion' => 'required',
+		//'bloodgroup' => 'required',
+		//'nationality' => 'required',
 		'dob' => 'required',
 		//'session' => 'required',
 		//'class' => 'required',
 		//'section' => 'required',
 		//'rollNo' => 'required',
 		//'shift' => 'required',
-		'photo' => 'required|mimes:jpeg,jpg,png',
+		'photo' => 'mimes:jpeg,jpg,png',
 		'phne' => 'required',
-		'emails' => 'required',
+		//'emails' => 'required',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
 		//'motherName' => 'required',
 		//'motherCellNo' => 'required',
 		'presentAddress' => 'required',
-		'parmanentAddress' => 'required'
+		//'parmanentAddress' => 'required'
 	];
 	$validator = \Validator::make(Input::all(), $rules);
 	if ($validator->fails())
@@ -111,46 +111,79 @@ class teacherController extends BaseController {
 		return Redirect::to('/teacher/create')->withErrors($validator);
 	}
 	else {
+
+		if(Input::file('photo')!=""){
 		$fileName=Input::get('fname').'.'.Input::file('photo')->getClientOriginalExtension();
+		}else{
+			$fileName='';
+		}
 
 		$teacher = new Teacher;
 		$teacher->firstName= Input::get('fname');
 		$teacher->lastName= Input::get('lname');
 		$teacher->gender= Input::get('gender');
 		$teacher->religion= Input::get('religion');
+		if(Input::get('religion')==''){
+          $teacher->religion="";
+		}
 		$teacher->bloodgroup= Input::get('bloodgroup');
+		if(Input::get('bloodgroup')==''){
+			$teacher->bloodgroup="";
+			
+		}
 		$teacher->nationality= Input::get('nationality');
+		if(Input::get('nationality')==''){
+			$teacher->nationality="";
+		}
 		$teacher->dob= Input::get('dob');
 		$teacher->photo= $fileName;
 		$teacher->nationality= Input::get('nationality');
+		if(Input::get('nationality')==''){
+			
+			$teacher->nationality= "";
+			
+		}
 		$teacher->phone= Input::get('phne');
 		$teacher->email= Input::get('emails');
+		if(Input::get('emails')==''){
+			$teacher->email="";
+		}
 
 		$teacher->fatherName= Input::get('fatherName');
 		$teacher->fatherCellNo= Input::get('fatherCellNo');
 		$teacher->presentAddress= Input::get('presentAddress');
 		$teacher->parmanentAddress= Input::get('parmanentAddress');
+		if(Input::get('parmanentAddress')==''){
+			$teacher->parmanentAddress="";
+		}
 
-		$hasTeacher = Teacher::where('email','=',Input::get('emails'))->first();
+		$hasTeacher = Teacher::where('phone','=',Input::get('phne'))->first();
 		if ($hasTeacher)
 		{
 			$messages = $validator->errors();
-			$messages->add('Duplicate!', 'Teacher already exits with this Email.');
+			$messages->add('Duplicate!', 'Teacher already exits with this Phone number.');
 			return Redirect::to('/teacher/create')->withErrors($messages)->withInput();
 		}
 		else {
 			$teacher->save();
+			if(Input::file('photo')!=""){
 			 Input::file('photo')->move(base_path() .'/public/images/teacher',$fileName);
+			}
 			//echo request()->photo->move(public_path('images/'), $fileName);
 			
 			
 			  $user = new User;
 			  $user->firstname = Input::get('fname');
 			  $user->lastname  = Input::get('lname');
+
 			  $user->email =     Input::get('emails');
+			  if(Input::get('emails')==''){
+                $user->email = Input::get('fname')."@gmail.com";
+
+			  }
 			  $user->login     = Input::get('fname').'_'.Input::get('lname');
 			  $user->group     = 'Teacher';
-			  $user->password  =	Hash::make('123456');
+			  $user->password  =	Hash::make(Input::get('phne'));
 			  $user->save();
 
 			  $ictcore_integration = Ictcore_integration::select("*")->first();
@@ -300,16 +333,16 @@ public function update()
 		'fname' => 'required',
 		'lname' => 'required',
 		'gender' => 'required',
-		'religion' => 'required',
-		'bloodgroup' => 'required',
-		'nationality' => 'required',
+		//'religion' => 'required',
+		//'bloodgroup' => 'required',
+		//'nationality' => 'required',
 		'phone' => 'required',
-		'email' => 'required',
+		//'email' => 'required',
 		'dob' => 'required',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
 		'presentAddress' => 'required',
-		'parmanentAddress' => 'required'
+		//'parmanentAddress' => 'required'
 	];
 	$validator = \Validator::make(Input::all(), $rules);
 	if ($validator->fails())
@@ -343,7 +376,7 @@ public function update()
 		}
 		//$student->regiNo=Input::get('regiNo');
 		//$student->rollNo=Input::get('rollNo');
-		$teacher->firstName= Input::get('fname');
+		/*$teacher->firstName= Input::get('fname');
 		$teacher->lastName= Input::get('lname');
 		$teacher->gender= Input::get('gender');
 		$teacher->religion= Input::get('religion');
@@ -357,7 +390,53 @@ public function update()
 		$teacher->fatherName= Input::get('fatherName');
 		$teacher->fatherCellNo= Input::get('fatherCellNo');
 		$teacher->presentAddress= Input::get('presentAddress');
+		$teacher->parmanentAddress= Input::get('parmanentAddress');*/
+
+
+
+
+
+		$teacher->firstName= Input::get('fname');
+		$teacher->lastName= Input::get('lname');
+		$teacher->gender= Input::get('gender');
+		$teacher->religion= Input::get('religion');
+		if(Input::get('religion')==''){
+          $teacher->religion="";
+		}
+		$teacher->bloodgroup= Input::get('bloodgroup');
+		if(Input::get('bloodgroup')==''){
+			$teacher->bloodgroup="";
+			
+		}
+		$teacher->nationality= Input::get('nationality');
+		if(Input::get('nationality')==''){
+			$teacher->nationality="";
+		}
+		$teacher->dob= Input::get('dob');
+	//	$teacher->photo= $fileName;
+		$teacher->nationality= Input::get('nationality');
+		if(Input::get('nationality')==''){
+			
+			$teacher->nationality= "";
+			
+		}
+		$teacher->phone= Input::get('phone');
+		$teacher->email= Input::get('emails');
+		if(Input::get('emails')==''){
+			$teacher->email="";
+		}
+
+		$teacher->fatherName= Input::get('fatherName');
+		$teacher->fatherCellNo= Input::get('fatherCellNo');
+		$teacher->presentAddress= Input::get('presentAddress');
 		$teacher->parmanentAddress= Input::get('parmanentAddress');
+		if(Input::get('parmanentAddress')==''){
+			$teacher->parmanentAddress="";
+		}
+
+
+
+
 
 		$teacher->save();
 
