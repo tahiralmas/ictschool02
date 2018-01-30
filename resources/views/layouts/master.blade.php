@@ -194,13 +194,13 @@
                         <li><a class="ajax-link" href="/dashboard"><i class="glyphicon glyphicon-th-large"></i><span> Dashboard</span></a>
                         </li>
                         @if (Session::get('userRole') =="Admin")
-                         <li class="accordion">
+                         <?php /* <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-folder-open"></i><span> Levels</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="/level/create">Add New</a></li>
                                 <li><a href="/level/list">Levels List</a></li>
                             </ul>
-                        </li>
+                        </li> */ ?>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-home"></i><span> Class</span></a>
                             <ul class="nav nav-pills nav-stacked">

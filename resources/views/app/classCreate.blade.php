@@ -27,18 +27,20 @@
                         </div>
                     </div>
                   <div class="form-group">
-                    <!--  <label for="name">Numeric Value of Class[One=1,Six=6,Ten=10 etc]</label>-->
-                      <label for="name">Level</label>
+                      <label for="name">Numeric Value of Class[One=1,Six=6,Ten=10 etc]</label>
+                     <!-- <label for="name">Level</label>-->
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                          <!--<input type="number" min="1" max="10" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">-->
+                          <input type="number" min="1" max="10" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">
                           
-                          <select class="form-control"  name="code" required >
+                         <?php /* <select class="form-control"  name="code" required >
                           <option value="">---Select Level---</option>
                            @foreach($levels as $level)
                              <option value="{{$level->name }}">{{ $level->name}}</option>
                              @endforeach
-                          </select>
+                          </select>  */ ?>
+
+
                       </div>
                   </div>
                   

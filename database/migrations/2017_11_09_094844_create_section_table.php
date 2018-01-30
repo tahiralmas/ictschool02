@@ -17,6 +17,8 @@ class CreateSectionTable extends Migration
             $table->increments('id');
             $table->string('name',100)->unique;
             $table->string('description',250);
+            $table->string('class_code',250);
+            
             $table->timestamps();
         });
     }

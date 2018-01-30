@@ -453,7 +453,7 @@ first creat message then use this method
 
 ## Sections Collection [/sections]
 
-Also search by parameter(sections?class) e.g class=class_id
+filter section using query string __(sections?class) e.g `class=class_id`__
 
 ### Get All Sectionds [GET]
 
@@ -545,7 +545,7 @@ first creat message then use this method
 
 ## Students Collection [/students]
 
-Also search by parameter(students?regiNo&class) or class,section,name,group e.g class=class_id,section=section_id
+filter `student` using query string  __(students?`regiNo`&`class`) or `class`,`section`,`name`,`group` e.g class=`class_id`,section=`section_id`__
 
 ### Get All Students [GET]
 
@@ -621,7 +621,7 @@ first creat message then use this method
 
 ## Results Collection [/results]
 
-also search by parameter(results?regiNo&class) or class,section,name,exam,subject e.g class=class_id,section=section_id,exam=exam_id,subject=subject_code
+filter `result` using query string __(results?`regiNo`&`class`) or `class`,`section`,`name`,`exam`,`subject` e.g class=`class_id`,section=`section_id`,exam=`exam_id`,subject=`subject_code`__
 
 ### List of all results [GET]
 
@@ -676,7 +676,7 @@ also search by parameter(results?regiNo&class) or class,section,name,exam,subjec
 
 ## Attendance Collection [/attendances]
 
-Read / view complete attendances data and also search by parameter(attendaces?regiNo&date) or class,section,name date formate:`year-month-date`
+Read / view complete attendances data and also filter `attendance` using query string __(attendaces?`regiNo`&`date`) or `class`,`section`,`name` date formate:`year-month-date`__
 
 ### List of all Attendace [GET]
 
