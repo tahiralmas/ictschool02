@@ -57,7 +57,7 @@
                                     <label for="name"  class="col-sm-2 col-form-label">Section</label>
                                     <div class="input-group col-md-6">
                                         <!--<select  name="section[]" id="section" class="form-control selectpicker" multiple="" data-hide-disabled="true" data-actions-box="true" data-size="5" tabindex="-99">-->
-                                        <select  name="section" id="section" class="form-control">
+                                        <select  name="section[]" id="section" class="form-control selectpicker" multiple="" data-hide-disabled="true" data-actions-box="true" data-size="5" tabindex="-99" >
                                              <option value="">Select Sections</option>
                                         </select>
                                     </div>
@@ -146,7 +146,7 @@
                                 <div class="form-group row" id="class" >
                                     <label for="name"  class="col-sm-2 col-form-label">Section</label>
                                     <div class="input-group col-md-6">
-                                        <select  name="section" id="section1" class="form-control">
+                                        <select  name="section[]" id="section1" class="form-control selectpicker" multiple="" data-hide-disabled="true" data-actions-box="true" data-size="5" tabindex="-99">
                                              <option value="">Select Sections</option>
                                         </select>
                                     </div>
@@ -251,17 +251,24 @@ function getsections()
       success: function(data) {
         $('#section').empty();
        //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
+       var options = [];
         $.each(data, function(i, section) {
           //console.log(student);
          
           
-            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+            var opt ="<option value='"+section.id+"'>"+section.name + " </option>"
 
         
           //console.log(opt);
-          $('#section').append(opt);
+       //  var data = $('#section').append(opt);
+         
+         options.push(opt);
+          
+        
+          //alert(786);
 
         });
+          $("#section").html(options).selectpicker('refresh');
         //console.log(data);
 
       },
@@ -285,17 +292,21 @@ function getsections1()
       success: function(data) {
         $('#section1').empty();
        //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
+       var options1 = [];
         $.each(data, function(i, section) {
           //console.log(student);
          
           
             var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+            
+            options1.push(opt);
 
         
           //console.log(opt);
-          $('#section1').append(opt);
+        //  $('#section1').append(opt);
 
         });
+        $("#section1").html(options1).selectpicker('refresh');
         //console.log(data);
 
       },

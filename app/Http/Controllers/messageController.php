@@ -37,132 +37,132 @@ class messageController extends BaseController {
 	}
 
 
-/**
-* Show the form for creating a new resource.
-*
-* @return Response
-*/
-public function create()
-{
-		$rules=[
-		'role' => 'required',
-		'message' => 'required',
-		'mess_name' => 'required'
-		];
-		$validator = \Validator::make(Input::all(), $rules);
-		if ($validator->fails())
-		{
-		  return Redirect::to('/message')->withErrors($validator);
-		}else {
-	               $ictcore_integration = Ictcore_integration::select("*")->first();
-		        if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
+	/**
+	* Show the form for creating a new resource.
+	*
+	* @return Response
+	*/
+	public function create()
+	{
+			$rules=[
+			'role' => 'required',
+			'message' => 'required',
+			'mess_name' => 'required',
+			'class'   => 'required',
+			'section' => 'required'
+			];
+			$validator = \Validator::make(Input::all(), $rules);
+			if ($validator->fails())
+			{
+			  return Redirect::to('/message')->withErrors($validator);
+			}else {
 
-					$ict  = new ictcoreController();
-					$role = Input::get('role');
-					$mess_name = Input::get('mess_name');
 
-					$remove_spaces_m =  str_replace(" ","_",$mess_name );
 
-					$message = Message::find(Input::get('message'));
+                  /*   $section = Input::get('section');
+							$class = Input::get('class');
+							$student=	DB::table('Student')
+							->select('*')
+							->where('isActive','Yes')
+							->whereIn('section1', $section)
+							->where('class', $class)
+							->get();
 
-					$data = array(
-						'name' => $remove_spaces_m,
-						'description' => $mess_name,
-						);
-					$group_id= $ict->ictcore_api('groups','POST',$data );
+							echo "<pre>";print_r($student->toArray());exit; */
 
-					if($role =='student' || $role =='parent'){
+					$type = Input::get('type');
+					$ictcore_integration = Ictcore_integration::select("*")->first();
+					if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 
-						$section = Input::get('section');
-						$class = Input::get('class');
-						$student=	DB::table('Student')
-						->select('*')
-						->where('isActive','Yes')
-						->whereIn('section', $section)
-						->whereIn('class', $class)
-						->get();
-						foreach($student as $std){
+	                  $ict  = new ictcoreController();
+	                  $role = Input::get('role');
+	                  $mess_name = Input::get('mess_name');
+					  $remove_spaces_m =  str_replace(" ","_",$mess_name );
 
+						if($type=='voice'){
+							
+							
+							
+							$message = Message::find(Input::get('message'));
+							$program_id =  $message->ictcore_program_id;
+							
+						}elseif($type=='sms' || $type=='Sms' || $type=='SMS'){
 							$data = array(
-							'first_name' => $std->firstName,
-							'last_name' => $std->lastName,
-							'phone'     => $std->fatherCellNo,
-							'email'     => '',
+								'name' => Input::get('mess_name'),
+								'data' =>Input::get('message'),
+								'type' => 'plain',
+								'description' =>'',
 							);
-
-
-							$contact_id = $ict->ictcore_api('contacts','POST',$data );
-
-							$group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
-
-						}
-					}else{
-		              $teacher=	DB::table('teacher')
-						->select('*')
-						->get();
-						foreach($teacher as $techrd){
-		                 $data = array(
-							'first_name' => $techrd->firstName,
-							'last_name' => $techrd->lastName,
-							'phone'     => $techrd->phone,
-							'email'     => $techrd->email
+							$text_id  =  $ict->ictcore_api('messages/texts','POST',$data );
+							$data = array(
+								'name' => Input::get('mess_name'),
+								'text_id' =>$text_id,
 							);
-
-
-							$contact_id = $ict->ictcore_api('contacts','POST',$data );
-
-							$group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
-
+							$program_id  =  $ict->ictcore_api('programs/sendsms','POST',$data );
 						}
-
-					}
-						/*$data = array(
-						'name' => $message->name,
-						'description' => $message->description,
-						);
-
-						$recording_id= $ict->ictcore_api('messages/recordings','POST',$data );
-						$name = base_path() .'/public/recording/'.$message->recording;
-						$finfo = new \finfo(FILEINFO_MIME_TYPE);
-						$mimetype = $finfo->file($name);
-						$cfile = curl_file_create($name, $mimetype, basename($name));
-						$data = array( $cfile);
-						$result = $ict->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
-						$recording_id = $result ;
 						$data = array(
-						'name' => $remove_spaces_m,
-						'recording_id' => $recording_id,
-						);
-						$program_id = $ict->ictcore_api('programs/voicemessage','POST',$data );*/
+								'name' => $remove_spaces_m,
+								'description' => $mess_name,
+								);
+		                $group_id= $ict->ictcore_api('groups','POST',$data );
+
+						if($role =='student' || $role =='parent'){
+
+							$section = Input::get('section');
+							$class = Input::get('class');
+							$student=	DB::table('Student')
+							->select('*')
+							->where('isActive','Yes')
+							->whereIn('section', $section)
+							->where('class', $class)
+							->get();
+							
 
 
+							foreach($student as $std){
+								$data = array(
+								'first_name' => $std->firstName,
+								'last_name' => $std->lastName,
+								'phone'     => $std->fatherCellNo,
+								'email'     => '',
+								);
+								$contact_id = $ict->ictcore_api('contacts','POST',$data );
+								$group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+							}
+						}else{
+							$teacher=	DB::table('teacher')
+							->select('*')
+							->get();
+							foreach($teacher as $techrd){
+								$data = array(
+								'first_name' => $techrd->firstName,
+								'last_name' => $techrd->lastName,
+								'phone'     => $techrd->phone,
+								'email'     => $techrd->email
+								);
 
+								$contact_id = $ict->ictcore_api('contacts','POST',$data );
+								$group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
 
+							}
+						}
 						$data = array(
-							'program_id' => $message->ictcore_program_id,
-							'group_id' => $group_id,
-							'delay' => '',
-							'try_allowed' => '',
-							'account_id' => 1,
-							'status' => '',
+						'program_id' => $program_id,
+						'group_id' => $group_id,
+						'delay' => '',
+						'try_allowed' => '',
+						'account_id' => 1,
+						'status' => '',
 						);
 						$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
 
-						print_r($campaign_id);
-
-					//exit;
-
-				}else{
-					return Redirect::to('/message')->withErrors("Please Add ictcore integration in Setting Menu");
-				}
-
-			//$class->save();
-			return Redirect::to('/message')->with("success", "Voice campaign Created Succesfully.");
+						
+						return Redirect::to('/message')->with("success", "campaign Created Succesfully.");
+					}else{
+						return Redirect::to('/message')->withErrors("Please Add ictcore integration in Setting Menu");
+					}
+		}
 	}
-
-}
-
-
 	/**
 	* Store a newly created resource in storage.
 	*
@@ -236,5 +236,4 @@ public function create()
 		$class->delete();
 		return Redirect::to('/level/list')->with("success","Level Deleted Succesfully.");
 	}
-
 }
