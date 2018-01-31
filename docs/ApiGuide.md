@@ -15,7 +15,9 @@ HOST: http://demo.ictschool.com/api/
 + login: username (string)
 + group: usertype like,Admin,Teacher and Student (string)
 
-
+## Authentication (object)
++ email: email (string)
++ password: password (string)
 
 ## RequestUser (object)
 
@@ -68,7 +70,7 @@ HOST: http://demo.ictschool.com/api/
 
 
 
-## sections (object)
+## Sections (object)
 
 + id: 1 (number ,default)
 + name: section name (string,required)
@@ -173,21 +175,16 @@ Authentication return token use this token to acess the apilacation user enter u
 
 + Request (application/json)
 
-        {
-            "email": "Enter user email",
-            "password":"Enter user password",
-        }
+    + Attributes (Authentication)
+
 + Response 200 (application/json)
 
-            {
-                "token": "string"
-            }
+    + Attributes
+    
+        + token: token (string) 
+
             
 # Group Users 
-
-testing user
-
-
 
 ## Users Collection [/users]
 
@@ -204,16 +201,15 @@ object containing a user information.
 
 + Request (application/json)
 
-    + Attributes (array[RequestUser])
+    + Attributes (RequestUser)
 
 + Response 200 (application/json)
 
   
-    + Body
+    + Attributes
+        
+        + user_id: 1 (number)
 
-            {
-                "user_id": "Integer"
-            }
             
 
 ## Single User [/users/{user_id}]
@@ -224,23 +220,23 @@ object containing a user information.
 
 + Response 200 (application/json)
 
-    + Attributes (array[User])
+    + Attributes (User)
 
     
 ### Update User [PUT]
 
 + Request (application/json)
 
-    + Attributes (array[RequestUser])
+    + Attributes (RequestUser)
 
 + Response 200 (application/json)
 
-    + Attributes (array[RequestUser])
+    + Attributes (RequestUser)
 
             
 ### User Delete [DELETE]
 
-+ Response 200
++ Response 200 (application/json)
 
 
 
@@ -252,7 +248,7 @@ object containing a user information.
 
 ### Get All Teachers [GET]
 
-+ Response 200
++ Response 200 (application/json)
 
     + Attributes (array[Teachers])
 
@@ -260,16 +256,15 @@ object containing a user information.
 
 + Request (application/json) 
 
-    + Attributes (array[Teachers])
+    + Attributes (Teachers )
 
 + Response 200 (application/json)
 
   
-    + Body
+    + Attributes
+        
+        + teacherid: 1 (number) - teacher id newly created
 
-            {
-                "teacherid": "Integer"
-            }
 ## Single Teacher [/teachers/{teacher_id}]
 + Parameters
     + teacher_id (number) - ID of the teacher in the form of an integer
@@ -278,18 +273,18 @@ object containing a user information.
 
 + Response 200 (application/json)
 
-    + Attributes (array[Teachers])
+    + Attributes (Teachers)
 
     
 ### Update Teacher [PUT]
 
 + Request (application/json)  
     
-    + Attributes (array[Teachers])
+    + Attributes (Teachers)
 
 + Response 200 (application/json)
 
-    + Attributes (array[Teachers])
+    + Attributes (Teachers)
 
     
 ##Teachers Sections [/teachers/{teacher_id}/sections]
@@ -326,17 +321,15 @@ Upload a wav file
      
              wav file content here
     
-+ Response 200
++ Response 200 (application/json)
 
-    + Body
-
-            {
-                "File name": "filename.wav"
-            }
+    + Attributes
+        
+        + Filename: file name (string) - file name with extention e.g `filename.wav`
 
 ### Get All Messages [GET]
 
-+ Response 200
++ Response 200 (application/json)
     
     + Attributes (array[Messages])
 
@@ -346,23 +339,21 @@ Upload a wav file
 
 ### View a  Message [GET]
 
-+ Response 200
++ Response 200 (application/json)
     
-    + Attributes (array[Messages])
+    + Attributes (Messages)
 
 ### Update Message [PUT]
 
 + Request (audio/wav)
 
-    + Attributes (array[Messages])
+    + Attributes (Messages)
 
-+ Response 200
++ Response 200 (application/json)
    
-   + Body
-
-            {
-                "File name": "filename.wav"
-            }
+   + Attributes
+        
+        + Filename: filename.wav (string)
 
 ### Delete a Message [DELETE]
 
@@ -376,7 +367,7 @@ Upload a wav file
 
 ### Get All Classes [GET]
 
-+ Response 200
++ Response 200 (application/json)
 
     + Attributes (array[Classes])
 
@@ -385,16 +376,15 @@ Upload a wav file
 
 + Request (application/json) 
 
-    + Attributes (array[Classes])
+    + Attributes (Classes)
 
 + Response 200 (application/json)
 
   
-    + Body
+    + Attributes
+        
+        + classid: 1 (number)
 
-            {
-                "classid": "Integer"
-            }
 
 ## Single Class [/classes/{class_id}]
 + Parameters
@@ -404,18 +394,18 @@ Upload a wav file
 
 + Response 200 (application/json)
 
-    + Attributes (array[Classes])
+    + Attributes (Classes)
 
     
 ### Update Class [PUT]
 
 + Request (application/json)  
     
-    + Attributes (array[Classes])
+    + Attributes (Classes)
 
 + Response 200 (application/json)
 
-    + Attributes (array[Classes])
+    + Attributes (Classes)
 
     
 ## Class Sections [/classes/{class_id}/sections]
@@ -423,8 +413,8 @@ Upload a wav file
 List of all class and section assign to teacher
 
 ### View Class Assign Sections  [GET]
-
-+ Response 200
+ 
++ Response 200 (application/json)
 
     + Attributes (array[Teacherssection])
 
@@ -438,16 +428,13 @@ first creat message then use this method
 
 + Request (application/json)
 
-    + Attributes (array[Notifications])
+    + Attributes (Notifications)
 
-+ Response 200
++ Response 200 (application/json)
 
-    + Body
-    
-    
-            {
-                "Success message"
-            }
+    + Attributes
+        
+        + message: message (string) - success message (send or failed)
 
 # Group Sections
 
@@ -457,7 +444,7 @@ filter section using query string __(sections?class) e.g `class=class_id`__
 
 ### Get All Sectionds [GET]
 
-+ Response 200
++ Response 200 (application/json)
 
     + Attributes (array[Sections])
 
@@ -466,16 +453,15 @@ filter section using query string __(sections?class) e.g `class=class_id`__
 
 + Request (application/json) 
 
-    + Attributes (array[Sections])
+    + Attributes (Sections)
 
 + Response 200 (application/json)
 
   
-    + Body
+    + Attributes
+    
+        + section_id: 1 (number)
 
-            {
-                "section": "Integer"
-            }
 
 ## Single Section [/section/{section_id}]
 + Parameters
@@ -485,18 +471,18 @@ filter section using query string __(sections?class) e.g `class=class_id`__
 
 + Response 200 (application/json)
 
-    + Attributes (array[Sections])
+    + Attributes (Sections)
 
     
 ### Update Section [PUT]
 
 + Request (application/json)  
     
-    + Attributes (array[Sections])
+    + Attributes (Sections)
 
 + Response 200 (application/json)
 
-    + Attributes (array[Sections])
+    + Attributes (Sections)
 
     
 ## Section Students [/section/{section_id}/students]
@@ -505,7 +491,7 @@ List of all student according section id
 
 ### View Students Accoring to Section  [GET]
 
-+ Response 200
++ Response 200 (application/json)
 
     + Attributes (array[Students])
 
@@ -513,11 +499,11 @@ List of all student according section id
 
 List of all student according section id
 
-### View Students Accoring to Section  [GET]
+### View Subjects Accoring to Section  [GET]
 
-+ Response 200
++ Response 200 (application/json)
 
-    + Attributes (array[Teacherssection])
+    + Attributes (array[Teacherssubjects])
 
 
 ## Section Notification [/section/{section_id}/notification]
@@ -530,16 +516,14 @@ first creat message then use this method
 
 + Request (application/json)
 
-    + Attributes (array[Notifications])
+    + Attributes (Notifications)
 
-+ Response 200
++ Response 200 (application/json)
 
-    + Body
-    
-    
-            {
-                "Success message"
-            }
+     + Attributes
+        
+        + message: message (string) - success message (send or failed)
+
 
 # Group Students
 
@@ -549,7 +533,7 @@ filter `student` using query string  __(students?`regiNo`&`class`) or `class`,`s
 
 ### Get All Students [GET]
 
-+ Response 200
++ Response 200 (application/json)
 
     + Attributes (array[Students])
 
@@ -563,18 +547,18 @@ filter `student` using query string  __(students?`regiNo`&`class`) or `class`,`s
 
 + Response 200 (application/json)
 
-    + Attributes (array[Students])
+    + Attributes (Students)
 
     
 ### Update Student [PUT]
 
 + Request (application/json)  
     
-    + Attributes (array[Students])
+    + Attributes (Students)
 
 + Response 200 (application/json)
 
-    + Attributes (array[Students])
+    + Attributes (Students)
 
 ## Student Notification [/students/{student_id}/notification]
 
@@ -586,16 +570,14 @@ first creat message then use this method
 
 + Request (application/json)
 
-    + Attributes (array[Notifications])
+    + Attributes (Notifications)
 
-+ Response 200
++ Response 200 (application/json)
 
-    + Body
-    
-    
-            {
-                "Success message"
-            }
+    + Attributes
+        
+        + message: message (string) - success message (send or failed)
+
 
 # Group Exam
 
@@ -603,7 +585,7 @@ first creat message then use this method
 
 ### Get all Exams List [GET]
 
-+ Response 200
++ Response 200 (application/json)
 
     + Attributes (array[Exams])
 
@@ -615,7 +597,7 @@ first creat message then use this method
 
 + Response 200 (application/json)
 
-    + Attributes (array[Exams])
+    + Attributes (Exams)
 
 # Group Results 
 
@@ -634,16 +616,15 @@ filter `result` using query string __(results?`regiNo`&`class`) or `class`,`sect
 
 + Request (application/json)
 
-    + Attributes (array[Resultsrequest])
+    + Attributes (Resultsrequest)
 
 + Response 200 (application/json)
 
   
-    + Body
+    + Attributes
+    
+        + result_id: 1 (number)
 
-            {
-                "result_id": "Integer"
-            }
             
 
 ## Single Result [/results/{result_id}]
@@ -654,18 +635,18 @@ filter `result` using query string __(results?`regiNo`&`class`) or `class`,`sect
 
 + Response 200 (application/json)
 
-    + Attributes (array[Results])
+    + Attributes (Results)
 
     
 ### Update Result [PUT]
 
 + Request (application/json)
 
-    + Attributes (array[Resultsrequest])
+    + Attributes (Resultsrequest)
 
 + Response 200 (application/json)
 
-    + Attributes (array[Resultsrequest])
+    + Attributes (Resultsrequest)
 
             
 ### Result Delete [DELETE]
@@ -689,16 +670,15 @@ Read / view complete attendances data and also filter `attendance` using query s
 
 + Request (application/json)
 
-    + Attributes (array[Attendancerequest])
+    + Attributes (Attendancerequest)
 
 + Response 200 (application/json)
 
   
-    + Body
+    + Attributes
+        
+        + attendance_id: 1 (number)
 
-            {
-                "attendance_id": "Integer"
-            }
             
 
 ## Single Attendance [/attendances/{attendance_id}]
@@ -709,23 +689,23 @@ Read / view complete attendances data and also filter `attendance` using query s
 
 + Response 200 (application/json)
 
-    + Attributes (array[Attendances])
+    + Attributes (Attendances)
 
     
 ### Update Attendance [PUT]
 
 + Request (application/json)
 
-    + Attributes (array[Attendancerequest])
+    + Attributes (Attendancerequest)
 
 + Response 200 (application/json)
 
-    + Attributes (array[Attendancerequest])
+    + Attributes (Attendancerequest)
 
             
 ### Attendance Delete [DELETE]
 
-+ Response 200
++ Response 200 (application/json)
 
 # Group Notifications 
 
@@ -743,17 +723,14 @@ Read / view complete attendances data and also filter `attendance` using query s
 
 + Request (application/json)
 
-    + Attributes (array[Notifications])
+    + Attributes (Notifications)
 
 + Response 200 (application/json)
 
   
-    + Body
-
-            {
-                "notification_id": "Integer"
-            }
-            
+    + Attributes
+    
+        + notification_id: 1 (number)
 
 ## Single Notification [/notifications/{notification_id}]
 + Parameters
@@ -763,23 +740,23 @@ Read / view complete attendances data and also filter `attendance` using query s
 
 + Response 200 (application/json)
 
-    + Attributes (array[Notifications])
+    + Attributes (Notifications)
 
     
 ### Update Notification [PUT]
 
 + Request (application/json)
 
-    + Attributes (array[Notifications])
+    + Attributes (Notifications)
 
 + Response 200 (application/json)
 
-    + Attributes (array[Notifications])
+    + Attributes (Notifications)
 
             
 ### Notification Delete [DELETE]
 
-+ Response 200
++ Response 200 (application/json)
 
 
 
