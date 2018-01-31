@@ -48,7 +48,7 @@
 
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
-                                            {{ Form::select('class',$classes,$formdata->class,['class'=>'form-control','required'=>'true'])}}
+                                            {{ Form::select('class',$classes,$formdata->class,['class'=>'form-control','id'=>'class','required'=>'true'])}}
                                         </div>
                                     </div>
                                 </div>
@@ -70,13 +70,13 @@
                                                     'I'=>'I',
                                                     'J'=>'J'
                                             ];?>
-                                            {{ Form::select('section',$data,$formdata->section,['class'=>'form-control','required'=>'true'])}}
+                                            {{ Form::select('section',$data,$formdata->section,['class'=>'form-control','id'=>'section','required'=>'true'])}}
 
 
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                               <?php /* <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="control-label" for="shift">Shift</label>
 
@@ -89,7 +89,8 @@
 
                                         </div>
                                     </div>
-                                </div>
+                                </div> */?>
+                                <input type="hidden" name="shift" id="shift" value="Morning" >
                                 <div class="col-md-2">
                                     <div class="form-group ">
                                         <label for="session">session</label>
@@ -114,7 +115,7 @@
                                                     'Mid Term'=>'Mid Term',
                                                     'Final Exam'=>'Final Exam'
                                             ];?>
-                                            {{ Form::select('exam',$data,$formdata->exam,['class'=>'form-control','required'=>'true'])}}
+                                            {{ Form::select('exam',$data,$formdata->exam,['class'=>'form-control','id'=>'exam','required'=>'true'])}}
 
 
                                         </div>
@@ -152,6 +153,83 @@
 
             });
             $('#markList').dataTable();
+
+           $('#class').on('change', function (e) {
+        
+                getsections();
+                getexam();
+            });
+     
+           getsections();
+            getexam();
         });
+
+        function getsections()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        //alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section').empty();
+      // $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+        
+          //console.log(opt);
+          $('#section').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
+
+ function getexam()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/exam/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#exam').empty();
+       $('#exam').append($('<option>').text("--Select Exam--").attr('value',""));
+        $.each(data, function(i, exam) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+exam.id+"'>"+exam.type + " </option>"
+
+        
+          //console.log(opt);
+          $('#exam').append(opt);
+
+        });
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
     </script>
 @stop

@@ -20,6 +20,7 @@
               <th style="width:30%">Name</th>
                <th style="width:30%">Class</th>
               <th style="width:30%">Description</th>
+              <th style="width:30%">Students</th>
              
               <th style="width:15%">Action</th>
             </tr>
@@ -31,6 +32,7 @@
               <td>{{$section->name}}</td>
               <td>{{$section->class_code}}</td>
               <td>{{$section->description}}</td>
+              <td>{{$section->students}}</td>
 
               <td>
                 <a title='Edit' class='btn btn-info' href='{{url("/section/edit")}}/{{$section->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/section/delete")}}/{{$section->id}}'> <i class="glyphicon glyphicon-trash icon-white"></i></a>

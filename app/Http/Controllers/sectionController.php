@@ -74,10 +74,14 @@ class sectionController extends BaseController {
 	{
 		//$Classes = ClassModel::orderby('code','asc')->get();
 		$sections = DB::table('section')
-		->select(DB::raw('section.id,section.class_code,section.name,section.description'))
+		//->select(DB::raw('section.id,section.class_code,section.name,section.description'))
+		->select(DB::raw('section.id,section.class_code,section.name,section.description,(select count(Student.id) from Student where class=section.class_code And section=section.id)as students'))
+
 		->get();
 		//dd($sections);
 		//return View::Make('app.classList',compact('Classes'));
+
+		//echo "<pre>";print_r($sections);exit;
 		return View('app.sectionList',compact('sections'));
 	}
 
