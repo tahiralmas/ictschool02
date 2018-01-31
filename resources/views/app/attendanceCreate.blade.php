@@ -155,6 +155,8 @@
 
                       <th>Is Present? <input type="checkbox" id="allcheck" name="allcheck">All Select</th>
 
+                       
+
                     </tr>
                   </thead>
                   <tbody>
@@ -288,6 +290,27 @@
 
         });
 
+          /*$('#allcheckl').change(function() {
+          var isS=false;
+          if ($('#isSendSMS').is(":checked"))
+          {
+            isS=true;
+          }
+          $('input:checkbox').not(this).prop('checked', this.checked);
+
+          if(isS)
+          {
+            $('#isSendSMS').prop('checked',true);
+          }
+          else
+          {
+
+            $('#isSendSMS').prop('checked',false);
+          }
+
+
+        });*/
+
       });
 
 
@@ -373,6 +396,7 @@ function getsections()
         chkbox.name="present["+data['regiNo']+"]";
         chkbox.size="3";
         cell5.appendChild(chkbox);
+
       };
 
       </script>
