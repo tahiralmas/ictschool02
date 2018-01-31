@@ -80,7 +80,7 @@ class ClassController extends Controller
     public function update_class($class_id)
     {
         $rules=[
-        'code' => 'required'
+        'code' => 'required',
 		'name' => 'required',
 		'description' => 'required'
 		];
