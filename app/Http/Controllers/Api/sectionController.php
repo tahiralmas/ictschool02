@@ -18,6 +18,7 @@ use App\Message;
 use App\Attendance;
 use App\Student;
 use App\SectionModel;
+use App\Ictcore_integration;
 use DB;
 use Excel;
 use Illuminate\Support\Collection;
@@ -179,34 +180,41 @@ class sectionController extends Controller
                 /* $drctry = storage_path('app/public/messages/');
                  $mimetype      = mime_content_type($drctry.Input::get('message'));
                 if($mimetype =='audio/x-wav' || $mimetype=='audio/wav'){ */
+                    $ictcore_integration = Ictcore_integration::select("*")->first();
+                 
+                if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url !='' && $ictcore_integration->ictcore_user !='' && $ictcore_integration->ictcore_password !=''){ 
 
-                $ict  = new ictcoreController();
-                $postmethod  = new NotificationController();
-                $data = array(
-                'name' => Input::get('name'),
-                'description' => 'this is section wise group',
-                );
-                $group_id= $ict->ictcore_api('groups','POST',$data );
-                $student=   DB::table('Student')
-                ->select('*')
-                ->where('isActive','Yes')
-                ->where('section', $section_id)
-                ->get();
-                foreach($student as $std){
+                    $ict  = new ictcoreController();
+                    $postmethod  = new NotificationController();
                     $data = array(
-                    'first_name' => $std->firstName,
-                    'last_name' => $std->lastName,
-                    'phone'     => $std->fatherCellNo,
-                    'email'     => '',
+                    'name' => Input::get('name'),
+                    'description' => 'this is section wise group',
                     );
-                    $contact_id = $ict->ictcore_api('contacts','POST',$data );
-                    $group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
-                }
-                    return $postmethod->postnotificationmethod(Input::get('name'),Input::get('type'),Input::get('message'),'group',$group_id);
+                    $group_id= $ict->ictcore_api('groups','POST',$data );
+                    $student=   DB::table('Student')
+                    ->select('*')
+                    ->where('isActive','Yes')
+                    ->where('section', $section_id)
+                    ->get();
+                    foreach($student as $std){
+                        $data = array(
+                        'first_name' => $std->firstName,
+                        'last_name' => $std->lastName,
+                        'phone'     => $std->fatherCellNo,
+                        'email'     => '',
+                        );
+                        $contact_id = $ict->ictcore_api('contacts','POST',$data );
+                        $group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+                    }
+                        return $postmethod->postnotificationmethod(Input::get('name'),Input::get('type'),Input::get('message'),'group',$group_id);
             /*}else{
                  return response()->json("ERROR:Please Upload Correct file",415 );
              }*/
+            }else{
+
+                 return response()->json(['Error'=>"Please Add Intigration  in Setting. Notification not send"],400);
             }
+        }
     }
 
      /*public function sectionwisenotification($section_id){

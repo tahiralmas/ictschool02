@@ -77,7 +77,7 @@ class templateController extends BaseController {
 
                    $ictcore_integration = Ictcore_integration::select("*")->first();
                    
-		    if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
+		    if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 				$ictcore_api  = new ictcoreController();
 				$sname = Input::get('title');
                 $remove_spaces =  str_replace(" ","_",Input::get('title'));

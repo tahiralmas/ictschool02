@@ -508,7 +508,7 @@ class feesController extends BaseController {
 
 						 $ictcore_fees = Ictcore_fees::select("*")->first();
 					     $ictcore_integration = Ictcore_integration::select("*")->first();
-				if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
+				if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
 				      $ict  = new ictcoreController();
 					  $data = array(
 						'name' => 'Fee Notification',

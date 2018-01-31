@@ -154,7 +154,7 @@ class attendancesController extends BaseController {
 						/////////////////////////////////////////////////////////////////////////////////////////////Contact Create in ictcore//////////////////////////////////////////////////////////////////////////////////////////
 						 $ictcore_attendance= Ictcore_attendance::select("*")->first();
 						 $ictcore_integration = Ictcore_integration::select("*")->first();
-						if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
+						if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
 							 $ict  = new ictcoreController();
 	                        if($ictcore_attendance->ictcore_program_id!=''){
 								$data = array(

@@ -16,6 +16,7 @@ use App\Message;
 use App\Subject;
 use App\Attendance;
 use App\Student;
+use App\Ictcore_integration;
 use App\SectionModel;
 use DB;
 use Excel;
@@ -213,27 +214,35 @@ class StudentController extends Controller
     		/*$drctry = storage_path('app/public/messages/');
              $mimetype      = mime_content_type($drctry.Input::get('message'));
             if($mimetype =='audio/x-wav' || $mimetype=='audio/wav'){ */
+                $ictcore_integration = Ictcore_integration::select("*")->first();
+                 
+                if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url !='' && $ictcore_integration->ictcore_user !='' && $ictcore_integration->ictcore_password !=''){ 
 
-                $ict         = new ictcoreController();
-                $postmethod  = new NotificationController();
+                    $ict         = new ictcoreController();
+                    $postmethod  = new NotificationController();
 
-                $student=   DB::table('Student')
-                ->select('*')
-                ->where('isActive','Yes')
-                ->where('id', $student_id)
-                ->first();
-                $data = array(
-                'first_name' => $student->firstName,
-                'last_name' => $student->lastName,
-                'phone'     => $student->fatherCellNo,
-                'email'     => '',
-                );
-                $contact_id = $ict->ictcore_api('contacts','POST',$data );
-                return $postmethod->postnotificationmethod(Input::get('name'),Input::get('type'),Input::get('message'),'single',$contact_id);
+                    $student=   DB::table('Student')
+                    ->select('*')
+                    ->where('isActive','Yes')
+                    ->where('id', $student_id)
+                    ->first();
+                    $data = array(
+                    'first_name' => $student->firstName,
+                    'last_name' => $student->lastName,
+                    'phone'     => $student->fatherCellNo,
+                    'email'     => '',
+                    );
+                    $contact_id = $ict->ictcore_api('contacts','POST',$data );
+                    return $postmethod->postnotificationmethod(Input::get('name'),Input::get('type'),Input::get('message'),'single',$contact_id);
 
-       		/* }else{
-                 return response()->json("ERROR:Please Upload Correct file",415 );
-             }*/
+           		/* }else{
+                     return response()->json("ERROR:Please Upload Correct file",415 );
+                 }*/
+             }else{
+
+                return response()->json(['Error'=>"Please Add Intigration  in Setting. Notification not send"],400);
+
+             }
         }
     }
 	/*public function studentnotification($student_id){

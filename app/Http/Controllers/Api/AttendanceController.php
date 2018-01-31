@@ -17,6 +17,7 @@ use App\Attendance;
 use App\Student;
 use App\SectionModel;
 use App\Ictcore_attendance;
+use App\Ictcore_integration;
 use App\SMSLog;
 use DB;
 use Excel;
@@ -53,53 +54,52 @@ class AttendanceController extends Controller
 			public function getallattendance()
 			{
 
-					$attendance = DB::table('Student')
-					->join('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
-					->select( 'Attendance.id','Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.date');
+				$attendance = DB::table('Student')
+				->join('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
+				->select( 'Attendance.id','Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.date');
 
-						 $attendance->when(request('regiNo', false), function ($q, $regiNo) { 
-							return $q->where('Student.regiNo', $regiNo);
-						  });
-						   $attendance->when(request('class', false), function ($q, $class) { 
-							 $classc = DB::table('Class')->select('*')->where('id','=',$class)->first();
-							return $q->where('Student.class',  $classc->code);
-						  });
-						   $attendance->when(request('date', false), function ($q, $date) { 
+					 $attendance->when(request('regiNo', false), function ($q, $regiNo) { 
+						return $q->where('Student.regiNo', $regiNo);
+					  });
+					   $attendance->when(request('class', false), function ($q, $class) { 
+						 $classc = DB::table('Class')->select('*')->where('id','=',$class)->first();
+						return $q->where('Student.class',  $classc->code);
+					  });
+					   $attendance->when(request('date', false), function ($q, $date) { 
 
-							return $q->where('Attendance.date',  $date);
-						  });
+						return $q->where('Attendance.date',  $date);
+					  });
 
-						   $attendance->when(request('session', false), function ($q, $session) { 
+					   $attendance->when(request('session', false), function ($q, $session) { 
 
-							return $q->where('Attendance.session',  $session);
-						  });
+						return $q->where('Attendance.session',  $session);
+					  });
 
-						   $attendance->when(request('section', false), function ($q, $section) { 
-							return $q->where('Student.section', $section);
-						  });
+					   $attendance->when(request('section', false), function ($q, $section) { 
+						return $q->where('Student.section', $section);
+					  });
 
-						   $attendance->when(request('name', false), function ($q, $name) { 
-							return $q->where('Student.firstName', 'like', '%' .$name.'%');
-						  });
-						/*->where('Student.class','=',Input::get('class'))
-						->where('Student.section','=',Input::get('section'))
-						->Where('Student.shift','=','Morning')
-						->where('Student.session','=',trim(Input::get('session')))
-						->where('Student.isActive', '=', 'Yes')
-						->where('Attendance.date', '=', $date)*/
-						$attendance=$attendance->get();
-					if($attendance->isEmpty()) {
-					  return response()->json(['error'=>'Attendance Not Found'], 404);
-					}else{
-						 return response()->json($attendance,200);
-					 }
-						
+					   $attendance->when(request('name', false), function ($q, $name) { 
+						return $q->where('Student.firstName', 'like', '%' .$name.'%');
+					  });
+					/*->where('Student.class','=',Input::get('class'))
+					->where('Student.section','=',Input::get('section'))
+					->Where('Student.shift','=','Morning')
+					->where('Student.session','=',trim(Input::get('session')))
+					->where('Student.isActive', '=', 'Yes')
+					->where('Attendance.date', '=', $date)*/
+					$attendance=$attendance->get();
+				if($attendance->isEmpty()) {
+				  return response()->json(['error'=>'Attendance Not Found'], 404);
+				}else{
+					 return response()->json($attendance,200);
+			 	}
 			}
-		 /**
-		 * attendance_create api
-		 *
-		 * @return \Illuminate\Http\Response
-		 */
+		 	/**
+			 * attendance_create api
+			 *
+			 * @return \Illuminate\Http\Response
+			 */
 		public function attendance_create()
 		{
 			$rules = [
@@ -142,7 +142,9 @@ class AttendanceController extends Controller
 						}else{
 						 return response()->json(['error'=>'Attendance already added'], 400);
 						}
-
+						$ictcore_integration = Ictcore_integration::select("*")->first();
+                 
+						if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url !='' && $ictcore_integration->ictcore_user !='' && $ictcore_integration->ictcore_password !=''){ 
 							   $student =	DB::table('Student')
 								->join('Class', 'Student.class', '=', 'Class.code')
 								->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Class.Name as class')
@@ -159,7 +161,8 @@ class AttendanceController extends Controller
 
 								   $ict  = new ictcoreController();
 
-									$ictcore_attendance= Ictcore_attendance::select("*")->first();
+								$ictcore_attendance= Ictcore_attendance::select("*")->first();
+
 								if($ictcore_attendance->ictcore_program_id!=''){
 									
 								   $contact_id = $ict->ictcore_api('contacts','POST',$data );
@@ -198,6 +201,11 @@ class AttendanceController extends Controller
 					}else{
 
 					  return response()->json(['Error'=>"Please Add Attendance Message in Setting."]);
+
+					}
+				}else{
+
+					  return response()->json(['Error'=>"Please Add Intigration  in Setting. Notification send failed"],400);
 
 					}
 

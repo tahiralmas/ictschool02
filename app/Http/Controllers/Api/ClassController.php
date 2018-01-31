@@ -15,6 +15,7 @@ use App\ClassModel;
 use App\Message;
 use App\Subject;
 use App\Attendance;
+use App\Ictcore_integration;
 use App\Student;
 use App\SectionModel;
 use DB;
@@ -118,7 +119,9 @@ class ClassController extends Controller
                  /*$drctry = storage_path('app/public/messages/');
                  $mimetype      = mime_content_type($drctry.Input::get('message'));
                 if($mimetype =='audio/x-wav' || $mimetype=='audio/wav'){ */
-
+                   $ictcore_integration = Ictcore_integration::select("*")->first();
+                 
+                if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url !='' && $ictcore_integration->ictcore_user !='' && $ictcore_integration->ictcore_password !=''){ 
                     $ict  = new ictcoreController();
                     $postmethod  = new NotificationController();
                     $classes = ClassModel::find($class_id);
@@ -151,7 +154,11 @@ class ClassController extends Controller
                 /*}else{
                      return response()->json("ERROR:Please Upload Correct file",415 );
                  }*/
+            }else{
+
+                  return response()->json(['Error'=>"Please Add Intigration  in Setting. Notification not send"],400);
             }
+        }
     }    
 
    /* public function classwisenotification($class_id){
