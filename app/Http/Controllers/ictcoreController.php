@@ -97,60 +97,80 @@ class ictcoreController {
 		{
 			return Redirect::to('/ictcore/attendance')->withErrors($validator);
 		}
-		else {
+		else{
             // echo "<pre>";print_r(Input::file('message'));exit;
              $drctry = storage_path('app/public/messages/');
-            $ictcore_attendance =	DB::table('ictcore_attendance')->select('*')->first();
-            if(File::exists($drctry.$ictcore_attendance->recording)){
-            	unlink($drctry .$ictcore_attendance->recording);
-		 	}
-            DB::table("ictcore_attendance")->delete();
-          
-			$sname = Input::get('title');
-			
-                $remove_spaces =  str_replace(" ","_",Input::get('title'));
-				$fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
-                Input::file('message')->move($drctry ,$fileName);
-                sleep(3);
-                $data = array(
-                             'name' => Input::get('title'),
-				             'description' => Input::get('description'),
-							 );
 
-                 $recording_id  =  $this->ictcore_api('messages/recordings','POST',$data );
-                 $name          =  $drctry .$fileName;
-                 $finfo         =  new \finfo(FILEINFO_MIME_TYPE);
-                 $mimetype      =  $finfo->file($name);
-                 $cfile         =  curl_file_create($name, $mimetype, basename($name));
-                 $data          =  array( $cfile);
-				 $result        =  $this->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
-                 $recording_id  =  $result ;
-                if(!is_array($recording_id )){
+           //  echo $drctry;
+             $ictcore_integration =	DB::table('ictcore_integration')->select('*')->first();
+            if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 
-                  $data = array(
-                             'name' => Input::get('title'),
-				             'recording_id' => $recording_id,
-							 );
-                 $program_id = $this->ictcore_api('programs/voicemessage','POST',$data );
-                 if(!is_array( $program_id )){
-                  $program_id = $program_id;
-                 }else{
-                 	return Redirect::to('/ictcore/attendance')->withErrors("ERROR: Program not Created" );
-                 }
-                }else{
-                     return Redirect::to('/ictcore/attendance')->withErrors("ERROR: Recording not Created" );               
-                }
+	            $ictcore_attendance =	DB::table('ictcore_attendance')->select('*')->first();
 
-				$ictcore_attendance = new Ictcore_attendance;
-				$ictcore_attendance->name = Input::get('title');
-				$ictcore_attendance->description = Input::get('description');
-			    $ictcore_attendance->recording =$fileName;
-			    $ictcore_attendance->ictcore_recording_id =$recording_id;
-                $ictcore_attendance->ictcore_program_id  =$program_id;
-				$ictcore_attendance->save();
+	            if(!empty($ictcore_attendance) && File::exists($drctry.$ictcore_attendance->recording)){
+
+	            	unlink($drctry .$ictcore_attendance->recording);
+			 	}
+	            DB::table("ictcore_attendance")->delete();
+	          
+				$sname = Input::get('title');
 				
-				return Redirect::to('/ictcore/attendance')->with("success", "Attendance Message Created Succesfully.");
-		}
+	                $remove_spaces =  str_replace(" ","_",Input::get('title'));
+			       echo  $fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
+
+
+	                Input::file('message')->move($drctry ,$fileName);
+
+	               
+	                sleep(3);
+	                $data = array(
+	                             'name'        => Input::get('title'),
+				     'description' => Input::get('description'),
+								 );
+
+
+
+	                 $recording_id  =  $this->ictcore_api('messages/recordings','POST',$data );
+
+	                //  echo "<pre>";print_r($recording_id);
+	                // exit;
+	                 $name          =  $drctry .$fileName;
+	                 $finfo         =  new \finfo(FILEINFO_MIME_TYPE);
+	                 $mimetype      =  $finfo->file($name);
+	                 $cfile         =  curl_file_create($name, $mimetype, basename($name));
+	                 $data          =  array( $cfile);
+			         $result        =  $this->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
+	                 $recording_id  =  $result ;
+
+	                if(!is_array($recording_id )){
+
+	                  $data = array(
+	                             'name' => Input::get('title'),
+					             'recording_id' => $recording_id,
+								 );
+	                 $program_id = $this->ictcore_api('programs/voicemessage','POST',$data );
+	                 if(!is_array( $program_id )){
+	                  $program_id = $program_id;
+	                 }else{
+	                 	return Redirect::to('/ictcore/attendance')->withErrors("ERROR: Program not Created" );
+	                 }
+	                }else{
+	                     return Redirect::to('/ictcore/attendance')->withErrors("ERROR: Recording not Created" );               
+	                }
+
+					$ictcore_attendance = new Ictcore_attendance;
+					$ictcore_attendance->name = Input::get('title');
+					$ictcore_attendance->description = Input::get('description');
+				    $ictcore_attendance->recording =$fileName;
+				    $ictcore_attendance->ictcore_recording_id =$recording_id;
+	                $ictcore_attendance->ictcore_program_id  =$program_id;
+					$ictcore_attendance->save();
+					
+					return Redirect::to('/ictcore/attendance')->with("success", "Attendance Message Created Succesfully.");
+                }else{
+           	       return Redirect::to('/ictcore/attendance')->withErrors("ERROR: Please Add Ictcore integration in Setting tab" );  
+                }
+		    }
 	}
 
 
@@ -182,63 +202,70 @@ class ictcoreController {
 		}
 		else {
             // echo "<pre>";print_r(Input::file('message'));exit;
-            $ictcore_fees =	DB::table('ictcore_fees')->select('*')->first();
-             $drctry = storage_path('app/public/messages/');
-            if(count($ictcore_fees) > 0 && File::exists($drctry.$ictcore_fees->recording)){
+            $ictcore_integration =	DB::table('ictcore_integration')->select('*')->first();
+            if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 
-            unlink($drctry.$ictcore_fees->recording);
-            // $this->ictcore_api('messages/recordings/'.$ictcore_fees->ictcore_recording_id,'DELETE',$data =array());
+	            $ictcore_fees =	DB::table('ictcore_fees')->select('*')->first();
+	             $drctry = storage_path('app/public/messages/');
+	            if(count($ictcore_fees) > 0 && File::exists($drctry.$ictcore_fees->recording)){
+
+	            unlink($drctry.$ictcore_fees->recording);
+	            // $this->ictcore_api('messages/recordings/'.$ictcore_fees->ictcore_recording_id,'DELETE',$data =array());
 
 
 
-        }
-            DB::table("ictcore_fees")->delete();
-          
-			$sname = Input::get('title');
-			
-                $remove_spaces =  str_replace(" ","_",Input::get('title'));
-				$fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
-                Input::file('message')->move($drctry,$fileName);
-                sleep(3);
-                $data = array(
-                             'name' => Input::get('title'),
-				             'description' => Input::get('description'),
-							 );
-
-                 $recording_id  =  $this->ictcore_api('messages/recordings','POST',$data );
-                 $name          =   $drctry.$fileName;
-                 $finfo         =  new \finfo(FILEINFO_MIME_TYPE);
-                 $mimetype      =  $finfo->file($name);
-                 $cfile         =  curl_file_create($name, $mimetype, basename($name));
-                 $data          =  array( $cfile);
-				 $result        =  $this->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
-                 $recording_id  =  $result ;
-                if(!is_array($recording_id )){
-
-                  $data = array(
-                             'name' => Input::get('title'),
-				             'recording_id' => $recording_id,
-							 );
-                 $program_id = $this->ictcore_api('programs/voicemessage','POST',$data );
-                 if(!is_array( $program_id )){
-                  $program_id = $program_id;
-                 }else{
-                 	return Redirect::to('/ictcore/fees')->withErrors("ERROR: Program not Created" );
-                 }
-                }else{
-                     return Redirect::to('/ictcore/fees')->withErrors("ERROR: Recording not Created" );               
-                }
-
-				$ictcore_fees = new Ictcore_fees;
-				$ictcore_fees->name = Input::get('title');
-				$ictcore_fees->description = Input::get('description');
-			    $ictcore_fees->recording =$fileName;
-			    $ictcore_fees->ictcore_recording_id =$recording_id;
-                $ictcore_fees->ictcore_program_id  =$program_id;
-				$ictcore_fees->save();
+	        }
+	            DB::table("ictcore_fees")->delete();
+	          
+				$sname = Input::get('title');
 				
-				return Redirect::to('/ictcore/fees')->with("success", "Fees Message Created Succesfully.");
-		}
+	                $remove_spaces =  str_replace(" ","_",Input::get('title'));
+					$fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
+	                Input::file('message')->move($drctry,$fileName);
+	                sleep(3);
+	                $data = array(
+	                             'name' => Input::get('title'),
+					             'description' => Input::get('description'),
+								 );
+
+	                 $recording_id  =  $this->ictcore_api('messages/recordings','POST',$data );
+	                 $name          =   $drctry.$fileName;
+	                 $finfo         =  new \finfo(FILEINFO_MIME_TYPE);
+	                 $mimetype      =  $finfo->file($name);
+	                 $cfile         =  curl_file_create($name, $mimetype, basename($name));
+	                 $data          =  array( $cfile);
+					 $result        =  $this->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
+	                 $recording_id  =  $result ;
+	                if(!is_array($recording_id )){
+
+	                  $data = array(
+	                             'name' => Input::get('title'),
+					             'recording_id' => $recording_id,
+								 );
+	                 $program_id = $this->ictcore_api('programs/voicemessage','POST',$data );
+	                 if(!is_array( $program_id )){
+	                  $program_id = $program_id;
+	                 }else{
+	                 	return Redirect::to('/ictcore/fees')->withErrors("ERROR: Program not Created" );
+	                 }
+	                }else{
+	                     return Redirect::to('/ictcore/fees')->withErrors("ERROR: Recording not Created" );               
+	                }
+
+					$ictcore_fees = new Ictcore_fees;
+					$ictcore_fees->name = Input::get('title');
+					$ictcore_fees->description = Input::get('description');
+				    $ictcore_fees->recording =$fileName;
+				    $ictcore_fees->ictcore_recording_id =$recording_id;
+	                $ictcore_fees->ictcore_program_id  =$program_id;
+					$ictcore_fees->save();
+					
+					return Redirect::to('/ictcore/fees')->with("success", "Fees Message Created Succesfully.");
+		
+                 }else{
+           	       return Redirect::to('/ictcore/attendance')->withErrors("ERROR: Please Add Ictcore integration in Setting tab" );  
+                }
+	        }
 	}
 	
  /*  function executeCurl($arrOptions) 
