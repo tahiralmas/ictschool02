@@ -103,7 +103,7 @@ class ictcoreController {
 
            //  echo $drctry;
              $ictcore_integration =	DB::table('ictcore_integration')->select('*')->first();
-            if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
+            if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 
 	            $ictcore_attendance =	DB::table('ictcore_attendance')->select('*')->first();
 
@@ -203,7 +203,7 @@ class ictcoreController {
 		else {
             // echo "<pre>";print_r(Input::file('message'));exit;
             $ictcore_integration =	DB::table('ictcore_integration')->select('*')->first();
-            if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
+            if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 
 	            $ictcore_fees =	DB::table('ictcore_fees')->select('*')->first();
 	             $drctry = storage_path('app/public/messages/');
