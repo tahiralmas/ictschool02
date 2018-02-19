@@ -251,10 +251,10 @@
                            <a href="#"><i class="glyphicon glyphicon-pencil"></i><span> Attendance</span></a>
                            <ul class="nav nav-pills nav-stacked">
                            @if (Session::get('userRole') =="Admin")
-                               <li><a href="/attendance/create-file">Add from file</a></li>
+                              <!-- <li><a href="/attendance/create-file">Add from file</a></li>-->
                                @endif
                                <li><a href="/attendance/create">Add</a></li>
-                               <!--<li><a href="/attendance/list">View</a></li>-->
+                               <li><a href="/attendance/list">View</a></li>
                            </ul>
                        </li>
                     <li class="accordion">
