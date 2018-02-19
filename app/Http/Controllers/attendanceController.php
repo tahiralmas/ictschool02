@@ -146,6 +146,7 @@ class attendanceController extends BaseController {
 					return Redirect::to('/attendance/create')->with("success", "Students attendance save Succesfully.");
 				} else {
 				if(count($absentStudents) > 0) {
+					
 					$student=array();
 					///////////////////////////////////////////////////////////////////////////////////////////////message Create in ictcore////////////////////////////////////////////////////////////////////////////////////////////
 				/*	$message = Message::find(Input::get('message'));
@@ -190,7 +191,7 @@ class attendanceController extends BaseController {
 						/////////////////////////////////////////////////////////////////////////////////////////////Contact Create in ictcore//////////////////////////////////////////////////////////////////////////////////////////
 						 $ictcore_attendance= Ictcore_attendance::select("*")->first();
 						 $ictcore_integration = Ictcore_integration::select("*")->first();
-						if($ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
+						if($ictcore_integration->ictcore_url!='' && $ictcore_integration->ictcore_user!='' && $ictcore_integration->ictcore_password!=''){ 
 							 $ict  = new ictcoreController();
 	                        if($ictcore_attendance->ictcore_program_id!=''){
 								$data = array(
@@ -216,17 +217,20 @@ class attendanceController extends BaseController {
 								//echo "================================================================transmission send==========================================";
 								//print_r($transmission_send);
 								// exit;
-								//  $msg = "Dear Parents your Child (Name-".$student->firstName." ".$student->middleName." ".$student->lastName.", Class- ".$student->class." , Roll- ".$student->rollNo." ) is Absent in School today.";
+								  $msg = "Dear Parents your Child (Name-".$student->firstName." ".$student->middleName." ".$student->lastName.", Class- ".$student->class." , Roll- ".$student->rollNo." ) is Absent in School today.";
 								//  $fatherCellNo = Student::select('fatherCellNo','')->where('regiNo', $absst)->first();
-								 if(!is_array($transmission_send)){
+								 if(!empty($transmission_send->error)){
 
-	                                 	$status = "Completed";
+	                                 	
+	                                 	$status =$transmission_send->error->message;
 	                                 }else{
-	                                 	$status ="Pending";
+	                                 	$status = "Completed";
 	                                 }
+
+	                                 //echo "bhutta<pre>".$status;exit;
 								$msg =$ictcore_attendance->recording;
 								$smsLog = new SMSLog();
-								$smsLog->type      = "Attendance";
+								$smsLog->type      = "Attendancehello";
 								$smsLog->sender    = "ictcore";
 								$smsLog->message   = $msg;
 								$smsLog->recipient = $student->fatherCellNo;
