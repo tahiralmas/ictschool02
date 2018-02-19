@@ -220,6 +220,9 @@ class ictcoreController {
 				$ictcore_fees = new Ictcore_fees;
 				$ictcore_fees->name = Input::get('title');
 				$ictcore_fees->description = Input::get('description');
+				if(Input::get('description')==''){
+                	$ictcore_fees->description ='';
+				}
 				$ictcore_fees->recording =$fileName;
 				$ictcore_fees->ictcore_recording_id =$recording_id;
 				$ictcore_fees->ictcore_program_id  =$program_id;
