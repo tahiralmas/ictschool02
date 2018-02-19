@@ -16,9 +16,12 @@ class CreateMessageTable extends Migration
         Schema::create('message', function (Blueprint $table) {
             $table->increments('id');
             
-             $table->string('name',30);
+            $table->string('name',30);
 	    $table->text('description');
             $table->string('recording',255);
+            $table->integer('ictcore_recording_id'); 
+            $table->integer('ictcore_program_id'); 
+            $table->string('type',30); 
             $table->string('type',30); 
             $table->timestamps();
         });
