@@ -97,7 +97,7 @@
         </div>
         <!-- Addmission dropdown starts -->
         @if (Session::get('userRole') =="Admin")
-        <div class="btn-group pull-right">
+       <!-- <div class="btn-group pull-right">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
                 <i class="glyphicon glyphicon-th-large"></i><span class=""> Admission</span>
@@ -109,16 +109,16 @@
                 <li><a href="/regonline" target="_blank"><i class="glyphicon glyphicon-list-alt"></i> Online Registration</a></li>
                 <li><a href="/admitcard" target="_blank"><i class="glyphicon glyphicon-print"></i> Print  Admitcard</a></li>
             </ul>
-        </div>
+        </div>-->
         <!-- admission dropdown ends -->
         <!-- Library dropdown starts -->
-        <div class="btn-group pull-right">
+         <!--<div class="btn-group pull-right">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
                 <i class="glyphicon glyphicon-book"></i><span class=""> Library</span>
                 <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu">
+           <ul class="dropdown-menu">
 
                 <li><a href="/library/search"><i class="glyphicon glyphicon-search"></i> Book Search</a></li>
                 <li><a href="/library/issuebook"><i class="glyphicon glyphicon-pencil"></i> Borrow Book</a></li>
@@ -131,10 +131,10 @@
 
 
             </ul>
-        </div>
+        </div>-->
         <!-- Library dropdown ends -->
         <!-- Dormitory dropdown starts -->
-        <div class="btn-group pull-right">
+       <!-- <div class="btn-group pull-right">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
                 <i class="glyphicon glyphicon-home"></i><span class=""> Dormitory</span>
@@ -151,7 +151,7 @@
                     <li><a href="/dormitory/report/fee"><i class="glyphicon glyphicon-print"></i> Fee Reports</a></li>
 
             </ul>
-        </div>
+        </div>-->
         <!-- Dormitory dropdown ends -->
         <!-- fees dropdown starts-->
         <div class="btn-group pull-right">
@@ -194,7 +194,7 @@
                         <li><a class="ajax-link" href="/dashboard"><i class="glyphicon glyphicon-th-large"></i><span> Dashboard</span></a>
                         </li>
                         @if (Session::get('userRole') =="Admin")
-                         <?php /* <li class="accordion">
+                        <?php /* <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-folder-open"></i><span> Levels</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="/level/create">Add New</a></li>
@@ -254,7 +254,7 @@
                                <li><a href="/attendance/create-file">Add from file</a></li>
                                @endif
                                <li><a href="/attendance/create">Add</a></li>
-                               <li><a href="/attendance/list">View</a></li>
+                               <!--<li><a href="/attendance/list">View</a></li>-->
                            </ul>
                        </li>
                     <li class="accordion">
@@ -298,7 +298,7 @@
                         <li class="">
                             <a href="/message"><i class="glyphicon glyphicon-envelope"></i><span> Voice / SMS</span></a>
                         </li>
-                        <li class="accordion">
+                       <!-- <li class="accordion">
                             <a href="#"><i class="glyphicon  glyphicon glyphicon-list-alt"></i><span> Accounting</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="/accounting/sectors">Sectors</a></li>
@@ -308,7 +308,7 @@
                                 <li><a href="/accounting/expencelist">View Expence</a></li>
 
                             </ul>
-                        </li>
+                        </li>-->
                         @endif
                       <!--  <li class="accordion">
                           <a href="#"><i class="glyphicon glyphicon-envelope"></i><span> SMS</span></a>
