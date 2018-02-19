@@ -39,7 +39,7 @@
 
                     <form role="form" action="/attendance/report" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <div class="row">
+                       <?php /* <div class="row">
                             <div class="col-md-12">
 
                             <div class="col-md-6">
@@ -68,10 +68,166 @@
 
 
                             </div>
+                        </div> */ ?>
+
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label" for="class">Class</label>
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
+
+                                            @if(isset($classes2))
+                                                {{ Form::select('class',$classes2,$formdata->class,['class'=>'form-control','id'=>'class','required'=>'true'])}}
+                                            @else
+
+
+                                                <select id="class" id="class" name="class" required="true" class="form-control" >
+                                                <option value="">---Select Class ---</option>
+                                                 <option value="all">All</option>
+                                                    @foreach($classes as $class)
+                                                        <option value="{{$class->code}}">{{$class->name}}</option>
+                                                    @endforeach
+
+                                                </select>
+                                            @endif
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group" id="hidesection">
+                                        <label class="control-label" for="section">Section</label>
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                            <?php  $data=[
+                                                    'A'=>'A',
+                                                 
+                                            ];?>
+                                            <select name="section[]" class="form-control selectpicker" id="section" multiple data-hide-disabled="true" data-size="5" >
+                                                
+                                            </select>
+                                           <?php /* {{ Form::select('section',$data,$formdata->section,['class'=>'form-control','id'=>'section','required'=>'true'])}} */ ?>
+
+       
+                                        </div>
+                                    </div>
+                                </div>
+
+                               <?php /* <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label" for="shift">Shift</label>
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                            <?php  $data=[
+                                                    'Day'=>'Day',
+                                                    'Morning'=>'Morning'
+                                            ];?>
+                                            {{ Form::select('shift',$data,$formdata->shift,['class'=>'form-control','id'=>'shift','required'=>'true'])}}
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div> */ ?>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label for="session">From Date</label>
+                                        <div class="input-group">
+
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                                            <input type="text" id="datepicker1" required="true" class="form-control" name="fdate" value="{{$formdata->date}}"   data-date-format="dd-mm-yyyy">
+                                        </div>
+                                    </div>
+                                </div>
+                                  <div class="col-md-2">
+                                <div class="form-group">
+                                  <label for="dob">&nbsp;</label>
+                                  <div class="input-group">
+
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-resize-horizontal"></i> </span>
+
+                                  </div>
+                                </div>
+                              </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label for="dob">To Date</label>
+                                        <div class="input-group">
+
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                                            <input type="text"  id="date" class="form-control datepicker" name="tdate" required  data-date-format="dd-mm-yyyy" value="{{$formdata->date}}">
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                         <div class="row">
+                            <div class="col-md-12">
+                                <div class="pull-right">
+                                   &nbsp;
+                                    <button class="btn btn-primary"  type="submit"><i class="glyphicon glyphicon-th"></i>Get List</button>
+                                </div>
+                            </div>
                         </div>
 
-
                     </form>
+
+                    @if($attendance)
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table id="attendanceList" class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Regi No</th>
+                                        <th>Name</th>
+                                        <th>Class</th>
+                                        <th>Section</th>
+                                        <th>Date</th>
+                                        <th>Is Present</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($attendance as $atd)
+                                        <tr>
+                                            <td>{{$atd->regiNo}}</td>
+                                            <td>{{$atd->firstName}} {{$atd->middleName}} {{$atd->lastName}}</td>
+                                            <td>{{$atd->class}}</td>
+                                            <td>{{$atd->section}}</td>
+                                            <td>{{$atd->date}}</td>
+                                            <td>
+                                              @if($atd->status=="Present")
+                                              <span class="text-success">Present</span>
+                                              @else
+
+                                              <span class="text-danger">Absent</span>
+
+                                              @endif
+                                            </td>
+
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    @endif
+
+
 
 
 
@@ -81,8 +237,100 @@
     </div>
 @stop
 @section('script')
+<script src="/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript">
 
-    <script type="text/javascript">
+ $( document ).ready(function() {
 
-    </script>
+               //getsections();
+              $('#class').on('change',function() {
+                if($('#class').val()=='all'){
+                 $("#hidesection").hide();
+
+                }else{
+              $("#hidesection").show();
+                getsections();
+                }
+              });
+            $("#datepicker1").datepicker( {
+                //format: " yyyy", // Notice the Extra space at the beginning
+               // viewMode: "years",
+                //minViewMode: "years",
+                autoclose:true,
+                odayHighlight: true
+
+            });
+            $(".datepicker").datepicker( {
+                autoclose:true,
+                todayHighlight: true
+
+            });
+
+            //$('#attendanceList').dataTable();
+             $('#attendanceList').DataTable({
+                "aaSorting": [ [4,'desc'] ],
+            });
+
+            $( "#btnPrint" ).click(function() {
+                var aclass = $('#class').val();
+                var section =  $('#section').val();
+                //var shift = $('#shift').val();
+                var shift = 'Morning';
+                var session = $('#session').val().trim();
+                var subject = $('#subject').val();
+                var atedate =$('#date').val().trim();
+
+                if(aclass!="" && section !="" && shift !="" && session !="" && atedate!="")
+                {
+
+                   var exurl='/attendance/printlist/'+aclass+'/'+section+'/'+shift+'/'+session+'/'+atedate;
+
+                    var win = window.open(exurl, '_blank');
+                    win.focus();
+
+                }
+                else
+                {
+                    alert('Not valid');
+                }
+            });
+
+        });
+function getsections()
+{
+    var aclass = $('#class').val();
+   // alert(aclass);
+    $.ajax({
+      url: '/section/getList/'+aclass,
+      data: {
+        format: 'json'
+      },
+      error: function(error) {
+        alert("Please fill all inputs correctly!");
+      },
+      dataType: 'json',
+      success: function(data) {
+        $('#section').empty();
+       //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
+       var options = [];
+        $.each(data, function(i, section) {
+          //console.log(student);
+         
+          
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+
+           options.push(opt);
+          //console.log(opt);
+          //$('#section').append(opt);
+
+        });
+         $("#section").html(options).selectpicker('refresh');
+        //console.log(data);
+
+      },
+      type: 'GET'
+    });
+};
+
+</script>
 @stop

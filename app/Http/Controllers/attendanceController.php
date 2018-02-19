@@ -570,11 +570,19 @@ class attendanceController extends BaseController {
 		public function report()
 		{
 			//return View::make('app.studentAttendance');
-			return View('app.studentAttendance');
+			$formdata = new formfoo;
+			$formdata->class="";
+			$formdata->section="";
+			$formdata->shift="";
+			$formdata->session=date('Y');
+			$formdata->date=date('d-m-Y');
+			$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
+			$attendance = array();
+			return View('app.studentAttendance',compact('classes','formdata','attendance'));
 		}
 		public function getReport()
 		{
-			$student= Student::where('regiNo','=',Input::get('regiNo'))
+			/*$student= Student::where('regiNo','=',Input::get('regiNo'))
 			->where('Student.isActive', '=', 'Yes')
 			->first();
 
@@ -590,27 +598,76 @@ class attendanceController extends BaseController {
 				//->where ('status','=', 'Present')
 				->where('isActive', '=', 'Yes')
 				->first();
-
-
-                  
-            /*  $student = DB::table('Student')
-			->join('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
-			->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.date')
-				->where('Student.regiNo','=',Input::get('regiNo'))
-				->where('Student.isActive', '=', 'Yes')
-				->where ('Attendance.status','=', 'Present')
-				->get();*/
-             //  echo "<pre>";print_r($student->toArray());exit;
 				$class = ClassModel::where('code','=',$student->class)->first();
 				if(count($student->attendance)>0)
-					//return View::make('app.stdattendance',compact('student','class'));
 				return View('app.stdattendance',compact('student','class'));
 				return  Redirect::back()->with('noresult','Attendance Not Found!');
 
 			}
-			return  Redirect::back()->with('noresult','Student Not Found!');
+			return  Redirect::back()->with('noresult','Student Not Found!');*/
+
+			$rules=[
+				'class'   => 'required',
+				//'section' => 'required',
+				'fdate' => 'required',
+				'tdate'    => 'required',
+
+			];
+			$validator = \Validator::make(Input::all(), $rules);
+			if ($validator->fails())
+			{
+				return Redirect::to('/attendance/report/')->withErrors($validator);
+			}
+			else {
+				$fdate = $this->parseAppDate(Input::get('fdate'));
+				$tdate = $this->parseAppDate(Input::get('tdate'));
+
+
+				/*$attendance = Student::with(['attendance' => function($query) use($date){
+
+				     $query->where('date',$date);
+				}])*/
+            	//echo "<pre>";print_r(Input::get('section'));exit;
+               
+	         $attendance = DB::table('Attendance')
+			->join('Student', 'Attendance.regiNo', '=', 'Student.regiNo')
+			->leftjoin('section', 'section.id', '=', 'Attendance.section_id')
+			->select('Attendance.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.section_id','Attendance.date','section.name as section');
+				if(Input::get('class')!='all'){
+			     $classc = DB::table('Class')->select('*')->where('code','=',Input::get('class'))->first();
+				$attendance=$attendance->where('Attendance.class_id','=',$classc->id);
+				//->where('Student.section','=',Input::get('section'))
+				 $attendance=$attendance->whereIn('Attendance.section_id', Input::get('section'));
+				}else{
+				$attendance=$attendance->where('Attendance.class_id','!=',NULL);
+				//->where('Student.section','=',Input::get('section'))
+				 $attendance=$attendance->where('Attendance.section_id','!=', NULL);
+				}
+				//$attendance=$attendance->Where('Student.shift','=','Morning');
+				//->where('Student.session','=',trim(Input::get('session')))
+				$attendance=$attendance->where('Student.isActive', '=', 'Yes');
+				//->where('Attendance.date', '=', $date)
+				$attendance=$attendance->whereBetween('Attendance.date', [$fdate, $tdate]);
+				$attendance=$attendance->orderby('Attendance.id','Desc');
+				$attendance=$attendance->get();
+				//echo "<pre>";print_r($attendance);
+				$formdata = new formfoo;
+				$formdata->class=Input::get('class');
+				//$formdata->section=Input::get('section');
+				$formdata->shift=Input::get('shift');
+				$formdata->session=Input::get('session');
+				$formdata->date=Input::get('date');
+
+				$classes2 = ClassModel::select('code','name')->orderby('code','asc')->pluck('name','code');
+
+				//return View::Make('app.attendanceList',compact('classes2','attendance','formdata'));
+	            // $attendance = $attendance->toArray();
+				//echo "<pre>";print_r($attendance);
+				//exit;
+				return View('app.studentAttendance',compact('classes2','attendance','formdata'));
 
 
 		}
+	}
 
 }
