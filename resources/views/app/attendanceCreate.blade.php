@@ -107,7 +107,7 @@
                   <div class="input-group">
 
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                    <input type="text" value="{{date('d-m-Y')}}"  class="form-control datepicker" name="date" required  data-date-format="dd-mm-yyyy">
+                    <input type="text" value="{{date('d-m-Y')}}"  class="form-control datepicker" id="datepicker" name="date" required  data-date-format="dd-mm-yyyy">
                   </div>
 
 
@@ -242,7 +242,7 @@
         });
       };
       $( document ).ready(function() {
-       
+       document.getElementById("datepicker").setAttribute("onkeyDown", "return false");
       getsections();
   $('#class').on('change',function() {
     getsections();
@@ -250,7 +250,38 @@
 
         getStudent();
         $('#btnsave').hide();
-        $(".datepicker").datepicker({autoclose:true,todayHighlight: true});
+
+        /*$("#datepicker").datepicker({
+         // constrainInput: true,
+         // autoclose:true,
+          //todayHighlight: true,
+          //hideIfNoPrevNext: true ,
+          maxDate: new Date()
+        });
+        
+        /* $("#datepicker").datepicker({
+          //dateFormat: 'yy-mm-dd ',
+          maxDate:'0'
+        });*/
+
+
+        var today = new Date();
+        $('.datepicker').datepicker({
+            //format: 'mm-dd-yyyy',
+            autoclose:true,
+            todayHighlight: true,
+            endDate: "today",
+            maxDate: today
+        }).on('changeDate', function (ev) {
+                $(this).datepicker('hide');
+            });
+
+
+        $('.datepicker').keyup(function () {
+            if (this.value.match(/[^0-9]/g)) {
+                this.value = this.value.replace(/[^0-9^-]/g, '');
+            }
+        });
         $(".datepicker2").datepicker( {
           format: " yyyy", // Notice the Extra space at the beginning
           viewMode: "years",
