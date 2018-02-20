@@ -52,7 +52,12 @@ class subjectController extends BaseController {
 			'wfull' => 'required',
 			'mfull' => 'required',
 			'sfull' => 'required',
-			'pfull' => 'required'
+			'pfull' => 'required',
+			'totalpass' => 'required',
+			'wpass' => 'required',
+			'mpass' => 'required',
+			'spass' => 'required',
+			'ppass' => 'required'
 
 		];
 		$validator = \Validator::make(Input::all(), $rules);

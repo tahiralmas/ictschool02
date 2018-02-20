@@ -175,7 +175,7 @@
                  <div class="form-group">
                <label for="totalpass" class="col-md-3 control-label">Total: </label>
                  <div class="col-md-3">
-                     <input type="text" class="form-control" name="totalpass"  placeholder="0">
+                     <input type="text" class="form-control" required name="totalpass"  placeholder="0">
                      </div>
                      </div>
                </div>
@@ -197,7 +197,7 @@
                 <div class="form-group">
               <label for="wpass" class="col-md-3 control-label">Written: &nbsp;</label>
                 <div class="col-md-3">
-                    <input type="text" class="form-control" name="wpass"  placeholder="0">
+                    <input type="text" class="form-control" required name="wpass"  placeholder="0">
                     </div>
                     </div>
               </div>
@@ -219,7 +219,7 @@
                <div class="form-group">
              <label for="mpass" class="col-md-3 control-label">MCQ: </label>
                <div class="col-md-3">
-                   <input type="text" class="form-control" name="mpass"  placeholder="0">
+                   <input type="text" class="form-control" required name="mpass"  placeholder="0">
                    </div>
                    </div>
              </div>
@@ -241,7 +241,7 @@
               <div class="form-group">
             <label for="spass" class="col-md-3 control-label">SBA: </label>
               <div class="col-md-3">
-                  <input type="text" class="form-control" name="spass"  placeholder="0">
+                  <input type="text" class="form-control" required name="spass"  placeholder="0">
                   </div>
                   </div>
             </div>
