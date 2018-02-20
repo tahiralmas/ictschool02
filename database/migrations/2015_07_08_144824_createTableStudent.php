@@ -21,6 +21,7 @@ class CreateTableStudent extends Migration {
 			$table->string('class',100);
 			$table->string('group',15);
 			$table->string('section',2);
+			$table->integer('discount_id');
 			$table->string('shift',15);
 			$table->string('firstName',60);
 			$table->string('middleName',60);
