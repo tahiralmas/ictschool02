@@ -55,13 +55,13 @@
         <div class="count blue">{{$total['exam']}}</div>
       </div>
       <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-2x fa-book green"></i> Books</span>
-        <div class="count yellow">{{$total['book']}}</div>
+        <span class="count_top"><i class="fa fa-2x fa-book green"></i> Absent Student </span>
+        <div class="count yellow">{{$total['totalabsent']}}</div>
       </div>
     </div>
     <!-- /top tiles -->
     <!-- Graph start -->
-    <div class="row">
+    <?php /*<div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
@@ -77,7 +77,7 @@
         </div>
       </div>
 
-    </div>
+    </div> */ ?>
 
   </div>
 </div>
