@@ -431,7 +431,7 @@
                         </div>
                         <div class="col-md-6">
                           <div class="form-group">
-                              <label for="parmanentAddress">Parmanent Address</label>
+                              <label for="parmanentAddress">Permanent Address</label>
                               <div class="input-group">
                                   <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
                                   <textarea type="text" class="form-control"  name="parmanentAddress" placeholder="Address">{{$student->parmanentAddress}}</textarea>
