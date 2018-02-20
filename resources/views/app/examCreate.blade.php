@@ -43,7 +43,7 @@
                         <label for="name">Section</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                           <select id="section" name="section" class="form-control" required="true">
+                           <select id="section" name="section[]" class="form-control selectpicker" id="section" multiple data-actions-box="true" data-hide-disabled="true" data-size="5"  required="true">
                   <?php /*  @foreach($section as $sec)
                       <option value="{{$sec->id}}">{{$sec->name}}</option>
                       @endforeach*/?>
@@ -98,13 +98,16 @@ getsections();
       success: function(data) {
         $('#section').empty();
       // $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+      var options = [];
         $.each(data, function(i, section) {
           //console.log(section);
             var opt="<option value='"+section.id+"'>"+section.name + " </option>"
           //console.log(opt);
-          $('#section').append(opt);
+          //$('#section').append(opt);
+          options.push(opt);
 
         });
+        $("#section").html(options).selectpicker('refresh');
         //console.log(data);
       },
       type: 'GET'

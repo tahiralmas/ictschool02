@@ -65,11 +65,15 @@ class examController extends BaseController {
 				return Redirect::to('/exam/create')->withErrors($errorMessages);
 			}
 			else {
-				$exam = new Exam;
-				$exam->type = Input::get('type');
-				$exam->class_id = $classes->id;
-				$exam->section_id = Input::get('section');
-				$exam->save();
+				//echo "<pre>";print_r(Input::get('section'));exit;
+				foreach(Input::get('section') as $section_id)
+				{
+					$exam = new Exam;
+					$exam->type = Input::get('type');
+					$exam->class_id = $classes->id;
+					$exam->section_id = $section_id;
+					$exam->save();
+			    }
 				return Redirect::to('/exam/create')->with("success", "Exam Created Succesfully.");
 			}
 
