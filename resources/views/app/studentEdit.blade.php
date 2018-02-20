@@ -63,9 +63,10 @@
                                           </div>
                                    </div>
                       </div>
+                      </div>
 
-                  </div>
                 </div>
+
                 <div class="row">
                   <div class="col-md-12">
                 <div class="col-md-4">
@@ -135,6 +136,28 @@
                     </div>
               </div>
             </div>
+
+             <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group ">
+                     <label for="session">Discount</label>
+                         <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                            <select class="form-control" name="discount_id">
+                              <option value="">---Select Discount---</option>
+                              <option value="2" @if($student->discount_id==2) selected @endif>10 %</option>
+                              <option value="3" @if($student->discount_id==3) selected @endif>20 %</option>
+                              <option value="4" @if($student->discount_id==4) selected @endif>30 %</option>
+                              <option value="5" @if($student->discount_id==5) selected @endif>40 %</option>
+                              <option value="6" @if($student->discount_id==6) selected @endif>50 %</option>
+                              <option value="7" @if($student->discount_id==7) selected @endif>60 %</option>
+                              <option value="8" @if($student->discount_id==8) selected @endif>65 %</option>
+                              <option value="9" @if($student->discount_id==9) selected @endif>90 %</option>
+                            </select>
+                        </div>
+                 </div>
+              </div>
+          </div>
           <!--  <div class="row">
               <div class="col-md-12">
                 <div class="col-md-4">

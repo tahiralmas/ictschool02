@@ -526,6 +526,10 @@ public function update()
 		if(Input::get('parmanentAddress')==''){
 			$student->parmanentAddress='';
 		}
+        $student->discount_id = Input::get('discount_id');
+		if(Input::get('discount_id') ==''){
+			$student->discount_id = NULL;
+		}
 
 		$student->save();
 
@@ -559,8 +563,13 @@ public function delete($id)
 */
 public function getForMarks($class,$section,$shift,$session)
 {
-	$students= Student::select('regiNo','rollNo','firstName','middleName','lastName')->where('isActive','=','Yes')->where('class','=',$class)->where('section','=',$section)->where('shift','=',$shift)->where('session','=',$session)->get();
+	$students= Student::select('regiNo','rollNo','firstName','middleName','lastName','discount_id')->where('isActive','=','Yes')->where('class','=',$class)->where('section','=',$section)->where('shift','=',$shift)->where('session','=',$session)->get();
 	return $students;
+}
+public function getdiscount($reg)
+{
+	$discount= Student::select('discount_id')->where('isActive','=','Yes')->where('regiNo','=',$reg)->first();
+	return $discount;
 }
 
 public function index_file(){

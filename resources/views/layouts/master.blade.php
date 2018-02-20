@@ -153,6 +153,26 @@
             </ul>
         </div>-->
         <!-- Dormitory dropdown ends -->
+        <!-- REPORTS -->
+        <div class="btn-group pull-right">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+
+                <i class="glyphicon glyphicon-print"></i><span class=""> Reports</span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="/gradesheet">Marksheet</a></li>
+                <li><a href="/attendance/report">Attendance</a></li>
+                <li><a href="/tabulation">Tabulationsheet</a></li>
+                <li><a href="/smslog">Voice Log / SMS Log</a></li>
+               <!-- <li><a href="/accounting/report">Account By Type</a></li>
+                <li><a href="/accounting/reportsum">Account Balance</a></li>
+                 <li><a href="/barcode">Barcode Generate</a></li>-->
+                 <li class="divider"></li>
+                 <li><a href="/fees/report"> Fee Collection Report</a></li>
+                 <li><a href="/fees/classreport"> Fee Class Report</a></li>
+            </ul>
+        </div>
         <!-- fees dropdown starts-->
         <div class="btn-group pull-right">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -162,15 +182,14 @@
             </button>
             <ul class="dropdown-menu">
                 <li><a href="/fees/view"><i class="glyphicon glyphicon-search"></i> Student Fees</a></li>
+                <!--<li><a href="/fee/vouchar"><i class="glyphicon glyphicon-pencil"></i> Create Vouchar</a></li>-->
                 <li><a href="/fee/collection"><i class="glyphicon glyphicon-pencil"></i> Fees Collection</a></li>
 
                 <li class="divider"></li>
                 <li><a href="/fees/list"><i class="glyphicon glyphicon-list"></i> Fees List</a></li>
                 <li><a href="/fees/setup"><i class="glyphicon glyphicon-cog"></i> Fees Setup</a></li>
-                <li class="divider"></li>
-                <li><a href="/fees/report"><i class="glyphicon glyphicon-print"></i> Fee Collection Report</a></li>
                 
-               <li><a href="/fees/classreport"><i class="glyphicon glyphicon-print"></i> Fee Class Report</a></li>
+                
 
             </ul>
         </div>
@@ -317,7 +336,7 @@
                           </ul>
                       </li> -->
                       @if (Session::get('userRole') =="Admin")
-                        <li class="accordion">
+                       <?php /* <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-print"></i><span> Reports</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="/gradesheet">Marksheet</a></li>
@@ -327,10 +346,12 @@
                                 <li><a href="/accounting/report">Account By Type</a></li>
                                 <li><a href="/accounting/reportsum">Account Balance</a></li>
                                  <li><a href="/barcode">Barcode Generate</a></li>
+                                 <li><a href="/fees/report"> Fee Collection Report</a></li>
+                                 <li><a href="/fees/classreport"> Fee Class Report</a></li>
 
 
                             </ul>
-                        </li>
+                        </li> */ ?>
                          @endif
                          <?php 
                          

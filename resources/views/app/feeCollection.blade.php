@@ -123,7 +123,7 @@
                 </div>
               </div>
 
-              <div class="col-md-4">
+             <!-- <div class="col-md-4">
                 <div class="form-group ">
                   <label for="dob">Collection Date</label>
                   <div class="input-group">
@@ -134,7 +134,7 @@
 
 
                 </div>
-              </div>
+              </div>-->
 
             </div>
           </div>
@@ -200,9 +200,31 @@
           </div>
         </div>
         <div id="feeInfoDiv" style="Display:none">
+        <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="feeAmount">Total Fee</label>
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                    <input id="total_fee" type="text" class="form-control" readonly="true"  name="total_fee" placeholder="0.00">
+                  </div>
+                </div>
+              </div>
+              </div>
+              </div>
           <div class="row">
             <div class="col-md-12">
-              <div class="col-md-4">
+            <div class="col-md-3">
+                <div class="form-group">
+                  <label for="discount">Discount  (discount parcentage: <i id="per"> </i> ) </label>
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                    <input  type="text" id="discount" readonly class="form-control" name="discount" value="0.00" placeholder="0.00">
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
                 <div class="form-group">
                   <label for="feeAmount">Fee</label>
                   <div class="input-group">
@@ -211,16 +233,17 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="form-group">
-                  <label for="LateFeeAmount">Late Fee</label>
+                  <label for="LateFeeAmount">Late Fee ( <i id="LateFeeAmount1"> </i> )</label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                    <input id="LateFeeAmount" type="text" class="form-control" name="LateFeeAmount" placeholder="0.00">
+                    <input id="LateFeeAmount" type="text" class="form-control" name="LateFeeAmount" value="0.00" placeholder="0.00">
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
+              
+              <div class="col-md-3">
                 <div class="form-group">
                   <label>&nbsp;</label>
                   <div class="input-group">
@@ -319,7 +342,7 @@
 
 
           </form>
-
+<p id="disc" style="display:none"></p>
         </div>
       </div>
     </div>
@@ -371,6 +394,58 @@
       });
 
     };
+
+     $("#student").on('change',function(){
+     var student_reg = $("#student").val();
+    // alert(student_reg);
+
+     $.ajax({
+          url: '/fee/getdiscountjson/'+student_reg,
+          data: {
+            format: 'json'
+          },
+          error: function(error) {
+            alert("Please fill all inputs correctly!");
+          },
+          dataType: 'json',
+          success: function(data) {
+            $('#fee').empty();
+          //  $('#fee').append($('<option>').text("--Select Fee--").attr('value',"-1"));
+         var dic_amount = JSON.stringify(data.discount_id);
+         if(dic_amount==2){
+          $('#disc').html(10);
+         }
+         if(dic_amount==3){
+           $('#disc').html(20);
+         }
+         if(dic_amount==4){
+          $('#disc').html(30);
+         }
+          if(dic_amount==5){
+          $('#disc').html(40);
+         }
+          if(dic_amount==6){
+          $('#disc').html(50);
+         }
+          if(dic_amount==7){
+          $('#disc').html(60);
+         }
+          if(dic_amount==8){
+          $('#disc').html(65);
+         }
+          if(dic_amount==9){
+          $('#disc').html(90);
+         }
+
+           //alert(dic_amount);
+            //console.log(data);
+
+          },
+          type: 'GET'
+        });
+
+
+    });
     $( document ).ready(function() {
         getsections();
               $('#class').on('change',function() {
@@ -458,8 +533,23 @@
           },
           dataType: 'json',
           success: function(data) {
-            $('#LateFeeAmount').val(data[0].Latefee);
+            //$('#LateFeeAmount').val(data[0].Latefee);
+            $('#LateFeeAmount1').html(data[0].Latefee);
+            //$('#feeAmount').val(data[0].fee);
+            var damnt =  $("#disc").html();
+            if($("#disc").html()!=''){
+              //alert("hello testing");
+              //alert(damnt);
+              var fee = data[0].fee/100 * damnt;
+              var total = data[0].fee - fee;
+               $('#total_fee').val(data[0].fee);
+               $('#feeAmount').val(total);
+               $('#per').html(damnt);
+               $('#discount').val(fee);
+          
+           }else{
             $('#feeAmount').val(data[0].fee);
+           }
             //console.log(data);
 
           },
@@ -643,7 +733,7 @@ function getsections()
       dataType: 'json',
       success: function(data) {
         $('#section').empty();
-      // $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+      $('#section').append($('<option>').text("--Select Section--").attr('value',""));
         $.each(data, function(i, section) {
           //console.log(student);
          

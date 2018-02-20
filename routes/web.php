@@ -95,6 +95,7 @@ Route::get('/student/csvexample','studentController@csvexample');
 
 });
 Route::get('/student/getList/{class}/{section}/{shift}/{session}','studentController@getForMarks');
+Route::get('/fee/getdiscountjson/{student_registration}','studentController@getdiscount');
 
 // Teacher routes
 Route::get('/teacher/getRegi/{class}/{session}/{section}','teacherController@getRegi');
@@ -311,6 +312,8 @@ Route::post('/fee/edit','feesController@postEdit');
 Route::get('/fee/delete/{id}','feesController@getDelete');
 
 Route::get('/fee/collection','feesController@getCollection');
+Route::get('/fee/vouchar','feesController@getvouchar');
+Route::post('/fee/vouchar','feesController@gpostvouchar');
 Route::post('/fee/collection','feesController@postCollection');
 Route::get('/fee/getListjson/{class}/{type}','feesController@getListjson');
 Route::get('/fee/getFeeInfo/{id}','feesController@getFeeInfo');
@@ -334,6 +337,7 @@ Route::post('/fees/classreport','feesController@classview');
 
 //Route::post('/fees/classview','feesController@classview');
 Route::post('/fees/unpaid_notification','feesController@ictcorefees');
+
 
 
 

@@ -18,6 +18,7 @@ use DB;
 use App\Ictcore_fees;
 use App\Ictcore_integration;
 use App\Http\Controllers\ictcoreController;
+use Carbon\Carbon;
 class studentfdata{
 
 
@@ -191,6 +192,19 @@ class feesController extends BaseController {
 		$fee->delete();
 		return Redirect::to('/fees/list')->with("success","Fee Deleted Succesfully.");
 	}
+	public function getvouchar()
+	{
+		$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
+		//return View::Make('app.feeCollection',compact('classes'));
+		return View('app.feeVouchar',compact('classes'));
+	}
+	public function postvouchar()
+	{
+		$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
+		//return View::Make('app.feeCollection',compact('classes'));
+		return View('app.feeCollection',compact('classes'));
+	}
+
 	public function getCollection()
 	{
 		$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
@@ -204,7 +218,7 @@ class feesController extends BaseController {
 
 			'class' => 'required',
 			'student' => 'required',
-			'date' => 'required',
+			//'date' => 'required',
 			'paidamount' => 'required',
 			'dueamount' => 'required',
 			'ctotal' => 'required'
@@ -217,6 +231,7 @@ class feesController extends BaseController {
 			return Redirect::to('/fee/collection')->withInput(Input::all())->withErrors($validator);
 		}
 		else {
+
 			try {
 				$feeTitles = Input::get('gridFeeTitle');
 				$feeAmounts = Input::get('gridFeeAmount');
@@ -224,6 +239,7 @@ class feesController extends BaseController {
 				$feeTotalAmounts = Input::get('gridTotal');
 				$feeMonths = Input::get('gridMonth');
 				$counter = count($feeTitles);
+
 				if($counter>0)
 				{
 					$rows = FeeCol::count();
@@ -238,6 +254,7 @@ class feesController extends BaseController {
 					else {
 						$billId='B'.($rows+1);
 					}
+
 					DB::transaction(function() use ($billId,$counter,$feeTitles,$feeAmounts,$feeLateAmounts,$feeTotalAmounts,$feeMonths)
 					{
 						$feeCol = new FeeCol();
@@ -247,9 +264,10 @@ class feesController extends BaseController {
 						$feeCol->payableAmount=Input::get('ctotal');
 						$feeCol->paidAmount=Input::get('paidamount');
 						$feeCol->dueAmount=Input::get('dueamount');
-						$feeCol->payDate=Input::get('date');
+						$feeCol->payDate= Carbon::now()->format('d-m-Y');
+						//echo "<pre>";print_r(Carbon::now()->format('d-m-Y'));exit;
 						$feeCol->save();
-
+                         	
 						for ($i=0;$i<$counter;$i++) {
 							$feehistory = new FeeHistory();
 							$feehistory->billNo=$billId;
@@ -262,6 +280,7 @@ class feesController extends BaseController {
 
 						}
 					});
+
 					return Redirect::to('/fee/collection')->with("success","Fee collection succesfull.");
 				}
 				else {
@@ -273,7 +292,7 @@ class feesController extends BaseController {
 			}
 			catch(\Exception $e)
 			{
-
+               //echo $e->getMessage();
 				return Redirect::to('/fee/collection')->withErrors( $e->getMessage())->withInput();
 			}
 
@@ -568,4 +587,5 @@ class feesController extends BaseController {
 				return Redirect::to('/fees/classreport')->with("success", "Voice campaign Created Succesfully.");
 		//return View('app.feestdreportclass',compact('resultArray','class','month','section','classes','session','year'));
     }
+
 }
