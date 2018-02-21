@@ -19,10 +19,7 @@ use App\Ictcore_fees;
 use App\Ictcore_integration;
 use App\Http\Controllers\ictcoreController;
 use Carbon\Carbon;
-class studentfdata{
 
-
-}
 class cronjobController extends BaseController {
 
 	public function __construct()
@@ -88,15 +85,18 @@ class cronjobController extends BaseController {
 			//$resultArray = array();
 				exit();
 			}
-                $data = array(
-					'program_id' => $ictcore_fees->ictcore_program_id,
-					'group_id' => $group_id,
-					'delay' => '',
-					'try_allowed' => '',
-					'account_id' => 1,
-					'status' => '',
-				);
-				$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
-				//$campaign_id = $ict->ictcore_api('campaigns/$campaign_id/start','PUT',$data=array() );
+			    if(!empty($ictcore_fees) && $ictcore_fees->ictcore_program_id!=''){
+			    	
+	                $data = array(
+						'program_id' => $ictcore_fees->ictcore_program_id,
+						'group_id' => $group_id,
+						'delay' => '',
+						'try_allowed' => '',
+						'account_id' => 1,
+						'status' => '',
+					);
+					$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
+					//$campaign_id = $ict->ictcore_api('campaigns/$campaign_id/start','PUT',$data=array() );
+			}
     }
 }
