@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+    '\App\Console\Commands\CronJob',
     ];
 
     /**
@@ -26,6 +27,10 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->command('CronJob:cronjob')
+                 ->everyMinute();
+                 //->monthlyOn(6, '7:00');
+                // $this->info('User Name Change Successfully!');
     }
 
     /**
