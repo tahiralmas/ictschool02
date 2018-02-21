@@ -28,8 +28,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->command('CronJob:cronjob')
-                 ->everyMinute();
-                 //->monthlyOn(6, '7:00');
+                 //->everyMinute();
+                 ->monthlyOn(6, '15:00');
                 // $this->info('User Name Change Successfully!');
     }
 
