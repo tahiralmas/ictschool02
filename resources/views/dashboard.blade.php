@@ -33,7 +33,7 @@
     <!-- /top tiles -->
     <div class="row tile_count text-center">
       <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-2x fa-home green"></i>     Class</span>
+        <span class="count_top"><i class="fa fa-2x fa-home green"></i>Class</span>
         <div class="count red">{{$total['class']}}</div>
       </div>
       <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
@@ -41,8 +41,8 @@
         <div class="count blue">{{$total['student']}}</div>
       </div>
       <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-2x fa-file green"></i> Subjects</span>
-        <div class="count yellow">{{$total['subject']}}</div>
+        <span class="count_top"><i class="fa fa-2x fa-file green"></i> Teachers</span>
+        <div class="count yellow">{{$total['teacher']}}</div>
       </div>
     </div>
     <div class="row tile_count text-center">

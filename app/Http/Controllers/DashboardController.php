@@ -7,6 +7,7 @@ use App\Attendance;
 use App\Accounting;
 use App\Marks;
 use App\AddBook;
+use App\Teacher;
 use Carbon\Carbon;
 
 class DashboardController extends BaseController {
@@ -28,6 +29,7 @@ class DashboardController extends BaseController {
 		$tclass = ClassModel::count();
 		$tsubject = Subject::count();
 		$tstudent=Student::count();
+		$teacher=Teacher::count();
  		$totalAttendance = Attendance::groupBy('date')->get();
  		//echo Carbon::now()->format('Y-m-d');
  		$totalabsent = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Absent')->count();
@@ -43,6 +45,7 @@ class DashboardController extends BaseController {
  			'exam' =>count($totalExam),
 			'book' => $book,
 			'totalabsent' => $totalabsent,
+			'teacher' => $teacher,
  		];
  	     // 	//graph data
  	  //dd($total);
