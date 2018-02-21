@@ -216,6 +216,11 @@ class subjectController extends BaseController {
 		$subject = Subject::select('totalfull','totalpass','wfull','wpass','mfull','mpass','sfull','spass','pfull','ppass')->where('code','=',$subject)->where('class','=',$cls)->get();
 		return $subject;
 	}
+	public function getsubjects($class){
+
+      $subject= Subject::select('id','name')->where('class','=',$class)->get();
+	return $subject;
+	}
 
 
 }

@@ -74,6 +74,7 @@ Route::post('/subject/update','subjectController@update');
 Route::get('/subject/delete/{id}','subjectController@delete');
 });
 Route::get('/subject/getmarks/{subject}/{cls}','subjectController@getmarks');
+Route::get('/subject/getList/{cls}','subjectController@getsubjects');
 
 
 //Student routes
@@ -119,6 +120,8 @@ Route::post('/teacher/create-file','teacherController@create_file');
 
 Route::get('/teacher/create-timetable','teacherController@index_timetable');
 Route::post('/teacher/create_timetable','teacherController@create_timetable');
+Route::get('/timetable/edit/{timetable_id}','teacherController@edit_timetable');
+Route::post('/timetable/update','teacherController@update_timetable');
 });
 Route::get('/teacher/view-timetable/{id}','teacherController@view_timetable');
 Route::get('/section/getList/{class}','sectionController@getsections');

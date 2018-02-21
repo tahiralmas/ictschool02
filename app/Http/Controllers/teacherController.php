@@ -562,7 +562,8 @@ class teacherController extends BaseController {
 	->select(DB::raw('teacher.*'))
 	->get();
 	//dd($teachers);
-	return View("app.teacherTimetable",compact("classes","sections","teachers","subjects"));
+	$timetable=array();
+	return View("app.teacherTimetable",compact("classes","sections","teachers","subjects","timetable"));
 
 	}
 
@@ -642,5 +643,92 @@ class teacherController extends BaseController {
 		// $timetables = DB::table('timetable')->where('timetable.teacher_id',$id)->get();
 		//echo "<pre>";print_r($timetables); exit;
 		return View("app.teacherViewtimetable",compact('timetables','teacher_name'));
+	}
+
+	public function edit_timetable($timetable_id)
+	{
+ 		
+		 $classes = DB::table('Class')
+		->select(DB::raw('Class.*'))
+		->get();
+
+		
+
+		$teachers = DB::table('teacher')
+		->select(DB::raw('teacher.*'))
+		->get();
+		//dd($teachers);
+		$timetable = DB::table('timetable')->where('id',$timetable_id)->first();
+
+		$subjects  = DB::table('Subject')
+		->where('class',$timetable->class_id)
+		->get();
+		$sections  = DB::table('section')
+		->select(DB::raw('section.*'))->where('class_code',$timetable->class_id)
+		->get();
+
+		//echo "<pre>";print_r($timetable);exit;
+		return View("app.teacherTimetable",compact("classes","sections","teachers","subjects","timetable"));
+	}
+
+
+	public function update_timetable()
+	{
+
+
+		//echo "<pre>";print_r(Input::get('day'));
+
+		$days = Input::get('day');
+
+
+		$rules=[//'regiNo' => 'required',
+		'teacher' => 'required',
+		'class' => 'required',
+		'section' => 'required',
+		'subject' => 'required',
+		'startt' => 'required',
+		'endt' => 'required',
+		'day' => 'required',
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails())
+		{
+		return Redirect::to('/timetable/edit/'.Input::get('tid'))->withErrors($validator);
+		}
+		else {
+
+
+				//$timetable->day= Input::get('day');
+
+				/*$hasTimetable = Timetable::where('teacher_id','=',Input::get('teacher'))->where('class_id','=',Input::get('class'))->first();
+				if ($hasTimetable)
+				{
+				$messages = $validator->errors();
+				$messages->add('Duplicate!', 'Teacher already exits with this Email.');
+				return Redirect::to('/teacher/create')->withErrors($messages)->withInput();
+				}
+				else {*/
+				foreach($days as $day){
+
+				$timetable = Timetable::find(Input::get('tid'));
+				$timetable->teacher_id= Input::get('teacher');
+				$timetable->class_id= Input::get('class');
+				$timetable->section_id= Input::get('section');
+				$timetable->subject_id= Input::get('subject');
+				$timetable->stattime= Input::get('startt');
+				$timetable->endtime= Input::get('endt');
+				$timetable->day = $day;
+				$timetable->save();
+
+			} 
+
+
+
+			//echo request()->photo->move(public_path('images/'), $fileName);
+			return Redirect::to('/teacher/list')->with("success","Time Table updated Succesfully.");
+			//	}
+
+
+		}
 	}
 }
