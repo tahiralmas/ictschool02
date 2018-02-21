@@ -14,7 +14,7 @@ class AddDiscountIdToStudent extends Migration
     public function up()
     {
         //
-         Schema::table('users', function($table)
+         Schema::table('Student', function($table)
       {
 	  $table->integer('discount_id');
       });
