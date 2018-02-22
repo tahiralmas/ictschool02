@@ -30,9 +30,12 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $cronschedule = DB::table('cronschedule')->first();
+        if(!empty($cronschedule)){
         $schedule->command('feeNotification:notification')
        // ->everyMinute();
          ->monthlyOn($cronschedule->date, $cronschedule->time)->timezone('Asia/Karachi');
+         
+         }
         //$test = $schedule->exec('touch /tmp/mytest____')->everyMinute();
 
     }

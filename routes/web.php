@@ -268,6 +268,8 @@ return Auth::user()->group;
 });
 Route::get('/settings','settingsController@index');
 Route::post('/settings','settingsController@save');
+Route::get('/schedule','settingsController@get_schedule');
+Route::post('/schedule','settingsController@post_schedule');
 // Accounting
 
 Route::group(['middleware' => 'admin'], function(){ 
@@ -426,3 +428,5 @@ Route::group(['middleware' => 'admin'], function(){
 Route::get('/barcode','barcodeController@index');
 Route::post('/barcode','barcodeController@generate');
 });
+
+Route::get('/cronjob/feenotification','cronjobController@feenotification');
