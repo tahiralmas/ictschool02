@@ -3,11 +3,14 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\User;
+use App\Schedule;
 use DB;
 use Auth;
 use Hash;
-class settingsController extends BaseController {
-	public function __construct() {
+class settingsController extends BaseController 
+{
+	public function __construct() 
+	{
 		/*$this->beforeFilter('csrf', array('on'=>'post'));
 		$this->beforeFilter('auth', array('only'=>array('save','index')));*/
 		$this->middleware('auth');
@@ -67,22 +70,57 @@ class settingsController extends BaseController {
 				$user->save();
 
 				return Redirect::to('/settings')->with('success', 'Settings is changed please relogin the site.');
-				/*}
-				else
-				{
+					/*}
+					else
+					{
+					$errorMessages = new Illuminate\Support\MessageBag;
+					$errorMessages->add('notmatch', 'Current Password did not match!');
+					return Redirect::to('/settings')->withErrors($errorMessages);
+				}*/
+			}else{
 				$errorMessages = new Illuminate\Support\MessageBag;
-				$errorMessages->add('notmatch', 'Current Password did not match!');
+				$errorMessages->add('notmatch', 'New Password and confirm password did not match!');
 				return Redirect::to('/settings')->withErrors($errorMessages);
-			}*/
-		}
-		else
-		{
-			$errorMessages = new Illuminate\Support\MessageBag;
-			$errorMessages->add('notmatch', 'New Password and confirm password did not match!');
-			return Redirect::to('/settings')->withErrors($errorMessages);
+			}
 		}
 	}
-}
+
+	public function get_schedule()
+	{
+
+		 $schedule = Schedule::select('date','time')->first();
+		if(is_null($schedule)){
+			$schedule=new Schedule;
+			$schedule->date = "";
+			$schedule->time = "";
+		
+		}
+		$datee=date('F');
+		$year= date('Y');
+		return View('app.schedulesetting',compact('schedule','datee','year'));
+	}
+
+	public function post_schedule()
+	{
+		$rules=[
+		'time' => 'required',
+		'date' => 'required',
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails()){
+			return Redirect::to('/schedule')->withErrors($validator);
+		}
+		else{
+			   $time =  date("H:i", strtotime(Input::get('time')));
+			   
+				DB::table("cronschedule")->delete();
+				$schedule=new Schedule;
+				$schedule->date = Input::get('date');
+				$schedule->time = $time;
+				$schedule->save();
+				return Redirect::to('/schedule')->with("success", "Schedule Created Succesfully.");
+			}
+	}
 
 
 }

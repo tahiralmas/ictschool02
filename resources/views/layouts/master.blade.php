@@ -372,6 +372,7 @@
 
                                 <li><a href="/template/create">Add Message</a></li>
                                 <li><a href="/template/list">Recording List</a></li>
+                                 <li><a href="/schedule">Fee Notification Reminder</a></li>
 
                             </ul>
                         </li>

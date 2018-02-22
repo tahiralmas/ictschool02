@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use DB;
 
 class Kernel extends ConsoleKernel
 {
@@ -14,7 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
-    '\App\Console\Commands\CronJob',
+    
+    '\App\Console\Commands\feeNotification',
     ];
 
     /**
@@ -27,10 +29,12 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->command('CronJob:cronjob')
-                 //->everyMinute();
-                 ->monthlyOn(6, '15:00');
-                // $this->info('User Name Change Successfully!');
+        $cronschedule = DB::table('cronschedule')->first();
+        $schedule->command('feeNotification:notification')
+       // ->everyMinute();
+         ->monthlyOn($cronschedule->date, $cronschedule->time)->timezone('Asia/Karachi');
+        //$test = $schedule->exec('touch /tmp/mytest____')->everyMinute();
+
     }
 
     /**
