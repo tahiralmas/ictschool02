@@ -56,6 +56,7 @@ School managment system feature list
 #### Students’ fees management   
 ------------------------------
 * __Create invoice for student fees__
+* __Automatically send fees notification to specific date whose set in amdin__
 
 #### Academic year or session handling    
 ---------------------------------------
@@ -91,6 +92,14 @@ $ php artisan serve --port 8080
 **  http://localhost:8080 **
 ```
 $ php artisan storage:link
+
+```
+## cron job Settings
+```
+crontab -e
+
+* * * * * /usr/bin/php7.1 /path/artisan schedule:run 1>> /dev/null 2>&1
+
 ```
 # Screenshot
 
