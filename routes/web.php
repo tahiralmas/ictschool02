@@ -139,6 +139,8 @@ Route::get('/attendance/printlist/{class}/{section}/{shift}/{session}/{date}','a
 Route::group(['middleware' => 'admin'], function(){ 
 Route::get('/attendance/report','attendanceController@report');
 Route::post('/attendance/report','attendanceController@getReport');
+Route::get('/attendance/student_report','attendanceController@stdatdreportindex');
+Route::get('/attendance/print_student_report/{b_form}','attendanceController@stdatdreport');
 
 
 

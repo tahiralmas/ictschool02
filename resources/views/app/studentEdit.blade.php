@@ -338,6 +338,16 @@
                               </div>
                           </div>
                           </div>
+
+                          <div class="col-md-4">
+                              <div class="form-group">
+                                <label for="remarks"> B-form/Cnic </label>
+                                <div class="input-group">
+                                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                  <input type="text" class="form-control b_form" value="{{$student->b_form}}"    name="b_form" placeholder="B-form/Cnic">
+                                </div>
+                              </div>
+                           </div>
                       </div>
                     </div>
 
@@ -431,7 +441,7 @@
                         </div>
                         <div class="col-md-6">
                           <div class="form-group">
-                              <label for="parmanentAddress">Permanent Address</label>
+                              <label for="parmanentAddress">Parmanent Address</label>
                               <div class="input-group">
                                   <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
                                   <textarea type="text" class="form-control"  name="parmanentAddress" placeholder="Address">{{$student->parmanentAddress}}</textarea>
@@ -475,7 +485,7 @@
 <script type="text/javascript">
 
     $( document ).ready(function() {
-
+         $('.b_form').mask('00000-0000000-0');
       $('.datepicker').datepicker({autoclose:true});
       $(".datepicker2").datepicker( {
     format: " yyyy", // Notice the Extra space at the beginning

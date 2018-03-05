@@ -106,6 +106,27 @@
               </div>
             </div>
           </div>
+            <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group ">
+                     <label for="session">Discount</label>
+                         <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                            <select class="form-control" name="discount_id">
+                              <option value="">---Select Discount---</option>
+                              <option value="2" >10 %</option>
+                              <option value="3">20 %</option>
+                              <option value="4" >30 %</option>
+                              <option value="5" >40 %</option>
+                              <option value="6" >50 %</option>
+                              <option value="7">60 %</option>
+                              <option value="8" >65 %</option>
+                              <option value="9" >90 %</option>
+                            </select>
+                        </div>
+                 </div>
+              </div>
+          </div>
           <div class="row">
             <div class="col-md-12">
               <div class="col-md-4">
@@ -321,6 +342,16 @@
                 </div>
               </div>
             </div>
+
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="remarks"> B-form/Cnic </label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <input type="text" class="form-control b_form"  name="b_form" placeholder="B-form/Cnic">
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -414,7 +445,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="parmanentAddress">Permanent Address</label>
+                <label for="parmanentAddress">Parmanent Address</label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
                   <textarea type="text" class="form-control"  name="parmanentAddress" placeholder="Address"></textarea>
@@ -489,8 +520,6 @@
        $('#section').append($('<option>').text("--Select Section--").attr('value',""));
         $.each(data, function(i, section) {
           //console.log(student);
-         
-          
             var opt="<option value='"+section.id+"'>"+section.name + " </option>"
 
         
@@ -506,6 +535,7 @@
 };
 
 $( document ).ready(function() {
+   $('.b_form').mask('00000-0000000-0');
   getStdRegiRollNo();
 getsections();
  

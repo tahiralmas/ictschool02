@@ -9,6 +9,7 @@ use App\Student;
 use App\Message;
 use App\Ictcore_attendance;
 use App\Ictcore_integration;
+use App\Institute;
 use DB;
 use Excel;
 use App\SMSLog;
@@ -393,7 +394,18 @@ class attendanceController extends BaseController {
 			$formdata->session=date('Y');
 			$formdata->date=date('d-m-Y');
 			$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
-			$attendance=array();
+			//$attendance=array();
+              $date = $this->parseAppDate(Carbon::now()->format('d-m-Y'));
+			$attendance = DB::table('Student')
+			->join('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
+			->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status')
+				//->where('Student.class','=',Input::get('class'))
+				//->where('Student.section','=',Input::get('section'))
+				//->Where('Student.shift','=','Morning')
+				//->where('Student.session','=',trim(Input::get('session')))
+				->where('Student.isActive', '=', 'Yes')
+				->where('Attendance.date', '=', $date )
+				->get();
 
 
 			//$formdata["class"]="";
@@ -435,26 +447,6 @@ class attendanceController extends BaseController {
 				->where('Student.isActive', '=', 'Yes')
 				->where('Attendance.date', '=', $date)
 				->get();
-
-
-
-				/*$student =	DB::table('Student')->leftJoin('Attendance', 'Student.regiNo', '=', 'Student.regiNo')
-						->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName ','Attendance.date as attendance')
-						// ->whereYear('stdBill.payDate', '=', 2017)
-						->where('Student.class','=',Input::get('class'))->where('Student.section','=',Input::get('section'))->where('Student.session','=',Input::get('session'))->where('Student.class','=',Input::get('class'))->whereYear('stdBill.payDate', '=', Input::get('year'))->where('billHistory.month','=',Input::get('month'))->where('billHistory.month','<>','-1')
-						//->orderby('stdBill.payDate')
-						->get();*/
-
-			 /*$attendance = Student::with(['attendance' => function ($query) use($date) {
-	          $query->where('date', '=',$date);
-
-	      }])->get();*/
-	      /*$attendance = App\Student::join('attendance', function ($join)use($date) {
-	            $join->on('date', '=', $date);
-	                // ->where('contacts.user_id', '>', 5);
-	        })
-	        ->get();*/
-				
 				$formdata = new formfoo;
 				$formdata->class=Input::get('class');
 				$formdata->section=Input::get('section');
@@ -669,5 +661,50 @@ class attendanceController extends BaseController {
 
 		}
 	}
+	public function stdatdreportindex(){
 
+       return View('app.studentAttendancereprt',compact(''));
+
+
+	}
+
+	public function stdatdreport($b_form)
+	{
+		$stdinfo =  DB::table('Student')->where('Student.b_form',$b_form)->first();
+		$attendances = DB::table('Attendance')
+			->join('Student', 'Attendance.regiNo', '=', 'Student.regiNo')
+			->leftjoin('section', 'section.id', '=', 'Attendance.section_id')
+			->select('Attendance.regiNo',DB::raw('count(Attendance.regiNo) as `data`'), DB::raw("DATE_FORMAT(Attendance.date, '%m-%Y') new_date"),  DB::raw('YEAR(Attendance.date) year, MONTH(Attendance.date) month'))->where('Student.b_form',$b_form)->where('Attendance.status','Present')
+             ->groupby('year')->get();
+			//->select('Attendance.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.section_id','Attendance.date','section.name as section')->where('Student.b_form',$b_form)->get();
+              foreach($attendances as $attendance){
+
+              // 	$year = date('Y', strtotime($dateString));
+              //	$this->years = Carbon::createFromDate(2018,1);
+
+              //	$yer[] = $this->years->weeksInMonth;
+              	echo date("z", mktime(0,0,0,12,31,$attendance->year)) + 1;
+                 echo "<br>";
+
+
+				$start = new \DateTime($attendance->year.'-01-01');
+				$end = new \DateTime($attendance->year.'-12-31');
+				$days = $start->diff($end, true)->days;
+
+				echo $sundays = intval($days / 7) + ($start->format('N') + $days % 7 >= 7);
+				echo "<br>";
+               }
+               echo "<pre>";print_r($attendances);
+
+
+               //echo "<pre>";print_r($yer);
+               $institute=Institute::select('*')->first();
+              $pdf = \PDF::loadView('app.attendancestdreportprint',compact('attendances','stdinfo','institute'));
+		      return $pdf->stream('student-Payments.pdf');
+               exit;
+		$institute=Institute::select('*')->first();
+		//$rdata =array('payTotal'=>$totals->payTotal,'paiTotal'=>$totals->paiTotal,'dueAmount'=>$totals->dueamount);
+		//$pdf = \PDF::loadView('app.attendancestdreportprint',compact('datas','rdata','stdinfo','institute'));
+		//return $pdf->stream('student-Payments.pdf');
+	}
 }

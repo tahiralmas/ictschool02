@@ -163,6 +163,7 @@
             <ul class="dropdown-menu">
                 <li><a href="/gradesheet">Marksheet</a></li>
                 <li><a href="/attendance/report">Attendance</a></li>
+                <li><a href="/attendance/student_report">Student Wise Attendance</a></li>
                 <li><a href="/tabulation">Tabulationsheet</a></li>
                 <li><a href="/smslog">Voice Log / SMS Log</a></li>
                <!-- <li><a href="/accounting/report">Account By Type</a></li>
@@ -473,6 +474,7 @@
 <script src="{{ URL::asset('/js/jquery.history.js') }}"></script>
 <!-- application script for Charisma demo -->
 <script src="{{ URL::asset('/js/charisma.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.14/jquery.mask.min.js"></script>
 
 @yield('script')
 </body>

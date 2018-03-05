@@ -100,6 +100,7 @@ class studentController extends BaseController {
 		'rollNo' => 'required',
 		'shift' => 'required',
 		'photo' => 'mimes:jpeg,jpg,png',
+		'b_form' => 'required',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
 		//'motherName' => 'required',
@@ -124,6 +125,10 @@ class studentController extends BaseController {
         
 		$student = new Student;
 		$student->regiNo = Input::get('regiNo');
+		$student->discount_id = Input::get('discount_id');
+		if(Input::get('discount_id') ==''){
+			$student->discount_id = NULL;
+		}
 		$student->firstName = Input::get('fname');
 
 		$student->middleName = Input::get('mname');
@@ -165,6 +170,7 @@ class studentController extends BaseController {
        if(Input::get('remarks') ==''){
 			$student->remarks = "";
 		}
+		$student->b_form= Input::get('b_form');
 		$student->fatherName= Input::get('fatherName');
 		$student->fatherCellNo= Input::get('fatherCellNo');
 		
@@ -393,6 +399,7 @@ public function update()
 		'section' => 'required',
 		'rollNo' => 'required',
 		'shift' => 'required',
+		'b_form' => 'required',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
 		//'motherName' => 'required',
@@ -500,6 +507,7 @@ public function update()
        if(Input::get('remarks') ==''){
 			$student->remarks = "";
 		}
+		$student->b_form= Input::get('b_form');
 		$student->fatherName= Input::get('fatherName');
 		$student->fatherCellNo= Input::get('fatherCellNo');
 		
