@@ -300,6 +300,9 @@
         $('#shift').change(function() {
           getStudent();
         });
+         $('#session').on('change',function() {
+          getsections();
+        });
         $('#allcheck').change(function() {
           var isS=false;
           if ($('#isSendSMS').is(":checked"))
@@ -349,9 +352,10 @@
 function getsections()
 {
     var aclass = $('#class').val();
+    var session = $('#session').val();
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass,
+      url: '/section/getList/'+aclass+'/'+session,
       data: {
         format: 'json'
       },
@@ -366,7 +370,8 @@ function getsections()
           //console.log(student);
          
           
-            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+            //var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+            var opt="<option value='"+section.id+"'>"+section.name +' (  ' + section.students +' ) '+ "</option>"
 
         
           //console.log(opt);

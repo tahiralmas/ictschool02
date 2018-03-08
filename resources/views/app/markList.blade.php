@@ -244,9 +244,10 @@
 function getsections()
 {
     var aclass = $('#class').val();
+    var session = $('#session').val();
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass,
+      url: '/section/getList/'+aclass+'/'+session,
       data: {
         format: 'json'
       },
@@ -261,7 +262,8 @@ function getsections()
           //console.log(student);
          
           
-            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+            //var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+            var opt="<option value='"+section.id+"'>"+section.name +' (  ' + section.students +' ) '+ "</option>"
 
         
           //console.log(opt);
@@ -326,6 +328,10 @@ function getsections()
       getSubjects();
        getsections();
         getexam();
+
+         $('#session').on('change',function() {
+          getsections();
+        });
     });
     </script>
     @stop

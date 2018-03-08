@@ -22,7 +22,6 @@ class CreateMessageTable extends Migration
             $table->integer('ictcore_recording_id'); 
             $table->integer('ictcore_program_id'); 
             $table->string('type',30); 
-            $table->string('type',30); 
             $table->timestamps();
         });
     }

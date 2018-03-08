@@ -39,11 +39,11 @@ class CreateTableStudent extends Migration {
 			$table->string('fatherCellNo',15);
 			$table->string('motherName',180);
 			$table->string('motherCellNo',15);
-		  $table->string('localGuardian',180);
+		        $table->string('localGuardian',180);
 			$table->string('localGuardianCell',15);
-      $table->string('presentAddress',500);
+                       $table->string('presentAddress',500);
 			$table->string('parmanentAddress',500);
-      $table->string('isActive',10);
+                        $table->string('isActive',10);
 			$table->timestamps();
 			$table->index('regiNo');
 		});
