@@ -61,7 +61,6 @@ class sectionController extends BaseController {
 				$class->save();
 				return Redirect::to('/section/create')->with("success", "Section Created Succesfully.");
 			}
-
 		}
 
 	}
@@ -146,10 +145,35 @@ class sectionController extends BaseController {
 		return Redirect::to('/section/list')->with("success","Section Deleted Succesfully.");
 	}
 
-	public function getsections($class){
+	public function getsections($class,$session){
 
-      $section= SectionModel::select('id','name')->where('class_code','=',$class)->get();
+      //$section= SectionModel::select('id','name')->where('class_code','=',$class)->get();
+		$section= DB::table('section')
+		//->select(DB::raw('section.id,section.class_code,section.name,section.description'))
+		->select(DB::raw('section.id,section.name,(select count(Student.id) from Student where  section=section.id AND session='.$session.')as students'))
+       ->where('section.class_code','=',$class)
+		->get();
+		//print_r($section);exit;
 	return $section;
+	}
+
+	public function view_timetable($id)
+	{
+		$teacher_name =  array();
+		$timetables = DB::table('timetable')
+		->join('teacher', 'timetable.teacher_id', '=', 'teacher.id')
+		->join('Subject', 'Subject.id', '=', 'timetable.subject_id')
+		//->join('Class', 'Class.id', '=', 'timetable.class_id')
+		->join('section', 'section.id', '=', 'timetable.section_id')
+		->select('teacher.*','timetable.stattime','timetable.endtime','timetable.day','timetable.id as timetable_id','Subject.name AS subname' , 'section.name as section_id', 'section.class_code as classname')
+		->where('timetable.section_id',$id)
+		/*	->where('section',Input::get('section'))
+		->where('shift',Input::get('shift'))
+		->where('session',trim(Input::get('session')))*/
+		->get();
+		// $timetables = DB::table('timetable')->where('timetable.teacher_id',$id)->get();
+		//echo "<pre>";print_r($timetables); exit;
+		return View("app.teacherViewtimetable",compact('timetables','teacher_name'));
 	}
 
 }
