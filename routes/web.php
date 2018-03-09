@@ -125,6 +125,7 @@ Route::post('/timetable/update','teacherController@update_timetable');
 });
 Route::get('/teacher/view-timetable/{id}','teacherController@view_timetable');
 Route::get('/section/getList/{class}/{session}','sectionController@getsections');
+Route::get('/section/getList/{class}','sectionController@getsectionsc');
 
 //student attendance
 Route::get('/attendance/create','attendanceController@index');

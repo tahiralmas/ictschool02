@@ -150,9 +150,18 @@ class sectionController extends BaseController {
       //$section= SectionModel::select('id','name')->where('class_code','=',$class)->get();
 		$section= DB::table('section')
 		//->select(DB::raw('section.id,section.class_code,section.name,section.description'))
-		->select(DB::raw('section.id,section.name,(select count(Student.id) from Student where  section=section.id AND session='.$session.')as students'))
+
+		->select(DB::raw('section.id,section.name,(select count(Student.id) from Student where  section=section.id And class=section.class_code AND session='.$session.')as students'))
        ->where('section.class_code','=',$class)
 		->get();
+		//print_r($section);exit;
+	return $section;
+	}
+
+	public function getsectionsc($class){
+
+      $section= SectionModel::select('id','name')->where('class_code','=',$class)->get();
+		
 		//print_r($section);exit;
 	return $section;
 	}
