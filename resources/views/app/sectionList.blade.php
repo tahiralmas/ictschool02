@@ -35,7 +35,7 @@
               <td>{{$section->students}}</td>
 
               <td>
-                <a title='Edit' class='btn btn-info' href='{{url("/section/edit")}}/{{$section->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/section/delete")}}/{{$section->id}}'> <i class="glyphicon glyphicon-trash icon-white"></i></a>
+                <a title='Edit' class='btn btn-info' href='{{url("/section/edit")}}/{{$section->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/section/delete")}}/{{$section->id}}' onclick="return confirm('Are you sure you want to delete this Section?');"> <i class="glyphicon glyphicon-trash icon-white"></i></a>&nbsp&nbsp<a title='view timetable' class='btn btn-success' href='{{url("/section/view-timetable")}}/{{$section->id}}'> <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
               </td>
               @endforeach
             </tbody>

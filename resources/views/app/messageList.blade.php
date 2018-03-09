@@ -36,7 +36,7 @@
               </td>
 
               <td>
-                <a title='Edit' class='btn btn-info' href='{{url("/message/edit")}}/{{$message->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/message/delete")}}/{{$message->id}}'> <i class="glyphicon glyphicon-trash icon-white"></i></a>
+                <a title='Edit' class='btn btn-info' href='{{url("/message/edit")}}/{{$message->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/message/delete")}}/{{$message->id}}' onclick="return confirm('Are you sure you want to delete this Message?');"> <i class="glyphicon glyphicon-trash icon-white"></i></a>
               </td>
               @endforeach
             </tbody>
