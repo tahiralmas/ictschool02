@@ -20,14 +20,14 @@
             </div>
           <div class="box-content">
             @if (count($errors) > 0)
-                                  <div class="alert alert-danger">
-                                      <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                                      <ul>
-                                          @foreach ($errors->all() as $error)
-                                              <li>{{ $error }}</li>
-                                          @endforeach
-                                      </ul>
-                                  </div>
+                    <div class="alert alert-danger">
+                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                   @endif
    <form role="form" action="/mark/create" method="post" enctype="multipart/form-data">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -84,22 +84,20 @@
                           </div>
                         </div>
                           </div>-->
-
                           <input type="hidden" name="shift" value="Morning">
-
                   </div>
                 </div>
                 <div class="row">
                 <div class="col-md-12">
                   <div class="col-md-3">
                     <div class="form-group ">
-                                     <label for="session">session</label>
-                                         <div class="input-group">
+                     <label for="session">session</label>
+                         <div class="input-group">
 
-                                          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                            <input type="text" id="session" required="true" class="form-control datepicker2" name="session"   data-date-format="yyyy">
-                                        </div>
-                                 </div>
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                            <input type="text" id="session" required="true" class="form-control datepicker2" name="session"   data-date-format="yyyy">
+                        </div>
+                    </div>
                     </div>
                     <div class="col-md-5">
                       <div class="form-group">
@@ -123,14 +121,13 @@
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                           <select name="exam" id="exam" required="true" class="form-control" >
-                          <option value="">-Select Exam-</option>
+                           <option value="">-Select Exam-</option>
                             	<!--<option value="">-Select Exam-</option>
                             <option value="Class Test">Class Test</option>
                             <option value="Model Test">Model Test</option>
                       			<option value="First Term">First Term</option>
                             	<option value="Mid Term">Mid Term</option>
                       			<option value="Final Exam">Final Exam</option>-->
-
                          </select>
 
 
@@ -242,12 +239,12 @@
        </div>
     </div>
 </div>
-</div>
+</div></div>
 @stop
 @section('script')
 <script src="/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
-
+//
     $( document ).ready(function() {
 
 
@@ -256,6 +253,9 @@
     getsections();
     getexam();
   });
+  $('#session').on('change',function() {
+          getsections();
+        });
        $('#btnsave').hide();
         $('#class').on('change', function (e) {
             var val = $(e.target).val();
@@ -275,14 +275,14 @@
             });
             });
 
-            $(".datepicker2").datepicker( {
+$(".datepicker2").datepicker( {
     format: " yyyy", // Notice the Extra space at the beginning
     viewMode: "years",
     minViewMode: "years",
     autoclose:true
 
 }).on('changeDate', function (ev) {
-     var aclass = $('#class').val();
+     /*var aclass = $('#class').val();
      var section =  $('#section').val();
     // var shift = $('#shift').val();
 
@@ -312,12 +312,13 @@
 
            },
            type: 'GET'
-       });
+       });*/
+         getstudent();
 
         });
 
         $( "#subject" ).change(function() {
-
+         
           $.ajax({
                 url: '/subject/getmarks/'+$('#subject').val()+'/'+$('#class').val(),
                 data: {
@@ -342,9 +343,12 @@
 
                   $('#cfull').text(data[0]['sfull']);
                   $('#cpass').text(data[0]['spass']);
+                  getstudent();
                 },
                 type: 'GET'
             });
+
+
 
              });
 
@@ -352,13 +356,57 @@
 
     });
 
+function getstudent()
+{
 
+
+var aclass = $('#class').val();
+     var section =  $('#section').val();
+    // var shift = $('#shift').val();
+
+    var shift =  "Morning";
+    
+     var session = $('#session').val().trim();
+     $.ajax({
+           url: '/student/getsList/'+aclass+'/'+section+'/'+shift+'/'+session,
+           data: {
+               format: 'json'
+           },
+           error: function(error) {
+              alert(error);
+           },
+           dataType: 'json',
+           success: function(data) {
+
+             $("#studentList").find("tr:gt(0)").remove();
+             if(data.length>0)
+             {
+               $('#btnsave').show();
+             }
+             for(var i =0;i < data.length;i++)
+              {
+                addRow(data[i],i);
+              }
+
+           },
+           type: 'GET'
+       });
+
+
+
+
+
+}
 function getsections()
 {
     var aclass = $('#class').val();
+     var session = $('#session').val();
+     if(session==''){
+       session =2018;
+     }
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass,
+      url: '/section/getList/'+aclass+'/'+session,
       data: {
         format: 'json'
       },
@@ -372,10 +420,9 @@ function getsections()
         $.each(data, function(i, section) {
           //console.log(student);
          
-          
-            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+            //var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+          var opt="<option value='"+section.id+"'>"+section.name +' (  ' + section.students +' ) '+ "</option>"
 
-        
           //console.log(opt);
           $('#section').append(opt);
 
@@ -430,7 +477,27 @@ function getsections()
     // chkbox.type = "checkbox";
      //chkbox.name="chkbox[]";
     // cell1.appendChild(chkbox);
+var tm = $('#tfull').text();
 
+if(tm ==''){
+  tm = 25;
+}
+var wm = $('#wfull').text();
+if(wm ==''){
+  wm = 25;
+}
+var mm=$('#mfull').text();
+if(mm ==''){
+  mm = 25;
+}
+var pm=$('#pfull').text();
+if(pm ==''){
+  pm = 25;
+}
+var cm = $('#cfull').text();
+if(cm ==''){
+  cm = 25;
+}
      var cell2 = row.insertCell(0);
      var regiNo = document.createElement("label");
 
@@ -462,39 +529,43 @@ function getsections()
 
      var cell5 = row.insertCell(3);
      var written = document.createElement("input");
-     written.type="text";
+     written.type="number";
 
      written.name = "written[]";
      written.required = "true";
      written.size="2";
      written.maxlength="2";
+     written.max = wm;
      written.class="form-control";
      cell5.appendChild(written);
 
      var cell6 = row.insertCell(4);
      var mcq = document.createElement("input");
-     mcq.type="text";
+     mcq.type="number";
 
      mcq.name = "mcq[]";
      mcq.required = "true";
      mcq.size="2";
+      mcq.max = mm;
      cell6.appendChild(mcq);
 
      var cell7 = row.insertCell(5);
      var practical = document.createElement("input");
-     practical.type="text";
+     practical.type="number";
 
      practical.name = "practical[]";
      practical.required = "true";
       practical.size="2";
+      practical.max = pm;
      cell7.appendChild(practical);
 
      var cell8 = row.insertCell(6);
      var ca = document.createElement("input");
-     ca.type="text";
+     ca.type="number";
 
      ca.name = "ca[]";
      ca.required = "true";
+     ca.max = cm;
      ca.size="2";
      cell8.appendChild(ca);
 

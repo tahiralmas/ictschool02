@@ -13,7 +13,7 @@ class subjectController extends BaseController {
 		$this->beforeFilter('auth');
 		$this->beforeFilter('userAccess',array('only'=> array('delete')));*/
 	       $this->middleware('auth');
-               $this->middleware('userAccess',array('only'=> array('delete')));
+              // $this->middleware('userAccess',array('only'=> array('delete')));
 	}
 	/**
 	* Display a listing of the resource.

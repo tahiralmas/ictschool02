@@ -96,6 +96,8 @@ Route::get('/student/csvexample','studentController@csvexample');
 
 });
 Route::get('/student/getList/{class}/{section}/{shift}/{session}','studentController@getForMarks');
+Route::get('/student/getsList/{class}/{section}/{shift}/{session}','studentController@getForMarksjoin');
+
 Route::get('/fee/getdiscountjson/{student_registration}','studentController@getdiscount');
 
 // Teacher routes

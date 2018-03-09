@@ -43,7 +43,7 @@ class studentController extends BaseController {
 		//return View::Make('app.studentCreate',compact('classes'));
 		return View('app.studentCreate',compact('classes','section'));
 	}
-
+//
 	public  function getRegi($class,$session,$section)
 	{
 		$ses =trim($session);
@@ -572,6 +572,19 @@ public function delete($id)
 public function getForMarks($class,$section,$shift,$session)
 {
 	$students= Student::select('regiNo','rollNo','firstName','middleName','lastName','discount_id')->where('isActive','=','Yes')->where('class','=',$class)->where('section','=',$section)->where('shift','=',$shift)->where('session','=',$session)->get();
+	return $students;
+}
+
+public function getForMarksjoin($class,$section,$shift,$session)
+{
+	$students= Student::select('regiNo','rollNo','firstName','middleName','lastName','discount_id')->where('isActive','=','Yes')->where('class','=',$class)->where('section','=',$section)->where('shift','=',$shift)->where('session','=',$session)->get();
+	/* $students=	DB::table('Student')
+	->leftjoin('Marks', 'Student.regiNo', '=', 'Marks.regiNo')
+	->select('Student.id', 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName',
+	'Student.discount_id','Marks.written','Marks.written','Marks.mcq','Marks.practical','Marks.ca','Marks.Absent')
+	->where('Student.section','=',$section)->where('Student.shift','=',$shift)->where('Student.session','=',$session)->get();
+
+*/
 	return $students;
 }
 public function getdiscount($reg)
