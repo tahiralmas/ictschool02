@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-<link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+<link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 @stop
 @section('content')
 @if (Session::get('success'))
@@ -28,7 +28,7 @@
           </ul>
         </div>
         @endif
-        <form role="form" action="/student/create" method="post" enctype="multipart/form-data">
+        <form role="form" action="{{url('/student/create')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <div class="row">
             <div class="col-md-12">
@@ -474,7 +474,7 @@
 </div>
 @stop
 @section('script')
-<script src="/js/bootstrap-datepicker.js"></script>
+<script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
  var getStdRegiRollNo = function(){
    var aclass = $('#class').val();
@@ -484,7 +484,7 @@
 //  var section = $("#section option:selected").val();
   // alert(section);
    $.ajax({
-     url: '/student/getRegi/'+aclass+'/'+session+'/'+section,
+     url: "{{url('/student/getRegi')}}"+'/'+aclass+'/'+session+'/'+section,
      data: {
        format: 'json'
      },
@@ -507,7 +507,7 @@
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass,
+      url: "{{url('/section/getList/')}}"+'/'+aclass,
       data: {
         format: 'json'
       },

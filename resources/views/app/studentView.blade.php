@@ -23,7 +23,7 @@
                <div class="col-md-12">
                    <div class="col-md-4"></div>
                     <div class="col-md-4">
-                      <img class="img responsive-img" style="height:150px;width:200px;" src="/images/{{$student->photo}}" alt="Photo">
+                      <img class="img responsive-img" style="height:150px;width:200px;" src="{{url('/images/'.$student->photo)}}" alt="Photo">
                     </div>
                        <div class="col-md-4"></div>
                   </div>

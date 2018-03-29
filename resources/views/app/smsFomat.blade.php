@@ -29,7 +29,7 @@
                         </div>
                     @endif
                     @if($sms)
-                        <form role="form" action="/sms/update" method="post" enctype="multipart/form-data">
+                        <form role="form" action="{{url('/sms/update')}}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="id" value="{{$sms->id}}">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="row">
@@ -68,7 +68,7 @@
                             <button class="btn btn-primary pull-right" type="submit"><i class="glyphicon glyphicon-plus"></i>Update</button>
                         </form>
                     @else
-                        <form role="form" action="/sms/create" method="post" enctype="multipart/form-data">
+                        <form role="form" action="{{url('/sms/create')}}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                             <div class="row">

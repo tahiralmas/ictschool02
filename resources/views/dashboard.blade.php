@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section("style")
-<link href='/css/custom.min.css' rel='stylesheet'>
-<link href='/font-awesome/css/font-awesome.min.css' rel='stylesheet'>
+<link href="{{ URL::asset('/css/custom.min.css')}}" rel='stylesheet'>
+<link href="{{ URL::asset('/font-awesome/css/font-awesome.min.css')}}" rel='stylesheet'>
 
 <style>
 .fc-today{

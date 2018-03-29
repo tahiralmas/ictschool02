@@ -29,7 +29,7 @@
                             </ul>
                         </div>
                     @endif
-                    <form role="form" action="/student/create-file" method="post" enctype="multipart/form-data">
+                    <form role="form" action="{{url('/student/create-file')}}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="row">
                             <div class="col-md-12">

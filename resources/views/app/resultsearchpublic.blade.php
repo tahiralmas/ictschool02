@@ -54,7 +54,7 @@
             </div>
             @endif
 
-            <form role="form" action="/results" method="post" enctype="multipart/form-data">
+            <form role="form" action="{{url('/results')}}" method="post" enctype="multipart/form-data">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
               <div class="row">
                 <div class="col-md-12">
@@ -134,7 +134,7 @@
 
   <!-- external javascript -->
 
-  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="{{url('bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
   <script type="text/javascript">
 
   
@@ -151,7 +151,7 @@ function getexam()
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/exam/getList/'+aclass,
+      url: "{{url('/exam/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },

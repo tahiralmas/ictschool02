@@ -43,6 +43,7 @@
     <link href='{{ URL::asset('/css/animate.min.css') }}' rel='stylesheet'>
     <link href='{{ URL::asset('/css/app.css') }}' rel='stylesheet'>
     <link href='//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css' rel='stylesheet'>
+    <link href="{{ URL::asset('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 
 
     @yield("style")
@@ -65,7 +66,7 @@
     <![endif]-->
 
     <!-- The fav icon -->
-    <link rel="shortcut icon" href="img/favicon.ico">
+    <link rel="shortcut icon" href="{{ URL::asset('img/favicon.ico')}}">
 
 </head>
 
@@ -90,13 +91,13 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="/settings"><i class="glyphicon glyphicon-user"></i> Profile</a></li>
+                <li><a href="{{url('/settings')}}"><i class="glyphicon glyphicon-user"></i> Profile</a></li>
                 <li class="divider"></li>
-                <li><a href="/users/logout"><i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
+                <li><a href="{{url('/users/logout')}}"><i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
             </ul>
         </div>
         <!-- Addmission dropdown starts -->
-        @if (Session::get('userRole') =="Admin")
+        @if(Session::get('userRole') =="Admin")
        <!-- <div class="btn-group pull-right">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
@@ -161,17 +162,17 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="/gradesheet">Marksheet</a></li>
-                <li><a href="/attendance/report">Attendance</a></li>
-                <li><a href="/attendance/student_report">Student Wise Attendance</a></li>
-                <li><a href="/tabulation">Tabulationsheet</a></li>
-                <li><a href="/smslog">Voice Log / SMS Log</a></li>
+                <li><a href="{{url('/gradesheet')}}">Marksheet</a></li>
+                <li><a href="{{url('/attendance/report')}}">Attendance</a></li>
+                <li><a href="{{url('/attendance/student_report')}}">Student Wise Attendance</a></li>
+                <li><a href="{{url('/tabulation')}}">Tabulationsheet</a></li>
+                <li><a href="{{url('/smslog')}}">Voice Log / SMS Log</a></li>
                <!-- <li><a href="/accounting/report">Account By Type</a></li>
                 <li><a href="/accounting/reportsum">Account Balance</a></li>
                  <li><a href="/barcode">Barcode Generate</a></li>-->
                  <li class="divider"></li>
-                 <li><a href="/fees/report"> Fee Collection Report</a></li>
-                 <li><a href="/fees/classreport"> Fee Class Report</a></li>
+                 <li><a href="{{url('/fees/report')}}"> Fee Collection Report</a></li>
+                 <li><a href="{{url('/fees/classreport')}}"> Fee Class Report</a></li>
             </ul>
         </div>
         <!-- fees dropdown starts-->
@@ -182,13 +183,13 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="/fees/view"><i class="glyphicon glyphicon-search"></i> Student Fees</a></li>
+                <li><a href="{{url('/fees/view')}}"><i class="glyphicon glyphicon-search"></i> Student Fees</a></li>
                 <!--<li><a href="/fee/vouchar"><i class="glyphicon glyphicon-pencil"></i> Create Vouchar</a></li>-->
-                <li><a href="/fee/collection"><i class="glyphicon glyphicon-pencil"></i> Fees Collection</a></li>
+                <li><a href="{{url('/fee/collection')}}"><i class="glyphicon glyphicon-pencil"></i> Fees Collection</a></li>
 
                 <li class="divider"></li>
-                <li><a href="/fees/list"><i class="glyphicon glyphicon-list"></i> Fees List</a></li>
-                <li><a href="/fees/setup"><i class="glyphicon glyphicon-cog"></i> Fees Setup</a></li>
+                <li><a href="{{url('/fees/list')}}"><i class="glyphicon glyphicon-list"></i> Fees List</a></li>
+                <li><a href="{{url('/fees/setup')}}"><i class="glyphicon glyphicon-cog"></i> Fees Setup</a></li>
                 
                 
 
@@ -211,7 +212,7 @@
                     </div>
                     <ul class="nav nav-pills nav-stacked main-menu">
                         <li class="nav-header">Main</li>
-                        <li><a class="ajax-link" href="/dashboard"><i class="glyphicon glyphicon-th-large"></i><span> Dashboard</span></a>
+                        <li><a class="ajax-link" href="{{url('/dashboard')}}"><i class="glyphicon glyphicon-th-large"></i><span> Dashboard</span></a>
                         </li>
                         @if (Session::get('userRole') =="Admin")
                         <?php /* <li class="accordion">
@@ -224,31 +225,31 @@
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-home"></i><span> Class</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="/class/create">Add New</a></li>
-                                <li><a href="/class/list">Class List</a></li>
+                                <li><a href="{{url('/class/create')}}">Add New</a></li>
+                                <li><a href="{{url('/class/list')}}">Class List</a></li>
                             </ul>
                         </li>
                         
                           <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-folder-open"></i><span> Section</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="/section/create">Add New</a></li>
-                                <li><a href="/section/list">Section List</a></li>
+                                <li><a href="{{url('/section/create')}}">Add New</a></li>
+                                <li><a href="{{url('/section/list')}}">Section List</a></li>
                             </ul>
                         </li>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-book"></i><span> Subject</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="/subject/create">Add New</a></li>
-                                <li><a href="/subject/list">Subject List</a></li>
+                                <li><a href="{{url('/subject/create')}}">Add New</a></li>
+                                <li><a href="{{url('/subject/list')}}">Subject List</a></li>
                             </ul>
                         </li>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-user"></i><span> Student</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="/student/create-file">Add from file</a></li>
-                                <li><a href="/student/create">Add New</a></li>
-                                <li><a href="/student/list">Student List</a></li>
+                                <li><a href="{{url('/student/create-file')}}">Add from file</a></li>
+                                <li><a href="{{url('/student/create')}}">Add New</a></li>
+                                <li><a href="{{url('/student/list')}}">Student List</a></li>
 
                             </ul>
                         </li>
@@ -257,12 +258,12 @@
                             <a href="#"><i class="glyphicon glyphicon-text-width"></i><span> Teacher</span></a>
                             <ul class="nav nav-pills nav-stacked">
                             @if (Session::get('userRole') =="Admin")
-                              <li><a href="/teacher/create-file">Add from file</a></li>
-                                <li><a href="/teacher/create">Add New</a></li>
+                              <li><a href="{{url('/teacher/create-file')}}">Add from file</a></li>
+                                <li><a href="{{url('/teacher/create')}}">Add New</a></li>
                                 @endif
-                                <li><a href="/teacher/list">Teacher List</a></li>
+                                <li><a href="{{url('/teacher/list')}}">Teacher List</a></li>
                                 @if (Session::get('userRole') =="Admin")
-                                <li><a href="/teacher/create-timetable">Timetable Management</a></li>
+                                <li><a href="{{url('/teacher/create-timetable')}}">Timetable Management</a></li>
                                 @endif
 
                             </ul>
@@ -273,37 +274,37 @@
                            @if (Session::get('userRole') =="Admin")
                               <!-- <li><a href="/attendance/create-file">Add from file</a></li>-->
                                @endif
-                               <li><a href="/attendance/create">Add</a></li>
-                               <li><a href="/attendance/list">View</a></li>
+                               <li><a href="{{url('/attendance/create')}}">Add</a></li>
+                               <li><a href="{{url('/attendance/list')}}">View</a></li>
                            </ul>
                        </li>
                     <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-fire"></i><span> Exams</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="/exam/create">Add New</a></li>
-                                <li><a href="/exam/list">Exam List</a></li>
+                                <li><a href="{{url('/exam/create')}}">Add New</a></li>
+                                <li><a href="{{url('/exam/list')}}">Exam List</a></li>
                             </ul>
                         </li>
                    
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-list-alt"></i><span> Mark Manage</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="/mark/create">Add New</a></li>
-                                <li><a href="/mark/list">Marks List</a></li>
+                                <li><a href="{{url('/mark/create')}}">Add New</a></li>
+                                <li><a href="{{url('/mark/list')}}">Marks List</a></li>
                             </ul>
                         </li>
                         @if (Session::get('userRole') =="Admin")
                         <li class="accordion">
                             <a href="#"><i class="glyphicon  glyphicon glyphicon-list"></i><span> Result</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="/result/generate">Generate</a></li>
-                                <li><a href="/result/search">Search</a></li>
-                                <li><a href="/results">Search Public</a></li>
+                                <li><a href="{{url('/result/generate')}}">Generate</a></li>
+                                <li><a href="{{url('/result/search')}}">Search</a></li>
+                                <li><a href="{{url('/results')}}">Search Public</a></li>
 
                             </ul>
                         </li>
                         <li class="">
-                            <a href="/promotion"><i class="glyphicon glyphicon-arrow-up"></i><span> Promotion</span></a>
+                            <a href="{{url('/promotion')}}"><i class="glyphicon glyphicon-arrow-up"></i><span> Promotion</span></a>
 
                         </li>
                         
@@ -316,7 +317,7 @@
                             </ul>
                         </li> */ ?>
                         <li class="">
-                            <a href="/message"><i class="glyphicon glyphicon-envelope"></i><span> Voice / SMS</span></a>
+                            <a href="{{url('/message')}}"><i class="glyphicon glyphicon-envelope"></i><span> Voice / SMS</span></a>
                         </li>
                        <!-- <li class="accordion">
                             <a href="#"><i class="glyphicon  glyphicon glyphicon-list-alt"></i><span> Accounting</span></a>
@@ -363,17 +364,17 @@
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-cog"></i><span> Settings</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="/gpa">GPA Ruels</a></li>
+                                <li><a href="{{url('/gpa')}}">GPA Ruels</a></li>
 
-                                <li><a href="/users">Users</a></li>
-                                <li><a href="/institute">Institute</a></li>
-                                <li><a href="/ictcore">IctCore Integration</a></li>
-                                <li><a href="/ictcore/attendance">Attendance Message</a></li>
-                                <li><a href="/ictcore/fees">Fees Message</a></li>
+                                <li><a href="{{url('/users')}}">Users</a></li>
+                                <li><a href="{{url('/institute')}}">Institute</a></li>
+                                <li><a href="{{url('/ictcore')}}">IctCore Integration</a></li>
+                                <li><a href="{{url('/ictcore/attendance')}}">Attendance Message</a></li>
+                                <li><a href="{{url('/ictcore/fees')}}">Fees Message</a></li>
 
-                                <li><a href="/template/create">Add Message</a></li>
-                                <li><a href="/template/list">Recording List</a></li>
-                                 <li><a href="/schedule">Fee Notification Reminder</a></li>
+                                <li><a href="{{url('/template/create')}}">Add Message</a></li>
+                                <li><a href="{{url('/template/list')}}">Recording List</a></li>
+                                 <li><a href="{{url('/schedule')}}">Fee Notification Reminder</a></li>
 
                             </ul>
                         </li>
@@ -475,6 +476,7 @@
 <!-- application script for Charisma demo -->
 <script src="{{ URL::asset('/js/charisma.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.14/jquery.mask.min.js"></script>
+    <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 
 @yield('script')
 </body>

@@ -31,7 +31,7 @@
                                     </div>
                                   </div>
 
-                            <form role="form" action="/library/addbook" method="post">
+                            <form role="form" action="{{url('/library/addbook')}}" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="row">
                       <div class="col-md-12">

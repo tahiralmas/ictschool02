@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-    <link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+    <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 
 @stop
 @section('content')
@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-md-12">
 
-                        <form role="form" action="/student/list" method="post" enctype="multipart/form-data">
+                        <form role="form" action="{{url('//student/list')}}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="row">
                                 <div class="col-md-12">
@@ -156,7 +156,7 @@
 </div>
 @stop
 @section('script')
-    <script src="/js/bootstrap-datepicker.js"></script>
+    <script src="{{url('//js/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
     $( document ).ready(function() {
         $('#studentList').dataTable();
@@ -186,7 +186,7 @@ function getsections()
     var session = $('#session').val();
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass+'/'+session,
+      url: "{{url('/section/getList')}}"+'/'+aclass+'/'+session,
       data: {
         format: 'json'
       },

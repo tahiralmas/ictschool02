@@ -23,7 +23,7 @@
                                   </div>
                   @endif
               @if (isset($student))
-              <form role="form" action="/student/update" method="post" enctype="multipart/form-data">
+              <form role="form" action="{{url('/student/update')}}" method="post" enctype="multipart/form-data">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="id" value="{{ $student->id }}">
                   <input type="hidden" name="oldphoto" value="{{ $student->photo }}">
@@ -481,7 +481,7 @@
 </div>
 @stop
 @section('script')
-<script src="/js/bootstrap-datepicker.js"></script>
+<script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
 
     $( document ).ready(function() {
@@ -507,7 +507,7 @@ function getsections()
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass,
+      url: "{{url('/section/getList)}}"+'/'+aclass,
       data: {
         format: 'json'
       },

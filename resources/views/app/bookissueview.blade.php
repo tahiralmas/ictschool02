@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-      <link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+      <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 
 @stop
 @section('content')
@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-md-12">
 
-                        <form role="form" action="/library/issuebookview" method="post" enctype="multipart/form-data">
+                        <form role="form" action="{{url('/library/issuebookview')}}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <span class="text-danger">[*] Fill at least one feild from first 4 feilds or just select status and get list</span>
                             <div class="row">
@@ -159,7 +159,7 @@
 @stop
 @section('script')
 
-<script src="/js/bootstrap-datepicker.js"></script>
+<script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
 $( document ).ready(function() {
     $('#booklist').dataTable();

@@ -36,7 +36,7 @@
                                     </div>
                                   </div>
 
-                            <form role="form" action="/library/issuebookupdate" method="post">
+                            <form role="form" action="{{url('/library/issuebookupdate')}}" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="id" value="{{$book->id}}">
                     <div class="row">

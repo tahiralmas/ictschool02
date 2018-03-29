@@ -9,7 +9,7 @@
             </div>
             <div class="box-content">
               @if (isset($level))
-              <form role="form" action="/level/update" method="post">
+              <form role="form" action="{{url('/level/update')}}" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                    <input type="hidden" name="id" value="{{$level->id }}">
                       <div class="form-group">

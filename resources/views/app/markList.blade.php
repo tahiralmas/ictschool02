@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-<link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+<link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 
 @stop
 @section('content')
@@ -43,7 +43,7 @@
         </div>
         @endif
 
-        <form role="form" action="/mark/list" method="post" enctype="multipart/form-data">
+        <form role="form" action="{{url('/mark/list')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <div class="row">
             <div class="col-md-12">
@@ -224,7 +224,7 @@
 
        // alert(val);
       $.ajax({
-        url:'/class/getsubjects/'+val,
+        url:"{{url('/class/getsubjects')}}"+'/'+val,
         type:'get',
         dataType: 'json',
         success: function( json ) {
@@ -247,7 +247,7 @@ function getsections()
     var session = $('#session').val();
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass+'/'+session,
+      url: "{{url('/section/getList')}}"+'/'+aclass+'/'+session,
       data: {
         format: 'json'
       },
@@ -281,7 +281,7 @@ function getsections()
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/exam/getList/'+aclass,
+      url: "{{url('/exam/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },

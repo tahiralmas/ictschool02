@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-    <link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+    <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 
 @stop
 @section('content')
@@ -163,7 +163,7 @@
     </div>
 @stop
 @section('script')
-    <script src="/js/bootstrap-datepicker.js"></script>
+    <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
     <script type="text/javascript">
         $( document ).ready(function() {
             $(".datepicker2").datepicker( {
@@ -190,7 +190,7 @@
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass,
+      url: "{{url('/section/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },
@@ -223,7 +223,7 @@
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/exam/getList/'+aclass,
+      url: "{{url('/exam/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },

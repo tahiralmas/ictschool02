@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-    <link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+    <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 
 @stop
 @section('content')
@@ -37,7 +37,7 @@
                         </div>
                     @endif
 
-                    <form role="form" action="/result/generate" method="post" enctype="multipart/form-data">
+                    <form role="form" action="{{url('/result/generate')}}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="row">
                             <div class="col-md-12">
@@ -100,7 +100,7 @@
     </div>
 @stop
 @section('script')
-    <script src="/js/bootstrap-datepicker.js"></script>
+    <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
     <script type="text/javascript">
         $( document ).ready(function() {
             $(".datepicker2").datepicker( {
@@ -125,7 +125,7 @@ function getexam()
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/exam/getList/'+aclass,
+      url: "{{url('/exam/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },

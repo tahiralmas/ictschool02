@@ -29,7 +29,7 @@
                                   </div>
                   @endif
                    @if($gpa)
-                     <form role="form" action="/gpa/update" method="post" enctype="multipart/form-data">
+                     <form role="form" action="{{url('/gpa/update')}}" method="post" enctype="multipart/form-data">
                        <input type="hidden" name="id" value="{{$gpa->id}}">
                          <input type="hidden" name="_token" value="{{ csrf_token() }}">
                      <div class="row">
@@ -93,7 +93,7 @@
                     <button class="btn btn-primary pull-right" type="submit"><i class="glyphicon glyphicon-plus"></i>Update</button>
                       </form>
                     @else
-                    <form role="form" action="/gpa/create" method="post" enctype="multipart/form-data">
+                    <form role="form" action="{{url('/gpa/create')}}" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                     <div class="row">

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-<link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+<link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 <style>
 #billItem thead th {
   color:#3986AC;
@@ -180,7 +180,7 @@
 
         </form>
 
-        <form action="/fees/unpaid_notification" method="post">
+        <form action="{{url('/fees/unpaid_notification')}}" method="post">
          <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <input type="hidden" name="month" value="{{$month}}">
         <input type="hidden" name="section" value="{{$section}}">
@@ -275,7 +275,7 @@
            
           @stop
           @section('script')
-          <script src="/js/bootstrap-datepicker.js"></script>
+          <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
           <script type="text/javascript">
           $( document ).ready(function() {
 
@@ -314,7 +314,7 @@
               var billId=$(this).text();
               $('.modal-title').html('"'+billId+'" bill details information');
               $.ajax({
-                url: '/fees/details/'+billId,
+                url: "{{url('/fees/details')}}"+'/'+billId,
                 data: {
                   format: 'json'
                 },
@@ -343,7 +343,7 @@
             var shift = "Morning";
             var session = $('#session').val().trim();
             $.ajax({
-              url: '/student/getList/'+aclass+'/'+section+'/'+shift+'/'+session,
+              url: "{{url('/student/getList')}}"+'/'+aclass+'/'+section+'/'+shift+'/'+session,
               data: {
                 format: 'json'
               },
@@ -471,7 +471,7 @@
                 var aclass = $('#class').val();
                // alert(aclass);
                 $.ajax({
-                  url: '/section/getList/'+aclass,
+                  url: "{{url('/section/getList/')}}"+'/'+aclass,
                   data: {
                     format: 'json'
                   },

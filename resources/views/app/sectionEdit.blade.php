@@ -9,7 +9,7 @@
             </div>
             <div class="box-content">
               @if (isset($section))
-              <form role="form" action="/section/update" method="post">
+              <form role="form" action="{{url('/section/update')}}" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                    <input type="hidden" name="id" value="{{$section->id }}">
                       <div class="form-group">

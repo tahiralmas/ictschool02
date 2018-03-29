@@ -37,7 +37,7 @@
                         </div>
                     @endif
 
-                    <form role="form" action="/attendance/report" method="post" enctype="multipart/form-data">
+                    <form role="form" action="{{url('/attendance/report')}}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                        <?php /* <div class="row">
                             <div class="col-md-12">
@@ -237,7 +237,7 @@
     </div>
 @stop
 @section('script')
-<script src="/js/bootstrap-datepicker.js"></script>
+<script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
 
  $( document ).ready(function() {
@@ -283,7 +283,7 @@
                 if(aclass!="" && section !="" && shift !="" && session !="" && atedate!="")
                 {
 
-                   var exurl='/attendance/printlist/'+aclass+'/'+section+'/'+shift+'/'+session+'/'+atedate;
+                   var exurl="{{url('/attendance/printlist')}}"+'/'+aclass+'/'+section+'/'+shift+'/'+session+'/'+atedate;
 
                     var win = window.open(exurl, '_blank');
                     win.focus();
@@ -301,7 +301,7 @@ function getsections()
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass,
+      url: "{{url('/section/getList/')}}"+aclass,
       data: {
         format: 'json'
       },

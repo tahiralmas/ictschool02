@@ -4,10 +4,10 @@
     <title>Attenace Report</title>
 
 
-    <link rel="stylesheet" type="text/css" href="/markssheetcontent/style.css">
-    <link rel="stylesheet" type="text/css" href="/markssheetcontent/result.css">
-    <link rel="stylesheet" type="text/css" href="/markssheetcontent/fonts.css">
-    <link rel="stylesheet" type="text/css" href="/markssheetcontent/stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="{{url('/markssheetcontent/style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url('/markssheetcontent/result.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url('/markssheetcontent/fonts.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url('/markssheetcontent/stylesheet.css')}}">
     <script type="text/javascript">
         //<![CDATA[
         var Croogo = {"basePath":"\/","params":{"controller":"student_results","action":"index","named":[]}};
@@ -71,8 +71,8 @@
 <div id="printableArea">
   <div class="wraperResult">
     <div class="resHdr">
-        <img src="/markssheetcontent/res-logo.png" alt="" class="resLogo">            <div class="schoolIdentity">
-            <img src="/markssheetcontent/school-title.png" alt="">                <div class="hdrText">
+        <img src="{{url('/markssheetcontent/res-logo.png')}}" alt="" class="resLogo">            <div class="schoolIdentity">
+            <img src="{{url('/markssheetcontent/school-title.png')}}" alt="">                <div class="hdrText">
                 <span> SESSION-{{$student->session}}</span>
                 <strong> </strong>
             </div><!-- end of hdrText -->

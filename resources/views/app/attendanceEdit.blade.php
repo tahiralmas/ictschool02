@@ -20,7 +20,7 @@
                         </div>
                     @endif
                     @if (isset($attendance))
-                        <form role="form" action="/attendance/update" method="post">
+                        <form role="form" action="{{url('/attendance/update')}}" method="post">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" value="{{$attendance->id }}">
                             <div class="row">

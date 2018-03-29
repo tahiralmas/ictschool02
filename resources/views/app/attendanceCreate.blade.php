@@ -29,7 +29,7 @@
           </ul>
         </div>
         @endif
-        <form role="form" action="/attendance/create" method="post" enctype="multipart/form-data">
+        <form role="form" action="{{url('/attendance/create')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <div class="row">
             <div class="col-md-12">
@@ -217,7 +217,7 @@
 
         var session = $('#session').val().trim();
         $.ajax({
-          url: '/student/getList/'+aclass+'/'+section+'/'+shift+'/'+session,
+          url: "{{url('/student/getList/')}}"+'/'+aclass+'/'+section+'/'+shift+'/'+session,
           data: {
             format: 'json'
           },
@@ -355,7 +355,7 @@ function getsections()
     var session = $('#session').val();
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass+'/'+session,
+      url: "{{url('/section/getList')}}"+'/'+aclass+'/'+session,
       data: {
         format: 'json'
       },

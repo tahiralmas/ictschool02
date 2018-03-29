@@ -87,7 +87,7 @@ left:0;
     <tr>
     <td class="lefthead">
 
-     <img class="logo" src="./img/logo.png">
+     <img class="logo" src="{{url('/img/logo.png')}}">
     </td>
 
    <td class="righthead">

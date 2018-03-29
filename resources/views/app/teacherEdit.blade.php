@@ -23,7 +23,7 @@
                                   </div>
                   @endif
               @if (isset($teacher))
-              <form role="form" action="/teacher/update" method="post" enctype="multipart/form-data">
+              <form role="form" action="{{url('/teacher/update')}}" method="post" enctype="multipart/form-data">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="id" value="{{ $teacher->id }}">
                   <input type="hidden" name="oldphoto" value="{{ $teacher->photo }}">

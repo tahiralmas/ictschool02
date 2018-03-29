@@ -67,7 +67,7 @@
                                     </div>
                     @endif
                <h2 class="text-info text-center">Student Details</h2>
-                <form role="form" action="/regonline" method="post" enctype="multipart/form-data">
+                <form role="form" action="{{url('/regonline')}}" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                   <div class="row">
                     <div class="col-md-12">

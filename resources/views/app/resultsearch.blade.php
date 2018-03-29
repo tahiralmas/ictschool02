@@ -37,7 +37,7 @@
                         </div>
                     @endif
 
-                    <form role="form" action="/result/search" method="post" enctype="multipart/form-data">
+                    <form role="form" action="{{url('/result/search')}}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="row">
                             <div class="col-md-12">
@@ -124,7 +124,7 @@ function getexam()
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/exam/getList/'+aclass,
+      url: "{{url('/exam/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },

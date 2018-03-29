@@ -29,7 +29,7 @@
                         </ul>
                     </div>
                   @endif
-   <form role="form" action="/mark/create" method="post" enctype="multipart/form-data">
+   <form role="form" action="{{url('/mark/create')}}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                   <div class="row">
                   <div class="col-md-12">
@@ -242,7 +242,7 @@
 </div></div>
 @stop
 @section('script')
-<script src="/js/bootstrap-datepicker.js"></script>
+<script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
 //
     $( document ).ready(function() {
@@ -260,7 +260,7 @@
         $('#class').on('change', function (e) {
             var val = $(e.target).val();
             $.ajax({
-                url:'/class/getsubjects/'+val,
+                url:"{{url('/class/getsubjects')}}"+'/'+val,
                 type:'get',
                 dataType: 'json',
                 success: function( json ) {
@@ -320,7 +320,7 @@ $(".datepicker2").datepicker( {
         $( "#subject" ).change(function() {
          
           $.ajax({
-                url: '/subject/getmarks/'+$('#subject').val()+'/'+$('#class').val(),
+                url: "{{url('/subject/getmarks')}}"+'/'+$('#subject').val()+'/'+$('#class').val(),
                 data: {
                     format: 'json'
                 },
@@ -368,7 +368,7 @@ var aclass = $('#class').val();
     
      var session = $('#session').val().trim();
      $.ajax({
-           url: '/student/getsList/'+aclass+'/'+section+'/'+shift+'/'+session,
+           url: "{{url('/student/getsList')}}"+'/'+aclass+'/'+section+'/'+shift+'/'+session,
            data: {
                format: 'json'
            },
@@ -406,7 +406,7 @@ function getsections()
      }
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass+'/'+session,
+      url: "{{url('/section/getList')}}"+'/'+aclass+'/'+session,
       data: {
         format: 'json'
       },
@@ -439,7 +439,7 @@ function getsections()
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/exam/getList/'+aclass,
+      url: "{{url('/exam/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },

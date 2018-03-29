@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <form role="form" action="/library/issuebook" method="post">
+        <form role="form" action="{{url('/library/issuebook')}}" method="post">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <div class="row">
             <div class="col-md-12">
@@ -250,7 +250,7 @@
           return false;
         }
         $.ajax({
-          url: '/library/issuebook-availabe/'+$('#bookCode').val()+'/'+$('#quantity').val(),
+          url: "{{url('/library/issuebook-availabe')}}"+'/'+$('#bookCode').val()+'/'+$('#quantity').val(),
           data: {
             format: 'json'
           },

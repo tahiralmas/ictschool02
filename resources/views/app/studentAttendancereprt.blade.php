@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-    <link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+    <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 
 @stop
 @section('content')
@@ -89,7 +89,7 @@
     </div>
 @stop
 @section('script')
-    <script src="/js/bootstrap-datepicker.js"></script>
+    <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 
 
     <script type="text/javascript">
@@ -105,7 +105,7 @@
                 if(b_form!="") {
                     var getUrl = window.location;
                     var baseUrl = getUrl .protocol + "//" + getUrl.host;
-                    var url =baseUrl+"/attendance/print_student_report/"+b_form;
+                    var url ="{{url('/attendance/print_student_report')}}"+'/'+b_form;
 
                     var win = window.open(url, '_blank');
                    win.focus();

@@ -9,7 +9,7 @@
             </div>
             <div class="box-content">
               @if (isset($message))
-              <form role="form" action="/message/update" method="post" enctype="multipart/form-data">
+              <form role="form" action="{{url('/message/update')}}" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                    <input type="hidden" name="id" value="{{$message->id }}">
                    <input type="hidden" name="recording" value="{{$message->recording}}">

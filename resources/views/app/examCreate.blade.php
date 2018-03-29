@@ -16,7 +16,7 @@
 
             </div>
             <div class="box-content">
-              <form role="form" action="/exam/create" method="post">
+              <form role="form" action="{{url('/exam/create')}}" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                     <div class="form-group">
@@ -87,7 +87,7 @@ getsections();
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass,
+      url: "{{url('/section/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },

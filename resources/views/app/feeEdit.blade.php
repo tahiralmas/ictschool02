@@ -9,7 +9,7 @@
             </div>
             <div class="box-content">
                   @if (isset($fee))
-              <form role="form" action="/fee/edit" method="post">
+              <form role="form" action="{{url('/fee/edit')}}" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                    <input type="hidden" name="id" value="{{$fee->id }}">
                    <div class="form-group">

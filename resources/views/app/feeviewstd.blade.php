@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-<link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+<link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 <style>
 #billItem thead th {
   color:#3986AC;
@@ -34,7 +34,7 @@
       </div>
       <div class="box-content">
 
-        <form role="form" action="/fees/view" method="post" enctype="multipart/form-data">
+        <form role="form" action="{{url('/fees/view')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <div class="row">
             <div class="col-md-12">
@@ -243,7 +243,7 @@
           </div>
           @stop
           @section('script')
-          <script src="/js/bootstrap-datepicker.js"></script>
+          <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
           <script type="text/javascript">
           var stdRegiNo="{{$student->regiNo}}";
           $( document ).ready(function() {
@@ -283,7 +283,7 @@
               var billId=$(this).text();
               $('.modal-title').html('"'+billId+'" bill details information');
               $.ajax({
-                url: '/fees/details/'+billId,
+                url: "{{url('/fees/details/')}}"+'/'+billId,
                 data: {
                   format: 'json'
                 },
@@ -312,7 +312,7 @@
             var shift = 'Morning';
             var session = $('#session').val().trim();
             $.ajax({
-              url: '/student/getList/'+aclass+'/'+section+'/'+shift+'/'+session,
+              url: "{{url('/student/getList')}}"+'/'+aclass+'/'+section+'/'+shift+'/'+session,
               data: {
                 format: 'json'
               },
@@ -439,7 +439,7 @@
                 var aclass = $('#class').val();
                // alert(aclass);
                 $.ajax({
-                  url: '/section/getList/'+aclass,
+                  url: "{{url('/section/getList')}}"+'/'+aclass,
                   data: {
                     format: 'json'
                   },

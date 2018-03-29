@@ -35,7 +35,7 @@
                         </div>
                     @endif
 
-                        <form role="form" action="/institute" method="post" enctype="multipart/form-data">
+                        <form role="form" action="{{url('/institute')}}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                             <div class="row">

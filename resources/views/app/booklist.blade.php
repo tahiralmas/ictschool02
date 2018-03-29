@@ -30,7 +30,7 @@
         <div class="row">
           <div class="col-md-12">
 
-            <form role="form" action="/library/view-show" method="get" enctype="multipart/form-data">
+            <form role="form" action="{{url('/library/view-show')}}" method="get" enctype="multipart/form-data">
 
               <div class="row">
                 <div class="col-md-12">

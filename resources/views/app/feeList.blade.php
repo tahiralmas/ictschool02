@@ -27,7 +27,7 @@
                 <div class="row">
                     <div class="col-md-12">
 
-                        <form role="form" action="/fees/list" method="post" enctype="multipart/form-data">
+                        <form role="form" action="{{url('/fees/list')}}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="row">
                                 <div class="col-md-12">

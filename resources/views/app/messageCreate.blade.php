@@ -23,7 +23,7 @@
 
                 <div id="myTabContent" class="tab-content">
                     <div class="tab-pane active" id="email">
-                        <form role="form" action="/message" method="post">
+                        <form role="form" action="{{url('/message')}}" method="post">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <input type="hidden" name="type" value="voice">
                                 <br >
@@ -116,7 +116,7 @@
 
 
                     <div class="tab-pane" id="sms">
-                       <form role="form" action="/message" method="post">
+                       <form role="form" action="{{url('/message')}}" method="post">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                  <input type="hidden" name="type" value="sms">
                                 <br >
@@ -240,7 +240,7 @@ function getsections()
     var aclass = $('#classa').val();
     //alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass,
+      url: "{{url('/section/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },
@@ -281,7 +281,7 @@ function getsections1()
     var aclass = $('#class1').val();
     //alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass,
+      url: "{{url('/section/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },

@@ -29,7 +29,7 @@
 
       </div>
       <div class="box-content">
-        <form  action="/smslog" method="post" enctype="multipart/form-data">
+        <form  action="{{url('/smslog')}}" method="post" enctype="multipart/form-data">
 
           <div class="row">
             <div class="col-md-12">

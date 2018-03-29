@@ -4,19 +4,19 @@
     <title>Marks Sheet</title>
 
 
-    <link rel="stylesheet" type="text/css" href="/markssheetcontent/style.css">
-    <link rel="stylesheet" type="text/css" href="/markssheetcontent/result.css">
-    <link rel="stylesheet" type="text/css" href="/markssheetcontent/fonts.css">
-    <link rel="stylesheet" type="text/css" href="/markssheetcontent/stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="{{url('/markssheetcontent/style.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url('/markssheetcontent/result.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url('/markssheetcontent/fonts.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url('/markssheetcontent/stylesheet.css')}}">
     <script type="text/javascript">
         //<![CDATA[
         var Croogo = {"basePath":"\/","params":{"controller":"student_results","action":"index","named":[]}};
         //]]>
     </script>
 
-    <script type="text/javascript" src="/markssheetcontent/jquery-1.8.2.min.js"></script>
-    <script type="text/javascript" src="/markssheetcontent/js.js"></script>
-    <script type="text/javascript" src="/markssheetcontent/admin.js"></script>
+    <script type="text/javascript" src="{{url('/markssheetcontent/jquery-1.8.2.min.js')}}"></script>
+    <script type="text/javascript" src="{{url('/markssheetcontent/js.js')}}"></script>
+    <script type="text/javascript" src="{{url('/markssheetcontent/admin.js')}}"></script>
 
 <style type="text/css">
 .btn-print {
@@ -60,8 +60,8 @@
 <div id="printableArea">
   <div class="wraperResult">
     <div class="resHdr">
-        <img src="/markssheetcontent/res-logo.png" alt="" class="resLogo">            <div class="schoolIdentity">
-            <img src="/markssheetcontent/school-title.png" alt="">                <div class="hdrText">
+        <img src="{{url('/markssheetcontent/res-logo.png')}}" alt="" class="resLogo">            <div class="schoolIdentity">
+            <img src="{{url('/markssheetcontent/school-title.png')}}" alt="">                <div class="hdrText">
                 <span>{{$extra[0]}} EXAMINATION-{{$student->session}}</span>
                 <strong>{{$student->class}} / Equivalent Result Publication {{$student->session}} </strong>
             </div><!-- end of hdrText -->

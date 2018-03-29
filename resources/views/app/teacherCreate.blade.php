@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-<link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+<link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 @stop
 @section('content')
 @if (Session::get('success'))
@@ -36,7 +36,7 @@
 
 
 
-        <form role="form" action="/teacher/create" method="post" enctype="multipart/form-data">
+        <form role="form" action="{{url('/teacher/create')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
         
           <div class="row">
@@ -294,7 +294,7 @@
 });*/
 
 </script>-->
-<script src="/js/bootstrap-datepicker.js"></script>
+<script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
  /*var getStdRegiRollNo = function(){
    var aclass = $('#class').val();

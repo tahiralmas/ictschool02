@@ -29,7 +29,7 @@
                         </div>
                     @endif
                     @if($user)
-                        <form role="form" action="/userupdate" method="post" enctype="multipart/form-data">
+                        <form role="form" action="{{url('/userupdate')}}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="id" value="{{$user->id}}">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="row">

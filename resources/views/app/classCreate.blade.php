@@ -16,7 +16,7 @@
 
             </div>
             <div class="box-content">
-              <form role="form" action="/class/create" method="post">
+              <form role="form" action="{{url('/class/create')}}" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                     <div class="form-group">

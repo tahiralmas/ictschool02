@@ -17,7 +17,7 @@
             </div>
              <div class="box-content">
                 
-                        <form role="form" action="/ictcore/attendance" method="post"  enctype="multipart/form-data">
+                        <form role="form" action="{{url('/ictcore/attendance')}}" method="post"  enctype="multipart/form-data">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <br >
                                 <div class="form-group col-md-12 row">

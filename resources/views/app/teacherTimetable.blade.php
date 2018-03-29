@@ -12,7 +12,7 @@
         </div>
     @endif
     @if($timetable)
-     <form role="form" action="/timetable/update" method="post" enctype="multipart/form-data">
+     <form role="form" action="{{url('/timetable/update')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <input type="hidden" name="tid" value="{{ $timetable->id }}">
         
@@ -301,7 +301,7 @@ function getsections()
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass,
+      url: "{{url('/section/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },
@@ -335,7 +335,7 @@ function getsections1()
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass,
+      url: "{{url('/section/getList/')}}"+'/'+aclass,
       data: {
         format: 'json'
       },
@@ -368,7 +368,7 @@ function getsubjects()
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/subject/getList/'+aclass,
+      url: "{{url('/subject/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },
@@ -403,7 +403,7 @@ function getsubjects1()
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/subject/getList/'+aclass,
+      url: "{{url('/subject/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },

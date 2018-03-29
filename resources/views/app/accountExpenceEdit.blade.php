@@ -23,7 +23,7 @@
                         </div>
                     @endif
                     @if (isset($expence))
-                        <form role="form" action="/accounting/expenceupdate" method="post">
+                        <form role="form" action="{{url('/accounting/expenceupdate')}}" method="post">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" value="{{$expence->id }}">
                             <div class="row">

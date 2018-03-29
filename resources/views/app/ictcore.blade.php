@@ -35,7 +35,7 @@
                         </div>
                     @endif
 
-                        <form role="form" action="/ictcore" method="post">
+                        <form role="form" action="{{url('/ictcore')}}" method="post">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                             <div class="row">

@@ -37,7 +37,7 @@
         <div class="row">
           <div class="col-md-12">
 
-            <form role="form" action="/library/search" method="post" enctype="multipart/form-data">
+            <form role="form" action="{{url('/library/search')}}" method="post" enctype="multipart/form-data">
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
               <span class="text-danger">[*]Fill up any feilds and search </span>
               <div class="row">

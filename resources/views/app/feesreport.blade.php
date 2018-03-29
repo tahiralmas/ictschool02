@@ -89,7 +89,7 @@
     </div>
 @stop
 @section('script')
-    <script src="/js/bootstrap-datepicker.js"></script>
+    <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 
 
     <script type="text/javascript">
@@ -106,7 +106,7 @@
                 if(fdate!="" && tdate !="") {
                     var getUrl = window.location;
                     var baseUrl = getUrl .protocol + "//" + getUrl.host;
-                    var url =baseUrl+"/fees/report/"+fdate+"/"+tdate;
+                    var url ="{{url('/fees/report')}}"+'/'+fdate+"/"+tdate;
 
                     var win = window.open(url, '_blank');
                    win.focus();

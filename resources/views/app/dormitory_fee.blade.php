@@ -29,7 +29,7 @@
                             </ul>
                         </div>
                     @endif
-                    <form role="form" action="/dormitory/fee" method="post" enctype="multipart/form-data">
+                    <form role="form" action="{{url('/dormitory/fee')}}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         <div class="row">
                             <div class="col-md-12">
@@ -144,7 +144,7 @@
             $('#dormitory').on('change', function (e) {
                 var val = $(e.target).val();
                 $.ajax({
-                    url:'/dormitory/getstudents/'+val,
+                    url:"{{url('/dormitory/getstudents')}}"+'/'+val,
                     type:'get',
                     dataType: 'json',
                     success: function( json ) {
@@ -163,7 +163,7 @@
             $('#students').on('change', function (e) {
                 var val = $(e.target).val();
                 $.ajax({
-                    url:'/dormitory/fee/info/'+val,
+                    url:"{{url('/dormitory/fee/info')}}"+'/'+val,
                     type:'get',
                     dataType: 'json',
                     success: function( data ) {

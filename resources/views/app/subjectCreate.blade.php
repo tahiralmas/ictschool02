@@ -31,7 +31,7 @@
                                     </div>
                                   </div>
 
-                            <form role="form" action="/subject/create" method="post">
+                            <form role="form" action="{{url('/subject/create')}}" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="row">
                       <div class="col-md-12">

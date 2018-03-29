@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-    <link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+    <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 
 @stop
 @section('content')
@@ -72,7 +72,7 @@
 </div>
 @stop
 @section('script')
-  <script src="/js/bootstrap-datepicker.js"></script>
+  <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
     <script type="text/javascript">
         $( document ).ready(function() {
           $(".datepicker").datepicker( {

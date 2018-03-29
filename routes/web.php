@@ -55,6 +55,7 @@ Route::get('/section/edit/{id}','sectionController@edit');
 Route::post('/section/update','sectionController@update');
 Route::get('/section/delete/{id}','sectionController@delete');
 Route::get('/section/getList/{class}','sectionController@getsections');
+Route::get('/section/view-timetable/{id}','sectionController@view_timetable');
 
 
 // level routes

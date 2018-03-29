@@ -134,7 +134,7 @@
              var formData = {id:rowid,transactionNo:transNo}; //Array
             $.ajax({ //Process the form using $.ajax()
            type      : 'GET', //Method type
-           url       : '/applicants/payment', //Your form processing file URL
+           url       : "{{url('/applicants/payment')}}", //Your form processing file URL
            data      : formData, //Forms name
            dataType  : 'json',
            success   : function(data) {

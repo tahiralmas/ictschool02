@@ -64,7 +64,7 @@ table td{
     <tr>
     <td class="lefthead">
 
-     <img class="logo" src="./img/logo.png">
+     <img class="logo" src="{{url('/img/logo.png')}}">
     </td>
 
    <td class="righthead">
@@ -142,7 +142,7 @@ table td{
 
     <td class="content">
 
-    <img src="./img/signature.png">
+    <img src="{{url('/img/signature.png')}}">
     </td>
   </tr>
   <tr>

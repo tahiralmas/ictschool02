@@ -87,6 +87,12 @@ $ php artisan migrate
 $ php artisan db:seed
 ```
 ```
+$ php artisan passport:install (for restfull Api)
+```
+```
+$ php artisan storage:link
+```
+```
 $ php artisan serve --port 8080
 ```
 **  http://localhost:8080 **

@@ -27,7 +27,7 @@
                                     </div>
                                   </div>
                 @if(isset($book))
-                            <form role="form" action="/library/update" method="post">
+                            <form role="form" action="{{url('/library/update')}}" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                        <input type="hidden" name="id" value="{{$book->id }}">
                     <div class="row">

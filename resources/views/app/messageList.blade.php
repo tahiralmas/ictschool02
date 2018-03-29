@@ -30,7 +30,7 @@
               <td>{{$message->name}}</td>
               <td>{{$message->description}}</td>
               <td> <audio controls>
-                    <source src="{{'/storage/messages/'.$message->recording}}" type="audio/wav">
+                    <source src="{{url('/storage/messages/'.$message->recording)}}" type="audio/wav">
                      Your browser does not support the audio element.
                 </audio>
               </td>

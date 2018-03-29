@@ -20,7 +20,7 @@
                                     </div>
                     @endif
                     @if (isset($marks))
-                   <form role="form" action="/mark/update" method="post">
+                   <form role="form" action="{{url('/mark/update')}}" method="post">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                    <input type="hidden" name="id" value="{{$marks->id }}">
 		   <input type="hidden" name="subject" value="{{$marks->subject }}">

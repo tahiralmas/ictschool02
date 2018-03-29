@@ -30,7 +30,7 @@
       </div>
       <div class="box-content">
 
-        <form role="form" action="/fee/collection" method="post" enctype="multipart/form-data">
+        <form role="form" action="{{url('/fee/collection')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <div class="row">
             <div class="col-md-12">
@@ -348,7 +348,7 @@
     </div>
     @stop
     @section('script')
-    <script src="/js/bootstrap-datepicker.js"></script>
+    <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
     <script type="text/javascript">
     function btnSaveIsvisibale()
     {
@@ -371,7 +371,7 @@
 
       var session = $('#session').val().trim();
       $.ajax({
-        url: '/student/getList/'+aclass+'/'+section+'/'+shift+'/'+session,
+        url: "{{url('/student/getList')}}"+'/'+aclass+'/'+section+'/'+shift+'/'+session,
         data: {
           format: 'json'
         },
@@ -400,7 +400,7 @@
     // alert(student_reg);
 
      $.ajax({
-          url: '/fee/getdiscountjson/'+student_reg,
+          url: "{{url('/fee/getdiscountjson')}}"+'/'+student_reg,
           data: {
             format: 'json'
           },
@@ -486,7 +486,7 @@
         var aclass = $('#class').val();
         var type =  $('#type').val();
         $.ajax({
-          url: '/fee/getListjson/'+aclass+'/'+type,
+          url: "{{url('/fee/getListjson/')}}"+'/'+aclass+'/'+type,
           data: {
             format: 'json'
           },
@@ -524,7 +524,7 @@
         var id = $('#fee').val();
 
         $.ajax({
-          url: '/fee/getFeeInfo/'+id,
+          url: "{{url('/fee/getFeeInfo')}}"+'/'+id,
           data: {
             format: 'json'
           },
@@ -668,7 +668,7 @@
         var stdId = $('#student').val();
 
         $.ajax({
-          url: '/fee/getDue/'+aclass+'/'+stdId,
+          url: "{{url('/fee/getDue')}}"+'/'+aclass+'/'+stdId,
           data: {
             format: 'json'
           },
@@ -723,7 +723,7 @@ function getsections()
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: '/section/getList/'+aclass,
+      url: "{{url('/section/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },
