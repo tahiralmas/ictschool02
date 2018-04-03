@@ -53,6 +53,7 @@ class feesController extends BaseController {
 			'class' => 'required',
 			'type' => 'required',
 			'fee' => 'required|numeric',
+			'Latefee' => 'required|numeric',
 			'title' => 'required'
 
 		];
@@ -73,6 +74,9 @@ class feesController extends BaseController {
 			$fee->fee = Input::get('fee');
 			$fee->Latefee = Input::get('Latefee');
 			$fee->description = Input::get('description');
+			if(Input::get('description')==''){
+				$fee->description ='';
+			}
 			$fee->save();
 			return Redirect::to('/fees/setup')->with("success","Fee Save Succesfully.");
 

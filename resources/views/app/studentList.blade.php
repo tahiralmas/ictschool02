@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-md-12">
 
-                        <form role="form" action="{{url('//student/list')}}" method="post" enctype="multipart/form-data">
+                        <form role="form" action="{{url('/student/list')}}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="row">
                                 <div class="col-md-12">
@@ -156,29 +156,27 @@
 </div>
 @stop
 @section('script')
-    <script src="{{url('//js/bootstrap-datepicker.js')}}"></script>
+<script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
-    $( document ).ready(function() {
-        $('#studentList').dataTable();
-        $(".datepicker2").datepicker( {
-            format: " yyyy", // Notice the Extra space at the beginning
-            viewMode: "years",
-            minViewMode: "years",
-            autoclose:true
+$( document ).ready(function() {
+  $('#studentList').dataTable();
+  
+  $(".datepicker2").datepicker( {
+    format: " yyyy", // Notice the Extra space at the beginning
+    viewMode: "years",
+    minViewMode: "years",
+    autoclose:true
 
-        });
-      
-   getsections();
+  });
+
+  getsections();
   $('#class').on('change',function() {
     getsections();
   });
   $('#session').on('change',function() {
     getsections();
   });
-    });
-
-
-
+});
 
 function getsections()
 {

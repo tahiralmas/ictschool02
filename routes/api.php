@@ -25,12 +25,12 @@ Route::post('authenticate', 'Api\UserController@login');
 	Route::put('users/{user_id}', 'Api\UserController@put_user');
 	
 // Attendance api routes
-       Route::get('attendances','Api\AttendanceController@getallattendance');
+  Route::get('attendances','Api\AttendanceController@getallattendance');
 	Route::get('attendances/{class_level}/{section}/{shift}/{session}/{date}','Api\AttendanceController@attendance_view');
 	Route::post('attendances','Api\AttendanceController@attendance_create');
 	Route::get('attendances/{attendance_id}','Api\AttendanceController@get_attendance');
 	Route::put('attendances/{attendance_id}','Api\AttendanceController@update_attendance');
-        Route::delete('attendances/{attendance_id}','Api\AttendanceController@deleted');
+  Route::delete('attendances/{attendance_id}','Api\AttendanceController@deleted');
 
    //student
    Route::get('students','Api\StudentController@all_students');

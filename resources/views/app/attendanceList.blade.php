@@ -144,7 +144,7 @@
                                 <button class="btn btn-primary" id="btnPrint"  type="button"><i class="glyphicon glyphicon-print"></i>Print List</button>
                                &nbsp;
                                 <button class="btn btn-primary"  type="submit"><i class="glyphicon glyphicon-th"></i>Get List</button>
-</div>
+                              </div>
                             </div>
                         </div>
                     </form>
@@ -192,7 +192,7 @@
 @stop
 @section('script')
     <script src="{{ URL::asset('/js/bootstrap-datepicker.js')}}"></script>
-    <script type="text/javascript">
+     <script type="text/javascript">
         $( document ).ready(function() {
 
                getsections();
@@ -206,7 +206,7 @@
                 autoclose:true
 
             });
-            $(".datepicker").datepicker( {
+            $(".datepicker").datepicker({
                 autoclose:true,
                 todayHighlight: true
 
@@ -215,18 +215,18 @@
             $('#attendanceList').dataTable();
 
             $( "#btnPrint" ).click(function() {
-                var aclass = $('#class').val();
-                var section =  $('#section').val();
+                var aclass  =   $('#class').val();
+                var section =   $('#section').val();
                 //var shift = $('#shift').val();
-                var shift = 'Morning';
+                var shift   = 'Morning';
                 var session = $('#session').val().trim();
                 var subject = $('#subject').val();
-                var atedate =$('#date').val().trim();
+                var atedate = $('#date').val().trim();
 
                 if(aclass!="" && section !="" && shift !="" && session !="" && atedate!="")
                 {
 
-                   var exurl='/attendance/printlist/'+aclass+'/'+section+'/'+shift+'/'+session+'/'+atedate;
+                   var exurl="{{url('/attendance/printlist')}}"+'/'+aclass+'/'+section+'/'+shift+'/'+session+'/'+atedate;
 
                     var win = window.open(exurl, '_blank');
                     win.focus();

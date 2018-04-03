@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-    <link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+    <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 @stop
 @section('content')
 
