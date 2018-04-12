@@ -34,7 +34,7 @@ class TeacherController extends Controller
 	 */
 	public function all_teachers()
 	{
-	  $teachers = DB::table('teacher')->select('id','firstName','lastName','gender','dob','email','phone','fatherName','fatherCellNo','presentAddress')->get();
+	  $teachers = DB::table('teacher')->select('id','firstName','lastName','gender','dob','email','phone','fatherName','fatherCellNo','presentAddress')->paginate(20);
 	  
 	  if(count($teachers)<1)
 	  {

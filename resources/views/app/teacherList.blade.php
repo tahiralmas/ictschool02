@@ -136,6 +136,8 @@
                                                                   <td>{{$teacher->presentAddress}}</td>
                                                        <td>
                                                   <a title='View' class='btn btn-success' href='{{url("/teacher/view")}}/{{$teacher->id}}'> <i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp&nbsp<a title='Edit' class='btn btn-info' href='{{url("/teacher/edit")}}/{{$teacher->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/teacher/delete")}}/{{$teacher->id}}' onclick="return confirm('Are you sure you want to delete this Teacher?');"> <i class="glyphicon glyphicon-trash icon-white"></i></a>&nbsp&nbsp<a title='view timetable' class='btn btn-success' href='{{url("/teacher/view-timetable")}}/{{$teacher->id}}'> <i class="glyphicon glyphicon-eye-open icon-white"></i></a>
+                                                  &nbsp&nbsp <a title='Mobile Access' class='btn btn-success' href='{{url("/teacher/access")}}/{{$teacher->id}}'> <i class="glyphicon glyphicon-phone"></i></a>
+
                                                                </td>
                                                            @endforeach
                                                            </tbody>

@@ -51,7 +51,7 @@ class sectionController extends Controller
 
             });
 
-           $section = $section->get();
+           $section = $section->paginate(20);
 	  if(count($section)<1)
 	  {
 	     return response()->json(['error'=>'No Section Found!'], 404);

@@ -57,7 +57,7 @@ class ResultController extends Controller
 			$marks->when(request('subject', false), function ($q, $subject) { 
 			return $q->where('Marks.subject',$subject);
 			});
-			$marks=$marks->get();
+			$marks=$marks->paginate(20);
 			if(count($marks)<1)
 			{
 				return response()->json(['error'=>'No result Found!'], 404);

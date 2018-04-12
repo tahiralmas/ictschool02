@@ -88,7 +88,7 @@ class AttendanceController extends Controller
 					->where('Student.session','=',trim(Input::get('session')))
 					->where('Student.isActive', '=', 'Yes')
 					->where('Attendance.date', '=', $date)*/
-					$attendance=$attendance->get();
+					$attendance=$attendance->paginate(20);
 				if($attendance->isEmpty()) {
 				  return response()->json(['error'=>'Attendance Not Found'], 404);
 				}else{

@@ -211,7 +211,7 @@ class studentController extends BaseController {
 			if( Input::file('photo')!=''){
              Input::file('photo')->move(base_path() .'/public/images',$fileName);
          	}
-                 $user = new User;
+               /*  $user = new User;
 
                 $user->firstname = Input::get('fname');
                 $user->lastname  = Input::get('lname');
@@ -266,7 +266,7 @@ class studentController extends BaseController {
 								//$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
 
              
-            }
+            }*/
 
 
 
@@ -676,6 +676,75 @@ public function csvexample(){
 
  return response()->download(storage_path('app/public/' . 'student.csv'));
 
+}
+
+public function access($id)
+{
+   $student= Student::find($id);
+   if(!empty($student) && count($student)>0){
+   	$chk_studnet  = User::where('login',$student->firstName.$student->lastName)->where('group_id',$student->id)->first();
+      if(count($chk_studnet)>0){
+      	   return Redirect::to('/student/list')->with("error","Already have Accessed .");
+
+      }
+        $user = new User;
+        $user->firstname = $student->firstName;
+        $user->lastname  = $student->lastName;
+        $user->email     =     $student->regiNo;
+      	$user->login     = $student->firstName.$student->lastName;
+      	$user->group     =  'Student';
+      	$user->group_id  = $student->id ;
+      	$user->access    = 1 ;
+        $user->password  =	Hash::make($student->regiNo);
+        $user->save();
+
+            $ictcore_integration = Ictcore_integration::select("*")->first();
+                 
+			if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url !='' && $ictcore_integration->ictcore_user !='' && $ictcore_integration->ictcore_password !=''){ 
+
+				 $ict  = new ictcoreController();
+				 	$data = array(
+					'first_name' => $student->firstName,
+					'last_name' => $student->lastName,
+					'phone'     => $student->fatherCellNo,
+					'email'     => '',
+					);
+					$contact_id = $ict->ictcore_api('contacts','POST',$data );
+
+                   $message = 'School name'.'<br>'.'Login Name: '.  $student->firstName.$student->lastName.' Password: '.$student->regiNo;
+                    $data = array(
+					'name' => 'School Name',
+					'data' => $message,
+					'type'     => 'plain',
+					'description'     => 'testing message',
+					);
+
+                  $text_id = $ict->ictcore_api('messages/texts','POST',$data );
+
+                  $data = array(
+					'name' => 'School Name',
+					'text_id' => $text_id
+					);
+
+                    $program_id = $ict->ictcore_api('programs/sendsms','POST',$data );
+
+					$data = array(
+					'title' => 'User Detail',
+					'program_id' => $program_id,
+					'account_id'     => 1,
+					'contact_id'     => $contact_id,
+					'origin'     => 1,
+					'direction'     => 'outbound',
+					);
+					$transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+					
+             
+            }
+
+   	   return Redirect::to('/student/list')->with("success","Teacher Moblie Access Created.");
+
+   }
+   return Redirect::to('/student/list')->with("error","Teacher not found.");
 }
 
 }

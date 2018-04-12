@@ -6,7 +6,8 @@ use App\ClassModel;
 use App\Subject;
 use DB;
 class classController extends BaseController {
-	public function __construct() {
+	public function __construct() 
+	{
 		/*$this->beforeFilter('csrf', array('on'=>'post'));
 		$this->beforeFilter('auth');
 		$this->beforeFilter('userAccess',array('only'=> array('delete')));*/
@@ -51,7 +52,7 @@ class classController extends BaseController {
 			$cexists=ClassModel::select('*')->where('code','=',$clcode)->get();
 			if(count($cexists)>0){
 
-				$errorMessages = new Illuminate\Support\MessageBag;
+				$errorMessages = new \Illuminate\Support\MessageBag;
 				$errorMessages->add('deplicate', 'Class all ready exists!!');
 				return Redirect::to('/class/create')->withErrors($errorMessages);
 			}
@@ -63,9 +64,7 @@ class classController extends BaseController {
 				$class->save();
 				return Redirect::to('/class/create')->with("success", "Class Created Succesfully.");
 			}
-
 		}
-
 	}
 
 
@@ -124,7 +123,6 @@ class classController extends BaseController {
 			$class->description=Input::get('description');
 			$class->save();
 			return Redirect::to('/class/list')->with("success","Class Updated Succesfully.");
-
 		}
 	}
 
@@ -147,5 +145,4 @@ class classController extends BaseController {
 		$subjects = Subject::select('name','code')->where('class',$class)->orderby('code','asc')->get();
 		return $subjects;
 	}
-
 }

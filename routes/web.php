@@ -86,6 +86,7 @@ Route::post('/student/create','studentController@create');
 Route::get('/student/list','studentController@show');
 Route::post('/student/list','studentController@getList');
 Route::get('/student/view/{id}','studentController@view');
+Route::get('/student/access/{id}','studentController@access');
 
 Route::get('/student/edit/{id}','studentController@edit');
 Route::post('/student/update','studentController@update');
@@ -120,6 +121,7 @@ Route::get('/teacher/getList/{class}/{section}/{shift}/{session}','teacherContro
 Route::group(['middleware' => 'admin'], function(){ 
 Route::get('/teacher/create-file','teacherController@index_file');
 Route::post('/teacher/create-file','teacherController@create_file');
+Route::get('/teacher/access/{id}','teacherController@access');
 
 Route::get('/teacher/create-timetable','teacherController@index_timetable');
 Route::post('/teacher/create_timetable','teacherController@create_timetable');

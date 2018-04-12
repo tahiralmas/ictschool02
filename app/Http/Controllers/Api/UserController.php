@@ -42,11 +42,16 @@ class UserController extends Controller
  */
     public function login()
     {
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')]))
+        if(Auth::attempt(['email' => request('email'), 'password' => request('password')]) ||Auth::attempt(['login' => request('username'), 'password' => request('password')]))
         {
 
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')->accessToken;
+            if($user->role_id==3){
+             $success['client_id'] =  $user->client_professional_id;
+           }elseif($user->role_id==2){
+             $success['professional_id'] =  $user->client_professional_id;
+           }
             return response()->json(['success' => $success], $this->successStatus);
         }
         else
@@ -96,13 +101,63 @@ class UserController extends Controller
 			return $q->where('group', $group);
 			});
         
-        $user=$user->get();
+        $user=$user->paginate(20);
         if(count($user)>0){
        	 return response()->json($user, $this->successStatus);
         }else{
 
            return response()->json(['error'=>'Student not found'], 404);
         }   
+    }
+    public function create_user()
+    {
+        $rules=[
+        'firstname' => 'required',
+        'fatherphone'=>'required',
+        'username'=>'required',
+        'password'=>  'required',
+        'regiNo'=>  'required|unique:users',
+        ];
+        $validator = \Validator::make(Input::all(), $rules);
+        if ($validator->fails())
+        {
+            return response()->json( $validator->errors(), 422);
+        }else {
+
+            $student= Student::where('regiNo',Input::get('regiNo'))->first();
+            if(!empty($student) && $student->regiNo!=''){
+                /* $chk_studnet  = User::where('regiNo',Input::get('regiNo'))->first();
+                if(!empty($chk_studnet)){
+                return response()->json(['error'=>422,'message'=>'Already Register'], 422);
+
+                }*/
+                //$user = User::select('id','firstname','lastname','phone','desc','login','group')->where('id',$user_id)->first();
+                $user = new User;
+                $user->firstname = Input::get('firstname');
+                $user->lastname = Input::get('lastname');
+                if(Input::get('lastname')==''){
+                    $user->lastname ='';
+                }
+                $user->login = Input::get('username');
+                $user->phone = Input::get('fatherphone');
+                $user->email = Input::get('email');
+                If(Input::get('email')==''){
+                 $user->email = NULL;
+
+                }
+                $user->password = Hash::make(Input::get('password'));
+                $user->group = "Student";
+                $user->group_id = $student->id;
+                $user->regiNo =Input::get('regiNo');
+                $user->access =1;
+                $user->save();
+                return response()->json($student->id,$this->successStatus);
+
+            }else{
+            return response()->json(['error'=>404,'message'=>'Student Not Found with This Registration n0'], 404);
+
+            }
+        }
     }
     public function put_user($user_id)
     {
@@ -112,7 +167,7 @@ class UserController extends Controller
 		'lastname' => 'required',
 		'phone'=>'required',
 		'login'=>'required',
-		'password'=>  'required',
+		//'password'=>  'required',
 		'group'   => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
@@ -128,7 +183,9 @@ class UserController extends Controller
           $user->login = Input::get('login');
         //  $user->email = Input::get('email');
           $user->phone = Input::get('phone');
+        if(Input::get('password')!=''){
           $user->password = Hash::make(Input::get('password'));
+        }
           $user->group = Input::get('group');
           $user->save();
           return response()->json($user,$this->successStatus);
