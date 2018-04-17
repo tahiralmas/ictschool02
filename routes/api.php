@@ -32,6 +32,11 @@ Route::post('users', 'Api\UserController@create_user');
 	Route::get('attendances/{attendance_id}','Api\AttendanceController@get_attendance');
 	Route::put('attendances/{attendance_id}','Api\AttendanceController@update_attendance');
   Route::delete('attendances/{attendance_id}','Api\AttendanceController@deleted');
+  Route::get('classes/{class_id}/attendances','Api\AttendanceController@get_attendance_classes');
+  Route::get('classes/{class_id}/attendances/history','Api\AttendanceController@classaten_history');
+  Route::get('sections/{section_id}/attendances','Api\AttendanceController@get_attendance_section');
+  Route::get('sections/{section_id}/attendances/history','Api\AttendanceController@sectionaten_history');
+  Route::get('students/{student_id}/attendances','Api\AttendanceController@get_attendance_student');
 
    //student
    Route::get('students','Api\StudentController@all_students');

@@ -114,7 +114,7 @@ class UserController extends Controller
         $rules=[
         'firstname' => 'required',
         'fatherphone'=>'required',
-        'username'=>'required',
+        'username'=>'required|unique:users,login',
         'password'=>  'required',
         'regiNo'=>  'required|unique:users',
         ];

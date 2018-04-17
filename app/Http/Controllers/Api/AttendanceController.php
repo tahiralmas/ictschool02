@@ -305,6 +305,165 @@ class AttendanceController extends Controller
 				   return response()->json($std_atd,200);
 				}
 			}
+//where('date',Carbon::today())
+           	public function get_attendance_classes($class_id){
+				   $classc = DB::table('Class')->select('*')->where('id','=',$class_id)->first();
+				   $attendance = DB::table('Student')
+				   ->join('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
+				   ->select( 'Attendance.id','Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.date')
+                   ->where('Student.class',  $classc->code);
+               
+					 /*$attendance->when(request('regiNo', false), function ($q, $regiNo) { 
+						return $q->where('Student.regiNo', $regiNo);
+					  });
+					   $attendance->when(request('class', false), function ($q, $class) { 
+						 $classc = DB::table('Class')->select('*')->where('id','=',$class)->first();
+						return $q->where('Student.class',  $classc->code);
+					  });*/
+					   $attendance->when(request('date', false), function ($q, $date) { 
+
+						return $q->where('Attendance.date',  $date);
+					  });
+
+					   $attendance->when(request('session', false), function ($q, $session) { 
+
+						return $q->where('Attendance.session',  $session);
+					  });
+
+					   $attendance->when(request('section', false), function ($q, $section) { 
+						return $q->where('Student.section', $section);
+					  });
+
+					   $attendance->when(request('name', false), function ($q, $name) { 
+						return $q->where('Student.firstName', 'like', '%' .$name.'%');
+					  });
+					/*->where('Student.class','=',Input::get('class'))
+					->where('Student.section','=',Input::get('section'))
+					->Where('Student.shift','=','Morning')
+					->where('Student.session','=',trim(Input::get('session')))
+					->where('Student.isActive', '=', 'Yes')
+					->where('Attendance.date', '=', $date)*/
+					$attendance=$attendance->get();
+				if($attendance->isEmpty()) {
+				  return response()->json(['error'=>'Attendance Not Found'], 404);
+				}else{
+					 return response()->json($attendance,200);
+			 	}
+			}
+
+			public function classaten_history($class_id)
+			{
+                   $classc = DB::table('Class')->select('*')->where('id','=',$class_id)->first();
+				   $attendances_a = DB::table('Attendance')->select(DB::raw('count(id) as absent'))->where('session',2018)->where('class_id',$class_id)->where('status','Absent')/*->where('date',Carbon::today())*/->first();
+				   $attendances_p = DB::table('Attendance')->select(DB::raw('count(id) as present'))->where('session',2018)->where('class_id',$class_id)->where('status','Present')/*->where('date',Carbon::today())*/->first();
+			       $data = array('Absent'=>$attendances_a->absent,'Present'=>$attendances_p->present);
+			       return response()->json($data,200);
+			} 
+
+			public function get_attendance_section($section_id)
+			{
+				  // $classc = DB::table('Class')->select('*')->where('id','=',$class_id)->first();
+				 $attendance = DB::table('Student')
+				->join('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
+				->select( 'Attendance.id','Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.date')
+                ->where('Student.section',  $section_id);
+                //->get();
+					 /*$attendance->when(request('regiNo', false), function ($q, $regiNo) { 
+						return $q->where('Student.regiNo', $regiNo);
+					  });
+					   $attendance->when(request('class', false), function ($q, $class) { 
+						 $classc = DB::table('Class')->select('*')->where('id','=',$class)->first();
+						return $q->where('Student.class',  $classc->code);
+					  });*/
+					   $attendance->when(request('date', false), function ($q, $date) { 
+
+						return $q->where('Attendance.date',  $date);
+					  });
+
+					   $attendance->when(request('session', false), function ($q, $session) { 
+
+						return $q->where('Attendance.session',  $session);
+					  });
+
+					   $attendance->when(request('section', false), function ($q, $section) { 
+						return $q->where('Student.section', $section);
+					  });
+
+					  /* $attendance->when(request('name', false), function ($q, $name) { 
+						return $q->where('Student.firstName', 'like', '%' .$name.'%');
+					  });*/
+					/*->where('Student.class','=',Input::get('class'))
+					->where('Student.section','=',Input::get('section'))
+					->Where('Student.shift','=','Morning')
+					->where('Student.session','=',trim(Input::get('session')))
+					->where('Student.isActive', '=', 'Yes')
+					->where('Attendance.date', '=', $date)*/
+					$attendance=$attendance->get();
+				if($attendance->isEmpty()) {
+				  return response()->json(['error'=>'Attendance Not Found'], 404);
+				}else{
+					 return response()->json($attendance,200);
+			 	}
+			}
+
+		    public function sectionaten_history($section_id)
+			{
+                   //$classc = DB::table('Class')->select('*')->where('id','=',$class_id)->first();
+				   $attendances_a = DB::table('Attendance')->select(DB::raw('count(id) as absent'))->where('session',2018)->where('section_id',$section_id)->where('status','Absent')/*->where('date',Carbon::today())*/->first();
+				   $attendances_p = DB::table('Attendance')->select(DB::raw('count(id) as present'))->where('session',2018)->where('section_id',$section_id)->where('status','Present')/*->where('date',Carbon::today())*/->first();
+			       $data = array('Absent'=>$attendances_a->absent,'Present'=>$attendances_p->present);
+			       return response()->json($data,200);
+			} 
+
+			public function get_attendance_student($student_id){
+				  // $classc = DB::table('Class')->select('*')->where('id','=',$class_id)->first();
+				 $attendance = DB::table('Student')
+				->join('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
+				->select( 'Attendance.id','Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.date')
+                ->where('Student.id',  $student_id)
+                ->get();
+					 /*$attendance->when(request('regiNo', false), function ($q, $regiNo) { 
+						return $q->where('Student.regiNo', $regiNo);
+					  });
+					   $attendance->when(request('class', false), function ($q, $class) { 
+						 $classc = DB::table('Class')->select('*')->where('id','=',$class)->first();
+						return $q->where('Student.class',  $classc->code);
+					  });
+					   $attendance->when(request('date', false), function ($q, $date) { 
+
+						return $q->where('Attendance.date',  $date);
+					  });
+
+					   $attendance->when(request('session', false), function ($q, $session) { 
+
+						return $q->where('Attendance.session',  $session);
+					  });
+
+					   $attendance->when(request('section', false), function ($q, $section) { 
+						return $q->where('Student.section', $section);
+					  });
+
+					   $attendance->when(request('name', false), function ($q, $name) { 
+						return $q->where('Student.firstName', 'like', '%' .$name.'%');
+					  });
+					/*->where('Student.class','=',Input::get('class'))
+					->where('Student.section','=',Input::get('section'))
+					->Where('Student.shift','=','Morning')
+					->where('Student.session','=',trim(Input::get('session')))
+					->where('Student.isActive', '=', 'Yes')
+					->where('Attendance.date', '=', $date)*/
+					//$attendance=$attendance->paginate(20);
+				if($attendance->isEmpty()) {
+				  return response()->json(['error'=>'Attendance Not Found'], 404);
+				}else{
+					 return response()->json($attendance,200);
+			 	}
+			}
+
+
+
+
+
 			public function update_attendance($attendance_id){
 
 				$rules = [
