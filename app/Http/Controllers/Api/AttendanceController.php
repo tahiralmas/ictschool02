@@ -357,7 +357,11 @@ class AttendanceController extends Controller
 				   $attendances_a = DB::table('Attendance')->select(DB::raw('count(id) as absent'))->where('session',2018)->where('class_id',$class_id)->where('status','Absent')/*->where('date',Carbon::today())*/->first();
 				   $attendances_p = DB::table('Attendance')->select(DB::raw('count(id) as present'))->where('session',2018)->where('class_id',$class_id)->where('status','Present')/*->where('date',Carbon::today())*/->first();
 			       $data = array('Absent'=>$attendances_a->absent,'Present'=>$attendances_p->present);
-			       return response()->json($data,200);
+			      if(empty($data)) {
+				  return response()->json(['error'=>'Attendance Not Found'], 404);
+				}else{
+					 return response()->json($data,200);
+			 	}
 			} 
 
 			public function get_attendance_section($section_id)
@@ -412,7 +416,12 @@ class AttendanceController extends Controller
 				   $attendances_a = DB::table('Attendance')->select(DB::raw('count(id) as absent'))->where('session',2018)->where('section_id',$section_id)->where('status','Absent')/*->where('date',Carbon::today())*/->first();
 				   $attendances_p = DB::table('Attendance')->select(DB::raw('count(id) as present'))->where('session',2018)->where('section_id',$section_id)->where('status','Present')/*->where('date',Carbon::today())*/->first();
 			       $data = array('Absent'=>$attendances_a->absent,'Present'=>$attendances_p->present);
-			       return response()->json($data,200);
+			       //return response()->json($data,200);
+			    if(empty($data)) {
+				  return response()->json(['error'=>'Attendance Not Found'], 404);
+				}else{
+					 return response()->json($data,200);
+			 	}
 			} 
 
 			public function get_attendance_student($student_id){

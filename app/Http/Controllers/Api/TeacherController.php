@@ -133,7 +133,7 @@ class TeacherController extends Controller
 		$teacher = DB::table('timetable')
 		->join('Class', 'timetable.class_id', '=', 'Class.code')
 		->join('section', 'timetable.section_id', '=', 'section.id')
-		->select('Class.name as class', 'section.name as section')
+		->select('Class.id as class_id','Class.name as class', 'section.id as section_id','section.name as section')
 		->where('timetable.teacher_id',$teacher_id)->groupby('timetable.class_id')->get();
 
 		if(!is_null($teacher) && count($teacher)>0){
