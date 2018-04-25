@@ -101,7 +101,7 @@ class StudentController extends Controller
 	{
 		  $students = DB::table('Student')
 		  ->join('Class', 'Student.class', '=', 'Class.code')
-		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo','Student.b_form as Bform', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
 		  'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion')
 		  ->where('class',$class_level)
 		  ->where('section',$section)
@@ -121,7 +121,7 @@ class StudentController extends Controller
          //$student = Student::find($student_id);
     	  $student = DB::table('Student')
     	 ->join('Class', 'Student.class', '=', 'Class.code')
-		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo','Student.b_form as Bform', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
 		  'Class.Name as class','Student.section' ,'Student.group','Student.session','Student.presentAddress','Student.dob','Student.gender', 'Student.religion')
 		    ->where('Student.id',$student_id)->first();
 
