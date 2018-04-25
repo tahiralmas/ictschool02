@@ -47,7 +47,7 @@ class StudentController extends Controller
 		
 		 $students = DB::table('Student')
 		  ->join('Class', 'Student.class', '=', 'Class.code')
-		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo','Student.b_form as Bform', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
 		  'Class.Name as class','Student.section' ,'Student.group' ,'Student.presentAddress', 'Student.gender', 'Student.religion');
 
 		  $students->when(request('regiNo', false), function ($q, $regiNo) { 
@@ -72,6 +72,11 @@ class StudentController extends Controller
           $students->when(request('name', false), function ($q, $name) { 
             return $q->where('Student.firstName', 'like', '%' .$name.'%');
           });
+
+           $students->when(request('cnic', false), function ($q, $cnic) { 
+            return $q->where('Student.b_form',$cnic);
+          });
+
          // ('name', 'like', '%' . Input::get('name') . '%')
           $students = $students->get();
 		
