@@ -143,7 +143,7 @@
         </div>
       </form>
       @else
-          <form role="form" action="/teacher/create_timetable" method="post" enctype="multipart/form-data">
+          <form role="form" action="{{url('/teacher/create_timetable')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
         
           <div class="row">

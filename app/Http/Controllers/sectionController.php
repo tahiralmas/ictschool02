@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\SectionModel;
 use DB;
+//
 class sectionController extends BaseController {
 
 	public function __construct() {
@@ -24,7 +25,9 @@ class sectionController extends BaseController {
 		$class = DB::table('Class')
 		->select(DB::raw('name,code'))
 		->get();
-		return View('app.sectionCreate',compact('class'));
+		$teachers = DB::table('teacher')
+	->select('id','firstName','lastName')->get();
+		return View('app.sectionCreate',compact('class','teachers'));
 		//echo "this is section controller";
 	}
 	/**
@@ -37,6 +40,7 @@ class sectionController extends BaseController {
 		$rules=[
 			'name' => 'required',
 			'class'=> 'required',
+			//'teacher_id'=>
 			'description' => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);

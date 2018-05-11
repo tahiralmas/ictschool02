@@ -74,6 +74,7 @@ Route::post('users', 'Api\UserController@create_user');
    Route::put('teachers/{teacher_id}','Api\TeacherController@update_teacher');
    Route::get('teachers/{teacher_id}/sections','Api\TeacherController@getsectionteacher');
    Route::get('teachers/{teacher_id}/subjects','Api\TeacherController@getsubjectteacher');
+   Route::get('teachers/{teacher_id}/attendances','Api\TeacherController@getteacherdata');
    
 
 //exam

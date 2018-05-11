@@ -42,6 +42,24 @@
                           </select>
                       </div>
                   </div>
+                  
+                    <div class="form-group">
+                    <!--  <label for="name">Numeric Value of Class[One=1,Six=6,Ten=10 etc]</label>-->
+                      <label for="name">Teachers</label>
+                      <div class="input-group">
+                          <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                          <!--<input type="number" min="1" max="10" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">-->
+                          
+                          <select class="form-control"  name="class" required >
+                          <option value="">---Select Class---</option>
+                           @foreach($teachers as $teacher)
+                             <option value="{{$teacher->id }}">{{ $teacher->firstName}} {{$teacher->lastName}}</option>
+                             @endforeach
+                          </select>
+                      </div>
+                  </div>
+
+
                     <div class="form-group">
                         <label for="name">Description</label>
                         <div class="input-group">
