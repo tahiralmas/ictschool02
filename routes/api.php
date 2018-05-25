@@ -37,6 +37,7 @@ Route::post('users', 'Api\UserController@create_user');
   Route::get('sections/{section_id}/attendances','Api\AttendanceController@get_attendance_section');
   Route::get('sections/{section_id}/attendances/history','Api\AttendanceController@sectionaten_history');
   Route::get('students/{student_id}/attendances','Api\AttendanceController@get_attendance_student');
+  Route::get('sections/{section_id}/attendances_today','Api\AttendanceController@get_attendance_section_today');
 
    //student
    Route::get('students','Api\StudentController@all_students');

@@ -167,37 +167,40 @@ class TeacherController extends Controller
 		->select('Class.id as class_id','Class.name as class', 'section.id as section_id','section.name as section')
 		->where('timetable.teacher_id',$teacher_id)->groupby('timetable.section_id')->get();		
 		$sections  = array();
+		$attendances_b  = array();
+		 if($teachers->count()>0){
+		 	$i=0;
 		foreach($teachers as $teacher ){
           $sections[] = $teacher->section_id;
-
-          $attendances_a[] = DB::table('Attendance')
+         
+          $attendances_a = DB::table('Attendance')
              ->join('Class', 'Attendance.class_id', '=', 'Class.id')
 		     ->join('section', 'Attendance.section_id', '=', 'section.id')
              ->select(DB::raw('COUNT(*) as total_attendance,
                            SUM(Attendance.status="Absent") as absent,
-                           SUM(Attendance.status="Present") as present' ),'section.id as section_id','section.name as section','Class.id as class_id','Class.name as class')->where('Attendance.session',2018)->where('Attendance.section_id',$teacher->section_id)/*->where('date',Carbon::today())*/->first();
-		    /*$attendances_p[] = DB::table('Attendance')
-            ->join('Class', 'Attendance.class_id', '=', 'Class.id')
-		     ->join('section', 'Attendance.section_id', '=', 'section.id')
-		    ->select(DB::raw('count(Attendance.id) as present'),'section.id as section_id','section.name as section','Class.id as class_id','Class.name as class')->where('Attendance.session',2018)->where('Attendance.section_id',$teacher->section_id)->where('Attendance.status','Present')/*->where('date',Carbon::today())*///->first();
+                           SUM(Attendance.status="Present") as present ,
+                           SUM(Attendance.status="sick_leave") as sick_leave,SUM(Attendance.status="leave") as leaved'),'section.id as section_id','section.name as section','Class.id as class_id','Class.name as class')->where('Attendance.session',2018)->where('Attendance.section_id',$teacher->section_id)->where('date',Carbon::today()->toDateString())->first();
+           //$tst[] = $attendances_a[$i]->total_attendance;
+           if($attendances_a->total_attendance==0){
+           	 $attendances_b[] = array('total_attendance'=>0,'absent'=>0,'present'=>0,'sick_leave'=>0,'leaved'=>0,'section_id'=>$teacher->section_id,'section'=>$teacher->section,'class_id'=>$teacher->class_id,'class'=>$teacher->class);
+           }else{
+           	$attendances_b[] = $attendances_a;
+           }
+           $i++;
 		}
-	$merage = $attendances_a;
-		/*
-            $attendances_a = DB::table('Attendance')
-             ->join('Class', 'Attendance.class_id', '=', 'Class.id')
-		     ->join('section', 'Attendance.section_id', '=', 'section.id')
-             ->select('section.id as section_id','section.name as section','Class.id as class_id','Class.name as class')->where('Attendance.session',2018)->whereIn('Attendance.section_id',$sections)->where('Attendance.status','Absent')/*->where('date',Carbon::today())*///->get();
-		   /* $attendances_p = DB::table('Attendance')
-            ->join('Class', 'Attendance.class_id', '=', 'Class.id')
-		     ->join('section', 'Attendance.section_id', '=', 'section.id')
-		    ->select(DB::raw('count(Attendance.id) as present'),'section.id as section_id','section.name as section','Class.id as class_id','Class.name as class')->where('Attendance.session',2018)->whereIn('Attendance.section_id',$sections)->where('Attendance.status','Present')/*->where('date',Carbon::today())*///->get();
-			      //echo "<pre>";print_r($attendances_a);
-	       //$data = array('Absent'=>$attendances_a,'Present'=>$attendances_p);
-			if(!is_null($merage)){
+		//$mrge = array_merge($attendances_b,$attendances_d);
+		return response()->json($attendances_b);
+	      $merage = $attendances_a;
+		
+			if(!empty($merage)){
 				return response()->json($merage,200);
 			}else{
 				return response()->json(['error'=>'teacher Not Found'], 404);
 			}
+		}else{
+			 return response()->json(['error'=>'teacher Not Found'], 404);
+
+		}
 	}     
 }
 

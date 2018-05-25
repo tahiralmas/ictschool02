@@ -109,7 +109,7 @@ class sectionController extends Controller
 
         $section = SectionModel::find($section_id);
          $subject = DB::table('Subject')->select('code','name','type','class','stdgroup')->where('class',$section->class_code)->get();
-
+//
          /*->join('Class', 'Student.class', '=', 'Class.code')
           ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
           'Class.Name as class','Student.section' ,'Student.presentAddress', 'Student.gender', 'Student.religion')

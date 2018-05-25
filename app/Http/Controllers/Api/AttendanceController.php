@@ -209,7 +209,7 @@ class AttendanceController extends Controller
 
 					}
 
-				}else if($status =='Present' || $status =='preaent'){
+				}else if($status =='Present' || $status =='preaent' || $status =='Leave' || $status =='leave'){
 					//}
 					
 					$atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$students)->first();
@@ -408,6 +408,25 @@ class AttendanceController extends Controller
 				}else{
 					 return response()->json($attendance,200);
 			 	}
+			}
+
+
+			public function get_attendance_section_today($section_id)
+			{
+
+				$attendance = DB::table('Student')
+				->select(DB::raw("Student.id as student_id ,Student.regiNo, Student.rollNo, Student.firstName, Student.middleName, Student.lastName,Student.class,Attendance.status,Attendance.date,Class.id as class_id" ))
+				->join('Class','Student.class','=', 'Class.code')
+				->leftJoin('Attendance',function ($join) {
+					$join->on('Attendance.regiNo', '=' , 'Student.regiNo') ;
+					$join->where('Attendance.date','=',Carbon::today()->toDateString()) ;
+				})->where('Student.section',  $section_id)->where('Student.session',2018)->get();
+				
+				if($attendance->isEmpty()) {
+					return response()->json(['error'=>'Attendance Not Found'], 404);
+				}else{
+					return response()->json($attendance,200);
+				}
 			}
 
 		    public function sectionaten_history($section_id)

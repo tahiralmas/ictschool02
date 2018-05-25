@@ -22,6 +22,9 @@ Teachers
 * GET teachers/{teacher_id}/sections
 * ~~GET teachers/{teacher_id}/students~~
 * GET teachers/{teacher_id}/subjects
+* __GET teachers/{teacher_id}/attendances__
+
+
 
 Classes
 -------
@@ -33,6 +36,8 @@ Classes
 * ~~GET classes/{class_id}/teachers~~
 * ~~GET classes/{class_id}/exams~~
 * POST classes/{class_id}/notifications
+* __GET classes/{class_id}/attendances__
+* __GET classes/{class_id}/attendances/history__
 
 Sections
 --------
@@ -44,6 +49,8 @@ Sections
 * GET sections/{section_id}/teachers ; i.e associated teachers
 * ~~GET sections/{section_id}/exams~~
 * POST sections/{section_id}/notifications
+* __GET sections/{section_id}/attendances__
+* __GET sections/{section_id}/attendances/history__
 
 Students
 --------
@@ -53,6 +60,7 @@ Students
 * ~~GET students/{student_id}/subjects~~
 * ~~GET students/{student_id}/exams~~
 * ~~GET students/{student_id}/teachers~~
+* __GET students/{student_id}/attendances__
 * POST students/{student_id}/notifications
 
 Subjects
