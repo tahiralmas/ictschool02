@@ -166,23 +166,23 @@ class AttendanceController extends Controller
 
 								if($ictcore_attendance->ictcore_program_id!=''){
 									
-								   $contact_id = $ict->ictcore_api('contacts','POST',$data );
-									$data = array(
+								   //$contact_id = $ict->ictcore_api('contacts','POST',$data );
+									/*$data = array(
 										   'title'       => 'Attendance',
 										   'program_id'  => $ictcore_attendance->ictcore_program_id,
 											'account_id' => 1,
 											'contact_id' => $contact_id,
 											'origin'     => 1,
 											'direction'  => 'outbound',
-										);
+										);*/
 
-									 $transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+									 //$transmission_id = $ict->ictcore_api('transmissions','POST',$data );
 
 									 
 
-									 $transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+									 //$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
 
-									 if(!is_array($transmission_send)){
+									 /*if(!is_array($transmission_send)){
 
 										$status1 = "Completed";
 									 }else{
@@ -196,7 +196,7 @@ class AttendanceController extends Controller
 									 $smsLog->recipient = $student->fatherCellNo;
 									 $smsLog->regiNo    = $students;
 									 $smsLog->status    = $status1;
-									 $smsLog->save();
+									 $smsLog->save();*/
 							
 						return response()->json(['success'=>"Students attendance save Succesfully.",'id' => $attendence_id]);
 					}else{
@@ -210,7 +210,7 @@ class AttendanceController extends Controller
 
 					}
 
-				}else if($status =='Present' || $status =='preaent' || $status =='Leave' || $status =='leave'){
+				}else if($status =='Present' || $status =='preaent' || $status =='Leave' || $status =='leave' || $status=='sick_leave'){
 					//}
 					
 					$atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$students)->first();
