@@ -434,7 +434,7 @@ class AttendanceController extends Controller
 			{
 
 				$attendance = DB::table('Student')
-				->select(DB::raw("Student.id as student_id ,Student.regiNo, Student.rollNo, Student.firstName, Student.middleName, Student.lastName,Student.class,Attendance.status,Attendance.date,Class.id as class_id" ))
+				->select(DB::raw("Student.id as student_id ,Student.regiNo, Student.rollNo, Student.firstName, Student.middleName, Student.lastName,Student.class,Attendance.session,Attendance.status,Attendance.date,Class.id as class_id" ))
 				->join('Class','Student.class','=', 'Class.code')
 				->leftJoin('Attendance',function ($join) {
 					$join->on('Attendance.regiNo', '=' , 'Student.regiNo') ;
