@@ -34,10 +34,15 @@ Route::post('users', 'Api\UserController@create_user');
   Route::delete('attendances/{attendance_id}','Api\AttendanceController@deleted');
   Route::get('classes/{class_id}/attendances','Api\AttendanceController@get_attendance_classes');
   Route::get('classes/{class_id}/attendances/history','Api\AttendanceController@classaten_history');
+  Route::get('classes/{class_id}/attendances_today','Api\AttendanceController@get_attendance_class_today');
   Route::get('sections/{section_id}/attendances','Api\AttendanceController@get_attendance_section');
   Route::get('sections/{section_id}/attendances/history','Api\AttendanceController@sectionaten_history');
   Route::get('students/{student_id}/attendances','Api\AttendanceController@get_attendance_student');
   Route::get('sections/{section_id}/attendances_today','Api\AttendanceController@get_attendance_section_today');
+  Route::post('sections/{section_id}/attendances_today/done','Api\AttendanceController@attendance_done');
+  Route::get('sections/{section_id}/attendances_today/done','Api\AttendanceController@get_attendance_done');
+  Route::get('sections/{section_id}/attendances_today/notification','Api\AttendanceController@notification');
+  Route::get('students/{student_id}/attendances_today','Api\AttendanceController@get_attendance_student_today');
 
    //student
    Route::get('students','Api\StudentController@all_students');

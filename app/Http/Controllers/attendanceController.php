@@ -183,7 +183,7 @@ class attendanceController extends BaseController {
 
 					foreach ($absentStudents as $absst) {
 
-						$student=	DB::table('Student')
+						$student =	DB::table('Student')
 						->join('Class', 'Student.class', '=', 'Class.code')
 						->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Class.Name as class')
 						->where('Student.regiNo','=',$absst)

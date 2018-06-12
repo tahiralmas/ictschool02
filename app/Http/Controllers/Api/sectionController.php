@@ -162,7 +162,7 @@ class sectionController extends Controller
         return response()->json(['error'=>'Teacher Not Found'], 404);
        }
     }
-
+//
     public function sectionwisenotification($section_id){
 
         $rules=[

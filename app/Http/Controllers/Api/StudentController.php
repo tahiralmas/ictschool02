@@ -46,9 +46,10 @@ class StudentController extends Controller
 
 		
 		 $students = DB::table('Student')
-		  ->join('Class', 'Student.class', '=', 'Class.code')
+          ->join('Class', 'Student.class', '=', 'Class.code')
+		  ->join('section', 'Student.section', '=', 'section.id')
 		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo','Student.b_form as Bform', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		  'Class.Name as class','Student.section' ,'Student.session','Student.group' ,'Student.presentAddress', 'Student.gender', 'Student.religion');
+		  'Class.Name as class','Student.section' ,'section.name as section_name','Student.session','Student.group' ,'Student.presentAddress', 'Student.gender', 'Student.religion','Student.fatherCellNo');
 
 		  $students->when(request('regiNo', false), function ($q, $regiNo) { 
             return $q->where('regiNo', $regiNo);
@@ -75,6 +76,9 @@ class StudentController extends Controller
 
            $students->when(request('cnic', false), function ($q, $cnic) { 
             return $q->where('Student.b_form',$cnic);
+          }); 
+           $students->when(request('mobile', false), function ($q, $mobile) { 
+            return $q->where('Student.fatherCellNo ',$mobile);
           });
 
          // ('name', 'like', '%' . Input::get('name') . '%')
@@ -83,7 +87,7 @@ class StudentController extends Controller
 		 // ->get();
 		  if(count($students)<1)
 		  {
-		     return response()->json(['error'=>'No Students Found!'], 401);
+		     return response()->json(['code'=>401,'error'=>'No Students Found!'], 401);
 		  }
 		  else {
 			  return response()->json($students,200);
@@ -125,7 +129,7 @@ class StudentController extends Controller
 		  'Class.Name as class','Student.section','Student.session' ,'Student.group','Student.session','Student.presentAddress','Student.dob','Student.gender', 'Student.religion')
 		    ->where('Student.id',$student_id)->first();
 
-        if(!is_null($student) && count($student)>0){
+        if(!empty($student)){
            return response()->json($student,200);
         }else{
         return response()->json(['error'=>'Student Not Found'], 404);

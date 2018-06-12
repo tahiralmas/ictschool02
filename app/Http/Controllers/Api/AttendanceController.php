@@ -19,6 +19,7 @@ use App\SectionModel;
 use App\Ictcore_attendance;
 use App\Ictcore_integration;
 use App\SMSLog;
+use App\SectionAttendance;
 use DB;
 use Excel;
 use Illuminate\Support\Collection;
@@ -363,6 +364,24 @@ class AttendanceController extends Controller
 					 return response()->json($data,200);
 			 	}
 			} 
+//
+			public function get_attendance_class_today($class_id)
+			{
+               $classc = DB::table('Class')->select('*')->where('id','=',$class_id)->first();
+				$attendance = DB::table('Student')
+				->select(DB::raw("Student.id as student_id ,Student.regiNo, Student.rollNo, Student.firstName, Student.middleName, Student.lastName,Student.class,Attendance.status,Attendance.date,Class.id as class_id" ))
+				->join('Class','Student.class','=', 'Class.code')
+				->leftJoin('Attendance',function ($join) {
+					$join->on('Attendance.regiNo', '=' , 'Student.regiNo') ;
+					$join->where('Attendance.date','=',Carbon::today()->toDateString()) ;
+				})->where('Student.class',  $classc->code)->where('Student.session',2018)->get();
+				
+				if($attendance->isEmpty()) {
+					return response()->json(['error'=>'Attendance Not Found'], 404);
+				}else{
+					return response()->json($attendance,200);
+				}
+			}
 
 			public function get_attendance_section($section_id)
 			{
@@ -443,6 +462,32 @@ class AttendanceController extends Controller
 			 	}
 			} 
 
+			public function attendance_done($section_id)
+			{
+				$check_attendance = SectionAttendance::where('date',Carbon::today()->toDateString())->first();
+				if(empty($check_attendance)){
+				$attendance_done = new SectionAttendance;
+				$attendance_done->section_id =$section_id;
+				$attendance_done->date =Carbon::today()->toDateString();
+				$attendance_done->attendance = 'Done';
+				$attendance_done->save();
+				 return response()->json("Section Attendance Complete today",200);
+			    }else{
+			     return response()->json("Already Done",200);
+
+			    }
+
+			}
+			public function get_attendance_done($section_id)
+			{
+				$attendance_done = SectionAttendance::where('section_id',$section_id)->where('date',Carbon::today()->toDateString())->first();
+				 if(empty($attendance_done)){
+				 return response()->json("Section Attendance Not Completed",400);
+
+				 }
+				 return response()->json($attendance_done ,200);
+			}
+
 			public function get_attendance_student($student_id){
 				  // $classc = DB::table('Class')->select('*')->where('id','=',$class_id)->first();
 				 $attendance = DB::table('Student')
@@ -488,7 +533,23 @@ class AttendanceController extends Controller
 			 	}
 			}
 
+            public function get_attendance_student_today($id)
+			{
 
+				$attendance = DB::table('Student')
+				->select(DB::raw("Student.id as student_id ,Student.regiNo, Student.rollNo, Student.firstName, Student.middleName, Student.lastName,Student.class,Attendance.status,Attendance.date,Class.id as class_id" ))
+				->join('Class','Student.class','=', 'Class.code')
+				->leftJoin('Attendance',function ($join) {
+					$join->on('Attendance.regiNo', '=' , 'Student.regiNo') ;
+					$join->where('Attendance.date','=',Carbon::today()->toDateString()) ;
+				})->where('Student.id',  $id)->where('Student.session',2018)->first();
+				
+				if(empty($attendance)) {
+					return response()->json(['error'=>'Attendance Not Found'], 404);
+				}else{
+					return response()->json($attendance,200);
+				}
+			}
 
 
 
@@ -517,7 +578,7 @@ class AttendanceController extends Controller
 						$section_id = Input::get('section_id');
 						$presentDate = $this->parseAppDate(Input::get('date'));
 
-					  if($status =='Absent' || $status =='absent') {
+					  if($status =='Absent' || $status =='absent' ) {
 					  
 							$attendance = Attendance::find($attendance_id);
 							$attendance->class_id = $class_id;
@@ -588,7 +649,7 @@ class AttendanceController extends Controller
 
 					}
 
-				}else if($status =='Present' || $status =='preaent'){
+				}else /*if($status =='Present' || $status =='preaent' || $status =='' || $status =='')*/{
 					//}
 					
 				
@@ -615,10 +676,10 @@ class AttendanceController extends Controller
 					return response()->json(['error'=>withErrors($errorMessages)], 400);
 
 				}*/
-			}else{
+			}/*else{
 				 return response()->json(['error'=>'Wrong Status'], 400);
 
-			}
+			}*/
 				
 			}
 
@@ -641,6 +702,77 @@ class AttendanceController extends Controller
 			  $date = explode('-', $datestr);
 			  return $date[2].'-'.$date[1].'-'.$date[0];
 			} 
+
+			public function notification($section_id)
+			{
+				$attendance = DB::table('Student')
+				->select('Student.id as student_id','Student.firstName', 'Student.middleName', 'Student.lastName','Student.fatherCellNo','Attendance.status','Attendance.regiNo')
+				//->join('Class', 'Student.class', '=', 'Class.code')
+
+				->join('Attendance' ,'Student.regiNo', '=' , 'Attendance.regiNo')
+				/*->Join('Attendance',function ($join) {
+					$join->on('Attendance.regiNo', '=' , 'Student.regiNo') ;
+					$join->where('Attendance.date','=',Carbon::today()->toDateString()) ;
+				})*/->where('Student.section',  $section_id)->where('Student.session',2018)->where('Attendance.date','=',Carbon::today()->toDateString())->where('Attendance.status','Absent')->get();
+			return response()->json($attendance, 200);
+                if($attendance->count()){
+                    //return response()->json('878878787', 200);
+
+
+                    $ictcore_integration = Ictcore_integration::select("*")->first();
+				    if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
+				      $ict  = new ictcoreController();
+					  $data = array(
+						'name' => 'Absent Notification',
+						'description' => 'Absent notification',
+						);
+
+					 $group_id= $ict->ictcore_api('groups','POST',$data );
+
+			     	}else{
+
+			           // return Redirect::to('/fees/classreport')->withErrors("Please Add ictcore integration in Setting Menu");
+	                return response()->json(['error'=>'Please Add ictcore integration in Setting Menu'], 404);
+
+	                    exit();
+			     	}
+					foreach($attendance as $student)
+					{
+
+							$data= array(
+					        //'registrationNumber' =>$stdfees->regiNo,
+							'first_name'         => $student->firstName,
+							'last_name'          =>  $student->lastName,
+							'phone'              =>  $student->fatherCellNo,
+							'email'              => '',
+							);
+
+						   $contact_id = $ict->ictcore_api('contacts','POST',$data );
+						    $group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+					}
+			}else{
+	                return response()->json(['error'=>'Attendance Not Found'], 404);
+				//exit();
+			}
+			    $ictcore_attendance= Ictcore_attendance::select("*")->first();
+
+			    if(!empty($ictcore_attendance) && $ictcore_attendance->ictcore_program_id!=''){
+			    	
+	                $data = array(
+						'program_id' => $ictcore_attendance->ictcore_program_id,
+						'group_id' => $group_id,
+						'delay' => '',
+						'try_allowed' => '',
+						'account_id' => 1,
+						'status' => '',
+					);
+					$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
+					//$campaign_id = $ict->ictcore_api('campaigns/$campaign_id/start','PUT',$data=array() );
+			}
+        return response()->json('Campaign Start', 200);
+
+
+			}
 }
 
 
