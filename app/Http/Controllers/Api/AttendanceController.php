@@ -715,7 +715,7 @@ class AttendanceController extends Controller
 					$join->on('Attendance.regiNo', '=' , 'Student.regiNo') ;
 					$join->where('Attendance.date','=',Carbon::today()->toDateString()) ;
 				})*/->where('Student.section',  $section_id)->where('Student.session',2018)->where('Attendance.date','=',Carbon::today()->toDateString())->where('Attendance.status','Absent')->get();
-			return response()->json($attendance, 200);
+			//return response()->json($attendance, 200);
                 if($attendance->count()){
                     //return response()->json('878878787', 200);
 
