@@ -123,6 +123,7 @@ class AttendanceController extends Controller
 					$status = Input::get('status');
 					$class_id = Input::get('class_id');
 					$section_id = Input::get('section_id');
+					$comments = Input::get('comments');
 					$presentDate = $this->parseAppDate(Input::get('date'));
 					  if($status =='Absent' || $status =='absent') {
 
@@ -136,6 +137,7 @@ class AttendanceController extends Controller
 									'regiNo' => $students,
 									'session'=>Input::get('session'),
 									'status' =>$status,
+									'coments' =>$comments,
 									'created_at' => Carbon::now()
 								];
 
@@ -224,6 +226,8 @@ class AttendanceController extends Controller
 							'date' => $presentDate,
 							'regiNo' => $students,
 							'status' =>$status,
+							'coments' =>NULL,
+
 							'created_at' => Carbon::now()
 						];
 						$attendence_id = Attendance::insertGetId($attenData);
@@ -586,6 +590,9 @@ class AttendanceController extends Controller
 							$attendance->date =Carbon::parse(Input::get('date'))->format('Y-m-d');
 							$attendance->regiNo= $students;
 							$attendance->status= $status;
+							if(Input::get('comments')!=''){
+							$attendance->coments = Input::get('comments');
+						    }
 							//$attendance->created_at= Carbon::now();
 
 							$attendance->save();
