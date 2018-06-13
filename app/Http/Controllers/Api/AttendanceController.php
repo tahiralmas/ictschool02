@@ -569,8 +569,6 @@ class AttendanceController extends Controller
 						 return response()->json($validator->errors(), 422);
 				}else 
 				{
-
-
 						$absentStudents = array();
 						$students = Input::get('regiNo');
 						$status = Input::get('status');
