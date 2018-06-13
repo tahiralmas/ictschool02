@@ -476,7 +476,6 @@ class AttendanceController extends Controller
 			     return response()->json("Already Done",200);
 
 			    }
-
 			}
 			public function get_attendance_done($section_id)
 			{
@@ -568,7 +567,7 @@ class AttendanceController extends Controller
 				if ($validator->fails()) 
 				{
 						 return response()->json($validator->errors(), 422);
-				} else 
+				}else 
 				{
 
 
@@ -609,7 +608,7 @@ class AttendanceController extends Controller
 								   $ict  = new ictcoreController();
 
 									$ictcore_attendance= Ictcore_attendance::select("*")->first();
-								if($ictcore_attendance->ictcore_program_id!=''){
+								if(!empty($ictcore_attendance) && $ictcore_attendance->ictcore_program_id!=''){
 									
 								   $contact_id = $ict->ictcore_api('contacts','POST',$data );
 									$data = array(
