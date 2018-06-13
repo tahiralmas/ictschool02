@@ -41,7 +41,7 @@ Route::post('users', 'Api\UserController@create_user');
   Route::get('sections/{section_id}/attendances_today','Api\AttendanceController@get_attendance_section_today');
   Route::put('sections/{section_id}/attendances_today/done','Api\AttendanceController@attendance_done');
   Route::get('sections/{section_id}/attendances_today/done','Api\AttendanceController@get_attendance_done');
-  Route::put('sections/{section_id}/attendances_today/notification','Api\AttendanceController@notification');
+  Route::post('sections/{section_id}/attendances_today/notification','Api\AttendanceController@notification');
   Route::get('students/{student_id}/attendances_today','Api\AttendanceController@get_attendance_student_today');
 
    //student
