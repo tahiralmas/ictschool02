@@ -585,7 +585,8 @@ class AttendanceController extends Controller
 							$attendance->class_id = $class_id;
 							$attendance->section_id = $section_id;
 							$attendance->session=Input::get('session');
-							$attendance->date = $presentDate;
+							//$attendance->date = $presentDate;
+							$attendance->date =Carbon::parse(Input::get('date'))->format('Y-m-d');
 							$attendance->regiNo= $students;
 							$attendance->status= $status;
 							//$attendance->created_at= Carbon::now();
