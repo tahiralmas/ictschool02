@@ -608,7 +608,7 @@ class AttendanceController extends Controller
 								   $ict  = new ictcoreController();
 
 									$ictcore_attendance= Ictcore_attendance::select("*")->first();
-								if(!empty($ictcore_attendance) && $ictcore_attendance->ictcore_program_id!=''){
+								/*if(!empty($ictcore_attendance) && $ictcore_attendance->ictcore_program_id!=''){
 									
 								   $contact_id = $ict->ictcore_api('contacts','POST',$data );
 									$data = array(
@@ -648,8 +648,8 @@ class AttendanceController extends Controller
 
 					  return response()->json(['Error'=>"Please Add Attendance Message in Setting."]);
 
-					}
-
+					}*/
+                  return response()->json($attendance,200);
 				}else /*if($status =='Present' || $status =='preaent' || $status =='' || $status =='')*/{
 					//}
 					
