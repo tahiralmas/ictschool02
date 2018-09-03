@@ -1055,7 +1055,7 @@ class attendanceController extends BaseController {
             //echo "<pre>";print_r($keys);
             //exit;
             $institute=Institute::select('*')->first();
-            if(!count($institute)) {
+            if(empty($institute)) {
                 $errorMessages = new Illuminate\Support\MessageBag;
                 $errorMessages->add('Error', 'Please setup institute information!');
                 return Redirect::to('/attendance/monthly-report')->withErrors($errorMessages);
