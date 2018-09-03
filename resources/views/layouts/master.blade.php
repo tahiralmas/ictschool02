@@ -277,7 +277,7 @@
                                <li><a href="{{url('/attendance/create')}}">Add</a></li>
                                <li><a href="{{url('/attendance/list')}}">View</a></li>
                                 <li><a href="{{url('/attendance/monthly-report')}}"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report</a></li>
-                                <li><a href="/teacher-attendance/monthly-report-2"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report Two</a></li>
+                                <!--<li><a href="/teacher-attendance/monthly-report-2"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report Two</a></li>-->
                            </ul>
                        </li>
                     <li class="accordion">
