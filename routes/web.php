@@ -147,7 +147,10 @@ Route::get('/attendance/report','attendanceController@report');
 Route::post('/attendance/report','attendanceController@getReport');
 Route::get('/attendance/student_report','attendanceController@stdatdreportindex');
 Route::get('/attendance/print_student_report/{b_form}','attendanceController@stdatdreport');
-
+/*Route::get('/attendance/report', 'attendanceController@report');
+Route::post('/attendance/report', 'attendanceController@getReport');
+*/
+Route::get('/attendance/monthly-report', 'attendanceController@monthlyReport');
 
 
 
@@ -435,6 +438,23 @@ Route::get('/dormitory/report/fee/{dormId}/{month}','dormitoryController@reportf
 Route::group(['middleware' => 'admin'], function(){ 
 Route::get('/barcode','barcodeController@index');
 Route::post('/barcode','barcodeController@generate');
+
+//holyday Routes
+Route::get('/holidays', 'attendanceController@holidayIndex');
+Route::post('/holidays/create', 'attendanceController@holidayCreate');
+Route::get('/holidays/delete/{id}', 'attendanceController@holidayDelete');
+
+//class off Routes
+Route::get('/class-off', 'attendanceController@classOffIndex');
+Route::post('/class-off/store', 'attendanceController@classOffStore');
+Route::get('/class-off/delete/{id}', 'attendanceController@classOffDelete');
+
+
+
+
 });
+
+
+
 
 Route::get('/cronjob/feenotification','cronjobController@feenotification');

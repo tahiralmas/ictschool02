@@ -34,7 +34,7 @@
       </div>
       <div class="box-content">
 
-        <form role="form" action="/fees/classreport" method="post" enctype="multipart/form-data">
+        <form role="form" action="{{url('/fees/classreport')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <div class="row">
             <div class="col-md-12">

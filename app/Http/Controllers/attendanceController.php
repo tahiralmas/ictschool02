@@ -13,6 +13,9 @@ use App\Institute;
 use DB;
 use Excel;
 use App\SMSLog;
+use App\SectionModel;
+use App\Holidays;
+use App\ClassOff;
 use App\Http\Controllers\ictcoreController;
 
 Class formfoo{
@@ -664,8 +667,6 @@ class attendanceController extends BaseController {
 	public function stdatdreportindex(){
 
        return View('app.studentAttendancereprt',compact(''));
-
-
 	}
 
 	public function stdatdreport($b_form)
@@ -707,4 +708,383 @@ class attendanceController extends BaseController {
 		//$pdf = \PDF::loadView('app.attendancestdreportprint',compact('datas','rdata','stdinfo','institute'));
 		//return $pdf->stream('student-Payments.pdf');
 	}
+
+
+    /*public function report()
+    {
+        return View::make('app.studentAttendance');
+    }
+    public function getReport()
+    {
+        $student= Student::where('regiNo', '=', Input::get('regiNo'))
+            ->where('Student.isActive', '=', 'Yes')
+            ->first();
+
+        if(count($student)>0) {
+            $student = Student::with('attendance')
+                ->where('regiNo', '=', Input::get('regiNo'))
+                ->where('isActive', '=', 'Yes')
+                ->first();
+            $class = ClassModel::where('code', '=', $student->class)->first();
+            if(count($student->attendance)>0) {
+                return View::make('app.stdattendance', compact('student', 'class'));
+            }
+            return  Redirect::back()->with('noresult', 'Attendance Not Found!');
+
+        }
+        return  Redirect::back()->with('noresult', 'Student Not Found!');
+
+
+    }*/
+ /*
+     * Holidays manage codes gores below
+     *
+     */
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function holidayIndex()
+    {
+        $holidays = Holidays::where('status',1)->get();
+        return View('app.teacher.holiday.list',compact('holidays'));
+    }
+
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function holidayCreate()
+    {
+        $rules=[
+            'holiDate' => 'required'
+        ];
+        $validator = \Validator::make(Input::all(), $rules);
+        if ($validator->fails())
+        {
+            return Redirect::to('/holiday/create')->withErrors($validator);
+        }
+        else {
+
+            $holiDayStart = \Carbon\Carbon::createFromFormat('d/m/Y',Input::get('holiDate'));
+            $holiDayEnd = null;
+            if(strlen(Input::get('holiDateEnd'))) {
+                $holiDayEnd = \Carbon\Carbon::createFromFormat('d/m/Y', Input::get('holiDateEnd'));
+            }
+
+            $dateList = [];
+
+            $desc = Input::get('description');
+
+            if($holiDayEnd){
+                if($holiDayEnd<$holiDayStart){
+                    $messages = $validator->errors();
+                    $messages->add('Wrong Input!', 'Date End can\'t be less than start date!');
+                    return Redirect::to('/holidays')->withErrors($messages)->withInput();
+                }
+
+                $start_time = strtotime($holiDayStart);
+                $end_time = strtotime($holiDayEnd);
+                for($i=$start_time; $i<=$end_time; $i+=86400)
+                {
+                    $dateList[] = [
+                        'holiDate' => date('Y-m-d', $i),
+                        'createdAt' => \Carbon\Carbon::now(),
+                        'description' => $desc,
+                        'status'  => 1
+                    ];
+
+                }
+
+            }
+            else{
+                $dateList[] =  [
+                    'holiDate' => $holiDayStart->format('Y-m-d'),
+                    'createdAt' => \Carbon\Carbon::now(),
+                    'description' => $desc,
+                    'status'  => 1
+                ];
+            }
+
+            Holidays::insert($dateList);
+
+            return Redirect::to('/holidays')->with("success","Holidays added succesfully.");
+
+
+
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function holidayDelete($id)
+    {
+        $holiDay = Holidays::findOrFail($id);
+        $holiDay->status= 0;
+        $holiDay->save();
+
+        return Redirect::to('/holidays')->with("success","Holiday Deleted Succesfully.");
+    }
+   
+     /*
+    * class off day manage codes gores below
+    *
+    */
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function classOffIndex()
+    {
+
+        $offdays = ClassOff::where('status', 1)->get();
+        return View('app.class_off_days', compact('offdays'));
+    }
+
+
+
+
+    /**
+     * Store the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function classOffStore()
+    {
+
+        $rules=[
+            'offDate' => 'required',
+            'oType' => 'required',
+
+        ];
+        $validator = \Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            return Redirect::to('/class-off')->withErrors($validator);
+        }
+        else {
+
+            $offDateStart = \Carbon\Carbon::createFromFormat('d/m/Y', Input::get('offDate'));
+            $offDateEnd = null;
+            if(strlen(Input::get('offDateEnd'))) {
+                $offDateEnd = \Carbon\Carbon::createFromFormat('d/m/Y', Input::get('offDateEnd'));
+            }
+
+            $offList = [];
+            $desc = Input::get('description');
+            $oType = Input::get('oType');
+
+
+
+            if($offDateEnd) {
+                if($offDateEnd<$offDateStart) {
+                    $messages = $validator->errors();
+                    $messages->add('Wrong Input!', 'Date End can\'t be less than start date!');
+                    return Redirect::to('/class-off')->withErrors($messages)->withInput();
+                }
+
+                $start_time = strtotime($offDateStart);
+                $end_time = strtotime($offDateEnd);
+                for($i=$start_time; $i<=$end_time; $i+=86400)
+                {
+                    $offList[] = [
+                        'offDate' => date('Y-m-d', $i),
+                        'created_at' => \Carbon\Carbon::now(),
+                        'updated_at' => \Carbon\Carbon::now(),
+                        'description' => $desc,
+                        'oType' => $oType,
+                        'status'  => 1
+                    ];
+
+                }
+
+            }
+            else{
+                $offList[] =  [
+                    'offDate' => $offDateStart->format('Y-m-d'),
+                    'created_at' => \Carbon\Carbon::now(),
+                    'updated_at' => \Carbon\Carbon::now(),
+                    'description' => $desc,
+                    'oType' => $oType,
+                    'status'  => 1
+                ];
+            }
+
+            ClassOff::insert($offList);
+
+            return Redirect::to('/class-off')->with("success", "Class off entry added.");
+
+
+        }
+    }
+
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    //    public function workOutsideUpdate($id,$status)
+    //    {
+    //
+    //        $leave = Leaves::where('status',1)->where('id',$id)->first();
+    //        if(!$leave){
+    //            return Redirect::to('/leaves')->with("error","Leave not found!");
+    //
+    //        }
+    //        $leave->status= $status;
+    //        $leave->save();
+    //
+    //        return Redirect::to('/leaves')->with("success","Leave updated succesfully.");
+    //
+    //
+    //    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function classOffDelete($id)
+    {
+        $classOff = ClassOff::where('status', 1)->where('id', $id)->first();
+
+        if(!$classOff) {
+            return Redirect::to('/class-off')->with("error", "Class off entry not found!");
+
+        }
+        $classOff->status= 0;
+        $classOff->save();
+
+        return Redirect::to('/class-off')->with("success", "Class off entry deleted successfully.");
+    }
+
+
+    public function monthlyReport()
+    {
+        $class     = Input::get('class', null);
+        $section   = Input::get('section', null);
+        $session   = trim(Input::get('session', date('Y')));
+        $shift     = Input::get('shift', null);
+        $isPrint   = Input::get('print_view', null);
+        $yearMonth = Input::get('yearMonth', date('Y-m'));
+
+        $classes2  = ClassModel::select('code', 'name')->orderby('code', 'asc')->get();
+
+        $section_data= SectionModel::select('id','name')->where('id','=',$section)->first();
+               if($isPrint) {
+
+            $myPart = mb_split('-', $yearMonth);
+            if(count($myPart)!=2) {
+                $errorMessages = new Illuminate\Support\MessageBag;
+                $errorMessages->add('Error', 'Please don\'t mess with inputs!!!');
+                return Redirect::to('/attendance/monthly-report')->withErrors($errorMessages);
+            }
+            $students = Student::where('class', $class)
+                ->where('isActive', 'Yes')
+                ->where('session' , $session)
+                ->where('shift'   , $shift)
+                ->where('section' , $section)
+              //->lists('regiNo');
+                ->pluck('regiNo');
+               // echo "<pre>";print_r($students->toArray());
+          // echo implode(',', $students->toArray());
+              // exit;
+            if(!count($students)) {
+                $errorMessages = new \Illuminate\Support\MessageBag;
+                $errorMessages->add('Error', 'Students not found!');
+                return Redirect::to('/attendance/monthly-report')->withErrors($errorMessages);
+            }
+
+
+            //find request month first and last date
+            $firstDate = $yearMonth."-01";
+            $oneMonthEnd = strtotime("+1 month", strtotime($firstDate));
+            $lastDate = date('Y-m-d', strtotime("-1 day", $oneMonthEnd));
+
+            //get holidays of request month
+            $holiDays = Holidays::where('status', 1)
+                ->whereDate('holiDate', '>=', $firstDate)
+                ->whereDate('holiDate', '<=', $lastDate)
+                //->lists('status', 'holiDate');
+                ->pluck('status', 'holiDate');
+            //get holidays of request month
+            $offDays = ClassOff::where('status', 1)
+                ->whereDate('offDate', '>=', $firstDate)
+                ->whereDate('offDate', '<=', $lastDate)
+                //->lists('oType', 'offDate');
+                 ->pluck('oType', 'offDate');
+                  //pluck
+            //find fridays of requested month
+            $fridays = [];
+            $startDate = Carbon::parse($firstDate)->next(Carbon::SUNDAY); // Get the first friday.
+            $endDate =   Carbon::parse($lastDate);
+
+            for ($date = $startDate; $date->lte($endDate); $date->addWeek()) {
+                $fridays[$date->format('Y-m-d')] = 1;
+            }
+
+            //get class info
+            $classInfo = ClassModel::where('code', $class)->first();
+            $className = $classInfo->name;
+
+
+            $SelectCol = self::getSelectColumns($myPart[0], $myPart[1]);
+             //echo "<pre>";print_r($SelectCol);
+             //exit;
+            $fullSql   = "SELECT CONCAT(MAX(s.firstName),' ',MAX(s.middleName),' ',MAX(s.lastName)) as name,
+             CAST(MAX(s.rollNo) as UNSIGNED) as rollNo,".$SelectCol." FROM Attendance as sa left join Student as s ON sa.regiNo=s.regiNo";
+            $fullSql .=" WHERE sa.regiNo IN(".implode(',', $students->toArray()).") AND sa.status !='Absent' GROUP BY sa.regiNo ORDER BY rollNo;";
+            $data = DB::select($fullSql);
+            //            return $data;
+             //echo "<pre>";print_r($data);
+            $keys = array_keys((array)$data[0]);
+            //            return $data;
+            //echo "<pre>";print_r($keys);
+            //exit;
+            $institute=Institute::select('*')->first();
+            if(!count($institute)) {
+                $errorMessages = new Illuminate\Support\MessageBag;
+                $errorMessages->add('Error', 'Please setup institute information!');
+                return Redirect::to('/attendance/monthly-report')->withErrors($errorMessages);
+            }
+
+
+
+            return View('app.attendanceMonthlyReport', compact('institute', 'data', 'keys', 'yearMonth', 'fridays', 'holiDays', 'className', 'section', 'session', 'shift', 'offDays','section_data'));
+
+        }
+        return View('app.attendanceMonthly', compact('yearMonth', 'classes2','section'));
+    }
+
+    private static function getSelectColumns($year,$month)
+    {
+        $start_date = "01-".$month."-".$year;
+        $start_time = strtotime($start_date);
+
+        $end_time = strtotime("+1 month", $start_time);
+        $selectCol = "";
+        for($i=$start_time; $i<$end_time; $i+=86400)
+        {
+            $d = date('Y-m-d', $i);
+            $selectCol .= "MAX(IF(date = '".$d."', 1, 0)) AS '".$d."',";
+        }
+        if(strlen($selectCol)) {
+            $selectCol = substr($selectCol, 0, -1);
+        }
+
+        return $selectCol;
+    }
 }

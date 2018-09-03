@@ -26,7 +26,7 @@ class sectionController extends BaseController {
 		->select(DB::raw('name,code'))
 		->get();
 		$teachers = DB::table('teacher')
-	->select('id','firstName','lastName')->get();
+	    ->select('id','firstName','lastName')->get();
 		return View('app.sectionCreate',compact('class','teachers'));
 		//echo "this is section controller";
 	}

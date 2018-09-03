@@ -179,7 +179,7 @@ class TeacherController extends Controller
              ->select(DB::raw('COUNT(*) as total_attendance,
                            SUM(Attendance.status="Absent") as absent,
                            SUM(Attendance.status="Present" ) as present ,
-                           SUM(Attendance.status="sick_leave" OR Attendance.status="leave") as leaves'),'section.id as section_id','section.name as section','Class.id as class_id','Class.name as class')->where('Attendance.session',2018)->where('Attendance.section_id',$teacher->section_id)->where('date',Carbon::today()->toDateString())->first();
+                           SUM(Attendance.coments="sick_leave" OR Attendance.coments="leave") as leaves'),'section.id as section_id','section.name as section','Class.id as class_id','Class.name as class')->where('Attendance.session',2018)->where('Attendance.section_id',$teacher->section_id)->where('date',Carbon::today()->toDateString())->first();
            //$tst[] = $attendances_a[$i]->total_attendance;
            if($attendances_a->total_attendance==0){
            	 $attendances_b[] = array('total_attendance'=>0,'absent'=>0,'present'=>0,'leaves'=>0,'section_id'=>$teacher->section_id,'section'=>$teacher->section,'class_id'=>$teacher->class_id,'class'=>$teacher->class);

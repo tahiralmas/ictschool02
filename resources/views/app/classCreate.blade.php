@@ -27,11 +27,11 @@
                         </div>
                     </div>
                   <div class="form-group">
-                      <label for="name">Numeric Value of Class[One=1,Six=6,Ten=10 etc]</label>
+                      <label for="name">Numeric Value of Class[play=-2,nusery=-1,parp=0,One=1,Six=6,Ten=10 etc]</label>
                      <!-- <label for="name">Level</label>-->
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                          <input type="number" min="1" max="10" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">
+                          <input type="number" min="-2" max="10" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">
                           
                          <?php /* <select class="form-control"  name="code" required >
                           <option value="">---Select Level---</option>

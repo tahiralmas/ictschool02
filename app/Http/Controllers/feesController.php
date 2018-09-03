@@ -237,49 +237,57 @@ class feesController extends BaseController {
 		else {
 
 			try {
-				$feeTitles = Input::get('gridFeeTitle');
-				$feeAmounts = Input::get('gridFeeAmount');
-				$feeLateAmounts = Input::get('gridLateFeeAmount');
+
+				/*$chk = DB::table('stdBill')
+				->join('billHistory','stdBill.billNo','=','billHistory.billNo')
+				->where('stdBill.regiNo',Input::get('student'))
+				->where('billHistory.month',);*/
+				
+				$feeTitles       = Input::get('gridFeeTitle');
+				$feeAmounts      = Input::get('gridFeeAmount');
+				$feeLateAmounts  = Input::get('gridLateFeeAmount');
 				$feeTotalAmounts = Input::get('gridTotal');
-				$feeMonths = Input::get('gridMonth');
-				$counter = count($feeTitles);
+				$feeMonths       = Input::get('gridMonth');
+				$counter         = count($feeTitles);
 
 				if($counter>0)
 				{
 					$rows = FeeCol::count();
-					if($rows<9)
+					if($rows < 9)
 					{
-						$billId='B00'.($rows+1);
+						$billId = 'B00'.($rows+1);
 					}
-					else if($rows<100)
+					else if($rows < 100)
 					{
-						$billId='B0'.($rows+1);
+						$billId = 'B0'.($rows+1);
 					}
 					else {
-						$billId='B'.($rows+1);
+						
+						$billId = 'B'.($rows+1);
 					}
 
 					DB::transaction(function() use ($billId,$counter,$feeTitles,$feeAmounts,$feeLateAmounts,$feeTotalAmounts,$feeMonths)
 					{
-						$feeCol = new FeeCol();
-						$feeCol->billNo=$billId;
-						$feeCol->class=Input::get('class');
-						$feeCol->regiNo=Input::get('student');
-						$feeCol->payableAmount=Input::get('ctotal');
-						$feeCol->paidAmount=Input::get('paidamount');
-						$feeCol->dueAmount=Input::get('dueamount');
-						$feeCol->payDate= Carbon::now()->format('d-m-Y');
-						//echo "<pre>";print_r(Carbon::now()->format('d-m-Y'));exit;
+						$feeCol                = new FeeCol();
+						$feeCol->billNo        = $billId;
+						$feeCol->class         = Input::get('class');
+						$feeCol->regiNo        = Input::get('student');
+						$feeCol->payableAmount = Input::get('ctotal');
+						$feeCol->paidAmount    = Input::get('paidamount');
+						$feeCol->dueAmount     = Input::get('dueamount');
+						$feeCol->payDate       = Carbon::now()->format('Y-m-d');
+						//echo "<pre>";print_r(Carbon::now()->format('Y-m-d'));exit;
 						$feeCol->save();
                          	
 						for ($i=0;$i<$counter;$i++) {
-							$feehistory = new FeeHistory();
-							$feehistory->billNo=$billId;
-							$feehistory->title=$feeTitles[$i];
-							$feehistory->fee=$feeAmounts[$i];
-							$feehistory->lateFee=$feeLateAmounts[$i];
-							$feehistory->total=$feeTotalAmounts[$i];
-							$feehistory->month=$feeMonths[$i];
+
+							$feehistory          = new FeeHistory();
+							$feehistory->billNo  = $billId;
+							$feehistory->title   = $feeTitles[$i];
+							$feehistory->fee     = $feeAmounts[$i];
+							$feehistory->lateFee = $feeLateAmounts[$i];
+							$feehistory->total   = $feeTotalAmounts[$i];
+							$feehistory->month   = $feeMonths[$i];
 							$feehistory->save();
 
 						}

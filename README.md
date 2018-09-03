@@ -27,10 +27,6 @@ School managment system feature list
 * __Take attendance of students daily__
 * __Keep track if students are absen__
 
-#### Students’ daily attendance  
---------------------------------
-* __Take attendance of students daily__
-* __Keep track if students are absen__
 
 #### Students’ attendance report  
 --------------------------------
@@ -42,16 +38,7 @@ School managment system feature list
 * __Compare students’ marks__
 * __Print student mark sheet__
 
-#### Library  
-------------
-* __Organize books class-wise__
-* __Students can issue the books they need__
-* __Librarian can keep track of the books issued__
 
-#### Dorms  
-----------
-* __Ability to manage school dorms__
-* __Assign students to specific dorm__
 
 #### Students’ fees management   
 ------------------------------

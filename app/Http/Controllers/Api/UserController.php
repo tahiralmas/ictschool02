@@ -47,11 +47,11 @@ class UserController extends Controller
 
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')->accessToken;
-            if($user->role_id==3){
+            /*if($user->role_id==3){
              $success['client_id'] =  $user->client_professional_id;
            }elseif($user->role_id==2){
              $success['professional_id'] =  $user->client_professional_id;
-           }
+           }*/
             return response()->json(['success' => $success], $this->successStatus);
         }
         else

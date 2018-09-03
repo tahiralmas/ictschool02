@@ -276,6 +276,8 @@
                                @endif
                                <li><a href="{{url('/attendance/create')}}">Add</a></li>
                                <li><a href="{{url('/attendance/list')}}">View</a></li>
+                                <li><a href="{{url('/attendance/monthly-report')}}"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report</a></li>
+                                <li><a href="/teacher-attendance/monthly-report-2"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report Two</a></li>
                            </ul>
                        </li>
                     <li class="accordion">
@@ -367,6 +369,8 @@
                                 <li><a href="{{url('/gpa')}}">GPA Ruels</a></li>
 
                                 <li><a href="{{url('/users')}}">Users</a></li>
+                                <li><a href="{{url('/holidays')}}">Holidays</a></li>
+                                <li><a href="{{url('/class-off')}}">Class Off Days</a></li>
                                 <li><a href="{{url('/institute')}}">Institute</a></li>
                                 <li><a href="{{url('/ictcore')}}">IctCore Integration</a></li>
                                 <li><a href="{{url('/ictcore/attendance')}}">Attendance Message</a></li>
@@ -374,7 +378,7 @@
 
                                 <li><a href="{{url('/template/create')}}">Add Message</a></li>
                                 <li><a href="{{url('/template/list')}}">Recording List</a></li>
-                                 <li><a href="{{url('/schedule')}}">Fee Notification Reminder</a></li>
+                                <li><a href="{{url('/schedule')}}">Fee Notification Reminder</a></li>
 
                             </ul>
                         </li>
@@ -434,10 +438,9 @@
         <hr>
         <p class="col-md-9 col-sm-9 col-xs-12 copyright"> <a href="#" target="_blank">{{Session::get('inName')}}</a> &copy;2017</p>
 
-        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Developed by: <a
-                    href="http://ictvision.net/">IctVision</a></p>
+        <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Developed by:
+        <a href="http://ictvision.net/">IctVision</a></p>
     </footer>
-
 </div><!--/.fluid-container-->
 
 <!-- external javascript -->

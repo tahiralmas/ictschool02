@@ -43,7 +43,7 @@
                       </div>
                   </div>
                   
-                    <div class="form-group">
+                   <?php /* <div class="form-group">
                     <!--  <label for="name">Numeric Value of Class[One=1,Six=6,Ten=10 etc]</label>-->
                       <label for="name">Teachers</label>
                       <div class="input-group">
@@ -58,7 +58,7 @@
                           </select>
                       </div>
                   </div>
-
+                  */ ?>
 
                     <div class="form-group">
                         <label for="name">Description</label>

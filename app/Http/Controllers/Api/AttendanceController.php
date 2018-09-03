@@ -124,12 +124,16 @@ class AttendanceController extends Controller
 					$class_id = Input::get('class_id');
 					$section_id = Input::get('section_id');
 					$comments = Input::get('comments');
-					$presentDate = $this->parseAppDate(Input::get('date'));
+					//$presentDate = $this->parseAppDate(Input::get('date'));
+					$presentDate = Carbon::parse(Input::get('date'))->format('Y-m-d');
+					 // return response()->json($presentDate);
+
+
 					  if($status =='Absent' || $status =='absent') {
 
 						$atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$students)->first();
-
-						if(is_null($atten)){
+                        //return response()->json($atten,200);
+						if(empty($atten)){
 							$attenData= [
 									'date' => $presentDate,
 									'class_id' => $class_id,
@@ -145,7 +149,7 @@ class AttendanceController extends Controller
 						}else{
 						 return response()->json(['error'=>'Attendance already added'], 400);
 						}
-						$ictcore_integration = Ictcore_integration::select("*")->first();
+						/*$ictcore_integration = Ictcore_integration::select("*")->first();
                  
 						if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url !='' && $ictcore_integration->ictcore_user !='' && $ictcore_integration->ictcore_password !=''){ 
 							   $student =	DB::table('Student')
@@ -201,7 +205,7 @@ class AttendanceController extends Controller
 									 $smsLog->save();*/
 							
 						return response()->json(['success'=>"Students attendance save Succesfully.",'id' => $attendence_id]);
-					}else{
+					/*}else{
 
 					  return response()->json(['Error'=>"Please Add Attendance Message in Setting."]);
 
@@ -210,13 +214,13 @@ class AttendanceController extends Controller
 
 					  return response()->json(['Error'=>"Please Add Intigration  in Setting. Notification send failed"],400);
 
-					}
+					}*/
 
-				}else if($status =='Present' || $status =='preaent' || $status =='Leave' || $status =='leave' || $status=='sick_leave'){
+				}else if($status == 'Present' || $status =='present' || $status =='Leave' || $status =='leave' || $status=='sick_leave'){
 					//}
 					
 					$atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$students)->first();
-					if(is_null($atten)){
+					if(empty($atten)){
 					
 						$attenData= [
 
@@ -226,10 +230,10 @@ class AttendanceController extends Controller
 							'date' => $presentDate,
 							'regiNo' => $students,
 							'status' =>$status,
-							'coments' =>NULL,
-
+							//'coments' =>NULL,
 							'created_at' => Carbon::now()
 						];
+						// return response()->json($attenData);
 						$attendence_id = Attendance::insertGetId($attenData);
 
 				}else{

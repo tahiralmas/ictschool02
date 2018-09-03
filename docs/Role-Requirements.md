@@ -135,5 +135,4 @@ Student / Parent
 * Class Result
 * Fees (pending / paid)
 * Attendance Reporting
-* Dairy
 

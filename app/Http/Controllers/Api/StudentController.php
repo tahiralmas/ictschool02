@@ -78,7 +78,7 @@ class StudentController extends Controller
             return $q->where('Student.b_form',$cnic);
           }); 
            $students->when(request('mobile', false), function ($q, $mobile) { 
-            return $q->where('Student.fatherCellNo ',$mobile);
+            return $q->where('Student.fatherCellNo',$mobile);
           });
 
          // ('name', 'like', '%' . Input::get('name') . '%')
