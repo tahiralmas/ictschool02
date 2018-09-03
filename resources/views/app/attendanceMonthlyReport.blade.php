@@ -29,12 +29,14 @@
             bottom:0;
             left:0;
         }
-        .logo{
+        .logo
+        {
             height:80px;
             width: 100px;
         }
         #attendanceList{
-            font-size: 10px;
+            font-size: 11px;
+            font-weight: bold;
         }
         #attendanceList th,#attendanceList td{
             text-align: center;
