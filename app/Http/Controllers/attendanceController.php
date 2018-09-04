@@ -671,7 +671,7 @@ class attendanceController extends BaseController {
 
 	public function stdatdreport($b_form)
 	{
-		$stdinfo =  DB::table('Student')->where('Student.b_form',$b_form)->first();
+		$stdinfo     =  DB::table('Student')->where('Student.b_form',$b_form)->first();
 		$attendances = DB::table('Attendance')
 			->join('Student', 'Attendance.regiNo', '=', 'Student.regiNo')
 			->leftjoin('section', 'section.id', '=', 'Attendance.section_id')
@@ -974,20 +974,20 @@ class attendanceController extends BaseController {
 
     public function monthlyReport()
     {
-        $class     = Input::get('class', null);
-        $section   = Input::get('section', null);
-        $session   = trim(Input::get('session', date('Y')));
-        $shift     = Input::get('shift', null);
-        $isPrint   = Input::get('print_view', null);
-        $yearMonth = Input::get('yearMonth', date('Y-m'));
+        $class        = Input::get('class', null);
+        $section      = Input::get('section', null);
+        $session      = trim(Input::get('session', date('Y')));
+        $shift        = Input::get('shift', null);
+        $isPrint      = Input::get('print_view', null);
+        $yearMonth    = Input::get('yearMonth', date('Y-m'));
 
-        $classes2  = ClassModel::select('code', 'name')->orderby('code', 'asc')->get();
+        $classes2     = ClassModel::select('code', 'name')->orderby('code', 'asc')->get();
 
-        $section_data= SectionModel::select('id','name')->where('id','=',$section)->first();
-               if($isPrint) {
+        $section_data = SectionModel::select('id','name')->where('id','=',$section)->first();
+        if($isPrint) {
 
             $myPart = mb_split('-', $yearMonth);
-            if(count($myPart)!=2) {
+            if(count($myPart)!= 2) {
                 $errorMessages = new Illuminate\Support\MessageBag;
                 $errorMessages->add('Error', 'Please don\'t mess with inputs!!!');
                 return Redirect::to('/attendance/monthly-report')->withErrors($errorMessages);
@@ -997,10 +997,10 @@ class attendanceController extends BaseController {
                 ->where('session' , $session)
                 ->where('shift'   , $shift)
                 ->where('section' , $section)
-              //->lists('regiNo');
+                 //->lists('regiNo');
                 ->pluck('regiNo');
-               // echo "<pre>";print_r($students->toArray());
-          // echo implode(',', $students->toArray());
+                // echo "<pre>";print_r($students->toArray());
+               // echo implode(',', $students->toArray());
               // exit;
             if(!count($students)) {
                 $errorMessages = new \Illuminate\Support\MessageBag;
@@ -1010,9 +1010,9 @@ class attendanceController extends BaseController {
 
 
             //find request month first and last date
-            $firstDate = $yearMonth."-01";
+            $firstDate   = $yearMonth."-01";
             $oneMonthEnd = strtotime("+1 month", strtotime($firstDate));
-            $lastDate = date('Y-m-d', strtotime("-1 day", $oneMonthEnd));
+            $lastDate    = date('Y-m-d', strtotime("-1 day", $oneMonthEnd));
 
             //get holidays of request month
             $holiDays = Holidays::where('status', 1)
@@ -1020,12 +1020,13 @@ class attendanceController extends BaseController {
                 ->whereDate('holiDate', '<=', $lastDate)
                 //->lists('status', 'holiDate');
                 ->pluck('status', 'holiDate');
-            //get holidays of request month
+               //get holidays of request month
+            
             $offDays = ClassOff::where('status', 1)
                 ->whereDate('offDate', '>=', $firstDate)
                 ->whereDate('offDate', '<=', $lastDate)
                 //->lists('oType', 'offDate');
-                 ->pluck('oType', 'offDate');
+                ->pluck('oType', 'offDate');
                   //pluck
             //find fridays of requested month
             $fridays = [];
@@ -1064,7 +1065,6 @@ class attendanceController extends BaseController {
 
 
             return View('app.attendanceMonthlyReport', compact('institute', 'data', 'keys', 'yearMonth', 'fridays', 'holiDays', 'className', 'section', 'session', 'shift', 'offDays','section_data'));
-
         }
         return View('app.attendanceMonthly', compact('yearMonth', 'classes2','section'));
     }

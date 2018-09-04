@@ -342,7 +342,7 @@ class gradesheetController extends BaseController {
 		->where('Student.isActive', '=', 'Yes')
 		->first();
 
-		if(count($student)>0) {
+		if(!empty($student)) {
 
 			$merit = DB::table('MeritList')
 			->select('regiNo', 'grade', 'point', 'totalNo')

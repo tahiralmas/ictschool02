@@ -56,11 +56,11 @@
     </style>
 </head>
 <body>
-{{--<div class="row">--}}
-{{--<div class="col-md-12">--}}
-{{--<a  class="btn btn-danger no-print" href="/teacher-attendance/list"><i class=""></i>Back</a>--}}
-{{--</div>--}}
-{{--</div>--}}
+    {{--<div class="row">--}}
+    {{--<div class="col-md-12">--}}
+    {{--<a  class="btn btn-danger no-print" href="/teacher-attendance/list"><i class=""></i>Back</a>--}}
+    {{--</div>--}}
+    {{--</div>--}}
 
 <div id="printableArea">
     <div class="row text-center">
