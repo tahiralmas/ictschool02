@@ -577,7 +577,7 @@ class gradesheetController extends BaseController {
 
 						if(count($subjects) == count($marksubmit))
 						{
-							$isAllSubSectionMarkSubmit =true;
+							$isAllSubSectionMarkSubmit = true;
 							continue;
 						}
 						else{

@@ -38,8 +38,6 @@ School managment system feature list
 * __Compare students’ marks__
 * __Print student mark sheet__
 
-
-
 #### Students’ fees management   
 ------------------------------
 * __Create invoice for student fees__
@@ -95,19 +93,23 @@ crontab -e
 
 ```
 # Screenshot
+============
 
-<img src="screenshot/1.png" >
-<img src="screenshot/2.png" >
-<img src="screenshot/3.png" >
-<img src="screenshot/4.png" >
-<img src="screenshot/5.png" >
-<img src="screenshot/6.png" >
-<img src="screenshot/7.png" >
-<img src="screenshot/8.png" >
-<img src="screenshot/9.png" >
-<img src="screenshot/10.png" >
-<img src="screenshot/11.png" >
-<img src="screenshot/12.png" >
+<img src="screenshoot/Screenshot(21).png" >
+<img src="screenshoot/Screenshot(22).png" >
+<img src="screenshoot/Screenshot(23).png" >
+<img src="screenshoot/Screenshot(24).png" >
+<img src="screenshoot/Screenshot(25).png" >
+<img src="screenshoot/Screenshot(26).png" >
+<img src="screenshoot/Screenshot(27).png" >
+<img src="screenshoot/Screenshot(28).png" >
+<img src="screenshoot/Screenshot(29).png" >
+<img src="screenshoot/Screenshot(30).png" >
+<img src="screenshoot/Screenshot(31).png" >
+<img src="screenshoot/Screenshot(32).png" >
+<img src="screenshoot/Screenshot(34).png" >
+<img src="screenshoot/Screenshot(35).png" >
+<img src="screenshoot/Screenshot(33).png" >
 
 System Dependencies
 ===================
