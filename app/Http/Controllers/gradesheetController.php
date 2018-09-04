@@ -354,7 +354,7 @@ class gradesheetController extends BaseController {
 			//->orderBy('point')
 			->orderBy('totalNo', 'DESC')->get();
 			//->orderBy('totalNo', 'DESC')->get();
-			if (count($student) < 1 || count($merit) < 1) {
+			if (empty($student) < 1 || empty($merit) < 1) {
 				return Redirect::back()->with('noresult', 'Result Not Found!');
 			} else {
 				$meritdata = new Meritdata();
@@ -560,7 +560,7 @@ class gradesheetController extends BaseController {
 			->where('session', '=', trim(Input::get('session')))
 			->where('exam', '=', Input::get('exam'))
 			->get();
-			if(!count($isGenerated))
+			if(empty($isGenerated))
 			{
 				$subjects = Subject::select('name', 'code', 'type', 'subgroup')->where('class', '=', Input::get('class'))->get();
 				$sectionsHas = Student::select('section')->where('class', '=', Input::get('class'))->where('session', trim(Input::get('session')))->where('isActive', '=', 'Yes')->distinct()->orderBy('section', 'asc')->get();
