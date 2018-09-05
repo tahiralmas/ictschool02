@@ -345,11 +345,12 @@ public function view($id)
 {
 	$student=	DB::table('Student')
 	->join('Class', 'Student.class', '=', 'Class.code')
+	->join('section', 'Student.section', '=', 'section.id')
 	->select('Student.id', 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName',
 	'Student.fatherName','Student.motherName', 'Student.fatherCellNo','Student.motherCellNo','Student.localGuardianCell',
 	'Class.Name as class','Student.presentAddress','Student.gender','Student.religion','Student.section','Student.shift','Student.session',
 	'Student.group','Student.dob','Student.bloodgroup','Student.nationality','Student.photo','Student.extraActivity','Student.remarks',
-	'Student.localGuardian','Student.parmanentAddress')
+	'Student.localGuardian','Student.parmanentAddress','section.name as section_name')
 	->where('Student.id','=',$id)->first();
 
 	//return View::Make("app.studentView",compact('student'));

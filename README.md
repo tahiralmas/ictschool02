@@ -2,7 +2,7 @@ School managment system feature list
 ====================================
 
 #### Dasboard
---------------
+-------------
 * __Total classes__
 * __Number of students__
 * __number of subjects__
@@ -10,36 +10,37 @@ School managment system feature list
 * __exams__
 
 #### Student admission system 
--------------------------------
+-----------------------------
 * __Fully functional and automated admission form for student enrolment__
-* __Enroll students to a specific class and section for a certain session __
+
+* __Enroll students to a specific class and section for a certain session__
 
 #### Class-wise subject management  
 ----------------------------------
 * __Add subjects for each class separately__
 
 #### Student promotion 
-----------------------
+-----------------------
 * __promote a student from one class to another__
 
 #### Students’ daily attendance  
---------------------------------
+-------------------------------
 * __Take attendance of students daily__
-* __Keep track if students are absen__
+* __Keep track if students are absent__
 
 
 #### Students’ attendance report  
---------------------------------
+---------------------------------
 * __Get a well defined attendance report for all students of a certain class for a certain month__
 
 #### Exam evaluations or marks management   
------------------------------------------
+------------------------------------------
 * __Evaluate or put exam marks for each student subject wise__
 * __Compare students’ marks__
 * __Print student mark sheet__
 
 #### Students’ fees management   
-------------------------------
+-------------------------------
 * __Create invoice for student fees__
 * __Automatically send fees notification to specific date whose set in amdin__
 
@@ -50,17 +51,17 @@ School managment system feature list
 * __Ability to see previous session data__
 
 #### Management of teachers     
----------------------------
+----------------------------
 * __Add/edit/delete teachers anytime you need__
 * __Assign teacher to specific class or section__
 * __Assign teacher to specific subject__
 
 #### Customization of school information    
-----------------------------------------
+-----------------------------------------
 * __Change school name and other information from system settings__
 
 #### Teacher Panel    
-------------------
+-------------------
 * __teacher show dasboard attendence and teachers portion__
 
 **Change configuration according your need and create Database**

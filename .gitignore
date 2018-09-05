@@ -1,5 +1,7 @@
 /.env
 /storage/*.key
+/docss.zip
+/docs/uml.zip
 Homestead.json
 Homestead.yaml
 npm-debug.log

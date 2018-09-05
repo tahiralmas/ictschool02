@@ -102,7 +102,7 @@
                                                   <strong class="text-info font-16" >Section :</strong>
                                                 </div>
                                                 <div class="col-md-7">
-                                                  <label>{{$student->section}} </label>
+                                                  <label>{{$student->section_name}} </label>
                                                 </div>
                                                 </div>
                                                 </div>
