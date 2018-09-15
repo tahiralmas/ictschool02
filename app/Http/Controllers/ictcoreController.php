@@ -356,7 +356,12 @@ class ictcoreController {
 
 	public function noti_index(){
 
-		$notification_types = DB::table('notification_type')->get();
+		$notification_type = DB::table('notification_type');
+          if($notification_type->count()>0){
+           $notification_types = $notification_type->get(); 
+          }else{
+          	$notification_types =array();
+          }
 	   
 	    return View('app.notifications',compact('notification_types'));
 	}
