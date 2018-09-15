@@ -1,6 +1,5 @@
 @extends('layouts.master')
 @section('style')
-
 @stop
 @section('content')
     @if (Session::get('success'))
@@ -37,11 +36,18 @@
 
                         <form role="form" action="{{url('/ictcore')}}" method="post">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
+                            <input type="hidden" name="type" value="{{ $type }}">
+                       <div class="col-md-10" >
+                                        <div class="form-group">
+                                            <label for="method">Method</label>
+                                            <div class="input-group">
+                                                 <input class="chb" data-toggle="toggle" id="myCheck" data-on="Ictcore" data-off="Telenor" data-width="100"   name="method" data-onstyle="success" data-offstyle="danger" type="checkbox">                                            </div>
+                                        </div>
+                                    </div>
                             <div class="row">
                                 <div class="col-md-12">
 
-                                    <div class="col-md-10">
+                                    <div class="col-md-10" id="ictcore">
                                         <div class="form-group">
                                             <label for="type">Url</label>
                                             <div class="input-group">
@@ -95,5 +101,32 @@
     </div>
 @stop
 @section('script')
+<script type="text/javascript">
 
+ var checkBox = document.getElementById("myCheck");
+    // document.getElementById("myForm").reset();
+    if (checkBox.checked == true){
+      //alert('hello');
+        $("#ictcore").show();
+    }else{
+      //alert('hello343');
+      $("#ictcore").hide();
+    }
+  $(".chb").change(function()
+  {
+  
+var checkBox = document.getElementById("myCheck");
+    if (checkBox.checked == true){
+      //alert('hello');
+        $("#ictcore").show();
+        var method = 'ictcore';
+    }else{
+      //alert('hello343');
+      $("#ictcore").hide();
+      var method = 'telenor'
+    }
+        //$(".chb").prop('checked',false);
+        //$(this).prop('checked',true);
+  });
+</script>
 @stop

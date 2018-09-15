@@ -188,65 +188,104 @@ class attendanceController extends BaseController {
 
 						$student =	DB::table('Student')
 						->join('Class', 'Student.class', '=', 'Class.code')
-						->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Class.Name as class')
+						->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.fatherCellNo','Class.Name as class')
 						->where('Student.regiNo','=',$absst)
-						->where('class',Input::get('class'))
+						->where('Student.class',Input::get('class'))
 						->first();
 						/////////////////////////////////////////////////////////////////////////////////////////////Contact Create in ictcore//////////////////////////////////////////////////////////////////////////////////////////
-						 $ictcore_attendance= Ictcore_attendance::select("*")->first();
-						 $ictcore_integration = Ictcore_integration::select("*")->first();
-						if($ictcore_integration->ictcore_url!='' && $ictcore_integration->ictcore_user!='' && $ictcore_integration->ictcore_password!=''){ 
-							 $ict  = new ictcoreController();
-	                        if($ictcore_attendance->ictcore_program_id!=''){
-								$data = array(
-								'first_name' => $student->firstName,
-								'last_name' => $student->lastName,
-								'phone'     => $student->fatherCellNo,
-								'email'     => '',
-								);
-								$contact_id = $ict->ictcore_api('contacts','POST',$data );
-								$data = array(
-								'title' => 'Attendance',
-								'program_id' => $ictcore_attendance->ictcore_program_id,
-								'account_id'     => 1,
-								'contact_id'     => $contact_id,
-								'origin'     => 1,
-								'direction'     => 'outbound',
-								);
-								$transmission_id = $ict->ictcore_api('transmissions','POST',$data );
-								//echo "================================================================transmission==========================================";
-								// print_r($transmission_id);
-								//GET transmissions/{transmission_id}/send
-								$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
-								//echo "================================================================transmission send==========================================";
-								//print_r($transmission_send);
-								// exit;
-								  $msg = "Dear Parents your Child (Name-".$student->firstName." ".$student->middleName." ".$student->lastName.", Class- ".$student->class." , Roll- ".$student->rollNo." ) is Absent in School today.";
-								//  $fatherCellNo = Student::select('fatherCellNo','')->where('regiNo', $absst)->first();
-								 if(!empty($transmission_send->error)){
+						 
 
-	                                 	
-	                                 	$status =$transmission_send->error->message;
-	                                 }else{
-	                                 	$status = "Completed";
-	                                 }
+                         $attendance_noti     = DB::table('notification_type')->where('notification','attendance')->first();
+						 
+						 $ictcore_attendance  = Ictcore_attendance::select("*")->first();
+						 $ictcore_integration = Ictcore_integration::select("*")->where('type',$attendance_noti->type)->first();
+						 $ict                 = new ictcoreController();
+						if($ictcore_integration->method=="telenor"){
+                          //  echo "telenor";
+                            //exit;
 
-	                                 //echo "bhutta<pre>".$status;exit;
-								$msg =$ictcore_attendance->recording;
-								$smsLog = new SMSLog();
-								$smsLog->type      = "Attendancehello";
-								$smsLog->sender    = "ictcore";
-								$smsLog->message   = $msg;
-								$smsLog->recipient = $student->fatherCellNo;
-								$smsLog->regiNo    = $absst;
-								$smsLog->status    = $status;
-								$smsLog->save();
+                            $get_msg  = DB::table('ictcore_attendance')->first();
+                            $name     = $student->firstName.' '.$student->lastName;
+                            $msg      =  str_replace("<<parent>>",$student->fatherName,$get_msg->description);
+		                    $msg      =  str_replace("<<name>>",$name,$msg);
+                            //if($attendance_noti->type=='sms'){
+                            $snd_msg  = $ict->verification_number_telenor_sms($student->fatherCellNo,$msg,'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$attendance_noti->type);
+                            //}elseif($attendance_noti->type=='voice'){
+                             //$msg =$ictcore_attendance->recording;
+                             //$snd_msg  = $ict->verification_number_telenor_voice($student->fatherCellNo,$msg,'USTADONLINE',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password);
+
+                           // }
+                            //echo "<pre>";
+                            //print_r($snd_msg);
+                           // exit;
+                             //$msg =$ictcore_attendance->recording;
+                            if($attendance_noti->type=="voice"){
+                            	$msg =$ictcore_attendance->recording;
+                            }
+									$smsLog = new SMSLog();
+									$smsLog->type      = "Attendancehello";
+									$smsLog->sender    = "telenor"." " .$attendance_noti->type;
+									$smsLog->message   = $msg;
+									$smsLog->recipient = $student->fatherCellNo;
+									$smsLog->regiNo    = $absst;
+									$smsLog->status    = $snd_msg->response;
+									$smsLog->save();
+
+
+						 }else{
+							if($ictcore_integration->ictcore_url!='' && $ictcore_integration->ictcore_user!='' && $ictcore_integration->ictcore_password!=''){ 
+								
+		                        if($ictcore_attendance->ictcore_program_id!=''){
+									$data = array(
+									'first_name' => $student->firstName,
+									'last_name' => $student->lastName,
+									'phone'     => $student->fatherCellNo,
+									'email'     => '',
+									);
+									$contact_id = $ict->ictcore_api('contacts','POST',$data );
+									$data = array(
+									'title' => 'Attendance',
+									'program_id' => $ictcore_attendance->ictcore_program_id,
+									'account_id'     => 1,
+									'contact_id'     => $contact_id,
+									'origin'     => 1,
+									'direction'     => 'outbound',
+									);
+									$transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+									//echo "================================================================transmission==========================================";
+									// print_r($transmission_id);
+									//GET transmissions/{transmission_id}/send
+									$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+									//echo "================================================================transmission send==========================================";
+									//print_r($transmission_send);
+									// exit;
+									  $msg = "Dear Parents your Child (Name-".$student->firstName." ".$student->middleName." ".$student->lastName.", Class- ".$student->class." , Roll- ".$student->rollNo." ) is Absent in School today.";
+									//  $fatherCellNo = Student::select('fatherCellNo','')->where('regiNo', $absst)->first();
+									 if(!empty($transmission_send->error)){
+
+		                                 	
+		                                 	$status =$transmission_send->error->message;
+		                                 }else{
+		                                 	$status = "Completed";
+		                                 }
+
+		                                 //echo "bhutta<pre>".$status;exit;
+									$msg    = $ictcore_attendance->recording;
+									$smsLog = new SMSLog();
+									$smsLog->type      = "Attendancehello";
+									$smsLog->sender    = "ictcore";
+									$smsLog->message   = $msg;
+									$smsLog->recipient = $student->fatherCellNo;
+									$smsLog->regiNo    = $absst;
+									$smsLog->status    = $status;
+									$smsLog->save();
+								}else{
+									return Redirect::to('/attendance/create')->withErrors("Please Add Attendance Message in Setting Menu");
+								}
 							}else{
-								return Redirect::to('/attendance/create')->withErrors("Please Add Attendance Message in Setting Menu");
+								return Redirect::to('/attendance/create')->withErrors("Please Add ictcore integration in Setting Menu");
 							}
-						}else{
-							return Redirect::to('/attendance/create')->withErrors("Please Add ictcore integration in Setting Menu");
-						}
+					    }
 					}
 					return Redirect::to('/attendance/create')->with("success", "Students attendance saved and " . count($absentStudents) . " sms send to father numbers.");
 				}

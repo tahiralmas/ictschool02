@@ -44,6 +44,7 @@
     <link href='{{ URL::asset('/css/app.css') }}' rel='stylesheet'>
     <link href='//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css' rel='stylesheet'>
     <link href="{{ URL::asset('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
+  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap2-toggle.min.css" rel="stylesheet">
 
 
     @yield("style")
@@ -372,7 +373,9 @@
                                 <li><a href="{{url('/holidays')}}">Holidays</a></li>
                                 <li><a href="{{url('/class-off')}}">Class Off Days</a></li>
                                 <li><a href="{{url('/institute')}}">Institute</a></li>
-                                <li><a href="{{url('/ictcore')}}">IctCore Integration</a></li>
+                                <li><a href="{{url('/ictcore?type=sms')}}">Sms Integration</a></li>
+                                <li><a href="{{url('/ictcore?type=voice')}}">Voice Integration</a></li>
+                                <li><a href="{{url('/notification_type')}}">Notification Types</a></li>
                                 <li><a href="{{url('/ictcore/attendance')}}">Attendance Message</a></li>
                                 <li><a href="{{url('/ictcore/fees')}}">Fees Message</a></li>
 
@@ -436,7 +439,7 @@
 
     <footer class="footer">
         <hr>
-        <p class="col-md-9 col-sm-9 col-xs-12 copyright"> <a href="#" target="_blank">{{Session::get('inName')}}</a> &copy;2017</p>
+        <p class="col-md-9 col-sm-9 col-xs-12 copyright"> <a href="#" target="_blank">{{Session::get('inName')}}</a> &copy;<?php echo date("Y");?></p>
 
         <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Developed by:
         <a href="http://ictvision.net/">IctVision</a></p>
@@ -479,7 +482,8 @@
 <!-- application script for Charisma demo -->
 <script src="{{ URL::asset('/js/charisma.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.14/jquery.mask.min.js"></script>
-    <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
+<script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
 @yield('script')
 </body>

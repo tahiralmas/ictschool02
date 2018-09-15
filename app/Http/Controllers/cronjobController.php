@@ -36,11 +36,16 @@ class cronjobController extends BaseController {
 
 		$student_all =	DB::table('Student')->select( '*')->get();
 		if(count($student_all)>0){
+			 $ict  = new ictcoreController();
 			$i=0;
-		    $ictcore_fees = Ictcore_fees::select("*")->first();
-			$ictcore_integration = Ictcore_integration::select("*")->first();
+			$attendance_noti     = DB::table('notification_type')->where('notification','fess')->first();
+		    $ictcore_fees        = Ictcore_fees::select("*")->first();
+			$ictcore_integration = Ictcore_integration::select("*")->where('type',$attendance_noti->type)->first();
+			if($ictcore_integration->method=="telenor"){
+              $group_id = $ict->telenor_apis('group','','');
+			}else{
 				if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
-				      $ict  = new ictcoreController();
+				     
 					  $data = array(
 						'name' => 'Fee Notification',
 						'description' => 'fee notification using cron job',
@@ -53,6 +58,7 @@ class cronjobController extends BaseController {
 		           // return Redirect::to('/fees/classreport')->withErrors("Please Add ictcore integration in Setting Menu");
                     exit();
 		     	}
+		     }
 				foreach($student_all as $stdfees)
 				{
 
@@ -73,10 +79,14 @@ class cronjobController extends BaseController {
 						'phone'              =>  $stdfees->fatherCellNo,
 						'email'              => '',
 						);
-
+                        if($ictcore_integration->method=="telenor"){
+                        	
+                        	 $group_contact_id = $ict->telenor_apis('add_contact',$group_id,$stdfees->fatherCellNo);
+                        }else{
 					   $contact_id = $ict->ictcore_api('contacts','POST',$data );
 
-					    $group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+					   $group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+					 }
 					}
 
 				}
@@ -85,6 +95,10 @@ class cronjobController extends BaseController {
 			//$resultArray = array();
 				exit();
 			}
+			    if($ictcore_integration->method=="telenor"){
+                    $group_contact_id
+                    
+			    }else{
 			    if(!empty($ictcore_fees) && $ictcore_fees->ictcore_program_id!=''){
 			    	
 	                $data = array(
@@ -98,5 +112,6 @@ class cronjobController extends BaseController {
 					$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
 					//$campaign_id = $ict->ictcore_api('campaigns/$campaign_id/start','PUT',$data=array() );
 			}
+		}
     }
 }

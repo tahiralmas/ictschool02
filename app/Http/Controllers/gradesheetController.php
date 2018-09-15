@@ -334,13 +334,13 @@ class gradesheetController extends BaseController {
 	public function printsheet($regiNo,$exam,$class)
 	{
 
-		$student=	DB::table('Student')
-		->join('Class', 'Student.class', '=', 'Class.code')
-		->select( 'Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session','Student.extraActivity')
-		->where('Student.regiNo','=',$regiNo)
-		->where('Student.class','=',$class)
-		->where('Student.isActive', '=', 'Yes')
-		->first();
+		$student =	DB::table('Student')
+		 ->join('Class', 'Student.class', '=', 'Class.code')
+		 ->select( 'Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session','Student.extraActivity')
+		 ->where('Student.regiNo','=',$regiNo)
+		 ->where('Student.class','=',$class)
+		 ->where('Student.isActive', '=', 'Yes')
+		 ->first();
 
 		if(!empty($student)) {
 
@@ -358,10 +358,11 @@ class gradesheetController extends BaseController {
 				return Redirect::back()->with('noresult', 'Result Not Found!');
 			} else {
 				$meritdata = new Meritdata();
-				$position = 0;
+				$position  = 0;
 				foreach ($merit as $m) {
 					$position++;
 					if ($m->regiNo === $regiNo) {
+
 						$meritdata->regiNo = $m->regiNo;
 						$meritdata->point = $m->point;
 						$meritdata->grade = $m->grade;
@@ -432,8 +433,6 @@ class gradesheetController extends BaseController {
 						$totalHighest += $maxMarks->highest;
 						array_push($subcollection, $submarks);
 					}
-
-
 				}
 				$gparules = GPA::select('gpa', 'grade', 'markfrom')->get();
 				$subgrpbl = false;
@@ -457,9 +456,6 @@ class gradesheetController extends BaseController {
 						array_push($blextra, $gcal[0]);
 						array_push($blextra, $gcal[1]);
 					}
-
-
-
 				}
 				$subgrpen = false;
 				if ($englishtotal > 0) {
@@ -482,8 +478,6 @@ class gradesheetController extends BaseController {
 						array_push($enextra, $gcal[1]);
 
 					}
-
-
 				}
 
 
@@ -535,7 +529,6 @@ class gradesheetController extends BaseController {
 			{
 				$total=$sub->totalfull;
 				break;
-
 			}
 		}
 		return $total;
@@ -546,12 +539,9 @@ class gradesheetController extends BaseController {
 			'class' => 'required',
 			'exam' => 'required',
 			'session' => 'required'
-
-
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails()) {
-
 			return Redirect::to('/result/generate')->withErrors($validator)->withInput();
 		} else {
 			$isGenerated=DB::table('MeritList')
@@ -562,8 +552,8 @@ class gradesheetController extends BaseController {
 			->get();
 			if(empty($isGenerated))
 			{
-				$subjects = Subject::select('name', 'code', 'type', 'subgroup')->where('class', '=', Input::get('class'))->get();
-				$sectionsHas = Student::select('section')->where('class', '=', Input::get('class'))->where('session', trim(Input::get('session')))->where('isActive', '=', 'Yes')->distinct()->orderBy('section', 'asc')->get();
+				$subjects           = Subject::select('name', 'code', 'type', 'subgroup')->where('class', '=', Input::get('class'))->get();
+				$sectionsHas        = Student::select('section')->where('class', '=', Input::get('class'))->where('session', trim(Input::get('session')))->where('isActive', '=', 'Yes')->distinct()->orderBy('section', 'asc')->get();
 
 				$sectionMarksSubmit = Marks::select('section')->where('class', '=', Input::get('class'))->where('session', trim(Input::get('session')))->where('exam',Input::get('exam'))->distinct()->get();
 				//dd($sectionsHas);
@@ -694,14 +684,14 @@ class gradesheetController extends BaseController {
 										$grandGrade = $this->gradnGradeCal($grandPoint, $gparules);
 									}
 
-									$merit = new MeritList;
-									$merit->class = Input::get('class');
+									$merit          = new MeritList;
+									$merit->class   = Input::get('class');
 									$merit->session = trim(Input::get('session'));
-									$merit->exam = Input::get('exam');
-									$merit->regiNo = $student->regiNo;
+									$merit->exam    = Input::get('exam');
+									$merit->regiNo  = $student->regiNo;
 									$merit->totalNo = $totalmarks;
-									$merit->point = $grandPoint;
-									$merit->grade = $grandGrade;
+									$merit->point   = $grandPoint;
+									$merit->grade   = $grandGrade;
 
                                 // echo "<pre>";print_r($merit );
 									$merit->save();
@@ -730,7 +720,6 @@ class gradesheetController extends BaseController {
 						}
 
 						return Redirect::to('/result/generate')->with("success", "Result Generate and Publish Successfull.");
-
 					}
 					else
 					{
@@ -757,20 +746,19 @@ class gradesheetController extends BaseController {
 			$grade="A+";
 			return $grade;
 		}
-		$lowarray = array("0.00","1.00","2.00","3.00","3.50","4.00");
-		$higharray = array("1.00","2.00","3.00","3.50","4.00","5.00");
+		$lowarray   = array("0.00","1.00","2.00","3.00","3.50","4.00");
+		$higharray  = array("1.00","2.00","3.00","3.50","4.00","5.00");
 		$gradearray = array("F","D","C","B","A-","A");
 
-		for($i=0;$i<count($lowarray);$i++)
+		for($i = 0;$i < count($lowarray);$i++)
 		{
-			if($grandPoint>=$lowarray[$i] && $grandPoint<$higharray[$i])
+			if($grandPoint >= $lowarray[$i] && $grandPoint<$higharray[$i])
 			{
 				$grade=$gradearray[$i];
 			}
 		}
 
 		return $grade;
-
 	}
 
 	public function search()
@@ -801,9 +789,6 @@ class gradesheetController extends BaseController {
 
 			return Redirect::to('/gradesheet/print/'.Input::get('regiNo').'/'.Input::get('exam').'/'.Input::get('class'));
 		}
-
-
-
 	}
 	public function searchpub()
 	{
@@ -817,12 +802,9 @@ class gradesheetController extends BaseController {
 	{
 
 		$rules=[
-
-			'exam' => 'required',
-			'regiNo' => 'required',
-			'class' => 'required'
-
-
+		 'exam' => 'required',
+		 'regiNo' => 'required',
+		 'class' => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())

@@ -270,8 +270,8 @@
                               'B+'=>'B+',
                               'AB+'=>'AB+',
                               'AB-'=>'AB-',
-                                  'O+'=>'O+',
-                                    'O-'=>'O-',
+                              'O+'=>'O+',
+                              'O-'=>'O-',
 
                               ];?>
                               {{ Form::select('bloodgroup',$data,$student->bloodgroup,['class'=>'form-control'])}}
@@ -469,12 +469,6 @@
                           </ul>
                       </div>
              @endif
-
-
-
-
-
-
         </div>
     </div>
 </div>
@@ -521,11 +515,7 @@ function getsections()
       // $('#section').append($('<option>').text("--Select Section--").attr('value',""));
         $.each(data, function(i, section) {
           //console.log(student);
-         
-          
             var opt="<option value='"+section.id+"'>"+section.name + " </option>"
-
-        
           //console.log(opt);
           $('#section').append(opt);
 
@@ -537,33 +527,6 @@ function getsections()
     });
 };
 
- $.ajax({
-      url: "{{url('/section/getList')}}"+'/'+aclass+'/'+session,
-      data: {
-        format: 'json'
-      },
-      error: function(error) {
-        alert("Please fill all inputs correctly!");
-      },
-      dataType: 'json',
-      success: function(data) {
-        $('#section').empty();
-       $('#section').append($('<option>').text("--Select Section--").attr('value',""));
-        $.each(data, function(i, section) {
-          //console.log(student);
-         
-          
-        var opt="<option value='"+section.id+"'>"+section.name +' (  ' + section.students +' ) '+ "</option>"
-
-        
-          //console.log(opt);
-          $('#section').append(opt);
-
-        });
-        //console.log(data);
-
-      },
-      type: 'GET'
-    });
+ 
 </script>
 @stop

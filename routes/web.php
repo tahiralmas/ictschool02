@@ -236,6 +236,8 @@ Route::post('/institute','instituteController@save');
 
 Route::get('/ictcore','ictcoreController@index');
 Route::post('/ictcore','ictcoreController@create');
+Route::post('/notification_type','ictcoreController@noti_create');
+Route::get('/notification_type','ictcoreController@noti_index');
 
 Route::get('/ictcore/attendance','ictcoreController@attendance_index');
 Route::post('/ictcore/attendance','ictcoreController@post_attendance');
