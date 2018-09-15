@@ -126,15 +126,13 @@ class ictcoreController {
 							$ictcore_attendance->telenor_file_id  =$upload_audio;
 							$ictcore_attendance->save();
                          	return Redirect::to('/ictcore/attendance')->with("success", "Attendance Message Created Succesfully.");
-               }
-             else{
+            }else{
 			if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 				$ictcore_attendance =	DB::table('ictcore_attendance')->select('*')->first();
 				
 				if(!empty($ictcore_attendance) && File::exists($drctry.$ictcore_attendance->recording)){
 					unlink($drctry .$ictcore_attendance->recording);
 				}
-
 				$sname = Input::get('title');
 				$remove_spaces =  str_replace(" ","_",Input::get('title'));
 				$fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
@@ -145,7 +143,6 @@ class ictcoreController {
 				$mimetype      =  $finfo->file($name);
 				$cfile         =  curl_file_create($name, $mimetype, basename($name));
 				$data          =  array( $cfile);
-				
 				$result        =  $this->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
 				$recording_id  =  $result ;
 				if(!empty($recording_id->error)){
@@ -214,12 +211,11 @@ class ictcoreController {
 			$ictcore_integration =	DB::table('ictcore_integration')->select('*')->where('type',$attendance_noti->type)->first();
             if($ictcore_integration->method=="telenor" && $attendance_noti->type=='voice'){
               // $ictcore_fees =	DB::table('ictcore_fees')->select('*')->first();
-				$drctry = storage_path('app/public/messages/');
+			  $drctry       = storage_path('app/public/messages/');
               $ictcore_fess =	DB::table('ictcore_fees')->select('*')->first();
 					if(!empty($ictcore_fess) && File::exists($drctry.$ictcore_fess->recording)){
 						unlink($drctry .$ictcore_fess->recording);
 					}
-
 						$sname = Input::get('title');
 						$remove_spaces =  str_replace(" ","_",Input::get('title'));
 						$fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
@@ -365,7 +361,8 @@ class ictcoreController {
 	    return View('app.notifications',compact('notification_types'));
 	}
 
-	public function noti_create(){
+	public function noti_create()
+	{
        $rules=[
 		'fess' => 'required',
 		'attendance' => 'required',
@@ -376,20 +373,19 @@ class ictcoreController {
 		}
 		else {
 		
-		$data = array(Input::all());
-		unset($data[0]['_token']);
-		Notification::truncate();
-		foreach($data[0] as $key=>$value){
-			$add_noti = new Notification;
-		     $add_noti->type = $value;
-		     $add_noti->notification = $key;
-		     $add_noti->save();
-		     //echo $key;echo $value;
-		     //echo "<br>";
-		}    
+			$data = array(Input::all());
+			unset($data[0]['_token']);
+			Notification::truncate();
+			foreach($data[0] as $key=>$value){
+				$add_noti = new Notification;
+			     $add_noti->type = $value;
+			     $add_noti->notification = $key;
+			     $add_noti->save();
+			     //echo $key;echo $value;
+			     //echo "<br>";
+			}    
 			return Redirect::to('/notification_type')->with("success", "Notifications setting Created Succesfully.");
-
-	}
+	    }
 	}
 
 	public function verification_number_telenor_sms($to,$msg,$mask,$user,$pass,$type)
@@ -430,11 +426,12 @@ class ictcoreController {
         if($mask!=null)
 	    {
 	    	if($type=='sms'){
-			$urlWithSessionKey = $urlWithSessionKey . "&mask=" . urlencode($mask);
+
+				$urlWithSessionKey = $urlWithSessionKey . "&mask=" . urlencode($mask);
 	        }
 	    }
 	    //return $urlWithSessionKey;
-          $snd_sms = curl_init();
+            $snd_sms = curl_init();
 		    curl_setopt($snd_sms, CURLOPT_URL,$urlWithSessionKey);
 		    curl_setopt($snd_sms, CURLOPT_FAILONERROR,1);
 		    curl_setopt($snd_sms, CURLOPT_FOLLOWLOCATION,1);
@@ -500,8 +497,8 @@ class ictcoreController {
 			//curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 			curl_setopt($cha, CURLOPT_FAILONERROR,1);
 	        curl_setopt($cha, CURLOPT_FOLLOWLOCATION,1);
-	       curl_setopt($cha, CURLOPT_RETURNTRANSFER,1);
-	       curl_setopt($cha, CURLOPT_TIMEOUT, 15);
+	        curl_setopt($cha, CURLOPT_RETURNTRANSFER,1);
+	        curl_setopt($cha, CURLOPT_TIMEOUT, 15);
 			curl_setopt($cha, CURLOPT_POST,1);
 			curl_setopt($cha, CURLOPT_POSTFIELDS, $post);
 			$result=curl_exec ($cha);
