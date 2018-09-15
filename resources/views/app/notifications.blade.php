@@ -35,8 +35,8 @@ exit;
                                 <div class="form-group">
                                     <label for="name"  class=" col-form-label">Attendance</label>
                                     <div class="input-group col-md-6">
-                                       sms <input type="radio" name="attendance" @if(!empty($notification_types) && $notification_types[0]->type =='sms') checked @endif value="sms"  >
-                                       voice <input type="radio" name="attendance" @if(!empty($notification_types) && $notification_types[0]->type=='voice') checked @endif value="voice" >
+                                       sms <input type="radio" name="attendance" value="sms"  >
+                                       voice <input type="radio" name="attendance"  value="voice" >
                                     </div>
                                 </div>
                                 </div>
@@ -45,8 +45,8 @@ exit;
                                 <div class="form-group">
                                     <label for="name"  class=" col-form-label">Fees</label>
                                     <div class="input-group col-md-6">
-                                       sms <input type="radio" name="fess" @if( !empty($notification_types) && $notification_types[1]->type=='sms') checked @endif required value="sms"  >
-                                       voice <input type="radio" name="fess" @if(!empty($notification_types) && $notification_types[1]->type=='voice') checked @endif required value="voice"  >
+                                       sms <input type="radio" name="fess" required value="sms"  >
+                                       voice <input type="radio" name="fess" required value="voice"  >
                                     </div>
                                 </div>
                                 </div>
