@@ -5,7 +5,16 @@
 <div class="alert alert-success">
   <button data-dismiss="alert" class="close" type="button">×</button>
     <strong>Process Success.</strong> {{ Session::get('success')}}<br><br>
-
+<?php 
+$notification_types;
+if(!empty($notification_types)){
+  echo "dsds";
+}
+else{
+  echo "sdsdsds";
+}
+exit;
+?>
 </div>
 @endif
 <div class="row">
