@@ -40,6 +40,8 @@ class feeNotification extends Command
     public function handle()
     {
         //
+       
+
         $cron_job = new cronjobController();
 
         $cron_job->feenotification();

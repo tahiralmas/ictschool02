@@ -324,10 +324,10 @@ class ictcoreController {
 		$api_username = $ictcore_integration[0]->ictcore_user;    // <=== Username at ICTCore
 		$api_password = $ictcore_integration[0]->ictcore_password;  // <=== Password at ICTCore
 		$service_url  =  $ictcore_integration[0]->ictcore_url;  //'http://172.17.0.2/ictcore/api'; // <=== URL for ICTCore REST APIs
-		$requestType = $req; // This can be PUT or POST
-		$api_url = "$service_url/$method";
-		$urlaray = explode('/',$method);
-		$curl = curl_init($api_url);
+		$requestType  = $req; // This can be PUT or POST
+		$api_url      = "$service_url/$method";
+		$urlaray      = explode('/',$method);
+		$curl         = curl_init($api_url);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_CUSTOMREQUEST,$requestType);
 		curl_setopt($curl, CURLOPT_POST, true);
@@ -397,12 +397,11 @@ class ictcoreController {
 	{
 
 	    $planetbeyondApiUrl="https://telenorcsms.com.pk:27677/corporate_sms2/api/auth.jsp?msisdn=#username#&password=#password#";
-		if($type=='sms'){
+		if($type == 'sms'){
 		$planetbeyondApiSendSmsUrl="https://telenorcsms.com.pk:27677/corporate_sms2/api/sendsms.jsp?session_id=#session_id#&to=#to_number_csv#&text=#message_text#"; 
-	    }elseif($type=='voice'){
+	    }elseif($type == 'voice'){
 	    	$attandace_message = DB::table("ictcore_attendance")->first();
 	    	$planetbeyondApiSendSmsUrl="https://telenorcsms.com.pk:27677/corporate_sms2/api/makecall.jsp?session_id=#session_id#&to=#to_number_csv#&file_id=".$attandace_message->telenor_file_id."&max_retries=1";
-
 	    }
 	    $userName = $user;
 	    $password = $pass;
@@ -522,17 +521,27 @@ class ictcoreController {
        if(!empty($ictcore_integration)){
         $planetbeyondApiUrl        = "https://telenorcsms.com.pk:27677/corporate_sms2/api/auth.jsp?msisdn=#username#&password=#password#";
 		if($method == 'group'){
-		$planetbeyondApi = "https://telenorcsms.com.pk:27677/corporate_sms2 /api/list.jsp?session_id=#session_id#&list_name=fee_defulter_".time(); 
+		$planetbeyondApi = "https://telenorcsms.com.pk:27677/corporate_sms2/api/list.jsp?session_id=#session_id#&list_name=fee_defulter_".time(); 
 	    }
 	    if($method == 'add_contact'){
-          $planetbeyondApi = "https://telenorcsms.com.pk:27677/corporate_sms2/api/addcontacts.jsp?session_id=#session_id#&list_id=".$group_id."&to=".$contact;
+	    	//$to = str_replace("0","92",$to);
+	    	$to = preg_replace('/0/', '92', $to, 1);
+
+          $planetbeyondApi = "https://telenorcsms.com.pk:27677/corporate_sms2/api/addcontacts.jsp?session_id=#session_id#&list_id=".$group_id."&to=".$to;
 	    }
 	    if($method == 'campaign_create' && $type =='sms'){
-	    	$planetbeyondApi="https://telenorcsms.com.pk:27677/corporate_sms2/api/campaign.jsp?session_id=#session_id#&name=fee_defulter_".time()."&group_ids=".$group_id."&text=".$sms_msg."&time=".date("Y/m/d h:i:s");
+	    	//echo "<=sms_msg=>".$sms_msg;
+	    	 date_default_timezone_set('Asia/Karachi');
+	    	$planetbeyondApi="https://telenorcsms.com.pk:27677/corporate_sms2/api/campaign.jsp?session_id=#session_id#&name=fee_defulter_".time()."&group_ids=".$group_id."&text=".urlencode($sms_msg)."&time=".urlencode(date("Y-m-d H:i:s", strtotime("+1 hours")))."&mask=".urlencode("ICT VISION");
 
 	    }
 	    if($method == 'campaign_create' && $type =='voice'){
-	    	$planetbeyondApi="https://telenorcsms.com.pk:27677/corporate_sms2/api/campaign.jsp?session_id=#session_id#&name=fee_defulter_".time()."&group_ids=".$group_id."&text=".$sms_msg."&time=".date("Y/m/d h:i:s");
+	    	$planetbeyondApi="https://telenorcsms.com.pk:27677/corporate_sms2/api/voice_broadcast_campaign.jsp?session_id=#session_id#&name=fee_defulter_voice_".time()."&file_id=".$file_id."&group_ids=".$group_id."&valid_options=0&text=".urlencode($sms_msg)."&max_retries=0";
+
+	    }
+	    if($method == 'send_msg'){
+
+	    	$planetbeyondApi="https://telenorcsms.com.pk:27677/corporate_sms2/api/campstatus.jsp?session_id=#session_id#&campid=".$type;
 
 	    }
 	    $userName  = $ictcore_integration->ictcore_user;
@@ -553,18 +562,23 @@ class ictcoreController {
 		$xml = new \SimpleXMLElement($retValue);
 	    $session_id = $xml->data;
 	    $urlWithSessionKey = str_replace("#session_id#",$session_id,$planetbeyondApi);
-         $api = curl_init();
+         //return $urlWithSessionKey ;
+         echo $urlWithSessionKey;
+            $api = curl_init();
 		    curl_setopt($api, CURLOPT_URL,$urlWithSessionKey);
 		    curl_setopt($api, CURLOPT_FAILONERROR,1);
 		    curl_setopt($api, CURLOPT_FOLLOWLOCATION,1);
 		    curl_setopt($api, CURLOPT_RETURNTRANSFER,1);
 		    curl_setopt($api, CURLOPT_TIMEOUT, 15);
-		    $api_data = curl_exec($api);          
+		    $api_data = curl_exec($api); 
 		    curl_close($api);
-				
+		    //echo "hgggggggg<pre>hgggggggggggggggggg";print_r($api_data);
+		if($method != 'add_contact'){
 			$xml     = new \SimpleXMLElement($api_data);
+		    //echo "<pre>";print_r($xml);
 		    $data    = $xml->data;
 		    return $data ;
+		}
 
        }else{
 

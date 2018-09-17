@@ -14,7 +14,7 @@ use App\FeeSetup;
 use App\Institute;
 use App\FeeHistory;
 use DB;
-
+use Illuminate\Console\Command;
 use App\Ictcore_fees;
 use App\Ictcore_integration;
 use App\Http\Controllers\ictcoreController;
@@ -33,6 +33,7 @@ class cronjobController extends BaseController {
 	
     public function feenotification()
     {
+     //$this->info('Notification sended successfully');
 
 		$student_all =	DB::table('Student')->select( '*')->get();
 		if(count($student_all)>0){
@@ -42,7 +43,7 @@ class cronjobController extends BaseController {
 		    $ictcore_fees        = Ictcore_fees::select("*")->first();
 			$ictcore_integration = Ictcore_integration::select("*")->where('type',$attendance_noti->type)->first();
 			if($ictcore_integration->method=="telenor"){
-              $group_id = $ict->telenor_apis('group','','');
+             $group_id = $ict->telenor_apis('group','','','','','');
 			}else{
 				if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
 				     
@@ -51,7 +52,7 @@ class cronjobController extends BaseController {
 						'description' => 'fee notification using cron job',
 						);
 
-					 $group_id= $ict->ictcore_api('groups','POST',$data );
+					echo  $group_id= $ict->ictcore_api('groups','POST',$data );
 
 		     	}else{
 
@@ -81,23 +82,34 @@ class cronjobController extends BaseController {
 						);
                         if($ictcore_integration->method=="telenor"){
                         	
-                        	 $group_contact_id = $ict->telenor_apis('add_contact',$group_id,$stdfees->fatherCellNo);
+                        	$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$stdfees->fatherCellNo,'','','');
+                             //break;
                         }else{
 					   $contact_id = $ict->ictcore_api('contacts','POST',$data );
 
 					   $group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
 					 }
 					}
-
 				}
 			}
 			else{
 			//$resultArray = array();
 				exit();
 			}
+		
 			    if($ictcore_integration->method=="telenor"){
-                    $group_contact_id
-                    
+                   $fee_msg = DB::table('ictcore_fees');
+                   if($fee_msg->count()>0 && $fee_msg->first()->description!=''){
+                   	$msg = $fee_msg->first()->description;
+                   }else{
+                   	$msg= "please submit your child  fee for this month";
+                   }
+                    //$group_id='410598';
+                   echo  $campaign      = $ict->telenor_apis('campaign_create',$group_id,'',$msg,$fee_msg->first()->telenor_file_id,$attendance_noti->type);
+                  // echo $campaign;
+                     // $this->info('Notification sended successfully'.$campaign);
+                    $send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
+
 			    }else{
 			    if(!empty($ictcore_fees) && $ictcore_fees->ictcore_program_id!=''){
 			    	
