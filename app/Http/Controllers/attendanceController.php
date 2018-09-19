@@ -238,9 +238,9 @@ class attendanceController extends BaseController {
 		                        if($ictcore_attendance->ictcore_program_id!=''){
 									$data = array(
 									'first_name' => $student->firstName,
-									'last_name' => $student->lastName,
-									'phone'     => $student->fatherCellNo,
-									'email'     => '',
+									'last_name'  =>  $student->lastName,
+									'phone'      =>  $student->fatherCellNo,
+									'email'      =>  '',
 									);
 									$contact_id = $ict->ictcore_api('contacts','POST',$data );
 									$data = array(

@@ -57,7 +57,7 @@ class messageController extends BaseController {
 			  return Redirect::to('/message')->withErrors($validator);
 			}else {
 
-
+                   $file_id='';
 
                   /*   $section = Input::get('section');
 							$class = Input::get('class');
@@ -71,6 +71,7 @@ class messageController extends BaseController {
 							echo "<pre>";print_r($student->toArray());exit; */
 
 					$type = Input::get('type');
+					
 					$ictcore_integration = Ictcore_integration::select("*")->first();
 					if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 
@@ -78,34 +79,43 @@ class messageController extends BaseController {
 	                  $role = Input::get('role');
 	                  $mess_name = Input::get('mess_name');
 					  $remove_spaces_m =  str_replace(" ","_",$mess_name );
-
+                       
 						if($type=='voice'){
 							
 							
 							
 							$message = Message::find(Input::get('message'));
 							$program_id =  $message->ictcore_program_id;
-							
+							$file_id =  $message->telenor_file_id;
 						}elseif($type=='sms' || $type=='Sms' || $type=='SMS'){
 							$data = array(
 								'name' => Input::get('mess_name'),
-								'data' =>Input::get('message'),
+								'data' => Input::get('message'),
 								'type' => 'plain',
 								'description' =>'',
 							);
+							if($ictcore_integration->method == 'telenor'){
+
+							}else{
 							$text_id  =  $ict->ictcore_api('messages/texts','POST',$data );
-							$data = array(
+							$data     = array(
 								'name' => Input::get('mess_name'),
 								'text_id' =>$text_id,
 							);
 							$program_id  =  $ict->ictcore_api('programs/sendsms','POST',$data );
 						}
+						}
+						if($ictcore_integration->method == 'telenor'){
+
+                            $group_id = $ict->telenor_apis('group','','','','','');
+
+						}else{
 						$data = array(
 								'name' => $remove_spaces_m,
 								'description' => $mess_name,
 								);
 		                $group_id= $ict->ictcore_api('groups','POST',$data );
-
+                         }
 						if($role =='student' || $role =='parent'){
 
 							$section = Input::get('section');
@@ -126,8 +136,16 @@ class messageController extends BaseController {
 								'phone'     => $std->fatherCellNo,
 								'email'     => '',
 								);
-								$contact_id = $ict->ictcore_api('contacts','POST',$data );
-								$group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+                                 
+                                if($ictcore_integration->method == 'telenor'){
+                                  
+                                $group_contact_id = $ict->telenor_apis('add_contact',$group_id,$std->fatherCellNo,'','','');
+
+                                }else{
+
+									$contact_id = $ict->ictcore_api('contacts','POST',$data );
+									$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+							    }
 							}
 						}else{
 							$teacher=	DB::table('teacher')
@@ -136,16 +154,29 @@ class messageController extends BaseController {
 							foreach($teacher as $techrd){
 								$data = array(
 								'first_name' => $techrd->firstName,
-								'last_name' => $techrd->lastName,
-								'phone'     => $techrd->phone,
-								'email'     => $techrd->email
+								'last_name'  => $techrd->lastName,
+								'phone'      => $techrd->phone,
+								'email'      => $techrd->email
 								);
+                                 if($ictcore_integration->method == 'telenor'){
+                                  
+                                $group_contact_id = $ict->telenor_apis('add_contact',$group_id,$std->fatherCellNo,'','','');
 
+                                }else{
 								$contact_id = $ict->ictcore_api('contacts','POST',$data );
-								$group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+								$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
 
+							    }
 							}
 						}
+						if($ictcore_integration->method == 'telenor'){
+                                  
+                        echo  $campaign      = $ict->telenor_apis('campaign_create',$group_id,'',Input::get('message'),$file_id,$type);
+                          // echo $campaign;
+                         // $this->info('Notification sended successfully'.$campaign);
+                  
+                           // $send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
+                        }else{
 						$data = array(
 						'program_id' => $program_id,
 						'group_id' => $group_id,
@@ -156,7 +187,7 @@ class messageController extends BaseController {
 						);
 						$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
 
-						
+						}
 						return Redirect::to('/message')->with("success", "campaign Created Succesfully.");
 					}else{
 						return Redirect::to('/message')->withErrors("Please Add ictcore integration in Setting Menu");

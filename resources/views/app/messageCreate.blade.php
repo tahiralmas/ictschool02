@@ -13,7 +13,6 @@
         <div class="box-inner">
             <div data-original-title="" class="box-header well">
                 <h2><i class="glyphicon glyphicon-th"></i> Send Notification </h2>
-
             </div>
             <div class="box-content">
                 <ul class="nav nav-tabs" id="myTab">

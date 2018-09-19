@@ -87,18 +87,46 @@ class templateController extends BaseController {
 
                 Input::file('message')->move($drctry,$fileName);
                 sleep(3);
+               echo 	$change_wav_mono =  exec('sox '.$drctry.$fileName .' -b 16 -r 8000 -c 1 -e signed-integer '.$drctry.'mono.wav');
+               //echo $drctry.$fileName;
+                //exit;
+                 $name              =   $drctry .$fileName;
+                 $telenor_name      =   $drctry .'mono.wav';
 
+                 $finfo             =  new \finfo(FILEINFO_MIME_TYPE);
+                 $mimetype          =  $finfo->file($name);
+                 $mimetypet         =  $finfo->file($telenor_name);
+                 $cfile             =  curl_file_create($telenor_name, $mimetypet, basename($telenor_name));
+                 $data              =     array( $cfile);
+                 $telenor_api_data  = array('name'=>time(),'audio_file'=> $cfile);
+              
+                $ictcore_integration =	DB::table('ictcore_integration')->select('*')->where('type','voice')->first();
+               if($ictcore_integration->method=="telenor"){
+
+                 $upload_audio  = $ictcore_api->verification_number_telenor_voice($telenor_api_data,$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password);
+                  
+                $ictcore_message = new Message;
+				$ictcore_message->name = Input::get('title');
+				$ictcore_message->description = Input::get('description');
+			    $ictcore_message->recording =$fileName;
+			    $ictcore_message->ictcore_recording_id ='';
+                $ictcore_message->ictcore_program_id  ='';
+                $ictcore_message->telenor_file_id  =$upload_audio;
+				$ictcore_message->save();
+
+			     unlink($drctry .'mono.wav');
+
+                return Redirect::to('/template/create')->with("success", "Message Created Succesfully.");
+
+
+              }else{
                 $data = array(
                              'name' => Input::get('title'),
 				             'description' => Input::get('description'),
 							 );
 
                  $recording_id  =  $ictcore_api->ictcore_api('messages/recordings','POST',$data );
-                 $name          =   $drctry .$fileName;
-                 $finfo         =  new \finfo(FILEINFO_MIME_TYPE);
-                 $mimetype      =  $finfo->file($name);
-                 $cfile         =  curl_file_create($name, $mimetype, basename($name));
-                 $data          =  array( $cfile);
+                 
 				 $result        =  $ictcore_api->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',$data );
                  $recording_id  =  $result ;
                 if(!is_array($recording_id )){
@@ -116,12 +144,14 @@ class templateController extends BaseController {
                 }else{
                      return Redirect::to('/template/create')->withErrors("ERROR: Recording not Created" );               
                 }
+            }
 				$ictcore_message = new Message;
 				$ictcore_message->name = Input::get('title');
 				$ictcore_message->description = Input::get('description');
 			    $ictcore_message->recording =$fileName;
 			    $ictcore_message->ictcore_recording_id =$recording_id;
                 $ictcore_message->ictcore_program_id  =$program_id;
+                $ictcore_message->telenor_file_id  ='';
 				$ictcore_message->save();
 				return Redirect::to('/template/create')->with("success", "Message Created Succesfully.");
 			

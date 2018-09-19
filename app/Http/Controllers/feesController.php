@@ -220,12 +220,12 @@ class feesController extends BaseController {
 
 		$rules=[
 
-			'class' => 'required',
-			'student' => 'required',
-			//'date' => 'required',
+			'class'      => 'required',
+			'student'    => 'required',
+			//'date'     => 'required',
 			'paidamount' => 'required',
-			'dueamount' => 'required',
-			'ctotal' => 'required'
+			'dueamount'  => 'required',
+			'ctotal'     => 'required'
 
 		];
 		$validator = \Validator::make(Input::all(), $rules);
@@ -241,8 +241,8 @@ class feesController extends BaseController {
 				/*$chk = DB::table('stdBill')
 				->join('billHistory','stdBill.billNo','=','billHistory.billNo')
 				->where('stdBill.regiNo',Input::get('student'))
-				->where('billHistory.month',);*/
-				
+				->where('billHistory.month',);
+				*/
 				$feeTitles       = Input::get('gridFeeTitle');
 				$feeAmounts      = Input::get('gridFeeAmount');
 				$feeLateAmounts  = Input::get('gridLateFeeAmount');
@@ -268,6 +268,29 @@ class feesController extends BaseController {
 
 					DB::transaction(function() use ($billId,$counter,$feeTitles,$feeAmounts,$feeLateAmounts,$feeTotalAmounts,$feeMonths)
 					{
+                        $j=0;
+						for ($i=0;$i<$counter;$i++) {
+                               
+                               $chk = DB::table('stdBill')
+								->join('billHistory','stdBill.billNo','=','billHistory.billNo')
+								->where('stdBill.regiNo',Input::get('student'))
+								->where('billHistory.month',$feeMonths[$i]);
+                              
+
+                        if(  $chk->count()==0){
+							$feehistory          = new FeeHistory();
+							$feehistory->billNo  = $billId;
+							$feehistory->title   = $feeTitles[$i];
+							$feehistory->fee     = $feeAmounts[$i];
+							$feehistory->lateFee = $feeLateAmounts[$i];
+							$feehistory->total   = $feeTotalAmounts[$i];
+							$feehistory->month   = $feeMonths[$i];
+							$feehistory->save();
+						$j++;
+						}
+                         
+						}
+						if($j>0){
 						$feeCol                = new FeeCol();
 						$feeCol->billNo        = $billId;
 						$feeCol->class         = Input::get('class');
@@ -278,8 +301,14 @@ class feesController extends BaseController {
 						$feeCol->payDate       = Carbon::now()->format('Y-m-d');
 						//echo "<pre>";print_r(Carbon::now()->format('Y-m-d'));exit;
 						$feeCol->save();
+						\Session::put('not_save', $j);
+					}else{
+						\Session::put('not_save', 0);
+						
+
+					}
                          	
-						for ($i=0;$i<$counter;$i++) {
+						/*for ($i=0;$i<$counter;$i++) {
 
 							$feehistory          = new FeeHistory();
 							$feehistory->billNo  = $billId;
@@ -290,14 +319,22 @@ class feesController extends BaseController {
 							$feehistory->month   = $feeMonths[$i];
 							$feehistory->save();
 
-						}
+						}*/
 					});
-
+                  if(\Session::get('not_save')!=0){
+					\Session::forget('not_save');
 					return Redirect::to('/fee/collection')->with("success","Fee collection succesfull.");
+				   }else{
+				   	\Session::forget('not_save');
+				   	$messages = "Student already add fee for this month"; 
+				       
+				        return Redirect::to('/fee/collection')->withErrors($messages);
+				   }
 				}
 				else {
 					$messages = $validator->errors();
 					$messages->add('Validator!', 'Please add atlest one fee!!!');
+					
 					return Redirect::to('/fee/collection')->withInput(Input::all())->withErrors($messages);
 
 				}
@@ -444,20 +481,20 @@ class feesController extends BaseController {
 
     public function classreportindex(){
         $classes = ClassModel::pluck('name','code');
-        $class = '';
+        $class   = '';
         $section = '';
-        $month = '';
+        $month   = '';
         $session = '';
-        $year = '';
+        $year    = '';
 		$student = new studentfdata;
-		$student->class="";
-		$student->section="";
-		$student->shift="";
-		$student->session="";
-		$student->regiNo="";
-		$fees=array();
+		$student->class = "";
+		$student->section = "";
+		$student->shift = "";
+		$student->session = "";
+		$student->regiNo = "";
+		$fees = array();
 		$paid_student = array();
-		$resultArray =array();
+		$resultArray  = array();
 		return View('app.feestdreportclass',compact('classes','student','fees','totals','class','section','month','session','paid_student','year','resultArray'));
 	}
 
@@ -523,14 +560,14 @@ class feesController extends BaseController {
 
 
         //echo "<pre>";print_r(Input::get());
-		$classes = ClassModel::pluck('name','code');
-		$student = new studentfdata;
-		$student->class=Input::get('class');
-		$student->section=Input::get('section');
-		$student->shift=Input::get('shift');
-		$student->session=Input::get('session');
-		$student->regiNo=Input::get('student');
-		$feeyear = Input::get('year') ;
+		$classes          = ClassModel::pluck('name','code');
+		$student          = new studentfdata;
+		$student->class   = Input::get('class');
+		$student->section = Input::get('section');
+		$student->shift   = Input::get('shift');
+		$student->session = Input::get('session');
+		$student->regiNo  = Input::get('student');
+		$feeyear          = Input::get('year') ;
 
 		$student_all =	DB::table('Student')->select( '*')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
 
