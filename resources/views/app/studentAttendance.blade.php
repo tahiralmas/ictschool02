@@ -14,7 +14,6 @@
         <div class="alert alert-warning">
             <button data-dismiss="alert" class="close" type="button">×</button>
             <strong>{{ Session::get('noresult')}}</strong>
-
         </div>
     @endif
 
@@ -299,14 +298,14 @@
 function getsections()
 {
     var aclass = $('#class').val();
-   // alert(aclass);
+    //alert(aclass);
     $.ajax({
-      url: "{{url('/section/getList/')}}"+aclass,
+      url: "{{url('/section/getList')}}/"+aclass,
       data: {
         format: 'json'
       },
       error: function(error) {
-        alert("Please fill all inputs correctly!");
+        alert(JSON.stringify(error));
       },
       dataType: 'json',
       success: function(data) {

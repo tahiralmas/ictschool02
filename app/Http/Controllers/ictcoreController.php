@@ -524,10 +524,16 @@ class ictcoreController {
 		$planetbeyondApi = "https://telenorcsms.com.pk:27677/corporate_sms2/api/list.jsp?session_id=#session_id#&list_name=fee_defulter_".time(); 
 	    }
 	    if($method == 'add_contact'){
-	    	//$to = str_replace("0","92",$to);
-	    	$to = preg_replace('/0/', '92', $to, 1);
 
-          $planetbeyondApi = "https://telenorcsms.com.pk:27677/corporate_sms2/api/addcontacts.jsp?session_id=#session_id#&list_id=".$group_id."&to=".$to;
+	    	
+           if (preg_match("~^0\d+$~", $to)) {
+           	$tos = preg_replace('/0/', '92', $to, 1);
+			   
+			}
+			else {
+			     $tos =$to;  
+			}
+          $planetbeyondApi = "https://telenorcsms.com.pk:27677/corporate_sms2/api/addcontacts.jsp?session_id=#session_id#&list_id=".$group_id."&to=".$tos;
 	    }
 	    if($method == 'campaign_create' && $type =='sms'){
 	    	//echo "<=sms_msg=>".$sms_msg;
@@ -536,7 +542,8 @@ class ictcoreController {
 
 	    }
 	    if($method == 'campaign_create' && $type =='voice'){
-	    	$planetbeyondApi="https://telenorcsms.com.pk:27677/corporate_sms2/api/voice_broadcast_campaign.jsp?session_id=#session_id#&name=fee_defulter_voice_".time()."&file_id=".$file_id."&group_ids=".$group_id."&valid_options=0&text=".urlencode($sms_msg)."&max_retries=0";
+	    	//$planetbeyondApi="https://telenorcsms.com.pk:27677/corporate_sms2/api/voice_dynamic_campaign.jsp?session_id=#session_id#&name=fee_defulter_voice_".time()."&file_id=".$file_id."&group_ids=".$group_id."&language=English&digits=123&voice=Male&text=".urlencode($sms_msg)."&max_retries=1";
+	    	$planetbeyondApi="https://telenorcsms.com.pk:27677/corporate_sms2/api/voice_broadcast_campaign.jsp?session_id=#session_id#&name=fee_defulter_voice_".time()."&file_id=".$file_id."&group_ids=".$group_id."&text=".urlencode($sms_msg)."&max_retries=1";
 
 	    }
 	    if($method == 'send_msg'){
