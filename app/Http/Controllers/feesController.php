@@ -14,7 +14,6 @@ use App\FeeSetup;
 use App\Institute;
 use App\FeeHistory;
 use DB;
-
 use App\Ictcore_fees;
 use App\Ictcore_integration;
 use App\Http\Controllers\ictcoreController;
@@ -169,12 +168,12 @@ class feesController extends BaseController {
 		}
 		else {
 
-			$fee = FeeSetup::find(Input::get('id'));
-			$fee->class = Input::get('class');
-			$fee->type = Input::get('type');
-			$fee->title = Input::get('title');
-			$fee->fee = Input::get('fee');
-			$fee->Latefee = Input::get('Latefee');
+			$fee              = FeeSetup::find(Input::get('id'));
+			$fee->class       = Input::get('class');
+			$fee->type        = Input::get('type');
+			$fee->title       = Input::get('title');
+			$fee->fee         = Input::get('fee');
+			$fee->Latefee     = Input::get('Latefee');
 			$fee->description = Input::get('description');
 			$fee->save();
 			return Redirect::to('/fees/list')->with("success","Fee Updated Succesfully.");
@@ -395,7 +394,7 @@ class feesController extends BaseController {
 		->where('class',Input::get('class'))
 		->where('regiNo',Input::get('student'))
 		->get();
-		$totals = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+		 $totals = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
 		->where('class',Input::get('class'))
 		->where('regiNo',Input::get('student'))
 		->first();

@@ -75,7 +75,7 @@ class templateController extends BaseController {
 
 				return Redirect::to('/template/create')->with("success", "Message Created Succesfully.");*/
 
-                   $ictcore_integration = Ictcore_integration::select("*")->first();
+               $ictcore_integration = Ictcore_integration::select("*")->first();
                    
 		    if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 				$ictcore_api  = new ictcoreController();

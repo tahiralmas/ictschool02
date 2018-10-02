@@ -1091,8 +1091,9 @@ class attendanceController extends BaseController {
             //            return $data;
              //echo "<pre>";print_r($data);
             $keys = array_keys((array)$data[0]);
+            $type = Input::get('type');
             //            return $data;
-            //echo "<pre>";print_r($keys);
+           // echo "<pre>";print_r($keys);
             //exit;
             $institute=Institute::select('*')->first();
             if(empty($institute)) {
@@ -1103,7 +1104,7 @@ class attendanceController extends BaseController {
 
 
 
-            return View('app.attendanceMonthlyReport', compact('institute', 'data', 'keys', 'yearMonth', 'fridays', 'holiDays', 'className', 'section', 'session', 'shift', 'offDays','section_data'));
+            return View('app.attendanceMonthlyReport', compact('institute', 'data', 'keys', 'yearMonth', 'fridays', 'holiDays', 'className', 'section', 'session', 'shift', 'offDays','section_data','type'));
         }
         return View('app.attendanceMonthly', compact('yearMonth', 'classes2','section'));
     }

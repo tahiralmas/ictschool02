@@ -145,6 +145,24 @@
 
                                     </div>
                                 </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label" for="section">Report Type</label>
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                            <select id="section" name="type"  class="form-control" >
+                                                <option value="">---SELECT Type ---</option>
+                                                <option value="complete">Complete Report</option>
+                                                <option value="count">Count Number only</option>
+                                               
+                                            </select>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
 
                                 <div class="col-md-2">
                                     <div class="form-group">

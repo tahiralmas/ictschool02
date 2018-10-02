@@ -97,15 +97,19 @@
             <table id="attendanceList" class="table table-bordered">
                 <thead>
                 <tr>
+                
                     @foreach($keys as $index=>$key)
                         @if($index>1)
+                        @if($type=='complete')
                             <th>{{date('d-M',strtotime($key))}}</th>
+                        @endif
                         @elseif($index==1)
                             <th>Roll No</th>
                         @else
                             <th>{{$key}}</th>
                         @endif
                     @endforeach
+                 
                     <th>Present</th>
                     <th>Absent</th>
                     <th>Holiday</th>
@@ -114,7 +118,7 @@
                 </tr>
                 </thead>
                 <tbody>
-
+                
                 @foreach($data as $datum)
                     <tr>
                         <?php
@@ -172,7 +176,9 @@
                                     ?>
                                 @endif
                                 @if($index != 0 && $index!=1)
+                                   @if($type=='complete')
                                     <td style="color:{{$color}};">{{$symbol}}</td>
+                                @endif
                                 @endif
                             @endif
 

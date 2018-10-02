@@ -13,7 +13,8 @@ use App\Http\Controllers\ictcoreController;
 
 class messageController extends BaseController {
 
-	public function __construct() {
+	public function __construct() 
+	{
 		/*$this->beforeFilter('csrf', array('on'=>'post'));
 		$this->beforeFilter('auth');
 		$this->beforeFilter('userAccess',array('only'=> array('delete')));*/
@@ -72,7 +73,10 @@ class messageController extends BaseController {
 
 					$type = Input::get('type');
 					
-					$ictcore_integration = Ictcore_integration::select("*")->first();
+					$ictcore_integration = Ictcore_integration::select("*")->where('type',$type)->first();
+					//echo "<pre>";print_r($ictcore_integration);
+
+					//exit;
 					if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 
 	                  $ict  = new ictcoreController();
@@ -81,9 +85,6 @@ class messageController extends BaseController {
 					  $remove_spaces_m =  str_replace(" ","_",$mess_name );
                        
 						if($type=='voice'){
-							
-							
-							
 							$message = Message::find(Input::get('message'));
 							$program_id =  $message->ictcore_program_id;
 							$file_id =  $message->telenor_file_id;
@@ -171,11 +172,14 @@ class messageController extends BaseController {
 						}
 						if($ictcore_integration->method == 'telenor'){
                                   
-                        echo  $campaign      = $ict->telenor_apis('campaign_create',$group_id,'',Input::get('message'),$file_id,$type);
+                        echo  $campaign    = $ict->telenor_apis('campaign_create',$group_id,'',Input::get('message'),$file_id,$type);
                           // echo $campaign;
                          // $this->info('Notification sended successfully'.$campaign);
-                  
-                           // $send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
+                        echo "<pre>";print_r($campaign);
+                            // exit;
+                            $send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
+                             echo "<pre>";print_r($send_campaign);
+                             exit;
                         }else{
 						$data = array(
 						'program_id' => $program_id,
@@ -188,6 +192,7 @@ class messageController extends BaseController {
 						$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
 
 						}
+						exit;
 						return Redirect::to('/message')->with("success", "campaign Created Succesfully.");
 					}else{
 						return Redirect::to('/message')->withErrors("Please Add ictcore integration in Setting Menu");
