@@ -751,7 +751,7 @@ class teacherController extends BaseController {
 	        $user = new User;
 	        $user->firstname = $teacher->firstName;
 	        $user->lastname  = $teacher->lastName;
-	        $user->email     = $email;
+	        $user->email     = $teacher->email;
 	      	$user->login     = $teacher->firstName.$teacher->lastName;
 	      	$user->group     =  'Teacher';
 	      	$user->group_id  = $teacher->id ;
