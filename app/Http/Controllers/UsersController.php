@@ -106,6 +106,7 @@ class UsersController extends BaseController {
         $user->group = Input::get('group');
         $user->password = Hash::make(Input::get('password'));
         $user->save();
+        
         return Redirect::to('/users')->with("success","User Created Succesfully.");
       }
 

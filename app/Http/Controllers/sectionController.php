@@ -25,8 +25,13 @@ class sectionController extends BaseController {
 		$class = DB::table('Class')
 		->select(DB::raw('name,code'))
 		->get();
-		$teachers = DB::table('teacher')
-	    ->select('id','firstName','lastName')->get();
+		$sections = SectionModel::get();
+		$teacher_ids = array();
+		foreach($sections as $section){
+         $teacher_ids[] = $section->teacher_id;
+		}
+		$teachers = DB::table('teacher')->join('users','teacher.id','=','users.group_id')
+	    ->select('teacher.id','teacher.firstName','teacher.lastName')/*->whereNotIn('id',$teacher_ids)*/->get();
 		return View('app.sectionCreate',compact('class','teachers'));
 		//echo "this is section controller";
 	}
@@ -41,7 +46,8 @@ class sectionController extends BaseController {
 			'name' => 'required',
 			'class'=> 'required',
 			//'teacher_id'=>
-			'description' => 'required'
+			'description' => 'required',
+			'teacher_id' => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
@@ -62,6 +68,7 @@ class sectionController extends BaseController {
 				$class->name = Input::get('name');
 				$class->class_code = Input::get('class');
 				$class->description = Input::get('description');
+				$class->teacher_id = Input::get('teacher_id');
 				$class->save();
 				return Redirect::to('/section/create')->with("success", "Section Created Succesfully.");
 			}
@@ -76,9 +83,9 @@ class sectionController extends BaseController {
 	public function show()
 	{
 		//$Classes = ClassModel::orderby('code','asc')->get();
-		$sections = DB::table('section')
+		$sections = DB::table('section')->leftjoin('teacher','section.teacher_id','=','teacher.id')
 		//->select(DB::raw('section.id,section.class_code,section.name,section.description'))
-		->select(DB::raw('section.id,section.class_code,section.name,section.description,(select count(Student.id) from Student where class=section.class_code And section=section.id)as students'))
+		->select(DB::raw('section.id,section.class_code,section.name,section.description,(select count(Student.id) from Student where class=section.class_code And section=section.id)as students'),'teacher.firstName','teacher.lastName')
 
 		->get();
 		//dd($sections);
@@ -102,8 +109,10 @@ class sectionController extends BaseController {
 		$class = DB::table('Class')
 		->select(DB::raw('name,code'))
 		->get();
+		$teachers = DB::table('teacher')->join('users','teacher.id','=','users.group_id')
+	    ->select('teacher.id','teacher.firstName','teacher.lastName')->get();
 		//return View::Make('app.classEdit',compact('class'));
-		return View('app.sectionEdit',compact('section','class'));
+		return View('app.sectionEdit',compact('section','class','teachers'));
 	}
 
 
@@ -117,7 +126,8 @@ class sectionController extends BaseController {
 	{
 		$rules=[
 			'name' => 'required',
-			'description' => 'required'
+			'description' => 'required',
+			'teacher_id' => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
@@ -129,6 +139,7 @@ class sectionController extends BaseController {
 			$section->name= Input::get('name');
             $section->class_code = Input::get('class');
 			$section->description=Input::get('description');
+			$section->teacher_id = Input::get('teacher_id');
 			$section->save();
 			return Redirect::to('/section/list')->with("success","Section Updated Succesfully.");
 

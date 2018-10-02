@@ -161,11 +161,18 @@ class TeacherController extends Controller
 
 	public function getteacherdata($teacher_id)
 	{
-		$teachers = DB::table('timetable')
+		/*$teachers = DB::table('timetable')
 		->join('Class', 'timetable.class_id', '=', 'Class.code')
 		->join('section', 'timetable.section_id', '=', 'section.id')
 		->select('Class.id as class_id','Class.name as class', 'section.id as section_id','section.name as section')
 		->where('timetable.teacher_id',$teacher_id)->groupby('timetable.section_id')->get();		
+		*/
+
+		$teachers = DB::table('section')
+		->join('Class', 'section.class_code', '=', 'Class.code')
+		//->join('section', 'timetable.section_id', '=', 'section.id')
+		->select('Class.id as class_id','Class.name as class', 'section.id as section_id','section.name as section')
+		->where('section.teacher_id',$teacher_id)->get();		
 		$sections  = array();
 		$attendances_b  = array();
 		 if($teachers->count()>0){

@@ -42,15 +42,21 @@ class UserController extends Controller
  */
     public function login()
     {
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')]) ||Auth::attempt(['login' => request('username'), 'password' => request('password')]))
+        if(request('email')!=''){
+            $user =request('email');
+            $parameter = 'email';
+        }
+        if(request('username')!=''){
+             $user =request('username');
+             $parameter = 'login';
+        }
+        if(Auth::attempt([$parameter=>$user, 'password' => request('password')]) )
         {
 
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')->accessToken;
             if($user->group=='Teacher'){
              $success['teacher_id'] =  $user->group_id;
-           }elseif($user->role_id==2){
-             $success['professional_id'] =  $user->client_professional_id;
            }
             return response()->json(['success' => $success], $this->successStatus);
         }

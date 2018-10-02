@@ -172,22 +172,22 @@ class teacherController extends BaseController {
 			//echo request()->photo->move(public_path('images/'), $fileName);
 
 
-			/*$user = new User;
+			$user = new User;
 			$user->firstname = Input::get('fname');
 			$user->lastname  = Input::get('lname');
 
-			$user->email =     Input::get('emails');
+			$user->email     =     Input::get('emails');
 			if(Input::get('emails')==''){
-				$user->email = Input::get('fname')."@gmail.com";
-
+				$user->email = '';
 			}
 
 			$user->login     = Input::get('fname').'_'.Input::get('lname');
 			$user->group     = 'Teacher';
+			$user->group_id  = $teacher->id;
 			$user->password  =	Hash::make(Input::get('phne'));
 			$user->save();
 
-			$ictcore_integration = Ictcore_integration::select("*")->first();
+			/*$ictcore_integration = Ictcore_integration::select("*")->first();
 			if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
 
 				$ict  = new ictcoreController();
