@@ -178,7 +178,7 @@ class teacherController extends BaseController {
 
 			$user->email     =     Input::get('emails');
 			if(Input::get('emails')==''){
-				$user->email = '';
+				$user->email = NULL;
 			}
 
 			$user->login     = Input::get('fname').'_'.Input::get('lname');
@@ -440,7 +440,26 @@ class teacherController extends BaseController {
 
 
 
-	$teacher->save();
+	//$teacher->save();
+	if($teacher->save()){
+
+		$users =  User::where('group_id',Input::get('id'))->first();
+		$user_id = $users->id;
+		$user = User::find($user_id);
+			$user->firstname = Input::get('fname');
+			$user->lastname  = Input::get('lname');
+
+			$user->email     =     Input::get('emails');
+			if(Input::get('emails')==''){
+				$user->email = NULL;
+			}
+
+			//$user->login     = Input::get('fname').'_'.Input::get('lname');
+			//$user->group     = 'Teacher';
+			//$user->group_id  = $teacher->id;
+			$user->password  =	Hash::make(Input::get('phone'));
+			$user->save();
+	}
 
 	return Redirect::to('/teacher/list')->with("success","Teacher Updated Succesfully.");
 	}
