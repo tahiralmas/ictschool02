@@ -737,7 +737,7 @@ class teacherController extends BaseController {
 	public function access($id)
 	{
 	   $teacher= Teacher::find($id);
-	   if(!empty($teacher) && count($teacher)>0){
+	   if(!empty($teacher) $teacher->count()>0){
 	   	$chk_teacher  = User::where('login',$teacher->firstName.$teacher->lastName)->where('group_id',$teacher->id)->first();
 	      if(count($chk_teacher)>0){
 	      	   return Redirect::to('/teacher/list')->with("error","Already have Accessed .");
