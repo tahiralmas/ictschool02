@@ -81,6 +81,7 @@ Route::post('users', 'Api\UserController@create_user');
    Route::get('teachers/{teacher_id}/sections','Api\TeacherController@getsectionteacher');
    Route::get('teachers/{teacher_id}/subjects','Api\TeacherController@getsubjectteacher');
    Route::get('teachers/{teacher_id}/attendances','Api\TeacherController@getteacherdata');
+   Route::get('admin/attendances','Api\TeacherController@getadmindata');
    
 
 //exam

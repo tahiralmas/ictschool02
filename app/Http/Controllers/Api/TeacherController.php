@@ -171,8 +171,11 @@ class TeacherController extends Controller
 		$teachers = DB::table('section')
 		->join('Class', 'section.class_code', '=', 'Class.code')
 		//->join('section', 'timetable.section_id', '=', 'section.id')
-		->select('Class.id as class_id','Class.name as class', 'section.id as section_id','section.name as section')
-		->where('section.teacher_id',$teacher_id)->get();		
+		->select('Class.id as class_id','Class.name as class', 'section.id as section_id','section.name as section');
+		if($teacher_id!='admin'){
+	    $teachers = $teachers->where('section.teacher_id',$teacher_id);		
+		}
+		$teachers =$teachers->get();
 		$sections  = array();
 		$attendances_b  = array();
 		 if($teachers->count()>0){
