@@ -182,7 +182,9 @@ class TeacherController extends Controller
 		 	$i=0;
 		foreach($teachers as $teacher ){
           $sections[] = $teacher->section_id;
-         
+          $count_student1 =  DB::table('Student')->select(DB::raw('COUNT(*) as total_student'))->where('section',$teacher->section_id)->first();
+          // $count_student =  $count_student1->total_attendance;
+          //$count_student[] =$count_student1->toArray();
           $attendances_a = DB::table('Attendance')
              ->join('Class', 'Attendance.class_id', '=', 'Class.id')
 		     ->join('section', 'Attendance.section_id', '=', 'section.id')
@@ -191,13 +193,21 @@ class TeacherController extends Controller
                            SUM(Attendance.status="Present" ) as present ,
                            SUM(Attendance.coments="sick_leave" OR Attendance.coments="leave") as leaves'),'section.id as section_id','section.name as section','Class.id as class_id','Class.name as class')->where('Attendance.session',2018)->where('Attendance.section_id',$teacher->section_id)->where('date',Carbon::today()->toDateString())->first();
            //$tst[] = $attendances_a[$i]->total_attendance;
+           //$attendances_a = $attendances_a + $count_student; 
+         
            if($attendances_a->total_attendance==0){
            	 $attendances_b[] = array('total_attendance'=>0,'absent'=>0,'present'=>0,'leaves'=>0,'section_id'=>$teacher->section_id,'section'=>$teacher->section,'class_id'=>$teacher->class_id,'class'=>$teacher->class);
            }else{
            	$attendances_b[] = $attendances_a;
            }
+           //$merged = $attendances_b->merge($count_student);
+
+           array_push($attendances_b,$count_student1);
            $i++;
 		}
+		
+		
+		//echo "<pre>";print_r($attendances_b);exit;
 		//$mrge = array_merge($attendances_b,$attendances_d);
 		return response()->json($attendances_b);
 	      $merage = $attendances_a;
