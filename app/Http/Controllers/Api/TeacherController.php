@@ -130,12 +130,19 @@ class TeacherController extends Controller
 	}
 	public function getsectionteacher($teacher_id){
 
-		$teacher = DB::table('timetable')
+		/*$teacher = DB::table('timetable')
 		->join('Class', 'timetable.class_id', '=', 'Class.code')
 		->join('section', 'timetable.section_id', '=', 'section.id')
 		->select('Class.id as class_id','Class.name as class', 'section.id as section_id','section.name as section')
 		->where('timetable.teacher_id',$teacher_id)->groupby('timetable.section_id')->get();
-           
+           */
+		$teacher = DB::table('section')
+		->join('Class', 'section.class_code', '=', 'Class.code')
+		//->join('section', 'timetable.section_id', '=', 'section.id')
+		->select('Class.id as class_id','Class.name as class', 'section.id as section_id','section.name as section');
+		if($teacher_id!='admin'){
+	    $teachers = $teachers->where('section.teacher_id',$teacher_id);		
+		}
 		
 		if(!is_null($teacher) && count($teacher)>0){
 			return response()->json($teacher,200);
@@ -182,6 +189,7 @@ class TeacherController extends Controller
 		 	$i=0;
 		foreach($teachers as $teacher ){
           $sections[] = $teacher->section_id;
+          //$count_student1 = array();
           $count_student1 =  DB::table('Student')->select(DB::raw('COUNT(*) as total_student'))->where('section',$teacher->section_id)->first();
           // $count_student =  $count_student1->total_attendance;
           //$count_student[] =$count_student1->toArray();
@@ -196,19 +204,31 @@ class TeacherController extends Controller
            //$attendances_a = $attendances_a + $count_student; 
          
            if($attendances_a->total_attendance==0){
-           	 $attendances_b[] = array('total_attendance'=>0,'absent'=>0,'present'=>0,'leaves'=>0,'section_id'=>$teacher->section_id,'section'=>$teacher->section,'class_id'=>$teacher->class_id,'class'=>$teacher->class);
+           	 $attendances_b[] = array('total_attendance'=>0,'absent'=>0,'present'=>0,'leaves'=>0,'section_id'=>$teacher->section_id,'section'=>$teacher->section,'class_id'=>$teacher->class_id,'class'=>$teacher->class,'total_student'=>$count_student1->total_student);
            }else{
-           	$attendances_b[] = $attendances_a;
+           	$attendances_b[] = array(get_object_vars($attendances_a),'total_student'=>$count_student1->total_student);
+           //	$attendances_b[] =;
            }
-           //$merged = $attendances_b->merge($count_student);
 
-           array_push($attendances_b,$count_student1);
+          // $attendances_b['total_student'.'_'.$teacher->section] =$count_student1->total_student; 
+          // $attendances_b['76']=65;
+           //$merged = $attendances_b->merge($count_student);
+//echo "<pre>";print_r($attendances_b);exit;
+           //array_push($attendances_b,$count_student1);//($attendances_b,$count_student1);
+          // $resultArray[$i] = $attendances_b;
+              //$result[] = $attendances_b + $count_student1;
+			// array_push($attendances_b,'rer');
+    // $a = array_merge($attendances_b, $count_student1);
+
            $i++;
 		}
 		
 		
 		//echo "<pre>";print_r($attendances_b);exit;
 		//$mrge = array_merge($attendances_b,$attendances_d);
+		
+   
+
 		return response()->json($attendances_b);
 	      $merage = $attendances_a;
 		
