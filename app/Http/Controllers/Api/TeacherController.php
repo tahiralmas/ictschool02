@@ -141,9 +141,9 @@ class TeacherController extends Controller
 		//->join('section', 'timetable.section_id', '=', 'section.id')
 		->select('Class.id as class_id','Class.name as class', 'section.id as section_id','section.name as section');
 		if($teacher_id!='admin'){
-	    $teachers = $teachers->where('section.teacher_id',$teacher_id);		
+	    $teacher = $teacher->where('section.teacher_id',$teacher_id);		
 		}
-		
+		$teacher = $teacher->get();
 		if(!is_null($teacher) && count($teacher)>0){
 			return response()->json($teacher,200);
 		}else{
