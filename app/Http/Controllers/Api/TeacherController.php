@@ -147,7 +147,7 @@ class TeacherController extends Controller
 		if(!is_null($teacher) && count($teacher)>0){
 			return response()->json($teacher,200);
 		}else{
-			return response()->json(['error'=>'teacher Not Found'], 404);
+			return response()->json(['error'=>'Section Not assigned yet'], 404);
 		}
 	}  
 
