@@ -23,19 +23,18 @@
 @endif
 <?php 
 if(!empty($_GET)){
- echo "<br>";
-  echo $class1   = $_GET['class_id'];
-  echo "<br>";
-  echo $section = $_GET['section'];
-   echo "<br>";
-  echo $session = $_GET['session'];
-   echo "<br>";
-  echo $month   = $_GET['month'];
-   echo "<br>";
-  echo $type    = $_GET['type'];
-   echo "<br>";
-  echo $fee     = $_GET['fee_name'];
- echo "<br>";
+  $class1   = $_GET['class_id'];
+ 
+   $section = $_GET['section'];
+   
+   $session = $_GET['session'];
+  
+   $month   = $_GET['month'];
+  
+   $type    = $_GET['type'];
+  
+   $fee     = $_GET['fee_name'];
+ 
 }else{
    $class1   = '';
   $section = '';
@@ -369,7 +368,7 @@ if(!empty($_GET)){
     @section('script')
     <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
     <script type="text/javascript">
-    $( document ).ready(function() {
+   /* $( document ).ready(function() {
         $('#feeInfoDiv').hide();
         if ($('#type').val()=="Monthly")
         {
@@ -405,7 +404,7 @@ if(!empty($_GET)){
         });
 
 
-      });
+      });*/
 
 
 
@@ -432,6 +431,7 @@ if(!empty($_GET)){
       var shift = 'Morning';
 
       var session = $('#session').val().trim();
+      if(section!=''){
       $.ajax({
         url: "{{url('/student/getList')}}"+'/'+aclass+'/'+section+'/'+shift+'/'+session,
         data: {
@@ -454,6 +454,7 @@ if(!empty($_GET)){
         },
         type: 'GET'
       });
+    }
 
     };
 
