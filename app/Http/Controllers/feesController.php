@@ -211,8 +211,18 @@ class feesController extends BaseController {
 	public function getCollection()
 	{
 		$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
+		if(Input::get('section')!=''){
+		$sections = DB::table('section')->select('*')->where('class_code',Input::get('class_id'))->get();
+		}else{
+			$sections = '';
+		}
+		//if(Input::get('')){
+
+			//$fee= FeeSetup::select('fee','Latefee')->where('id','=',$id)->get();
+		//}
+		//echo "<pre>";print_r($sections);
 		//return View::Make('app.feeCollection',compact('classes'));
-		return View('app.feeCollection',compact('classes'));
+		return View('app.feeCollection',compact('classes','sections'));
 	}
 	public function postCollection()
 	{
@@ -227,11 +237,13 @@ class feesController extends BaseController {
 			'ctotal'     => 'required'
 
 		];
+		//echo "<pre>";print_r(Input::all());
+		//exit;
 		$validator = \Validator::make(Input::all(), $rules);
 
 		if ($validator->fails())
 		{
-			return Redirect::to('/fee/collection')->withInput(Input::all())->withErrors($validator);
+			return Redirect::to('/fee/collection?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&type='.Input::get('type').'&month='.Input::get('gridMonth')[0].'&fee_name='.Input::get('fee'))->withInput(Input::all())->withErrors($validator);
 		}
 		else {
 
@@ -247,6 +259,7 @@ class feesController extends BaseController {
 				$feeLateAmounts  = Input::get('gridLateFeeAmount');
 				$feeTotalAmounts = Input::get('gridTotal');
 				$feeMonths       = Input::get('gridMonth');
+				$month = $feeMonths[0]; 
 				$counter         = count($feeTitles);
 
 				if($counter>0)
@@ -322,26 +335,26 @@ class feesController extends BaseController {
 					});
                   if(\Session::get('not_save')!=0){
 					\Session::forget('not_save');
-					return Redirect::to('/fee/collection')->with("success","Fee collection succesfull.");
+					return Redirect::to('/fee/collection?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&type='.Input::get('type').'&month='.$month.'&fee_name='.Input::get('fee'))->with("success","Fee collection succesfull.");
 				   }else{
 				   	\Session::forget('not_save');
 				   	$messages = "Student already add fee for this month"; 
 				       
-				        return Redirect::to('/fee/collection')->withErrors($messages);
+				        return Redirect::to('/fee/collection?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&type='.Input::get('type').'&month='.$month.'&fee_name='.Input::get('fee'))->withErrors($messages);
 				   }
 				}
 				else {
 					$messages = $validator->errors();
 					$messages->add('Validator!', 'Please add atlest one fee!!!');
 					
-					return Redirect::to('/fee/collection')->withInput(Input::all())->withErrors($messages);
+					return Redirect::to('/fee/collection?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&type='.Input::get('type').'&month='.$month.'&fee_name='.Input::get('fee'))->withInput(Input::all())->withErrors($messages);
 
 				}
 			}
 			catch(\Exception $e)
 			{
                //echo $e->getMessage();
-				return Redirect::to('/fee/collection')->withErrors( $e->getMessage())->withInput();
+				return Redirect::to('/fee/collection?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&type='.Input::get('type').'&month='.Input::get('gridMonth')[0].'&fee_name='.Input::get('fee'))->withErrors( $e->getMessage())->withInput();
 			}
 
 		}
