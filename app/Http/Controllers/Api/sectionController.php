@@ -63,9 +63,14 @@ class sectionController extends Controller
 
     public function getsection($section_id)
     {
-         $section = SectionModel::find($section_id);
+         //$section = SectionModel::find($section_id);
+         $now   = Carbon::now();
+         $year  =  $now->year;
+         $section = DB::table('section')->leftjoin('Student','section.id','=','Student.section')
+         ->select('section.id','section.name','section.class_code',DB::raw("count(DISTINCT(Student.id)) as total_student"))->where('section.id',$section_id)->where('Student.session',$year)->where('Student.isActive','Yes')->groupBy('Student.section');
+       // ,DB::raw("GROUP_CONCAT(estimation.id SEPARATOR ',') as estimations")
         if(!is_null($section) && $section->count()>0){
-           return response()->json($section,200);
+           return response()->json($section->first(),200);
         }else{
         return response()->json(['error'=>'Section Not Found'], 404);
        }
