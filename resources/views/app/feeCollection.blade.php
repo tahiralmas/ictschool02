@@ -81,7 +81,7 @@ if(!empty($_GET)){
                     <select id="section" name="section"  class="form-control" >
                       @if(!empty($sections))
                       @foreach($sections as $sction)
-                      <option value="{{$sction->id}}}" @if($section==$sction->id) selected @endif>{{$sction->name}}</option>
+                      <option value="{{$sction->id}}" @if($section==$sction->id) selected @endif>{{$sction->name}}</option>
                       @endforeach
                       @endif
                     </select>
@@ -205,7 +205,9 @@ if(!empty($_GET)){
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                   <select id="fee" name="fee" class="form-control" required="true">
-                   
+                   @foreach($fees as $fee)
+                   <option value={{$fee->id}}>{{$fee->type}} </option>
+                  @endforeach
                   </select>
                 </div>
               </div>
@@ -421,8 +423,11 @@ if(!empty($_GET)){
       }
     }
     var getStudents = function () {
+     
       var aclass = $('#class').val();
       var section =  $('#section').val();
+     // alert(aclass);
+     // alert(section);
      // var shift = $('#shift').val();
       var shift = 'Morning';
 
