@@ -21,6 +21,26 @@
   </ul>
 </div>
 @endif
+<?php 
+if(!empty($_GET)){
+
+ $class1   = $_GET['class_id'];
+   $section = $_GET['section'];
+  $session = $_GET['session'];
+   $month   = $_GET['month'];
+   $type    = $_GET['type'];
+   $fee     = $_GET['fee_name'];
+ 
+}else{
+   $class1   = '';
+  $section = '';
+  $session = '';
+  $month   = '';
+  $type    = '';
+  $fee     = '';
+}
+//echo "<pre>";print_r($_GET);
+?>
 <div class="row">
   <div class="box col-md-12">
     <div class="box-inner">
@@ -45,7 +65,7 @@
                     <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
                     <select id="class" id="class" name="class" class="form-control" >
                       @foreach($classes as $class)
-                      <option value="{{$class->code}}">{{$class->name}}</option>
+                      <option value="{{$class->code}}" @if($class1==$class->code) Selected @endif>{{$class->name}}</option>
                       @endforeach
 
                     </select>
@@ -59,17 +79,11 @@
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select id="section" name="section"  class="form-control" >
-                      <option value="A">A</option>
-                      <option value="B">B</option>
-                      <option value="C">C</option>
-                      <option value="D">D</option>
-                      <option value="E">E</option>
-                      <option value="F">F</option>
-                      <option value="G">G</option>
-                      <option value="H">H</option>
-                      <option value="I">I</option>
-                      <option value="J">J</option>
-
+                      @if(!empty($sections))
+                      @foreach($sections as $sction)
+                      <option value="{{$sction->id}}}" @if($section==$sction->id) selected @endif>{{$sction->name}}</option>
+                      @endforeach
+                      @endif
                     </select>
 
 
@@ -149,8 +163,8 @@
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select id="type" name="type" class="form-control" required>
                       <option>--Select Fee Type--</option>
-                      <option value="Other">Other</option>
-                      <option value="Monthly">Monthly</option>
+                      <option value="Other" @if($type=='Other') selected @endif>Other</option>
+                      <option value="Monthly" @if($type=='Monthly') selected @endif>Monthly</option>
 
                     </select>
                   </div>
@@ -165,18 +179,18 @@
                     <select id="month" name="month" class="form-control" style="display:none">
 
                       <option selected="selected" value="-1">--Select Month--</option>
-                      <option value="1">January</option>
-                      <option value="2">February</option>
-                      <option value="3">March</option>
-                      <option value="4">April</option>
-                      <option value="5">May</option>
-                      <option value="6">June</option>
-                      <option value="7">July</option>
-                      <option value="8">August</option>
-                      <option value="9">September</option>
-                      <option value="10">October</option>
-                      <option value="11">November</option>
-                      <option value="12">December</option>
+                      <option value="1" @if($month=='1') selected @endif>January</option>
+                      <option value="2" @if($month=='2') selected @endif>February</option>
+                      <option value="3" @if($month=='3') selected @endif>March</option>
+                      <option value="4" @if($month=='4')  selected @endif>April</option>
+                      <option value="5" @if($month=='5')  selected @endif>May</option>
+                      <option value="6" @if($month=='6')  selected @endif>June</option>
+                      <option value="7" @if($month=='7')  selected @endif>July</option>
+                      <option value="8" @if($month=='8')  selected @endif>August</option>
+                      <option value="9" @if($month=='9')  selected @endif>September</option>
+                      <option value="10" @if($month=='10') selected @endif>October</option>
+                      <option value="11" @if($month=='11') selected @endif>November</option>
+                      <option value="12" @if($month=='12') selected @endif>December</option>
 
                     </select>
 
@@ -191,7 +205,7 @@
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                   <select id="fee" name="fee" class="form-control" required="true">
-                    <option value="-1">--Select Fee--</option>
+                   
                   </select>
                 </div>
               </div>
@@ -350,6 +364,49 @@
     @section('script')
     <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
     <script type="text/javascript">
+    $( document ).ready(function() {
+        $('#feeInfoDiv').hide();
+        if ($('#type').val()=="Monthly")
+        {
+          $('#month').show();
+        }
+        else
+        {
+          $('#month').hide();
+        }
+        var aclass = $('#class').val();
+        var type =  $('#type').val();
+        $.ajax({
+          url: "{{url('/fee/getListjson/')}}"+'/'+aclass+'/'+type,
+          data: {
+            format: 'json'
+          },
+          error: function(error) {
+            alert("Please fill all inputs correctly!");
+          },
+          dataType: 'json',
+          success: function(data) {
+            $('#fee').empty();
+           // $('#fee').append($('<option>').text("--Select Fee--").attr('value',"-1"));
+            $.each(data, function(i, fee) {
+              // console.log(fee);
+
+              $('#fee').append($('<option>').text(fee.title).attr('value', fee.id));
+            });
+            //console.log(data);
+
+          },
+          type: 'GET'
+        });
+
+
+      });
+
+
+
+
+
+
     function btnSaveIsvisibale()
     {
       var table = document.getElementById('feeList');
@@ -447,7 +504,9 @@
 
     });
     $( document ).ready(function() {
+        <?php if(empty($sections)){ ?>
         getsections();
+        <?php } ?>
               $('#class').on('change',function() {
                 getsections();
               });
@@ -496,7 +555,7 @@
           dataType: 'json',
           success: function(data) {
             $('#fee').empty();
-            $('#fee').append($('<option>').text("--Select Fee--").attr('value',"-1"));
+           // $('#fee').append($('<option>').text("--Select Fee--").attr('value',"-1"));
             $.each(data, function(i, fee) {
               // console.log(fee);
 
