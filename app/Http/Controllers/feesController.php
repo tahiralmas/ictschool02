@@ -216,13 +216,14 @@ class feesController extends BaseController {
 		}else{
 			$sections = '';
 		}
-		//if(Input::get('')){
-
-			//$fee= FeeSetup::select('fee','Latefee')->where('id','=',$id)->get();
-		//}
+		if(Input::get('type')!=''){
+         $fees= FeeSetup::select('id','title')->where('id','=',Input::get('type'))->get();
+		}else{
+			$fees=array();
+		}
 		//echo "<pre>";print_r($sections);
 		//return View::Make('app.feeCollection',compact('classes'));
-		return View('app.feeCollection',compact('classes','sections'));
+		return View('app.feeCollection',compact('classes','sections','fees'));
 	}
 	public function postCollection()
 	{
