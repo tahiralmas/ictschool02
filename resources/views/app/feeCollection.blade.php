@@ -23,14 +23,19 @@
 @endif
 <?php 
 if(!empty($_GET)){
-
- $class1   = $_GET['class_id'];
-   $section = $_GET['section'];
-  $session = $_GET['session'];
-   $month   = $_GET['month'];
-   $type    = $_GET['type'];
-   $fee     = $_GET['fee_name'];
- 
+ echo "<br>";
+  echo $class1   = $_GET['class_id'];
+  echo "<br>";
+  echo $section = $_GET['section'];
+   echo "<br>";
+  echo $session = $_GET['session'];
+   echo "<br>";
+  echo $month   = $_GET['month'];
+   echo "<br>";
+  echo $type    = $_GET['type'];
+   echo "<br>";
+  echo $fee     = $_GET['fee_name'];
+ echo "<br>";
 }else{
    $class1   = '';
   $section = '';
@@ -79,7 +84,7 @@ if(!empty($_GET)){
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select id="section" name="section"  class="form-control" >
-                      @if(!empty($sections))
+                     @if(!empty($sections))
                       @foreach($sections as $sction)
                       <option value="{{$sction->id}}" @if($section==$sction->id) selected @endif>{{$sction->name}}</option>
                       @endforeach
@@ -163,8 +168,8 @@ if(!empty($_GET)){
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select id="type" name="type" class="form-control" required>
                       <option>--Select Fee Type--</option>
-                      <option value="Other" @if($type=='Other') selected @endif>Other</option>
-                      <option value="Monthly" @if($type=='Monthly') selected @endif>Monthly</option>
+                      <option value="Other" >Other</option>
+                      <option value="Monthly" >Monthly</option>
 
                     </select>
                   </div>
@@ -205,9 +210,7 @@ if(!empty($_GET)){
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                   <select id="fee" name="fee" class="form-control" required="true">
-                   @foreach($fees as $fee)
-                   <option value={{$fee->id}}>{{$fee->type}} </option>
-                  @endforeach
+                    <option value="-1">--Select Fee--</option>
                   </select>
                 </div>
               </div>
@@ -389,7 +392,7 @@ if(!empty($_GET)){
           dataType: 'json',
           success: function(data) {
             $('#fee').empty();
-           // $('#fee').append($('<option>').text("--Select Fee--").attr('value',"-1"));
+            $('#fee').append($('<option>').text("--Select Fee--").attr('value',"-1"));
             $.each(data, function(i, fee) {
               // console.log(fee);
 
@@ -423,11 +426,8 @@ if(!empty($_GET)){
       }
     }
     var getStudents = function () {
-     
       var aclass = $('#class').val();
       var section =  $('#section').val();
-     // alert(aclass);
-     // alert(section);
      // var shift = $('#shift').val();
       var shift = 'Morning';
 
@@ -471,7 +471,7 @@ if(!empty($_GET)){
           },
           dataType: 'json',
           success: function(data) {
-            $('#fee').empty();
+           
           //  $('#fee').append($('<option>').text("--Select Fee--").attr('value',"-1"));
          var dic_amount = JSON.stringify(data.discount_id);
          if(dic_amount==2){
@@ -498,7 +498,7 @@ if(!empty($_GET)){
           if(dic_amount==9){
           $('#disc').html(90);
          }
-
+ $('#fee').empty();
            //alert(dic_amount);
             //console.log(data);
 
@@ -560,7 +560,7 @@ if(!empty($_GET)){
           dataType: 'json',
           success: function(data) {
             $('#fee').empty();
-           // $('#fee').append($('<option>').text("--Select Fee--").attr('value',"-1"));
+            $('#fee').append($('<option>').text("--Select Fee--").attr('value',"-1"));
             $.each(data, function(i, fee) {
               // console.log(fee);
 
