@@ -434,6 +434,7 @@ class feesController extends BaseController {
 		->join('Class', 'Student.class', '=', 'Class.code')
 		->select('Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName',
 		'Student.section','Student.shift','Student.session','Class.Name as class')
+		->where('isActive','Yes')
 		->where('Student.regiNo',$regiNo)
 		->first();
 		$institute=Institute::select('*')->first();
@@ -508,7 +509,11 @@ class feesController extends BaseController {
 		$student->regiNo=Input::get('student');
 		$feeyear = Input::get('year') ;
 
-		$student_all =	DB::table('Student')->select( '*')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
+		$student_all =	DB::table('Student')->select( '*')->where('isActive','Yes')->where('class','=',Input::get('class'));
+		if(Input::get('section')!=''){
+		$student_all =$student_all->where('section','=',Input::get('section'));
+	    }
+		$student_all =$student_all->where('session','=',$student->session)->get();
 
 		if(count($student_all)>0){
 			$i=0;
@@ -568,7 +573,7 @@ class feesController extends BaseController {
 		$student->regiNo  = Input::get('student');
 		$feeyear          = Input::get('year') ;
 
-		$student_all =	DB::table('Student')->select( '*')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
+		$student_all =	DB::table('Student')->select( '*')->where('isActive','Yes')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
 
 		if(count($student_all)>0){
 			$i=0;
