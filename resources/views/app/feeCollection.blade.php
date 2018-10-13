@@ -1,14 +1,13 @@
 @extends('layouts.master')
 @section('style')
 <link href="/css/bootstrap-datepicker.css" rel="stylesheet">
-
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
 @stop
 @section('content')
 @if (Session::get('success'))
 <div class="alert alert-success">
   <button data-dismiss="alert" class="close" type="button">×</button>
   <strong>Process Success.</strong> {{ Session::get('success')}}<br><a href="/fees/view">View List</a><br>
-
 </div>
 @endif
 @if (count($errors) > 0)
@@ -125,37 +124,7 @@ if(!empty($_GET)){
                 </div>
               </div>
  </div>
-          <div class="row">
-            <div class="col-md-12">
-            
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label class="control-label" for="student">Student</label>
-
-                  <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-book blue"></i></span>
-                    <select id="student" name="student" class="form-control" required="true">
-                      <option value="">--Select Student--</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-             <!-- <div class="col-md-4">
-                <div class="form-group ">
-                  <label for="dob">Collection Date</label>
-                  <div class="input-group">
-
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                    <input type="text" value="{{date('Y-m-d')}}"  class="form-control datepicker" name="date" required  data-date-format="yyyy-mm-dd">
-                  </div>
-
-
-                </div>
-              </div>-->
-
-            </div>
-          </div>
+          
           <hr class="hrclass">
           <div class="row">
             <div class="col-md-12">
@@ -167,8 +136,8 @@ if(!empty($_GET)){
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select id="type" name="type" class="form-control" required>
                       <option>--Select Fee Type--</option>
-                      <option value="Other" >Other</option>
-                      <option value="Monthly" >Monthly</option>
+                      <option value="Other" @if($type=='Other') Selected @endif >Other</option>
+                      <option value="Monthly" @if($type=="Monthly") Selected @endif >Monthly</option>
 
                     </select>
                   </div>
@@ -210,6 +179,9 @@ if(!empty($_GET)){
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                   <select id="fee" name="fee" class="form-control" required="true">
                     <option value="-1">--Select Fee--</option>
+                  @foreach($fees as $fe)
+                   <option value="{{$fe->id}}" @if($fe->id==$fee) Selected @endif>{{$fe->title}}</option>
+                  @endforeach
                   </select>
                 </div>
               </div>
@@ -217,6 +189,37 @@ if(!empty($_GET)){
 
           </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+            
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="control-label" for="student">Student</label>
+
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-book blue"></i></span>
+                    <select id="student" name="student" class="form-control selectpicker" required="true"  data-show-subtext="true" data-live-search="true">
+                     
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+             <!-- <div class="col-md-4">
+                <div class="form-group ">
+                  <label for="dob">Collection Date</label>
+                  <div class="input-group">
+
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                    <input type="text" value="{{date('Y-m-d')}}"  class="form-control datepicker" name="date" required  data-date-format="yyyy-mm-dd">
+                  </div>
+
+
+                </div>
+              </div>-->
+
+            </div>
+          </div>
         <div id="feeInfoDiv" style="Display:none">
         <div class="row">
             <div class="col-md-12">
@@ -238,7 +241,7 @@ if(!empty($_GET)){
                   <label for="discount">Discount  (discount parcentage: <i id="per"> </i> ) </label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                    <input  type="text" id="discount" readonly class="form-control" name="discount" value="0.00" placeholder="0.00">
+                    <input  type="text" id="discount" readonly class="form-control" name="discount"  placeholder="0.00">
                   </div>
                 </div>
               </div>
@@ -366,9 +369,11 @@ if(!empty($_GET)){
     </div>
     @stop
     @section('script')
+
     <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
     <script type="text/javascript">
-   /* $( document ).ready(function() {
+    $( document ).ready(function() {
         $('#feeInfoDiv').hide();
         if ($('#type').val()=="Monthly")
         {
@@ -378,7 +383,7 @@ if(!empty($_GET)){
         {
           $('#month').hide();
         }
-        var aclass = $('#class').val();
+        /*var aclass = $('#class').val();
         var type =  $('#type').val();
         $.ajax({
           url: "{{url('/fee/getListjson/')}}"+'/'+aclass+'/'+type,
@@ -394,17 +399,18 @@ if(!empty($_GET)){
             $('#fee').append($('<option>').text("--Select Fee--").attr('value',"-1"));
             $.each(data, function(i, fee) {
               // console.log(fee);
-
-              $('#fee').append($('<option>').text(fee.title).attr('value', fee.id));
+             var sel='';
+             
+              $('#fee').append($('<option>').text(fee.title).attr('value', fee.id).attr('selected',sel));
             });
             //console.log(data);
 
           },
           type: 'GET'
         });
+*/
 
-
-      });*/
+      });
 
 
 
@@ -442,13 +448,16 @@ if(!empty($_GET)){
         },
         dataType: 'json',
         success: function(data) {
+         // .selectpicker('refresh');
           $('#student').empty();
           $('#student').append($('<option>').text("--Select Student--").attr('value',""));
           $.each(data, function(i, student) {
             // console.log(student);
 
             $('#student').append($('<option>').text(student.firstName+" "+student.middleName+" "+student.lastName+"["+student.rollNo+"]").attr('value', student.regiNo));
+              
           });
+          $('#student').selectpicker('refresh');
           //console.log(data);
 
         },
@@ -457,13 +466,23 @@ if(!empty($_GET)){
     }
 
     };
-
-     $("#student").on('change',function(){
-     var student_reg = $("#student").val();
-    // alert(student_reg);
-
-     $.ajax({
-          url: "{{url('/fee/getdiscountjson')}}"+'/'+student_reg,
+     /*$('#student').change(function() {
+      var ids = $('#fee').val();
+        if (ids!="-1")
+        {
+          $('#feeInfoDiv').show();
+        }
+        else
+        {
+          $('#feeInfoDiv').hide();
+        }
+       
+       // alert("ewe"+ids);
+        console.log("{{url('/fee/getFeeInfo')}}"+'/'+ids);
+        //damnt = 0;
+        alert( "yy" + $("#disc").html());
+        $.ajax({
+          url: "{{url('/fee/getFeeInfo')}}"+'/'+ids,
           data: {
             format: 'json'
           },
@@ -472,35 +491,25 @@ if(!empty($_GET)){
           },
           dataType: 'json',
           success: function(data) {
-           
-          //  $('#fee').append($('<option>').text("--Select Fee--").attr('value',"-1"));
-         var dic_amount = JSON.stringify(data.discount_id);
-         if(dic_amount==2){
-          $('#disc').html(10);
-         }
-         if(dic_amount==3){
-           $('#disc').html(20);
-         }
-         if(dic_amount==4){
-          $('#disc').html(30);
-         }
-          if(dic_amount==5){
-          $('#disc').html(40);
-         }
-          if(dic_amount==6){
-          $('#disc').html(50);
-         }
-          if(dic_amount==7){
-          $('#disc').html(60);
-         }
-          if(dic_amount==8){
-          $('#disc').html(65);
-         }
-          if(dic_amount==9){
-          $('#disc').html(90);
-         }
- $('#fee').empty();
-           //alert(dic_amount);
+            //$('#LateFeeAmount').val(data[0].Latefee);
+            $('#LateFeeAmount1').html(data[0].Latefee);
+            //$('#feeAmount').val(data[0].fee);
+            var damnt =  $("#disc").html();
+            alert("www"+damnt);
+            if($("#disc").html()!=''){
+              //alert("hello testing");
+              //alert(damnt);
+              var fee = data[0].fee/100 * damnt;
+              var total = data[0].fee - fee;
+               $('#total_fee').val(data[0].fee);
+               $('#feeAmount').val(total);
+               $('#paidamount').val(total);
+               $('#per').html(damnt);
+               $('#discount').val(fee);
+          
+           }else{
+            $('#paidamount').val(data[0].fee);
+           }
             //console.log(data);
 
           },
@@ -508,7 +517,119 @@ if(!empty($_GET)){
         });
 
 
-    });
+      });*/
+      $("#student").on('change',function(){
+        var student_reg = $("#student").val();
+        var ids = $('#fee').val();
+        if (ids!="-1")
+        {
+        $('#feeInfoDiv').show();
+        }
+        else
+        {
+        $('#feeInfoDiv').hide();
+        alert('select fee Name');
+        }
+
+        // alert("ewe"+ids);
+        console.log("{{url('/fee/getFeeInfo')}}"+'/'+ids);
+        //damnt = 0;
+        //alert( "yy" + $("#disc").html());
+        // alert(student_reg);
+        // $('#disc').html(0);
+        $.ajax({
+          url: "{{url('/fee/getdiscountjson')}}"+'/'+student_reg,
+          data: {
+          format: 'json'
+          },
+          error: function(error) {
+            alert("Please fill all inputs correctly!");
+          },
+          dataType: 'json',
+          success: function(data) {
+
+            //  $('#fee').append($('<option>').text("--Select Fee--").attr('value',"-1"));
+            var dic_amount = JSON.stringify(data.discount_id);
+            //alert("sd"+dic_amount);
+            var dis = 0;
+            if(dic_amount==2){
+              $('#disc').html(10);
+              dis=10;
+            }
+            else if(dic_amount==3){
+              $('#disc').html(20);
+              dis=20;
+            }
+            else if(dic_amount==4){
+              $('#disc').html(30);
+              dis=30;
+            }
+            else if(dic_amount==5){
+              $('#disc').html(40);
+              dis=40;
+            }
+            else if(dic_amount==6){
+              $('#disc').html(50);
+               dis=50;
+            }
+            else if(dic_amount==7){
+              $('#disc').html(60);
+              dis=60;
+            }
+            else  if(dic_amount==8){
+              $('#disc').html(65);
+              dis=65;
+            }
+            else if(dic_amount==9){
+              $('#disc').html(90);
+              dis=90;
+            }
+            else if(dic_amount=='null'){
+              $('#disc').html(0);
+              dis=0;
+            }else{
+              $('#disc').html(0);
+              dis=0;
+            }
+            //$('#fee').empty();
+            //alert(dic_amount);
+            //console.log(data);
+            $.ajax({
+              url: "{{url('/fee/getFeeInfo')}}"+'/'+ids,
+              data: {
+              format: 'json'
+              },
+              error: function(error) {
+               alert("Please fill all inputs correctly!");
+              },
+              dataType: 'json',
+              success: function(data) {
+                //$('#LateFeeAmount').val(data[0].Latefee);
+                $('#LateFeeAmount1').html(data[0].Latefee);
+                //$('#feeAmount').val(data[0].fee);
+                var damnt =  $("#disc").html();
+                //alert("www"+damnt);
+                if($("#disc").html()!=''){
+                //alert("hello testing");
+                //alert(damnt);
+                var fee = data[0].fee/100 * dis;
+                var total = data[0].fee - fee;
+                $('#total_fee').val(data[0].fee);
+                $('#feeAmount').val(total);
+                //$('#paidamount').val(total);
+                $('#per').html(damnt);
+                $('#discount').val(fee);
+                }else{
+                $('#paidamount').val(data[0].fee);
+                }
+                //console.log(data);
+              },
+              type: 'GET'
+            });
+          },
+          type: 'GET'
+        });
+      });
     $( document ).ready(function() {
         <?php if(empty($sections)){ ?>
         getsections();
@@ -576,53 +697,8 @@ if(!empty($_GET)){
 
       });
       //get fee info
-      $('#fee').change(function() {
-
-        if ($('#fee').val()!="-1")
-        {
-          $('#feeInfoDiv').show();
-        }
-        else
-        {
-          $('#feeInfoDiv').hide();
-        }
-        var id = $('#fee').val();
-
-        $.ajax({
-          url: "{{url('/fee/getFeeInfo')}}"+'/'+id,
-          data: {
-            format: 'json'
-          },
-          error: function(error) {
-            alert("Please fill all inputs correctly!");
-          },
-          dataType: 'json',
-          success: function(data) {
-            //$('#LateFeeAmount').val(data[0].Latefee);
-            $('#LateFeeAmount1').html(data[0].Latefee);
-            //$('#feeAmount').val(data[0].fee);
-            var damnt =  $("#disc").html();
-            if($("#disc").html()!=''){
-              //alert("hello testing");
-              //alert(damnt);
-              var fee = data[0].fee/100 * damnt;
-              var total = data[0].fee - fee;
-               $('#total_fee').val(data[0].fee);
-               $('#feeAmount').val(total);
-               $('#per').html(damnt);
-               $('#discount').val(fee);
-          
-           }else{
-            $('#feeAmount').val(data[0].fee);
-           }
-            //console.log(data);
-
-          },
-          type: 'GET'
-        });
-
-
-      });
+      //#,
+      
       //add fee to grid
       $( "#btnAddRow" ).click(function() {
         //  console.log($('#fee').val());
