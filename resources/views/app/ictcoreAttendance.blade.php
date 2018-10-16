@@ -43,7 +43,7 @@
 
                                         <input type="file" class="form-control"  name="message_absent" placeholder="">
                                         @if($ictcore_attendance->recording !='')
-                                          <input type="hidden" class="form-control"  name="message_absent" value="{{ $ictcore_attendance->recording  }}" placeholder="">
+                                          <input type="hidden" class="form-control"  name="message_absent1" value="{{ $ictcore_attendance->recording  }}" placeholder="">
 
                                        <div style="line-height:72px;">
                                         <audio controls>
@@ -71,7 +71,7 @@
 
                                         <input type="file" class="form-control"  name="message_late" placeholder="">
                                         @if($ictcore_attendance->late_file !='')
-                                              <input type="hidden" class="form-control"  name="message_late" value="{{ $ictcore_attendance->late_file  }}" placeholder="">
+                                              <input type="hidden" class="form-control"  name="message_late1" value="{{ $ictcore_attendance->late_file  }}" placeholder="">
 
                                        <div style="line-height:72px;">
                                         <audio controls>
@@ -110,7 +110,7 @@
 
                                         <input type="file" class="form-control"  name="fee_message" placeholder="">
                                         @if($ictcore_fees->recording !='')
-                                      <input type="hidden" class="form-control"  name="fee_message" value="{{ $ictcore_fees->recording }}" placeholder="">
+                                      <input type="hidden" class="form-control"  name="fee_message1" value="{{ $ictcore_fees->recording }}" placeholder="">
                                        <div style="line-height:72px;">
                                         <audio controls>
                                           <source src=" {{url('/storage/app/public/messages/')}}/{{$ictcore_fees->recording}}" type="audio/wav">
