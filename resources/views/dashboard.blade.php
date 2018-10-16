@@ -28,6 +28,7 @@
 
 </div>
 @endif
+
 <div class="row">
   <div class="col-md-12 col-sm-12 col-xs-12">
     <!-- /top tiles -->
@@ -59,6 +60,82 @@
         <div class="count yellow">{{$total['totalabsent']}}</div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-md-6 col-sm-6 col-xs-6">
+         
+        <h2>Fee Detail <small> {{$month_n}}</small></h2>
+         <table id="feeList" class="table table-striped table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>Class</th>
+               
+                  <th>Number of paid</th>
+                  <th>Number of Upaid</th>
+                  <th>Number of Student</th>
+                  <th>Action</th>
+                
+                </tr>
+              </thead>
+              <tbody>
+              <?php $i=0; 
+              //echo "<pre>".$i;print_r($scetionarray);
+              //exit;
+              ?>
+              @foreach($scetionarray as $section)
+               
+                <tr>
+                  <td>{{$section['section']}}</td>
+              
+                  <td>{{$resultArray1[$i]['paid']}}</td>
+                  <td>{{$resultArray1[$i]['unpaid']}}</td>
+                  <td>{{$resultArray1[$i]['total']}}</td>
+                  <td><a href="{{url('/fees/classreport?class_id='.$section['class'].'&month='.$month.'&year='.$year.'&direct=yes')}}">veiw detail</a></td>
+                 
+                </tbody>
+                <?php $i++; ?>
+                @endforeach
+              </table>
+      </div>
+      <div class="col-md-6 col-sm-6 col-xs-6">
+         <h2>Attendance Detail  <small> today</small></h2>
+         <table id="feeList" class="table table-striped table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Number of Student</th>
+                  <th>Total Attendance</th>
+                  <th>Number of Paresnt</th>
+                  <th>Number of Absent</th>
+                  <th>Number of Leaves</th>
+                  <th>Action</th>
+                
+                </tr>
+              </thead>
+              <tbody>
+              <?php $i=0; 
+              //echo "<pre>".$i;print_r($scetionarray);
+              //exit;
+              ?>
+              @foreach($attendances_b as $attendance)
+               
+                <tr>
+                  <td>{{$attendance['class']}}</td>
+                  <td>{{$attendance['total_student']}}</td>
+                  <td>{{$attendance['total_attendance']}}</td>
+                  <td>{{$attendance['present']}}</td>
+                  <td>{{$attendance['absent']}}</td>
+                  <td> @if($attendance['leaves']==''){{  0 }} @else {{ $attendance['leaves'] }} @endif </td>
+                  <td></td>
+                 
+                </tbody>
+                <?php $i++; ?>
+                @endforeach
+              </table>
+      </div>
+    </div>
+
+
+
     <!-- /top tiles -->
     <!-- Graph start -->
     <?php /*<div class="row">
