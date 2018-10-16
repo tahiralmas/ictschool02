@@ -40,13 +40,17 @@
                          <div class="input-group">
                              <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                              <select name="for" class="form-control">
-                               @if($gpa->for=="1")
-                               <option value="1" selected="true">100 Marks </option>
-                               <option value="2">50 Marks </option>
-                             @else
-                               <option value="1" >100 Marks </option>
-                               <option value="2" selected="true">50 Marks </option>
-                             @endif
+                              
+                               <option value="1"   @if($gpa->for=="1") selected="true" @endif>100 Marks </option>
+                               <option value="3" @if($gpa->for=="3") selected="true" @endif>75 Marks </option>
+
+                               <option value="2" @if($gpa->for=="2") selected="true" @endif>50 Marks </option>
+                               <option value="4" @if($gpa->for=="4") selected="true" @endif>30 Marks </option>
+                               <option value="5" @if($gpa->for=="5") selected="true" @endif>25 Marks </option>
+                               <option value="6" @if($gpa->for=="6") selected="true" @endif>20 Marks </option>
+                               <option value="7" @if($gpa->for=="7") selected="true" @endif>15 Marks </option>
+                               <option value="8" @if($gpa->for=="8") selected="true" @endif>10 Marks </option>
+                             
                              </select>
                          </div>
                      </div>
@@ -106,7 +110,14 @@
                             <select name="for" class="form-control">
 
                               <option value="1">100 Marks </option>
+                              <option value="3"> 75 Marks </option>
                               <option value="2">50 Marks </option>
+                              
+                              <option value="4">30 Marks </option>
+                              <option value="5">25 Marks </option>
+                              <option value="6">20 Marks </option>
+                              <option value="7">15 Marks </option>
+                              <option value="8">10 Marks </option>
 
                             </select>
                         </div>
