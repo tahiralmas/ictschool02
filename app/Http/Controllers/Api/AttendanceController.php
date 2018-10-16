@@ -129,7 +129,7 @@ class AttendanceController extends Controller
 					 // return response()->json($presentDate);
 
 
-					  if($status =='Absent' || $status =='absent' ) {
+					  if($status =='Absent' || $status =='absent' || $status =='leave' || $status =='Leave') {
 
 						$atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$students)->first();
                         //return response()->json($atten,200);
