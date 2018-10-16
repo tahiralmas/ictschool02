@@ -41,7 +41,7 @@
                                         <div class="form-group">
                                             <label for="method">Method</label>
                                             <div class="input-group">
-                                                 <input class="chb" data-toggle="toggle" id="myCheck" data-on="Ictcore" data-off="Telenor" data-width="100"   name="method" data-onstyle="success" data-offstyle="danger" type="checkbox">                                            </div>
+                                                 <input class="chb" data-toggle="toggle" id="myCheck" data-on="Ictcore" data-off="Telenor" data-width="100"   name="method" data-onstyle="success" data-offstyle="danger" type="checkbox" @if($ictcore_integration->method=='ictcore') Checked @endif>                                            </div>
                                         </div>
                                     </div>
                             <div class="row">
