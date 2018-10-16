@@ -129,7 +129,7 @@ class AttendanceController extends Controller
 					 // return response()->json($presentDate);
 
 
-					  if($status =='Absent' || $status =='absent') {
+					  if($status =='Absent' || $status =='absent' ) {
 
 						$atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$students)->first();
                         //return response()->json($atten,200);
@@ -216,7 +216,7 @@ class AttendanceController extends Controller
 
 					}*/
 
-				}else if($status == 'Present' || $status =='present' || $status =='Leave' || $status =='leave' || $status=='sick_leave'){
+				}else if($status == 'Present' || $status =='present' || $status =='Late' || $status =='late'){
 					//}
 					
 					$atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$students)->first();
