@@ -131,7 +131,7 @@ class ictcoreController {
 		    $attendance_noti = DB::table('notification_type')->where('notification','attendance')->first();
 
 			$ictcore_integration =	DB::table('ictcore_integration')->select('*')->where('type',$attendance_noti->type)->first();
-               //echo "<pre>";print_r($ictcore_integration);
+              // echo "<pre>";print_r($ictcore_integration);
                //exit;
                 $ictcore_attendance =	DB::table('ictcore_attendance')->select('*')->first();
 				   //echo "<pre>";print_r($ictcore_attendance );exit;
@@ -153,7 +153,15 @@ class ictcoreController {
 
                //if($ictcore_integration->method=="telenor" && $attendance_noti->type=='voice'){
                   
-                    if(empty($ictcore_attendance) || $ictcore_attendance->recording != Input::get('message_absent')){
+                    if(Input::file('message_absent')==''){
+                   //echo   $ictcore_attendance->late_file ."=======".Input::get('message_late1');
+                   $inpet_attendance_file_ab = Input::get('message_absent1');
+                   }else{
+                   	                  // echo   $ictcore_attendance->late_file ."=======ee".Input::get('message_late');
+                     $inpet_attendance_file_ab = Input::file('message_absent');
+
+                   }
+                    if(empty($ictcore_attendance) || $ictcore_attendance->recording != $inpet_attendance_file_ab){
                         $fileName_absnet = $name_absent.'_'.time().'.'.Input::file('message_absent')->getClientOriginalExtension();
                  
                         Input::file('message_absent')->move($drctry ,$fileName_absnet);
@@ -219,8 +227,17 @@ class ictcoreController {
 	                    $recording_id_absent = $ictcore_attendance->ictcore_recording_id;
                         $program_id_absent = $ictcore_attendance->ictcore_program_id;
                     }
+                    if(Input::file('message_late')==''){
+                   //echo   $ictcore_attendance->late_file ."=======".Input::get('message_late1');
+                   $inpet_attendance_file = Input::get('message_late1');
+                   }else{
+                   	                  // echo   $ictcore_attendance->late_file ."=======ee".Input::get('message_late');
+                     $inpet_attendance_file = Input::file('message_late');
 
-                    if(empty($ictcore_attendance) || $ictcore_attendance->late_file != Input::get('message_late')){
+                   }
+                   // echo   $ictcore_attendance->late_file ."=======ee".$inpet_attendance_file;
+                  // exit;
+                    if(empty($ictcore_attendance) || $ictcore_attendance->late_file !=  $inpet_attendance_file){
                         $fileName_late   =   $name_late.'_'.time().'.'.Input::file('message_late')->getClientOriginalExtension();
                  
                         Input::file('message_late')->move($drctry ,$fileName_late);
@@ -278,7 +295,16 @@ class ictcoreController {
 	                     $program_id_late   = $ictcore_attendance->ictcore_program_id_late;
                     }
 
-                    if(empty($ictcore_fess) || $ictcore_fess->recording != Input::get('fee_message')){
+                     if(Input::file('message_absent')==''){
+                   //echo   $ictcore_attendance->late_file ."=======".Input::get('message_late1');
+                   $inpet_attendance_file_fee = Input::get('fee_message1');
+                   }else{
+                   	                  // echo   $ictcore_attendance->late_file ."=======ee".Input::get('message_late');
+                     $inpet_attendance_file_fee = Input::file('fee_message');
+
+                   }
+
+                    if(empty($ictcore_fess) || $ictcore_fess->recording != $inpet_attendance_file_fee){
                       $fileName_fee    =    $name_fee.'_'.time().'.'.Input::file('fee_message')->getClientOriginalExtension();
                         Input::file('fee_message')->move($drctry ,$fileName_fee);
 						sleep(2);
