@@ -97,8 +97,18 @@
                 <li><a href="{{url('/users/logout')}}"><i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
             </ul>
         </div>
+
+        <!--<div class="btn-group ">
+          
+                <form class="navbar-search ">
+                    <input placeholder="Search" class="search-query form-control col-md-10" name="query"
+                    type="text">
+                </form>
+           
+        </div>-->
         <!-- Addmission dropdown starts -->
         @if(Session::get('userRole') =="Admin")
+        
        <!-- <div class="btn-group pull-right">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
@@ -164,7 +174,7 @@
             </button>
             <ul class="dropdown-menu">
                 <li><a href="{{url('/gradesheet')}}">Marksheet</a></li>
-                <li><a href="{{url('/attendance/report')}}">Attendance</a></li>
+               <!-- <li><a href="{{url('/attendance/report')}}">Attendance</a></li>-->
                 <li><a href="{{url('/attendance/student_report')}}">Student Wise Attendance</a></li>
                 <li><a href="{{url('/tabulation')}}">Tabulationsheet</a></li>
                 <li><a href="{{url('/smslog')}}">Voice Log / SMS Log</a></li>
@@ -172,7 +182,8 @@
                 <li><a href="/accounting/reportsum">Account Balance</a></li>
                  <li><a href="/barcode">Barcode Generate</a></li>-->
                  <li class="divider"></li>
-                 <li><a href="{{url('/fees/report')}}"> Fee Collection Report</a></li>
+                 <!--<li><a href="{{url('/fees/report')}}"> Fee Collection Report</a></li>
+                 -->
                  <li><a href="{{url('/fees/classreport')}}"> Fee Class Report</a></li>
             </ul>
         </div>
@@ -195,6 +206,7 @@
                 
 
             </ul>
+
         </div>
         <!-- fees dropdown ends -->
      @endif
@@ -376,9 +388,9 @@
                                 <li><a href="{{url('/ictcore?type=sms')}}">Sms Integration</a></li>
                                 <li><a href="{{url('/ictcore?type=voice')}}">Voice Integration</a></li>
                                 <li><a href="{{url('/notification_type')}}">Notification Types</a></li>
-                                <li><a href="{{url('/ictcore/attendance')}}">Attendance Message</a></li>
-                                <li><a href="{{url('/ictcore/fees')}}">Fees Message</a></li>
-
+                                <li><a href="{{url('/ictcore/attendance')}}">Notifications</a></li>
+                                <!--<li><a href="{{url('/ictcore/fees')}}">Fees Message</a></li>
+                                -->
                                 <li><a href="{{url('/template/create')}}">Add Message</a></li>
                                 <li><a href="{{url('/template/list')}}">Recording List</a></li>
                                 <li><a href="{{url('/schedule')}}">Fee Notification Reminder</a></li>
