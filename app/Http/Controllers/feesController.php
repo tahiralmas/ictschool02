@@ -588,11 +588,13 @@ class feesController extends BaseController {
 		$feeyear          = Input::get('year') ;
 
 		$student_all =	DB::table('Student')->select( '*')->where('isActive','Yes')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
-
+$ictcore_fees = Ictcore_fees::select("*")->first();
+						// echo "<pre>";print_r($student_all);
+						// exit;
 		if(count($student_all)>0){
 			$i=0;
 
-						 $ictcore_fees = Ictcore_fees::select("*")->first();
+
 					     $ictcore_integration = Ictcore_integration::select("*")->first();
 				if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
 				      $ict  = new ictcoreController();
@@ -648,7 +650,7 @@ class feesController extends BaseController {
 					'status' => '',
 				);
 				$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
-			
+			    $campaign_id = $ict->ictcore_api('campaigns/'.$campaign_id.'/start','PUT',$data=array() );
 	          //echo "<pre>";print_r($data);
 
 				return Redirect::to('/fees/classreport')->with("success", "Voice campaign Created Succesfully.");
