@@ -658,12 +658,15 @@ class ictcoreController {
           }else{
           	$notification_types =array();
           }
-
+         if(file_exists(Storage::get('/public/cronsettings.txt'))){
           $contant = Storage::get('/public/cronsettings.txt');
           $data = explode('<br>',$contant );
 
 			//echo "<pre>";print_r($data);
 			$attendance_time = $data[0]; 
+		}else{
+			$attendance_time ='';
+		}
 	   //exit;
 	    return View('app.notifications',compact('notification_types','attendance_time'));
 	}
@@ -706,6 +709,7 @@ class ictcoreController {
         //exit;
         $time = DATE("H:i", STRTOTIME($data[0]['time']));
             $setting = $time."<br>".'';
+           
            Storage::put('/public/cronsettings.txt', $setting);
   
 			return Redirect::to('/notification_type')->with("success", "Notifications setting Created Succesfully.");
