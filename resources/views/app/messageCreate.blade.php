@@ -22,7 +22,7 @@
 
                 <div id="myTabContent" class="tab-content">
                     <div class="tab-pane active" id="email">
-                        <form role="form" action="{{url('/message')}}" method="post">
+                        <form role="form" action="{{url('/message')}}" method="post"  enctype="multipart/form-data">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <input type="hidden" name="type" value="voice">
                                 <br >
@@ -30,10 +30,11 @@
                                     <label for="name"  class="col-sm-2 col-form-label">Role</label>
                                     <div class="input-group col-md-6">
                                         <select name="role" id="role" class="form-control selectpicker" tabindex="-1">
-                                            <option value="">Select Users Type</option>
-                                            <option value="student">Student</option>
-                                            <option value="teacher">Teacher</option>
-                                             <option value="parent">Parent</option>
+                                             <option value="">Select Users Type</option>
+                                             <option value="student">Student</option>
+                                             <option value="teacher">Teacher</option>
+                                             <!--<option value="parent">Parent</option>-->
+                                             <option value="testing">Testing</option>
                                         </select>
                                     </div>
                                 </div>
@@ -63,7 +64,14 @@
                                 </div>
                             </div>
 
+                               <div class="form-group row" id="testing" >
+                                <label for="name"  class="col-sm-2 col-form-label">Phone Numbers</label>
+                                <div class="input-group col-md-6">
+                                    <input  name="phone_number" placeholder="example:923001234567"  class="form-control">
 
+                                </div>
+
+                            </div>
 
                               <div class="form-group row" id="class" >
                                 <label for="name"  class="col-sm-2 col-form-label">Message Title</label>
@@ -74,17 +82,20 @@
 
                             </div>
 
-
+                           
 
                                 <div class="form-group row">
                                     <label for="name" class="col-sm-2 col-form-label">Message</label>
                                     <div class="input-group col-md-6">
 
-                                     <select  name="message" class="form-control selectpicker"  data-hide-disabled="true" data-actions-box="true" data-size="5" tabindex="-99">
+                                     <select  name="message" id="message" class="form-control selectpicker"  data-hide-disabled="true" data-actions-box="true" data-size="5" tabindex="-99">
+                                             
                                             <option value="">Select Message</option>
+                                            <option value="other">New Upload</option>
                                     @foreach($messages as $message)
                                         <option value="{{$message->id}}">{{$message->name}}</option>
                                     @endforeach
+                                      
 
 
                                             
@@ -92,6 +103,15 @@
                                  </div>
                                 </div>
 
+                                
+                               <div class="form-group row" id="upload" >
+                                <label for="message_file"  class="col-sm-2 col-form-label">Uplad Voice Message <small>Only wav file suported</small></label>
+                                <div class="input-group col-md-6">
+                                    <input type="file"  id="message_file" name="message_file"  class="form-control">
+
+                                </div>
+
+                            </div>
                                 
                                 <div class="clearfix"></div>
                                 @if (count($errors) > 0)
@@ -122,15 +142,15 @@
                                 <div class="form-group col-md-12 row">
                                     <label for="name"  class="col-sm-2 col-form-label">Role</label>
                                     <div class="input-group col-md-6">
-                                        <select name="role" id="role" class="form-control selectpicker" tabindex="-1">
+                                        <select name="role" id="role1" class="form-control selectpicker" tabindex="-1">
                                             <option value="">Select Users Type</option>
                                             <option value="student">Student</option>
                                             <option value="teacher">Teacher</option>
-                                             <option value="parent">Parent</option>
+                                             <option value="testing">Testing</option>
                                         </select>
                                     </div>
                                 </div>
-                             <div id="studen" >
+                             <div id="studen1" >
                                 <div class="form-group row" id="class" >
                                     <label for="name"  class="col-sm-2 col-form-label">Class</label>
                                     <div class="input-group col-md-6">
@@ -152,7 +172,14 @@
                                 </div>
                             </div>
 
+                              <div class="form-group row" id="testing1" >
+                                <label for="name"  class="col-sm-2 col-form-label">Phone Numbers</label>
+                                <div class="input-group col-md-6">
+                                    <input  name="phone_number" placeholder="example:923001234567"  class="form-control">
 
+                                </div>
+
+                            </div>
 
                               <div class="form-group row" id="class" >
                                 <label for="name"  class="col-sm-2 col-form-label">Message Title</label>
@@ -203,6 +230,12 @@
 
 $(document).ready(function()
 {
+
+   $("#upload").hide();
+   $("#studen").hide();
+    $("#testing").hide();
+    $("#testing1").hide();
+
     $("#role").change(function()
     {
         var id=$(this).val();
@@ -210,9 +243,51 @@ $(document).ready(function()
        // alert(id);
          if(id=='teacher'){
             $("#studen").hide();
-        }else{
+            $("#testing").hide();
+        }else if(id=='student') {
          $("#studen").show();
+         $("#testing").hide();
+        }else{
+           $("#studen").hide();
+           $("#testing").show();
+            //$("#studen").hide();
         }
+
+
+    });
+    $("#message").change(function()
+    {
+        var id=$(this).val();
+        //var dataString = 'id='+ id;
+       // alert(id);
+         if(id=='other'){
+            $("#upload").show();
+           
+         }else{
+          $("#upload").hide();
+            //$("#studen").hide();
+        }
+
+
+    });
+
+    $("#role1").change(function()
+    {
+        var id=$(this).val();
+        //var dataString = 'id='+ id;
+       // alert(id);
+         if(id=='teacher'){
+            $("#studen1").hide();
+            $("#testing1").hide();
+        }else if(id=='student') {
+         $("#studen1").show();
+         $("#testing1").hide();
+        }else{
+           $("#studen1").hide();
+           $("#testing1").show();
+            //$("#studen").hide();
+        }
+
 
     });
 
