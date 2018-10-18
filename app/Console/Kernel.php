@@ -47,8 +47,7 @@ class Kernel extends ConsoleKernel
 
             //echo "<pre>";print_r($data);
             $attendance_time = $data[0]; 
-
-     $schedule->command('attendanceNotification:attendacenotification')->dailyAt($attendance_time);
+         $schedule->command('attendanceNotification:attendacenotification')->dailyAt($attendance_time)->timezone('Asia/Karachi');
     }
 
     /**
