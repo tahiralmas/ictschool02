@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Student;
-use File;
+use Illuminate\Support\Facades\File;
 use App\Ictcore_integration;
 use App\Ictcore_attendance;
 use App\Ictcore_fees;
@@ -658,15 +658,19 @@ class ictcoreController {
           }else{
           	$notification_types =array();
           }
-         if(file_exists(Storage::get('/public/cronsettings.txt'))){
+         // $result = File::exists(Storage::get('/public/cronsettings.txt'));
+         //print_r($result);
+        // Storage::disk('public')->exists('.cronsettings.txt');
+         if(Storage::disk('local')->exists('/public/cronsettings.txt')){
           $contant = Storage::get('/public/cronsettings.txt');
           $data = explode('<br>',$contant );
 
 			//echo "<pre>";print_r($data);
 			$attendance_time = $data[0]; 
 		}else{
-			$attendance_time ='';
+	      $attendance_time ='';
 		}
+	//	echo $attendance_time;
 	   //exit;
 	    return View('app.notifications',compact('notification_types','attendance_time'));
 	}
