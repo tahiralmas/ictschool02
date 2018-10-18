@@ -44,7 +44,8 @@ class messageController extends BaseController {
 	* @return Response
 	*/
 	public function create()
-	{
+	{    
+		if(Input::get('role')=='student'){
 			$rules=[
 			'role' => 'required',
 			'message' => 'required',
@@ -52,14 +53,40 @@ class messageController extends BaseController {
 			'class'   => 'required',
 			'section' => 'required'
 			];
+        }
+        if(Input::get('role')=='teacher'){
+			$rules=[
+			'role' => 'required',
+			'message' => 'required',
+			'mess_name' => 'required',
+			//'class'   => 'required',
+			//'section' => 'required'
+			];
+        }
+        if(Input::get('role')=='testing' && Input::get('type')!='sms'){
+			$rules=[
+			'role'      => 'required',
+			'message'   => 'required',
+			'mess_name' => 'required',
+			'message_file'      =>'required|mimes:wav'
+			];
+        }else{
+        	$rules=[
+        	'role' => 'required',
+			'message' => 'required',
+			'mess_name' => 'required',
+			//'class'   => 'required',
+			//'section' => 'required'
+			];
+        }
 			$validator = \Validator::make(Input::all(), $rules);
 			if ($validator->fails())
 			{
 			  return Redirect::to('/message')->withErrors($validator);
 			}else {
-
+                
                    $file_id='';
-
+                 //echo "<pre>";print_r(Input::all());exit;
                   /*   $section = Input::get('section');
 							$class = Input::get('class');
 							$student=	DB::table('Student')
@@ -70,21 +97,75 @@ class messageController extends BaseController {
 							->get();
 
 							echo "<pre>";print_r($student->toArray());exit; */
+                  //$phone = explode(',',Input::get('phone_number'));
+			      //  echo "<pre>";print_r($phone);exit;
+                  echo $type = Input::get('type');
+                  $ictcore_integration = Ictcore_integration::select("*")->where('type',$type)->first();
+                  $ict  = new ictcoreController();
+					if(Input::get('message')=='other'){
 
-					$type = Input::get('type');
+						$drctry = storage_path('app/public/messages/');
+					    $fileName = 'othernoti_'.time().'.'.Input::file('message_file')->getClientOriginalExtension();
+                        Input::file('message_file')->move($drctry ,$fileName);
+						sleep(2);
+                        echo exec('sox '.$drctry.'/'.$fileName .' -b 16 -r 8000 -c 1 -e signed-integer '.$drctry.'/'.'other.wav');
+						$name_ab          =  $drctry .'other.wav';
+						$finfo_ab         =  new \finfo(FILEINFO_MIME_TYPE);
+						$mimetype_ab      =  $finfo_ab->file($name_ab);
+						$cfile_ab            =  curl_file_create($name_ab, $mimetype_ab, basename($name_ab));
+						$data             = array('name'=>time(),'audio_file'=> $cfile_ab);
+                       if($ictcore_integration->method=="telenor" && $attendance_noti->type=='voice'){
+                        	$file_id     = $ict->verification_number_telenor_voice($data,$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password);
+					}else{
+						$data_abs = array(
+							'name' => Input::get('title_abent'),
+							'description' => Input::get('description_absent'),
+							);
+				          $recording_id  =  $ict->ictcore_api('messages/recordings','POST',$data_abs );
+						if(!empty($recording_id->error)){
+							return Redirect::to('/ictcore/attendance')->withErrors("ERROR: some thing wrong in ictcore check password or user name " );
+						}
+                          $result        =  $ict->ictcore_api('messages/recordings/'.$recording_id.'/media','PUT',array( $cfile_ab));
+				          $recording_id  =  $result ;
+				          //
+							if(!empty($recording_id->error)){
+								return Redirect::to('/ictcore/attendance')->withErrors("ERROR: some thing wrong in ictcore check password or user name " );
+							}
+							if(!is_array($recording_id )){
+								$data = array(
+								'name' => Input::get('title'),
+								'recording_id' => $recording_id,
+								);
+								$program_id = $ict->ictcore_api('programs/voicemessage','POST',$data );
+								if(!empty($program_id->error)){
+									return Redirect::to('/message')->withErrors("ERROR: some thing wrong in ictcore check password or user name " );
+								}
+								if(!is_array( $program_id )){
+									$program_id = $program_id;
+								}else{
+									return Redirect::to('/message')->withErrors("ERROR: Program not Created" );
+								}
+							}else{
+							return Redirect::to('/message')->withErrors("ERROR: Recording not Created" );               
+							}
+
+							  echo "<pre>";print_r( $recording_id);
+						 
+					}
+				}
 					
-					$ictcore_integration = Ictcore_integration::select("*")->where('type',$type)->first();
+					
 					//echo "<pre>";print_r($ictcore_integration);
 
 					//exit;
 					if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 
-	                  $ict  = new ictcoreController();
+	                  
 	                  $role = Input::get('role');
 	                  $mess_name = Input::get('mess_name');
 					  $remove_spaces_m =  str_replace(" ","_",$mess_name );
                        
-						if($type=='voice'){
+						if($type=='voice' && Input::get('message')!='other' ){
 							$message = Message::find(Input::get('message'));
 							$program_id =  $message->ictcore_program_id;
 							$file_id =  $message->telenor_file_id;
@@ -96,14 +177,15 @@ class messageController extends BaseController {
 								'description' =>'',
 							);
 							if($ictcore_integration->method == 'telenor'){
-
+                             echo "adeel";
 							}else{
+							echo "adeel";
 							$text_id  =  $ict->ictcore_api('messages/texts','POST',$data );
 							$data     = array(
 								'name' => Input::get('mess_name'),
 								'text_id' =>$text_id,
 							);
-							$program_id  =  $ict->ictcore_api('programs/sendsms','POST',$data );
+							echo $program_id  =  $ict->ictcore_api('programs/sendsms','POST',$data );
 						}
 						}
 						if($ictcore_integration->method == 'telenor'){
@@ -148,7 +230,7 @@ class messageController extends BaseController {
 									$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
 							    }
 							}
-						}else{
+						}else if($role =='teacher'){
 							$teacher=	DB::table('teacher')
 							->select('*')
 							->get();
@@ -167,19 +249,41 @@ class messageController extends BaseController {
 								$contact_id = $ict->ictcore_api('contacts','POST',$data );
 								$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
 
+							     
 							    }
 							}
+						}else{
+                          $phone = explode(',',Input::get('phone_number'));
+                          foreach($phone as $number){
+                            if($ictcore_integration->method == 'telenor'){
+                                
+                            
+                                $group_contact_id = $ict->telenor_apis('add_contact',$group_id,$number,'','','');
+
+                                }else{
+                                     $data = array(
+										'first_name' => '',
+										'last_name'  =>'',
+										'phone'      =>$number,
+										'email'      =>''
+								);
+									$contact_id = $ict->ictcore_api('contacts','POST',$data );
+									$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+							    }
+							}
+
+
 						}
 						if($ictcore_integration->method == 'telenor'){
                                   
                         echo  $campaign    = $ict->telenor_apis('campaign_create',$group_id,'',Input::get('message'),$file_id,$type);
                           // echo $campaign;
                          // $this->info('Notification sended successfully'.$campaign);
-                        echo "<pre>";print_r($campaign);
+                       // echo "<pre>";print_r($campaign);
                             // exit;
                             $send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
-                             echo "<pre>";print_r($send_campaign);
-                             exit;
+                             // echo "<pre>";print_r($send_campaign);
+                            // exit;
                         }else{
 						$data = array(
 						'program_id' => $program_id,
@@ -190,14 +294,18 @@ class messageController extends BaseController {
 						'status' => '',
 						);
 						$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
+                       $campaign_start = $ict->ictcore_api('campaigns/'.$campaign_id.'/start','PUT',$data=array() );
 
 						}
-						exit;
+
+
+						//exit;
 						return Redirect::to('/message')->with("success", "campaign Created Succesfully.");
 					}else{
 						return Redirect::to('/message')->withErrors("Please Add ictcore integration in Setting Menu");
 					}
 		}
+		//}
 	}
 	/**
 	* Store a newly created resource in storage.
