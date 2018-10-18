@@ -187,10 +187,13 @@ class TeacherController extends Controller
 		$attendances_b  = array();
 		 if($teachers->count()>0){
 		 	$i=0;
+		 	$now   = Carbon::now();
+             $year  =  $now->year;
 		foreach($teachers as $teacher ){
           $sections[] = $teacher->section_id;
           //$count_student1 = array();
-          $count_student1 =  DB::table('Student')->select(DB::raw('COUNT(*) as total_student'))->where('section',$teacher->section_id)->first();
+         $class = DB::table('Class')->where('id',$teacher->class_id)->first();
+          $count_student1 =  DB::table('Student')->select(DB::raw('COUNT(id) as total_student'))->where('isActive','yes')->where('class',$class->code)->where('section',$teacher->section_id)->where('session',$year)->first();
           // $count_student =  $count_student1->total_attendance;
           //$count_student[] =$count_student1->toArray();
           $attendances_a = DB::table('Attendance')
