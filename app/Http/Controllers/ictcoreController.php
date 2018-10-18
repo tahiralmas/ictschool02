@@ -14,6 +14,7 @@ use App\ClassModel;
 use App\Notification;
 use DB;
 use Carbon\Carbon;
+use Storage;
 class ictcoreController {
 
 	public function __construct() {
@@ -657,8 +658,14 @@ class ictcoreController {
           }else{
           	$notification_types =array();
           }
-	   
-	    return View('app.notifications',compact('notification_types'));
+
+          $contant = Storage::get('/public/cronsettings.txt');
+          $data = explode('<br>',$contant );
+
+			//echo "<pre>";print_r($data);
+			$attendance_time = $data[0]; 
+	   //exit;
+	    return View('app.notifications',compact('notification_types','attendance_time'));
 	}
 
 	public function noti_create()
@@ -674,16 +681,33 @@ class ictcoreController {
 		else {
 		
 			$data = array(Input::all());
+			//echo "<pre>";print_r($data[0]);
+			//exit;
+			//$contant = Storage::get('/public/cronsettings.txt');
+			//echo "<pre>";print_r($contant);
+			//exit;
 			unset($data[0]['_token']);
 			Notification::truncate();
 			foreach($data[0] as $key=>$value){
+			//	echo $value;
+				//exit;
 				$add_noti = new Notification;
+			     if($value=='sms' || $value=='voice'){
 			     $add_noti->type = $value;
 			     $add_noti->notification = $key;
 			     $add_noti->save();
+			    }
 			     //echo $key;echo $value;
 			     //echo "<br>";
-			}    
+
+			}  
+			//echo DATE("g:i a", STRTOTIME("13:30"));
+       // echo   $setting = $data[0]['time']."<br>".'';
+        //exit;
+        $time = DATE("H:i", STRTOTIME($data[0]['time']));
+            $setting = $time."<br>".'';
+           Storage::put('/public/cronsettings.txt', $setting);
+  
 			return Redirect::to('/notification_type')->with("success", "Notifications setting Created Succesfully.");
 	    }
 	}
