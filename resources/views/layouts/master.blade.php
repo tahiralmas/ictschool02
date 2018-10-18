@@ -98,14 +98,18 @@
             </ul>
         </div>
 
-        <!--<div class="btn-group ">
+        <div class="btn-group ">
           
-                <form class="navbar-search ">
-                    <input placeholder="Search" class="search-query form-control col-md-10" name="query"
+                <form class="navbar-search" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                    <input placeholder="Search Student" class="search-query form-control col-md-10" name="student_nameds" id="student_namesd" 
                     type="text">
+                    <div id="studentListsds">
+                    </div>
                 </form>
            
-        </div>-->
+        </div>
         <!-- Addmission dropdown starts -->
         @if(Session::get('userRole') =="Admin")
         
@@ -391,10 +395,11 @@
                                 <li><a href="{{url('/ictcore/attendance')}}">Notifications</a></li>
                                 <!--<li><a href="{{url('/ictcore/fees')}}">Fees Message</a></li>
                                 -->
-                                <li><a href="{{url('/template/create')}}">Add Message</a></li>
+                               <!-- <li><a href="{{url('/template/create')}}">Add Message</a></li>
                                 <li><a href="{{url('/template/list')}}">Recording List</a></li>
+                              
                                 <li><a href="{{url('/schedule')}}">Fee Notification Reminder</a></li>
-
+  -->
                             </ul>
                         </li>
                           @endif
@@ -496,7 +501,33 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.14/jquery.mask.min.js"></script>
 <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<script>
+$(document).ready(function(){
 
+ /*$('#student_name').keyup(function(){ 
+        var query = $(this).val();
+        if(query != '')
+        {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+          url:"{{ url('student/search') }}",
+          method:"POST",
+          data:{query:query, _token:_token},
+          success:function(data){
+           $('#studentList').fadeIn();  
+                    $('#studentList').html(data);
+          }
+         });
+        }
+    });
+
+    $(document).on('click', 'li', function(){  
+        $('#student_name').val($(this).text());  
+        $('#studentList').fadeOut();  
+    });  */
+
+});
+</script>
 @yield('script')
 </body>
 </html>
