@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use DB;
+use Storage;
 use Illuminate\Support\Facades\Schema;
 
 class Kernel extends ConsoleKernel
@@ -18,6 +19,7 @@ class Kernel extends ConsoleKernel
         //
     
     '\App\Console\Commands\feeNotification',
+    '\App\Console\Commands\attendanceNotification',
     ];
 
     /**
@@ -40,6 +42,13 @@ class Kernel extends ConsoleKernel
          }
         //$test = $schedule->exec('touch /tmp/mytest____')->everyMinute();
 
+          $contant = Storage::get('/public/cronsettings.txt');
+          $data = explode('<br>',$contant );
+
+            //echo "<pre>";print_r($data);
+            $attendance_time = $data[0]; 
+
+     $schedule->command('attendanceNotification:attendacenotification')->dailyAt($attendance_time);
     }
 
     /**
