@@ -206,7 +206,7 @@ class TeacherController extends Controller
            if($attendances_a->total_attendance==0){
            	 $attendances_b[] = array('total_attendance'=>0,'absent'=>0,'present'=>0,'leaves'=>0,'section_id'=>$teacher->section_id,'section'=>$teacher->section,'class_id'=>$teacher->class_id,'class'=>$teacher->class,'total_student'=>$count_student1->total_student);
            }else{
-           	$attendances_b[] = array(get_object_vars($attendances_a),'total_student'=>$count_student1->total_student);
+           	$attendances_b[] = array('total_attendance'=>$attendances_a->total_attendance,'absent'=>$attendances_a->absent,'present'=>$attendances_a->present,'leaves'=>$attendances_a->leaves,'section_id'=>$teacher->section_id,'section'=>$teacher->section,'class_id'=>$teacher->class_id,'class'=>$teacher->class,'total_student'=>$count_student1->total_student);
            //	$attendances_b[] =;
            }
 
