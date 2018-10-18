@@ -32,7 +32,7 @@
                                     </div>
                                     <label for="name"  class=" col-form-label">Schedule Setting</label>
                                     <div class="input-group col-md-6">
-                                        <input type="text" name="time" value={{$attendance_time}} id="timepicker">
+                                        <input type="text" name="time" value="{{$attendance_time}}" id="timepicker">
                                     </div>
                                 </div>
                                 </div>
