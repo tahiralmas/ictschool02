@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+   <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" />
 @if (Session::get('success'))
 
 <div class="alert alert-success">
@@ -28,6 +29,10 @@
                                     <div class="input-group col-md-6">
                                        sms <input type="radio" name="attendance" @if(!empty($notification_types) && $notification_types[0]->type =='sms') checked @endif value="sms"  >
                                        voice <input type="radio" name="attendance" @if(!empty($notification_types) && $notification_types[0]->type=='voice') checked @endif value="voice" >
+                                    </div>
+                                    <label for="name"  class=" col-form-label">Schedule Setting</label>
+                                    <div class="input-group col-md-6">
+                                        <input type="text" name="time" value={{$attendance_time}} id="timepicker">
                                     </div>
                                 </div>
                                 </div>
@@ -117,9 +122,12 @@
 <script>
 $( document ).ready(function() {
    //$('#timepicker1').timepicker();
-    $('#timepicker1').timepicker({
+    $('#timepicker').timepicker({
         timeFormat: 'HH:mm:ss',
     });
+
+            $('#timepicker1').timepicker();
+    
 });
 </script>
 @stop
