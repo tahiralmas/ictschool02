@@ -10,6 +10,7 @@ use App\Ictcore_integration;
 use App\Ictcore_attendance;
 use App\Ictcore_fees;
 use App\SectionModel;
+use App\Schedule;
 use App\ClassModel;
 use App\Notification;
 use DB;
@@ -670,9 +671,18 @@ class ictcoreController {
 		}else{
 	      $attendance_time ='';
 		}
+		 $schedule = Schedule::select('date','time')->first();
+		if(is_null($schedule)){
+			$schedule=new Schedule;
+			$schedule->date = "";
+			$schedule->time = "";
+		
+		}
+		$datee=date('F');
+		$year= date('Y');
 	//	echo $attendance_time;
 	   //exit;
-	    return View('app.notifications',compact('notification_types','attendance_time'));
+	    return View('app.notifications',compact('notification_types','attendance_time','schedule','datee','year'));
 	}
 
 	public function noti_create()
@@ -680,6 +690,9 @@ class ictcoreController {
        $rules=[
 		'fess' => 'required',
 		'attendance' => 'required',
+		'time_set' => 'required',
+		'time' => 'required',
+		'date' => 'required',
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails()){
@@ -703,11 +716,18 @@ class ictcoreController {
 			     $add_noti->type = $value;
 			     $add_noti->notification = $key;
 			     $add_noti->save();
+			    }else{
+
 			    }
 			     //echo $key;echo $value;
 			     //echo "<br>";
 
 			}  
+			 DB::table("cronschedule")->delete();
+				$schedule=new Schedule;
+				$schedule->date = $data[0]['date'];
+				$schedule->time = $data[0]['time_set'];
+				$schedule->save();
 			//echo DATE("g:i a", STRTOTIME("13:30"));
        // echo   $setting = $data[0]['time']."<br>".'';
         //exit;
