@@ -163,6 +163,7 @@ class ictcoreController {
                      $inpet_attendance_file_ab = Input::file('message_absent');
 
                    }
+                    if($inpet_attendance_file_ab!=''){
                     if(empty($ictcore_attendance) || $ictcore_attendance->recording != $inpet_attendance_file_ab){
                         $fileName_absnet = $name_absent.'_'.time().'.'.Input::file('message_absent')->getClientOriginalExtension();
                  
@@ -229,6 +230,14 @@ class ictcoreController {
 	                    $recording_id_absent = $ictcore_attendance->ictcore_recording_id;
                         $program_id_absent = $ictcore_attendance->ictcore_program_id;
                     }
+                }else{
+
+                	     $upload_audio_ab = '';
+                    	 $fileName_absnet = '';
+	                    $recording_id_absent = '';
+                        $program_id_absent = '';
+
+                }
                     if(Input::file('message_late')==''){
                    //echo   $ictcore_attendance->late_file ."=======".Input::get('message_late1');
                    $inpet_attendance_file = Input::get('message_late1');
@@ -239,6 +248,7 @@ class ictcoreController {
                    }
                    // echo   $ictcore_attendance->late_file ."=======ee".$inpet_attendance_file;
                   // exit;
+                    if($inpet_attendance_file!=''){
                     if(empty($ictcore_attendance) || $ictcore_attendance->late_file !=  $inpet_attendance_file){
                         $fileName_late   =   $name_late.'_'.time().'.'.Input::file('message_late')->getClientOriginalExtension();
                  
@@ -296,8 +306,14 @@ class ictcoreController {
 	                     $recording_id_late = $ictcore_attendance->ictcore_recording_id_late;
 	                     $program_id_late   = $ictcore_attendance->ictcore_program_id_late;
                     }
+                }else{
+                       $upload_audio_lt = '';
+                    	 $fileName_late   = '';
+	                     $recording_id_late = '';
+	                     $program_id_late   = '';
+                }
 
-                     if(Input::file('message_absent')==''){
+                     if(Input::file('fee_message')==''){
                    //echo   $ictcore_attendance->late_file ."=======".Input::get('message_late1');
                    $inpet_attendance_file_fee = Input::get('fee_message1');
                    }else{
@@ -305,7 +321,10 @@ class ictcoreController {
                      $inpet_attendance_file_fee = Input::file('fee_message');
 
                    }
-
+                  //echo "<pre>";print_r($ictcore_fess);
+                   //echo $ictcore_fess->recording ." != ". $inpet_attendance_file_fee;
+                  //exit;
+                    if( $inpet_attendance_file_fee !=''){
                     if(empty($ictcore_fess) || $ictcore_fess->recording != $inpet_attendance_file_fee){
                       $fileName_fee    =    $name_fee.'_'.time().'.'.Input::file('fee_message')->getClientOriginalExtension();
                         Input::file('fee_message')->move($drctry ,$fileName_fee);
@@ -370,6 +389,12 @@ class ictcoreController {
 	                       $program_id_fee   = $ictcore_fess->ictcore_program_id;
 
                     }
+                }else{
+                	$upload_audio_fe = '';
+                    	 $fileName_fee   = '';
+                          $recording_id_fee   = '';
+	                       $program_id_fee   = '';
+                }
 					/*if(!empty($ictcore_attendance) && File::exists($drctry.$ictcore_attendance->recording)){
 						unlink($drctry .$ictcore_attendance->recording);
 					}
