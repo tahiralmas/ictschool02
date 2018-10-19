@@ -291,7 +291,6 @@ class messageController extends BaseController {
 						'delay' => '',
 						'try_allowed' => '',
 						'account_id' => 1,
-						'status' => '',
 						);
 						$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
                        $campaign_start = $ict->ictcore_api('campaigns/'.$campaign_id.'/start','PUT',$data=array() );
