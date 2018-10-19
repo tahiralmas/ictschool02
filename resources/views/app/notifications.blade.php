@@ -116,6 +116,11 @@
                                     <div class="input-group col-md-6">
                                        sms <input type="radio" name="attendance" value="sms"  >
                                        voice <input type="radio" name="attendance"  value="voice" >
+                                    
+                                    </div>
+                                     <label for="name"  class=" col-form-label">Schedule Setting</label>
+                                    <div class="input-group col-md-6">
+                                        <input type="text" name="time" value="{{$attendance_time}}" id="timepicker">
                                     </div>
                                 </div>
                                 </div>
@@ -127,6 +132,42 @@
                                        sms <input type="radio" name="fess" required value="sms"  >
                                        voice <input type="radio" name="fess" required value="voice"  >
                                     </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="name"  class=" col-form-label">Date</label>
+                                    <div class="input-group col-md-6">
+                                       <input type="text" name="date" class="form-control" required value="{{$schedule->date}}" >
+                                    </div>
+                                </div>
+                            
+                                <div class="form-group">
+                                    <label for="name" class="col-form-label">Time</label>
+                                    <div class="input-group col-md-6">
+
+                                        <input type="text" id="timepicker1" class="form-control"  name="time_set" value="{{$schedule->time}}" >
+                                    </div>
+                                </div>
+                               
+
+                                
+                                 <div class="form-group">
+                                    <label for="name" class=" col-form-label">Month</label>
+                                    <div class="input-group col-md-6">
+
+                                        <input type="text" class="form-control"  value="{{$datee}}" readonly >
+                                    </div>
+                                </div>
+                                
+                         
+                                <div class="form-group">
+                                    <label for="name" class="col-form-label">Year</label>
+                                    <div class="input-group col-md-6">
+
+                                        <input type="text" class="form-control" value="{{$year}}"  readonly>
+                                    </div>
+                              
                                 </div>
                                 </div>
 
