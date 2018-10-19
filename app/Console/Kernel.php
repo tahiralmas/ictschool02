@@ -41,13 +41,14 @@ class Kernel extends ConsoleKernel
          }
          }
         //$test = $schedule->exec('touch /tmp/mytest____')->everyMinute();
+           if(Storage::disk('local')->exists('/public/cronsettings.txt')){
+              $contant = Storage::get('/public/cronsettings.txt');
+              $data = explode('<br>',$contant );
 
-          $contant = Storage::get('/public/cronsettings.txt');
-          $data = explode('<br>',$contant );
-
-            //echo "<pre>";print_r($data);
-            $attendance_time = $data[0]; 
-         $schedule->command('attendanceNotification:attendacenotification')->dailyAt($attendance_time)->timezone('Asia/Karachi');
+                //echo "<pre>";print_r($data);
+                $attendance_time = $data[0]; 
+             $schedule->command('attendanceNotification:attendacenotification')->dailyAt($attendance_time)->timezone('Asia/Karachi');
+            }
     }
 
     /**
