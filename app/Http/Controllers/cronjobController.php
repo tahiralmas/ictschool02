@@ -72,11 +72,16 @@ class cronjobController extends BaseController {
 					if(count($student)>0 ){
 						$datanot[]=array($stdfees->regiNo);
 					}else{
+						if (preg_match("~^0\d+$~", $stdfees->fatherCellNo)) {
+                        	$to = preg_replace('/0/', '92', $stdfees->fatherCellNo, 1);
+                        }else {
+                            $to =$stdfees->fatherCellNo;  
+                        }
 						$data = array(
 				        //'registrationNumber' =>$stdfees->regiNo,
 						'first_name'         => $stdfees->firstName,
 						'last_name'          =>  $stdfees->lastName,
-						'phone'              =>  $stdfees->fatherCellNo,
+						'phone'              =>  $to,
 						'email'              => '',
 						);
                         if($ictcore_integration->method=="telenor"){
@@ -118,7 +123,6 @@ class cronjobController extends BaseController {
 						'delay' => '',
 						'try_allowed' => '',
 						'account_id' => 1,
-						'status' => '',
 					);
 					$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
 					//$campaign_id = $ict->ictcore_api('campaigns/$campaign_id/start','PUT',$data=array() );
