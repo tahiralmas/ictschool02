@@ -44,6 +44,33 @@ class studentController extends BaseController {
 		return View('app.studentCreate',compact('classes','section'));
 	}
 //
+
+	public function search(Request $request)
+	{
+
+		
+			$query = Input::get('query');
+			$output="";
+			$data=DB::table('Student')->where('isActive', '=', 'Yes')->where('firstName','LIKE','%'.$query."%")->orwhere('lastName','LIKE','%'.$query."%")->orwhere('fatherName','LIKE','%'.$query."%")->orwhere('b_form','LIKE','%'.$query."%")
+			->orwhere('session','LIKE','%'.$query."%")->orwhere('class','LIKE','%'.$query."%")->orwhere('dob','LIKE','%'.$query."%")
+			->orwhere('parmanentAddress','LIKE','%'.$query."%")->orwhere('discount_id','LIKE','%'.$query."%")
+			->orderBy('session', 'desc')
+			->orderBy('class', 'asc')
+			->limit(20)
+			->get();
+			//return Response($output);
+			 $output = '<ul class="dropdown-menu" id="searchlist" style="display:block; position:relative">';
+		      foreach($data as $row)
+		      {
+		      	$section = DB::table('section')->where('id',$row->section)->first();
+		       $output .= '
+		       <li><a href="#">'.$row->firstName.''.$row->lastName.' (class = '.$row->class.')'.'(sectoion = '.$section->name.')'.'(regiNo = '.$row->regiNo.')'.'(session = '.$row->session.')'.'</a></li>
+		       ';
+		      }
+		      $output .= '</ul>';
+		      echo $output;
+		
+	}
 	public  function getRegi($class,$session,$section)
 	{
 		$ses =trim($session);
@@ -300,6 +327,8 @@ public function show()
 }
 public function getList()
 {
+	
+if(Input::get('search')==''){
 	$rules = [
 		'class' => 'required',
 		'section' => 'required',
@@ -308,20 +337,75 @@ public function getList()
 
 
 	];
+}else{
+	$rules = [
+	
+	];
+}
 	$validator = \Validator::make(Input::all(), $rules);
 	if ($validator->fails()) {
 		return Redirect::to('/student/list')->withInput(Input::all())->withErrors($validator);
 	} else {
+
+		if(Input::get('search')=='yes'){
+         //echo Input::get('student_name');
+            $exp = explode('(',Input::get('student_name'));
+         	//echo "<pre>";print_r($exp);
+         	$class = explode(')',$exp[1]);
+         	$section = explode(')',$exp[2]);
+         	$regiNo = explode(')',$exp[3]);
+         	$session = explode(')',$exp[4]);
+
+         	$class1 = explode('=',$class[0]);
+         	$section1 = explode('=',$section[0]);
+         	$regiNo1 = explode('=',$regiNo[0]);
+         	$session1 = explode('=',$session[0]);
+         	//echo "<pre>";print_r($class1);
+         	//echo "<pre>";print_r($section1);
+         	//echo "<pre>";print_r($regiNo1);
+         	//echo "<pre>";print_r($session1);
+         	//$get_student = DB::table('Student')->where('session',trim($session1[1]))->where('regiNo',trim($regiNo1[1]))->first();
+        // echo "<pre>ddd";print_r($get_student);
+         //	exit;
+            //$class_code = $get_student->class;
+         	//$section_id = $get_student->section;
+         	////$shift =$get_student->shift;
+         	//$session_year =$session1[1];
+         $students = DB::table('Student')
+		->join('Class', 'Student.class', '=', 'Class.code')
+		->join('section', 'Student.section', '=', 'section.id')
+		->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+		'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion','section.name')
+		->where('Student.isActive', '=', 'Yes')
+		->where('session',trim($session1[1]))
+		->where('regiNo',trim($regiNo1[1]))
+		->get();
+		//echo "<pre>ddd";print_r($students);
+         	//exit;
+        //exit;
+		}else{
+		$class_code	=Input::get('class');
+		$section_id=Input::get('section');
+		$shift=Input::get('shift');
+		$session_year =trim(Input::get('session'));
 		$students = DB::table('Student')
 		->join('Class', 'Student.class', '=', 'Class.code')
+		->join('section', 'Student.section', '=', 'section.id')
 		->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion')
-		->where('isActive', '=', 'Yes')
-		->where('class',Input::get('class'))
-		->where('section',Input::get('section'))
-		->where('shift',Input::get('shift'))
-		->where('session',trim(Input::get('session')))
+		'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion','section.name')
+		->where('Student.isActive', '=', 'Yes')
+		->where('Student.class',$class_code)
+		->where('Student.section',$section_id)
+		->where('Student.shift',$shift)
+		->where('Student.session',$session_year)
 		->get();
+		//echo "<pre>ddd";print_r($students);
+         	//exit;
+
+
+		}
+
+		
 		if(count($students)<1)
 		{
 			return Redirect::to('/student/list')->withInput(Input::all())->with('error','No Students Found!');
