@@ -768,6 +768,7 @@ class ictcoreController {
 	public function verification_number_telenor_sms($to,$msg,$mask,$user,$pass,$type)
 	{
 
+	    
 	    $planetbeyondApiUrl="https://telenorcsms.com.pk:27677/corporate_sms2/api/auth.jsp?msisdn=#username#&password=#password#";
 		if($type == 'sms'){
 		$planetbeyondApiSendSmsUrl="https://telenorcsms.com.pk:27677/corporate_sms2/api/sendsms.jsp?session_id=#session_id#&to=#to_number_csv#&text=#message_text#"; 
@@ -780,7 +781,11 @@ class ictcoreController {
 	    $url      =  str_replace("#username#",$userName,$planetbeyondApiUrl);
 		$url      =  str_replace("#password#",$password,$url);
 
-
+        if (preg_match("~^0\d+$~", $to)) {
+            $to = preg_replace('/0/', '92', $to, 1);
+	    }else {
+	        $to =$to;  
+	    }
 	   $ch = curl_init();
 	    curl_setopt($ch, CURLOPT_URL,$url);
 	    curl_setopt($ch, CURLOPT_FAILONERROR,1);
@@ -797,6 +802,8 @@ class ictcoreController {
 
 	     $url_sms = str_replace("#to_number_csv#",$to,$url_sms);
 	   //$url=str_replace("#from_number#",$fromNumber,$url);
+
+	     
 
 	    $urlWithSessionKey = str_replace("#session_id#",$session_id,$url_sms);
         if($mask!=null)
