@@ -213,10 +213,16 @@ class messageController extends BaseController {
 
 
 							foreach($student as $std){
+								if (preg_match("~^0\d+$~", $std->fatherCellNo)) {
+                                	$to = preg_replace('/0/', '92', $std->fatherCellNo, 1);
+	                            }else {
+	                                $to =$std->fatherCellNo;  
+	                            }
+
 								$data = array(
 								'first_name' => $std->firstName,
 								'last_name' => $std->lastName,
-								'phone'     => $std->fatherCellNo,
+								'phone'     => $to,
 								'email'     => '',
 								);
                                  
