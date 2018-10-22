@@ -100,12 +100,13 @@
 
         <div class="btn-group ">
           
-                <form class="navbar-search" method="post">
+                <form class="navbar-search" name="navbar_search" action="{{url('/student/list')}}" id="navbar_search" method="post">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="search" value="yes">
 
-                    <input placeholder="Search Student" class="search-query form-control col-md-10" name="student_nameds" id="student_namesd" 
-                    type="text">
-                    <div id="studentListsds">
+                    <input placeholder="Search Student" class="search-query form-control col-md-10" name="student_name" id="student_name" 
+                    type="text" autocomplete="off">
+                    <div id="studentListd">
                     </div>
                 </form>
            
@@ -399,7 +400,7 @@
                                 <li><a href="{{url('/template/list')}}">Recording List</a></li>
                               
                                 <li><a href="{{url('/schedule')}}">Fee Notification Reminder</a></li>
-  -->
+                             -->
                             </ul>
                         </li>
                           @endif
@@ -504,8 +505,8 @@
 <script>
 $(document).ready(function(){
 
- /*$('#student_name').keyup(function(){ 
-        var query = $(this).val();
+ $('#student_name').keyup(function(){ 
+        var query = $('#student_name').val();
         if(query != '')
         {
          var _token = $('input[name="_token"]').val();
@@ -514,17 +515,20 @@ $(document).ready(function(){
           method:"POST",
           data:{query:query, _token:_token},
           success:function(data){
-           $('#studentList').fadeIn();  
-                    $('#studentList').html(data);
+           $('#studentListd').fadeIn();  
+                    $('#studentListd').html(data);
           }
          });
         }
     });
 
-    $(document).on('click', 'li', function(){  
-        $('#student_name').val($(this).text());  
-        $('#studentList').fadeOut();  
-    });  */
+     
+     
+    $('#studentListd').on('click', 'li', function() { 
+         $('#student_name').val($(this).text());  
+         $('#studentListd').fadeOut(); 
+         $( "#navbar_search" ).submit(); 
+    });
 
 });
 </script>
