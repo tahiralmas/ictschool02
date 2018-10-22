@@ -375,7 +375,7 @@ if(Input::get('search')==''){
 		->join('Class', 'Student.class', '=', 'Class.code')
 		->join('section', 'Student.section', '=', 'section.id')
 		->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion','section.name')
+		'Class.Name as class','Class.code as class_code', 'Student.presentAddress', 'Student.gender', 'Student.session','section.name','section.id as section_id')
 		->where('Student.isActive', '=', 'Yes')
 		->where('session',trim($session1[1]))
 		->where('regiNo',trim($regiNo1[1]))
@@ -418,8 +418,10 @@ if(Input::get('search')==''){
 			$formdata->section=Input::get('section');
 			$formdata->shift=Input::get('shift');
 			$formdata->session=trim(Input::get('session'));
+			$month=8;
+			$fee_name=2;
 			//return View::Make("app.studentList", compact('students','classes','formdata'));
-			return View("app.studentList", compact('students','classes','formdata'));
+			return View("app.studentList", compact('students','classes','formdata','month','fee_name'));
 		}
 	}
 
