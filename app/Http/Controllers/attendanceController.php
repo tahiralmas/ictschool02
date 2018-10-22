@@ -68,6 +68,14 @@ class attendanceController extends BaseController {
 				$absentStudents = array();
 				$students = Input::get('regiNo');
 				$presents = Input::get('present');
+				$leave    = Input::get('leave');
+                //echo "<pre>present";print_r($presents);
+                //echo "<pre>leave";print_r($leave);
+                $leaves = array();
+                foreach($leave as $key=>$val){
+                	$leaves[] = $key;
+                }
+
 				$all = false;
 				if ($presents == null) {
 				 $all = true;
@@ -90,6 +98,10 @@ class attendanceController extends BaseController {
 						array_push($stpresent, $st);
 					}
 				}
+
+              //echo "<pre>pp";print_r($stpresent);
+              //echo "<pre>ab";print_r($absentStudents);
+                //exit;
 				$presentDate = $this->parseAppDate(Input::get('date'));
 				DB::beginTransaction();
 				try {
@@ -118,6 +130,17 @@ class attendanceController extends BaseController {
 					foreach ($absentStudents as $absst) {
 					   $atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$absst)->first();
 	                    if(is_null($atten)){
+	                    	if(in_array($absst,$leaves)){
+							$attenDataabsnt= [
+							'date' => $presentDate,
+							'regiNo' => $absst,
+							'status' => "leave",
+							'class_id'=>$class_id,
+							'section_id'=>Input::get('section'),
+							'session'=>Input::get('session'),
+							'created_at' => Carbon::now()
+							];
+							}else{
 							$attenDataabsnt= [
 							'date' => $presentDate,
 							'regiNo' => $absst,
@@ -127,11 +150,14 @@ class attendanceController extends BaseController {
 							'session'=>Input::get('session'),
 							'created_at' => Carbon::now()
 							];
+							}
 						    Attendance::insert($attenDataabsnt);
 
 						    $i++;
 						}
 					}
+					//echo "<pre>";print_r($attenDataabsnt);
+					//exit;
 					if($i==0){
                        $errorMessages = new \Illuminate\Support\MessageBag;
 					$errorMessages->add('Error', 'Attendance already added by this Date Please Select Other Date');
@@ -196,18 +222,25 @@ class attendanceController extends BaseController {
 						 
 
                          $attendance_noti     = DB::table('notification_type')->where('notification','attendance')->first();
-						 
 						 $ictcore_attendance  = Ictcore_attendance::select("*")->first();
 						 $ictcore_integration = Ictcore_integration::select("*")->where('type',$attendance_noti->type)->first();
 						 $ict                 = new ictcoreController();
 						if($ictcore_integration->method=="telenor"){
                           //  echo "telenor";
                             //exit;
-
+                            if(in_array($absst,$leaves)){
                             $get_msg  = DB::table('ictcore_attendance')->first();
                             $name     = $student->firstName.' '.$student->lastName;
                             $msg      =  str_replace("<<parent>>",$student->fatherName,$get_msg->description);
 		                    $msg      =  str_replace("<<name>>",$name,$msg);
+                            }else{
+                            $get_msg  = DB::table('ictcore_attendance')->first();
+                            $name     = $student->firstName.' '.$student->lastName;
+                            $msg      =  str_replace("<<parent>>",$student->fatherName,$get_msg->description);
+		                    $msg      =  str_replace("<<name>>",$name,$msg);
+
+                            }
+                            
                             //if($attendance_noti->type=='sms'){
                             $snd_msg  = $ict->verification_number_telenor_sms($student->fatherCellNo,$msg,'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$attendance_noti->type);
                             //}elseif($attendance_noti->type=='voice'){

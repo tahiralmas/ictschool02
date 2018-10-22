@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Console\Commands;
-
 use Illuminate\Console\Command;
-
 use App\Http\Controllers\cronjobController;
 use App\Http\Controllers\ictcoreController;
 use App\Student;
@@ -60,10 +58,7 @@ class attendanceNotification extends Command
                       ->select('Student.id as student_id','Student.firstName', 'Student.middleName', 'Student.lastName','Student.fatherCellNo','Student.fatherName','Attendance.status','Attendance.regiNo')
                       ->join('Attendance' ,'Student.regiNo', '=' , 'Attendance.regiNo')
                       /*->where('Student.section',  $section_id)*/->where('Student.session',$year)->where('Attendance.date','=',Carbon::today()->toDateString())->whereIn('Attendance.status',$status);
-      echo "<pre>";print_r($attendance->get());
-
-       
-       
+     // echo "<pre>";print_r($attendance->get());
         if($attendance->count()){
             $attendance = $attendance->get();
             $attendance_noti     = DB::table('notification_type')->where('notification','attendance')->first();
@@ -108,10 +103,16 @@ class attendanceNotification extends Command
                      $get_msg  = DB::table('ictcore_attendance')->first();
                     if($attendance_noti->type=='voice'){
                         if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){  
+                           if (preg_match("~^0\d+$~", $student->fatherCellNo)) {
+                                $to = preg_replace('/0/', '92', $student->fatherCellNo, 1);
+                            }else {
+                                $to =$student->fatherCellNo;  
+                            }
+
                             $data= array(
                                 'first_name'         => $student->firstName,
                                 'last_name'          =>  $student->lastName,
-                                'phone'              =>  $student->fatherCellNo,
+                                'phone'              =>  $to,
                                 'email'              => '',
                             );
                             $contact_id = $ict->ictcore_api('contacts','POST',$data );
