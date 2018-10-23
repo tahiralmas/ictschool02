@@ -22,17 +22,12 @@
 @endif
 <?php 
 if(!empty($_GET)){
-  $class1   = $_GET['class_id'];
- 
-   $section = $_GET['section'];
-   
-   $session = $_GET['session'];
-  
-   $month   = $_GET['month'];
-  
-   $type    = $_GET['type'];
-  
-   $fee     = $_GET['fee_name'];
+  $class1      = $_GET['class_id'];
+   $section    = $_GET['section'];
+   $session    = $_GET['session'];
+   $month      = $_GET['month'];
+   $type       = $_GET['type'];
+   $fee        = $_GET['fee_name'];
  
 }else{
    $class1   = '';
@@ -41,6 +36,7 @@ if(!empty($_GET)){
   $month   = '';
   $type    = '';
   $fee     = '';
+  //$regiNo ='';
 }
 //echo "<pre>";print_r($_GET);
 ?>
@@ -199,7 +195,10 @@ if(!empty($_GET)){
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-book blue"></i></span>
                     <select id="student" name="student" class="form-control selectpicker" required="true"  data-show-subtext="true" data-live-search="true">
-                     
+                     @if($student)
+                     <!--<option value='-1'>---Select Student---</option>-->
+                     <option value="{{$student->regiNo}}">{{$student->firstName}} {{$student->lastName}} [{{$student->rollNo}}]</option>
+                    @endif
                     </select>
                   </div>
                 </div>
@@ -374,6 +373,7 @@ if(!empty($_GET)){
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
     <script type="text/javascript">
     $( document ).ready(function() {
+       
         $('#feeInfoDiv').hide();
         if ($('#type').val()=="Monthly")
         {
@@ -421,7 +421,7 @@ if(!empty($_GET)){
     {
       var table = document.getElementById('feeList');
       var rowCount = table.rows.length;
-      console.log(rowCount);
+    //  console.log(rowCount);
       if(rowCount>1)
       {
         $('#btnsave').show();
@@ -519,11 +519,15 @@ if(!empty($_GET)){
 
       });*/
       $("#student").on('change',function(){
+       // alert(34);
         var student_reg = $("#student").val();
         var ids = $('#fee').val();
+        //alert(ids);
+        $('#feeInfoDiv').show();
         if (ids!="-1")
         {
         $('#feeInfoDiv').show();
+      //  alert('select fee Name');
         }
         else
         {
@@ -532,7 +536,7 @@ if(!empty($_GET)){
         }
 
         // alert("ewe"+ids);
-        console.log("{{url('/fee/getFeeInfo')}}"+'/'+ids);
+        //console.log("{{url('/fee/getFeeInfo')}}"+'/'+ids);
         //damnt = 0;
         //alert( "yy" + $("#disc").html());
         // alert(student_reg);
@@ -631,6 +635,9 @@ if(!empty($_GET)){
         });
       });
     $( document ).ready(function() {
+     <?php if(!empty($student)){ ?>
+      $('#student').trigger('change');
+       <?php } ?>
         <?php if(empty($sections)){ ?>
         getsections();
         <?php } ?>
@@ -638,7 +645,9 @@ if(!empty($_GET)){
                 getsections();
               });
       btnSaveIsvisibale();
+      <?php if(empty($student)){ ?>
       getStudents();
+      <?php } ?>
       $(".datepicker").datepicker({autoclose:true,todayHighlight: true});
       $(".datepicker2").datepicker( {
         format: " yyyy", // Notice the Extra space at the beginning
