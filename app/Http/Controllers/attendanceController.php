@@ -1064,13 +1064,24 @@ class attendanceController extends BaseController {
                 $errorMessages->add('Error', 'Please don\'t mess with inputs!!!');
                 return Redirect::to('/attendance/monthly-report')->withErrors($errorMessages);
             }
-            $students = Student::where('class', $class)
-                ->where('isActive', 'Yes')
-                ->where('session' , $session)
-                ->where('shift'   , $shift)
-                ->where('section' , $section)
-                 //->lists('regiNo');
-                ->pluck('regiNo');
+            if(Input::get('regiNo')==''){
+	            $students = Student::where('class', $class)
+	                ->where('isActive', 'Yes')
+	                ->where('session' , $session)
+	                ->where('shift'   , $shift)
+	                ->where('section' , $section)
+	                 //->lists('regiNo');
+	                ->pluck('regiNo');
+	            }else{
+	            	 $students = Student::where('class', $class)
+	                ->where('isActive', 'Yes')
+	                ->where('session' , $session)
+	                ->where('shift'   , $shift)
+	                ->where('section' , $section)
+	                ->where('regiNo' , Input::get('regiNo'))
+	                 //->lists('regiNo');
+	                ->pluck('regiNo');
+	            }
                 // echo "<pre>";print_r($students->toArray());
                // echo implode(',', $students->toArray());
               // exit;
