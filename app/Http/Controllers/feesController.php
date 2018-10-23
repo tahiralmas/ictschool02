@@ -207,6 +207,29 @@ class feesController extends BaseController {
 		//return View::Make('app.feeCollection',compact('classes'));
 		return View('app.feeCollection',compact('classes'));
 	}
+    
+	public function detail()
+	{
+
+		$month = array('1'=>'January','2'=>'February','3'=>'March','4'=>'April','5'=>'May','6'=>'June','7'=>'July','8'=>'August','9'=>'September','10'=>'October','11'=>'November','12'=>'December');
+		//echo "<pre>";print_r($fee_list);
+		foreach($month as $key=>$mnth) :
+			$fee_list =DB::table('stdBill')
+			->join('billHistory','stdBill.billNo','=','billHistory.billNo')
+			->select('stdBill.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','billHistory.total')
+			->where('stdBill.regiNo',Input::get('regiNo'))
+			->whereYear('stdBill.created_at', date('Y'))
+			->where('billHistory.month',$key);
+			// ->orderBy('billHistory.month','ASC');
+			if($fee_list->count()>0) :
+				$fee_list =$fee_list->first();
+				$fee_data[] = array('month'=>$mnth,'fee'=>$fee_list->fee,'lateFee'=>$fee_list->lateFee,'total'=>$fee_list->total,'status'=>'paid');
+			else :
+				$fee_data[] = array('month'=>$mnth,'fee'=>'','lateFee'=>'','total'=>'','status'=>'unpaid');
+			endif ;
+		endforeach ;
+		return View('app.feedetail',compact('fee_data'));
+	}
 
 	public function getCollection()
 	{
@@ -221,9 +244,16 @@ class feesController extends BaseController {
 		}else{
 			$fees=array();
 		}
+		if(Input::get('regiNo')!=''){
+		  $student= Student::select('regiNo','rollNo','firstName','middleName','lastName','discount_id')->where('isActive','=','Yes')->where('regiNo','=',Input::get('regiNo'))->first();
+	      //return $students;
+		}
+		else{
+			 $student=array();
+		}
 		//echo "<pre>";print_r($fees->toArray());exit;
 		//return View::Make('app.feeCollection',compact('classes'));
-		return View('app.feeCollection',compact('classes','sections','fees'));
+		return View('app.feeCollection',compact('classes','sections','fees','student'));
 	}
 	public function postCollection()
 	{
