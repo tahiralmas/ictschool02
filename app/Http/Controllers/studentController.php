@@ -8,10 +8,12 @@ use App\Student;
 use App\User;
 use App\SectionModel;
 use App\ClassModel;
+use App\FeeSetup;
 use Hash;
 use DB;
 use App\Ictcore_integration;
 use App\Http\Controllers\ictcoreController;
+use Carbon\Carbon;
 class foobar{
 
 }
@@ -349,40 +351,25 @@ if(Input::get('search')==''){
 
 		if(Input::get('search')=='yes'){
          //echo Input::get('student_name');
-            $exp = explode('(',Input::get('student_name'));
-         	//echo "<pre>";print_r($exp);
-         	$class = explode(')',$exp[1]);
-         	$section = explode(')',$exp[2]);
-         	$regiNo = explode(')',$exp[3]);
-         	$session = explode(')',$exp[4]);
-
-         	$class1 = explode('=',$class[0]);
-         	$section1 = explode('=',$section[0]);
-         	$regiNo1 = explode('=',$regiNo[0]);
-         	$session1 = explode('=',$session[0]);
-         	//echo "<pre>";print_r($class1);
-         	//echo "<pre>";print_r($section1);
-         	//echo "<pre>";print_r($regiNo1);
-         	//echo "<pre>";print_r($session1);
-         	//$get_student = DB::table('Student')->where('session',trim($session1[1]))->where('regiNo',trim($regiNo1[1]))->first();
-        // echo "<pre>ddd";print_r($get_student);
-         //	exit;
-            //$class_code = $get_student->class;
-         	//$section_id = $get_student->section;
-         	////$shift =$get_student->shift;
-         	//$session_year =$session1[1];
-         $students = DB::table('Student')
-		->join('Class', 'Student.class', '=', 'Class.code')
-		->join('section', 'Student.section', '=', 'section.id')
-		->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		'Class.Name as class','Class.code as class_code', 'Student.presentAddress', 'Student.gender', 'Student.session','section.name','section.id as section_id')
-		->where('Student.isActive', '=', 'Yes')
-		->where('session',trim($session1[1]))
-		->where('regiNo',trim($regiNo1[1]))
-		->get();
-		//echo "<pre>ddd";print_r($students);
-         	//exit;
-        //exit;
+            $exp       = explode('(',Input::get('student_name'));
+         	$class     = explode(')',$exp[1]);
+         	$section   = explode(')',$exp[2]);
+         	$regiNo    = explode(')',$exp[3]);
+         	$session   = explode(')',$exp[4]);
+         	$class1    = explode('=',$class[0]);
+         	$section1  = explode('=',$section[0]);
+         	$regiNo1   = explode('=',$regiNo[0]);
+         	$session1  = explode('=',$session[0]);
+	         $students = DB::table('Student')
+			->join('Class', 'Student.class', '=', 'Class.code')
+			->join('section', 'Student.section', '=', 'section.id')
+			->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+			'Class.Name as class','Class.code as class_code', 'Student.presentAddress', 'Student.gender', 'Student.session','section.name','section.id as section_id')
+			->where('Student.isActive', '=', 'Yes')
+			->where('session',trim($session1[1]))
+			->where('regiNo',trim($regiNo1[1]))
+			->first();
+         	return Redirect::to('student/view/'.$students->id);
 		}else{
 		$class_code	=Input::get('class');
 		$section_id=Input::get('section');
@@ -399,13 +386,7 @@ if(Input::get('search')==''){
 		->where('Student.shift',$shift)
 		->where('Student.session',$session_year)
 		->get();
-		//echo "<pre>ddd";print_r($students);
-         	//exit;
-
-
 		}
-
-		
 		if(count($students)<1)
 		{
 			return Redirect::to('/student/list')->withInput(Input::all())->with('error','No Students Found!');
@@ -432,15 +413,24 @@ public function view($id)
 	$student=	DB::table('Student')
 	->join('Class', 'Student.class', '=', 'Class.code')
 	->join('section', 'Student.section', '=', 'section.id')
+	//->leftjoin('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
 	->select('Student.id', 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName',
 	'Student.fatherName','Student.motherName', 'Student.fatherCellNo','Student.motherCellNo','Student.localGuardianCell',
-	'Class.Name as class','Student.presentAddress','Student.gender','Student.religion','Student.section','Student.shift','Student.session',
+	'Class.Name as class','Class.code as class_code','Student.presentAddress','Student.gender','Student.religion','Student.section','Student.shift','Student.session',
 	'Student.group','Student.dob','Student.bloodgroup','Student.nationality','Student.photo','Student.extraActivity','Student.remarks',
 	'Student.localGuardian','Student.parmanentAddress','section.name as section_name')
-	->where('Student.id','=',$id)->first();
+	->where('Student.id','=',$id)
+	
+	->first();
+	$attendances = DB::table('Attendance')->where('Attendance.date',Carbon::today()->toDateString())->where('regiNo',$student->regiNo)->first();
+	   //return View::Make("app.studentView",compact('student'));
+	$fees= FeeSetup::select('id','title')->where('class','=',$student->class_code)->where('type','=','Monthly')->first();
 
-	//return View::Make("app.studentView",compact('student'));
-	return View("app.studentView",compact('student'));
+	$now   = Carbon::now();
+             $year  =  $now->year;
+            $month =  $now->month;
+            $fee_name =  $fees->id;
+	return View("app.studentView",compact('student','attendances','year','month','fee_name'));
 }
 /**
 * Show the form for editing the specified resource.
@@ -832,6 +822,22 @@ public function access($id)
 
    }
    return Redirect::to('/student/list')->with("error","Teacher not found.");
+}
+
+public function send_sms()
+{
+    $ictcore_integration  = Ictcore_integration::select("*")->where('type','sms')->first();
+    $ict                  = new ictcoreController();
+    $snd_msg  = $ict->verification_number_telenor_sms(Input::get('phone'),Input::get('message'),'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
+    //echo "<pre>";print_r( $snd_msg);
+    //exit;
+    if($snd_msg->response!='OK'){
+    $error = "Whoops!";
+	return Redirect::to('/student/view/'.Input::get('id'))->with("error"," $error Message Not send");
+    }else{
+     return Redirect::to('/student/view/'.Input::get('id'))->with("success","  Message sended");
+
+    }
 }
 
 }
