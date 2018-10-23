@@ -16,7 +16,7 @@
   <div class="box col-md-12">
     <div class="box-inner">
       <div data-original-title="" class="box-header well">
-        <h2><i class="glyphicon glyphicon-user"></i> Teacher Timetable</h2>
+        <h2><i class="glyphicon glyphicon-user"></i> @if($class=='') Teacher Timetable @else Student Timetable @endif</h2>
 
       </div>
       <div class="box-content">
