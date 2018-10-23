@@ -647,21 +647,39 @@ class teacherController extends BaseController {
 	}
 	public function view_timetable($id)
 	{
-		$teacher_name =  DB::table('teacher')->select('firstName','lastName')->where('id',$id)->first();
-		$timetables = DB::table('timetable')
-		->join('teacher', 'timetable.teacher_id', '=', 'teacher.id')
-		->join('Subject', 'Subject.id', '=', 'timetable.subject_id')
-		//->join('Class', 'Class.id', '=', 'timetable.class_id')
-		->join('section', 'section.id', '=', 'timetable.section_id')
-		->select('teacher.*','timetable.stattime','timetable.endtime','timetable.day','timetable.id as timetable_id','Subject.name AS subname' , 'section.name as section_id', 'section.class_code as classname')
-		->where('timetable.teacher_id',$id)
-		/*	->where('section',Input::get('section'))
-		->where('shift',Input::get('shift'))
-		->where('session',trim(Input::get('session')))*/
-		->get();
+		if(Input::get('class')!='' && Input::get('section')!=''){
+           $teacher_name =  array();
+			$class = Input::get('class');
+			$timetables = DB::table('timetable')
+			->join('teacher', 'timetable.teacher_id', '=', 'teacher.id')
+			->join('Subject', 'Subject.id', '=', 'timetable.subject_id')
+			//->join('Class', 'Class.id', '=', 'timetable.class_id')
+			->join('section', 'section.id', '=', 'timetable.section_id')
+			->select('teacher.*','timetable.stattime','timetable.endtime','timetable.day','timetable.id as timetable_id','Subject.name AS subname' , 'section.name as section_id', 'section.class_code as classname')
+			->where('timetable.class_id',Input::get('class'))
+			->where('timetable.section_id',Input::get('section'))
+			/*	->where('section',Input::get('section'))
+			->where('shift',Input::get('shift'))
+			->where('session',trim(Input::get('session')))*/
+			->get();
+		}else{
+			$class = '';
+			$teacher_name =  DB::table('teacher')->select('firstName','lastName')->where('id',$id)->first();
+			$timetables = DB::table('timetable')
+			->join('teacher', 'timetable.teacher_id', '=', 'teacher.id')
+			->join('Subject', 'Subject.id', '=', 'timetable.subject_id')
+			//->join('Class', 'Class.id', '=', 'timetable.class_id')
+			->join('section', 'section.id', '=', 'timetable.section_id')
+			->select('teacher.*','timetable.stattime','timetable.endtime','timetable.day','timetable.id as timetable_id','Subject.name AS subname' , 'section.name as section_id', 'section.class_code as classname')
+			->where('timetable.teacher_id',$id)
+			/*	->where('section',Input::get('section'))
+			->where('shift',Input::get('shift'))
+			->where('session',trim(Input::get('session')))*/
+			->get();
+	    }
 		// $timetables = DB::table('timetable')->where('timetable.teacher_id',$id)->get();
 		//echo "<pre>";print_r($timetables); exit;
-		return View("app.teacherViewtimetable",compact('timetables','teacher_name'));
+		return View("app.teacherViewtimetable",compact('timetables','teacher_name','class'));
 	}
 
 	public function edit_timetable($timetable_id)
