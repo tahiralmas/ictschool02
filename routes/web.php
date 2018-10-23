@@ -100,6 +100,7 @@ Route::get('/student/csvexample','studentController@csvexample');
 Route::get('/student/getList/{class}/{section}/{shift}/{session}','studentController@getForMarks');
 //Route::get('/student/getsList/{class}/{section}/{shift}/{session}','studentController@getForMarksjoin');
 Route::post('/student/search','studentController@search');
+Route::post('/sms/send','studentController@send_sms');
 
 Route::get('/fee/getdiscountjson/{student_registration}','studentController@getdiscount');
 
@@ -352,6 +353,7 @@ Route::get('/fees/details/{billNo}','feesController@billDetails');
 Route::get('/fees/classreport','feesController@classreportindex');
 //Route::post('/fees/classreport','feesController@classreport');
 Route::post('/fees/classreport','feesController@classview');
+Route::get('/fee/detail','feesController@detail');
 
 
 //Route::post('/fees/classview','feesController@classview');
