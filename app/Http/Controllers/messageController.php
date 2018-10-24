@@ -84,7 +84,7 @@ class messageController extends BaseController {
 			{
 			  return Redirect::to('/message')->withErrors($validator);
 			}else {
-                
+                 //echo "<pre>";echo Input::get('role');exit;
                    $file_id='';
                  //echo "<pre>";print_r(Input::all());exit;
                   /*   $section = Input::get('section');
@@ -199,19 +199,21 @@ class messageController extends BaseController {
 								);
 		                $group_id= $ict->ictcore_api('groups','POST',$data );
                          }
-						if($role =='student' || $role =='parent'){
+						if($role =='student' || $role =='parent' || $role =='all_student'){
 
 							$section = Input::get('section');
 							$class = Input::get('class');
 							$student=	DB::table('Student')
 							->select('*')
-							->where('isActive','Yes')
-							->whereIn('section', $section)
-							->where('class', $class)
-							->get();
-							
+							->where('isActive','Yes');
+							if(Input::get('role')!='all_student'){
+							    $student=$student->whereIn('section', $section)
+							         ->where('class', $class);
+						    }
+							$student=$student->get();
 
-
+							//echo "<pre>";print_r($student->toArray());
+							//exit;
 							foreach($student as $std){
 								if (preg_match("~^0\d+$~", $std->fatherCellNo)) {
                                 	$to = preg_replace('/0/', '92', $std->fatherCellNo, 1);
