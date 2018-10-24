@@ -94,11 +94,9 @@ Route::get('/student/delete/{id}','studentController@delete');
 Route::get('/student/create-file','studentController@index_file');
 Route::post('/student/create-file','studentController@create_file');
 Route::get('/student/csvexample','studentController@csvexample');
-
-
 });
 Route::get('/student/getList/{class}/{section}/{shift}/{session}','studentController@getForMarks');
-//Route::get('/student/getsList/{class}/{section}/{shift}/{session}','studentController@getForMarksjoin');
+Route::get('/student/getsList/{class}/{section}/{shift}/{session}','studentController@getForMarksjoin');
 Route::post('/student/search','studentController@search');
 Route::post('/sms/send','studentController@send_sms');
 
