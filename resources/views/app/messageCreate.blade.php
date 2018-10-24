@@ -27,6 +27,13 @@
                                 <input type="hidden" name="type" value="voice">
                                 <br >
                                 <div class="form-group col-md-12 row">
+                                    <label for="name"  class="col-sm-2 col-form-label">Message type</label>
+                                    <div class="input-group col-md-6">
+                                       Quick Message <input type="radio" name='stpye' value="quick" >
+                                       Campaign  <input type="radio" name='stpye' value="campaign" checked>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12 row">
                                     <label for="name"  class="col-sm-2 col-form-label">Role</label>
                                     <div class="input-group col-md-6">
                                         <select name="role" id="role" class="form-control selectpicker" tabindex="-1">
@@ -140,6 +147,13 @@
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                  <input type="hidden" name="type" value="sms">
                                 <br >
+                                <div class="form-group col-md-12 row">
+                                    <label for="name"  class="col-sm-2 col-form-label">Message type</label>
+                                    <div class="input-group col-md-6">
+                                       Quick Message <input type="radio" name='stpye' value="quick" >
+                                       Campaign  <input type="radio" name='stpye' value="campaign" checked>
+                                    </div>
+                                </div>
                                 <div class="form-group col-md-12 row">
                                     <label for="name"  class="col-sm-2 col-form-label">Role</label>
                                     <div class="input-group col-md-6">
