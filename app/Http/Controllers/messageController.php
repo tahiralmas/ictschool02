@@ -86,6 +86,7 @@ class messageController extends BaseController {
 			}else {
                  //echo "<pre>";echo Input::get('role');exit;
                    $file_id='';
+                   $msg_type=Input::get('stpye');
                  //echo "<pre>";print_r(Input::all());exit;
                   /*   $section = Input::get('section');
 							$class = Input::get('class');
@@ -189,16 +190,18 @@ class messageController extends BaseController {
 						}
 						}
 						if($ictcore_integration->method == 'telenor'){
-
-                            $group_id = $ict->telenor_apis('group','','','','','');
-
+                            if($msg_type!='quick'){
+                            	$group_id = $ict->telenor_apis('group','','','','','');
+                            }
 						}else{
-						$data = array(
-								'name' => $remove_spaces_m,
-								'description' => $mess_name,
-								);
-		                $group_id= $ict->ictcore_api('groups','POST',$data );
-                         }
+							if($msg_type!='quick'){
+								$data = array(
+											'name' => $remove_spaces_m,
+											'description' => $mess_name,
+										);
+				                $group_id= $ict->ictcore_api('groups','POST',$data );
+		                    }
+                        }
 						if($role =='student' || $role =='parent' || $role =='all_student'){
 
 							$section = Input::get('section');
@@ -220,7 +223,7 @@ class messageController extends BaseController {
 	                            }else {
 	                                $to =$std->fatherCellNo;  
 	                            }
-
+                                
 								$data = array(
 								'first_name' => $std->firstName,
 								'last_name' => $std->lastName,
@@ -229,81 +232,165 @@ class messageController extends BaseController {
 								);
                                  
                                 if($ictcore_integration->method == 'telenor'){
-                                  
-                                $group_contact_id = $ict->telenor_apis('add_contact',$group_id,$std->fatherCellNo,'','','');
+                                    if($msg_type!='quick'){
+                                		$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$to,'','','');
+                                    }else{
+                                        $snd_msg  = $ict->verification_number_telenor_sms($to,Input::get('message'),'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$type);
 
+                                    }
                                 }else{
+	                                    if($msg_type!='quick'){
+											$contact_id = $ict->ictcore_api('contacts','POST',$data );
+											$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+										}else{
+											$contact_id = $ict->ictcore_api('contacts','POST',$data );
+											//$program_id = 'program_id =>'.$get_msg->ictcore_program_id;
 
-									$contact_id = $ict->ictcore_api('contacts','POST',$data );
-									$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
-							    }
+											$data = array(
+											'title' => 'Attendance',
+											$program_id,
+											'account_id'     => 1,
+											'contact_id'     => $contact_id,
+											'origin'     => 1,
+											'direction'     => 'outbound',
+											);
+											$transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+											$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+											if(!empty($transmission_send->error)){
+											$status =$transmission_send->error->message;
+											}else{
+											$status = "Completed";
+											}
+										}
+									}
 							}
 						}else if($role =='teacher'){
 							$teacher=	DB::table('teacher')
 							->select('*')
 							->get();
 							foreach($teacher as $techrd){
+								if (preg_match("~^0\d+$~", $techrd->phone)) {
+                                	$to = preg_replace('/0/', '92', $techrd->phone, 1);
+	                            }else {
+	                                $to =$techrd->phone;  
+	                            }
+
 								$data = array(
 								'first_name' => $techrd->firstName,
 								'last_name'  => $techrd->lastName,
-								'phone'      => $techrd->phone,
+								'phone'      => $to,
 								'email'      => $techrd->email
 								);
                                  if($ictcore_integration->method == 'telenor'){
                                   
-                                $group_contact_id = $ict->telenor_apis('add_contact',$group_id,$std->fatherCellNo,'','','');
-
+                               // $group_contact_id = $ict->telenor_apis('add_contact',$group_id,$std->fatherCellNo,'','','');
+                                   if($msg_type!='quick'){
+                                		$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$to,'','','');
+                                    }else{
+                                        $snd_msg  = $ict->verification_number_telenor_sms($to,Input::get('message'),'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$type);
+                                    }
                                 }else{
-								$contact_id = $ict->ictcore_api('contacts','POST',$data );
-								$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+								//$contact_id = $ict->ictcore_api('contacts','POST',$data );
+								//$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+                                    if($msg_type!='quick'){
+											$contact_id = $ict->ictcore_api('contacts','POST',$data );
+											$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+										}else{
+											$contact_id = $ict->ictcore_api('contacts','POST',$data );
+											//$program_id = 'program_id =>'.$get_msg->ictcore_program_id;
 
+											$data = array(
+											'title' => 'Attendance',
+											$program_id,
+											'account_id'     => 1,
+											'contact_id'     => $contact_id,
+											'origin'     => 1,
+											'direction'     => 'outbound',
+											);
+											$transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+											$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+											if(!empty($transmission_send->error)){
+											$status =$transmission_send->error->message;
+											}else{
+											$status = "Completed";
+											}
+										}
 							     
 							    }
 							}
 						}else{
                           $phone = explode(',',Input::get('phone_number'));
                           foreach($phone as $number){
+                            if (preg_match("~^0\d+$~", $number)) {
+                                	$to = preg_replace('/0/', '92', $number, 1);
+	                            }else {
+	                                $to =$number;  
+	                            }
                             if($ictcore_integration->method == 'telenor'){
-                                
-                            
-                                $group_contact_id = $ict->telenor_apis('add_contact',$group_id,$number,'','','');
-
+                                //$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$number,'','','');
+                                if($msg_type!='quick'){
+                                		$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$to,'','','');
+                                    }else{
+                                        $snd_msg  = $ict->verification_number_telenor_sms($to,Input::get('message'),'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$type);
+                                    }
                                 }else{
                                      $data = array(
 										'first_name' => '',
 										'last_name'  =>'',
-										'phone'      =>$number,
+										'phone'      =>$to,
 										'email'      =>''
 								);
-									$contact_id = $ict->ictcore_api('contacts','POST',$data );
-									$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+									//$contact_id = $ict->ictcore_api('contacts','POST',$data );
+									//$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+							        if($msg_type!='quick'){
+											$contact_id = $ict->ictcore_api('contacts','POST',$data );
+											$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+										}else{
+											$contact_id = $ict->ictcore_api('contacts','POST',$data );
+											//$program_id = 'program_id =>'.$get_msg->ictcore_program_id;
+
+											$data = array(
+											'title' => 'Attendance',
+											$program_id,
+											'account_id'     => 1,
+											'contact_id'     => $contact_id,
+											'origin'     => 1,
+											'direction'     => 'outbound',
+											);
+											$transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+											$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+											if(!empty($transmission_send->error)){
+											$status =$transmission_send->error->message;
+											}else{
+											$status = "Completed";
+											}
+										}
 							    }
 							}
-
-
 						}
-						if($ictcore_integration->method == 'telenor'){
-                                  
-                        echo  $campaign    = $ict->telenor_apis('campaign_create',$group_id,'',Input::get('message'),$file_id,$type);
-                          // echo $campaign;
-                         // $this->info('Notification sended successfully'.$campaign);
-                       // echo "<pre>";print_r($campaign);
-                            // exit;
-                            $send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
-                             // echo "<pre>";print_r($send_campaign);
-                            // exit;
-                        }else{
-						$data = array(
-						'program_id' => $program_id,
-						'group_id' => $group_id,
-						'delay' => '',
-						'try_allowed' => '',
-						'account_id' => 1,
-						);
-						$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
-                       $campaign_start = $ict->ictcore_api('campaigns/'.$campaign_id.'/start','PUT',$data=array() );
+						if($msg_type!='quick'){
+							if($ictcore_integration->method == 'telenor'){
+	                        echo  $campaign    = $ict->telenor_apis('campaign_create',$group_id,'',Input::get('message'),$file_id,$type);
+	                               // echo $campaign;
+	                              // $this->info('Notification sended successfully'.$campaign);
+	                             // echo "<pre>";print_r($campaign);
+	                            // exit;
+	                            $send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
+	                             // echo "<pre>";print_r($send_campaign);
+	                            // exit;
+	                        }else{
+							$data = array(
+							'program_id' => $program_id,
+							'group_id' => $group_id,
+							'delay' => '',
+							'try_allowed' => '',
+							'account_id' => 1,
+							);
+							$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
+	                       $campaign_start = $ict->ictcore_api('campaigns/'.$campaign_id.'/start','PUT',$data=array() );
 
-						}
+							}
+					    } 
 
 
 						//exit;
