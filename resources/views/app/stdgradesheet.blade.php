@@ -51,11 +51,23 @@
   color: #34BA1F;
   background-color: #ffffff;
 }
+@media print {
+  .page {
+    margin: 0;
+    border: initial;
+    border-radius: initial;
+    width: initial;
+    min-height: initial;
+    box-shadow: initial;
+    background: initial;
+    page-break-after: always;
+  }
+}
 </style>
 
 </head>
 
-<body class="scms-result-print">
+<body class="scms-result-print page">
   <button class="btn-print" onclick="printDiv('printableArea')">Print</button>
 <div id="printableArea">
   <div class="wraperResult">
@@ -73,19 +85,23 @@
             <div class="restopleft">
                 <div><b>{{$student->firstName}} {{$student->middleName}} {{$student->lastName}}</b></div>
                 <div><span>FATHER'S NAME</span><i>: </i><em>{{$student->fatherName}}</em></div>
-                <div><span>MOTHER'S NAME</span><i>: </i><em>{{$student->motherName}}</em></div>
+                <div><span>CLASS</span><i>: </i><em>{{$student->class}}</em></div>
+                <div><span>GROUP</span><i>: </i><em>{{$student->group}}</em></div>
+                <div><span>SECTION</span><i>: </i><em>{{$student->section_name}}</em></div>
+                <div><span>ROLL NO</span><i>: </i><em>{{$student->rollNo}}</em></div>
+               <!-- <div><span>MOTHER'S NAME</span><i>: </i><em>{{$student->motherName}}</em></div>
                 <div><span>STUDENT ID</span><i>: </i><em>{{$student->regiNo}}</em></div>
                 <div><span>DATE OF BIRTH</span><i>: </i><em>{{$student->dob}}</em></div>
+                -->
                 <!--<div><span>NEW CLASS ROLL :  </span><em>02</em></div>-->
-                <div><span>SHIFT</span><i>: </i><em>{{$student->shift}}</em></div>
-                <div><span>BOARD</span><i>: </i><em>KHULNA</em></div>
+                <!--<div><span>SHIFT</span><i>: </i><em>{{$student->shift}}</em></div>
+               -->
+                <!--<div><span>BOARD</span><i>: </i><em>KHULNA</em></div>
+            -->
             </div><!-- end of restopleft -->
 
             <div class="restopleft rgttopleft">
-                <div><span>CLASS</span><i>: </i><em>{{$student->class}}</em></div>
-                <div><span>GROUP</span><i>: </i><em>{{$student->group}}</em></div>
-                <div><span>SECTION</span><i>: </i><em>{{$student->section}}</em></div>
-                <div><span>ROLL NO</span><i>: </i><em>{{$student->rollNo}}</em></div>
+               
 
                 <div><span>GPA</span><i>: </i><em>{{$meritdata->point}}</em></div>
 
@@ -117,8 +133,8 @@
                     <td class="res7" colspan="2">MCQ</td>
                     <td class="res7" colspan="2">SBA</td>
                     <td class="res7" colspan="2">Practical</td>
-                    <td class="res5">Total</td>
-                    <td class="res5">Highest</td>
+                    <td class="res5">Obtain Marks</td>
+                    <td class="res5">Total Marks</td>
                     <td class="res4">GP</td>
                     <td class="res3">Grade</td>
                     <!--<td class="res3">Written</td>
@@ -146,8 +162,6 @@
 
                     <td><b>{{$banglaArray[0][5]}}</b></td>
                     <td rowspan="2"><b>{{$banglaArray[0][5]+$banglaArray[1][5]}}</b></td>
-
-
                     <td rowspan="2"><b>{{$blextra[0]}}</b></td>
                     <td rowspan="2"><b>{{$blextra[1]}}</b></td>
                     <td rowspan="2"><b>{{$blextra[2]}}</b></td>
@@ -244,7 +258,7 @@
 
 
                     <td><b>{{$subject->total}}</b></td>
-                    <td><b>{{$subject->highest}}</b></td>
+                    <td><b>{{$subject->outof}}</b></td>
                     <td><b>{{$subject->point}}</b></td>
                     <td><b>{{$subject->grade}} </b></td>
 
@@ -287,7 +301,7 @@
                     <td class="markTotal" colspan="9">Total Marks &amp; GPA = </td>
                     
                     <td><b>{{intval($meritdata->totalNo)}}</b></td>
-                    <td><b>{{$extra[2]}}</b></td>
+                    <td><b>{{$extra[5]}}</b></td>
                     <td><b>{{$meritdata->point}}</b></td>
                     <td><b>{{$meritdata->grade}}</b></td>
                     <!--<td class="res3 markTotal2" colspan="3">Total marks &amp; GPA</td>
@@ -450,7 +464,7 @@
                 <!--<img src="/markssheetcontent/head-sign.png" alt="" style="left:23px;bottom:21px">-->                <b>Signature (Head Master)</b>
             </div>
         </div></div><!-- end of signatureWraper -->
-    <img src="/markssheetcontent/certificate-bg.png" alt="" class="result-bg">    </div><!-- end of wraperResult -->
+    <img src="{{url('/markssheetcontent/certificate-bg.png')}}" alt="" class="result-bg">    </div><!-- end of wraperResult -->
   </div>
 
 

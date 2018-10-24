@@ -193,8 +193,20 @@
                                                                    <tr>
                                                                      @if($gpa->for=="1")
                                                                       <td>100 Marks</td>
-                                                                      @else
+                                                                      @elseif($gpa->for=="3")
+                                                                        <td>75 Marks</td>
+                                                                        @elseif($gpa->for=="2")
                                                                         <td>50 Marks</td>
+                                                                        @elseif($gpa->for=="4")
+                                                                        <td>30 Marks</td>
+                                                                        @elseif($gpa->for=="5")
+                                                                        <td>25 Marks</td>
+                                                                        @elseif($gpa->for=="6")
+                                                                        <td>20 Marks</td>
+                                                                        @elseif($gpa->for=="7")
+                                                                        <td>15 Marks</td>
+                                                                        @else
+                                                                        <td>10 Marks</td>
                                                                       @endif
                                                                       <td>{{$gpa->gpa}}</td>
                                                                      <td>{{$gpa->grade}}</td>

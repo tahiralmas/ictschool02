@@ -130,9 +130,11 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <select name="gradeSystem" required class="form-control">
-                              @if(count($gpa)==2)
-                              <option value="1">100 Marks </option>
-                              <option value="2">50 Marks </option>
+                              @if($gpa)
+                             @foreach($gpa as $gp)
+                              <option  value="{{$gp->for}}"> @if($gp->for=="1") 100 Marks @elseif($gp->for=="3") 75 Marks  @elseif($gp->for=="2") 50 Marks  @elseif($gp->for=="4") 30 Marks  @elseif($gp->for=="5") 25 Marks  @elseif($gp->for=="6") 20 Marks @elseif($gp->for=="7") 15 Marks @elseif($gp->for=="8") 10 Marks @endif </option>
+                              <!--<option value="2">50 Marks </option>-->
+                            @endforeach
                             @endif
                             </select>
                         </div>

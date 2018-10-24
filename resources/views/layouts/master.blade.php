@@ -34,6 +34,11 @@
 
     <link href='{{ URL::asset('/bower_components/responsive-tables/responsive-tables.css') }}' rel='stylesheet'>
 
+     <!-- <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
+    -->
+    <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet">
+
+
     <link href='{{ URL::asset('/css/jquery.noty.css') }}' rel='stylesheet'>
     <link href='{{ URL::asset('/css/noty_theme_default.css') }}' rel='stylesheet'>
     <link href='{{ URL::asset('/css/elfinder.min.css') }}' rel='stylesheet'>
@@ -43,6 +48,7 @@
     <link href='{{ URL::asset('/css/animate.min.css') }}' rel='stylesheet'>
     <link href='{{ URL::asset('/css/app.css') }}' rel='stylesheet'>
     <link href='//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css' rel='stylesheet'>
+    <link href='https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css' rel='stylesheet'>
     <link href="{{ URL::asset('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
   <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap2-toggle.min.css" rel="stylesheet">
 
@@ -57,10 +63,53 @@
       font-weight: 400;
       line-height: 1.471;
   }
+
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding : 0px;
+    margin-left: 0px;
+    display: inline;
+    border: 0px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    border: 0px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 3px !important;
+   
+}
+.paginate_button.next  {       
+      background: rgba(0, 0, 0, 0) url("./next1.gif") no-repeat scroll right center;
+ }
+ .paginate_button.next.disabled  {       
+      background: rgba(0, 0, 0, 0) url("./next0.gif") no-repeat scroll right center !important;
+ }
+ 
+ .paginate_button.first  {       
+      background: rgba(0, 0, 0, 0) url("first1.gif") no-repeat scroll right center;
+ }
+ 
+ .paginate_button.first.disabled  {       
+      background: rgba(0, 0, 0, 0) url("first0.gif") no-repeat scroll right center !important;
+ }
+ 
+ .paginate_button.last  {       
+      background: rgba(0, 0, 0, 0) url("last1.gif") no-repeat scroll right center;
+ }
+ 
+ .paginate_button.last.disabled  {       
+      background: rgba(0, 0, 0, 0) url("last0.gif") no-repeat scroll right center !important;
+ }
+ 
+.paginate_button.previous  {         
+      background: rgba(0, 0, 0, 0) url("prev1.gif") no-repeat scroll right center;
+ }
   </style>
     <!-- jQuery -->
     <script src="{{ URL::asset('/bower_components/jquery/jquery.min.js') }}"></script>
-
+   <!--<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+-->
     <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -479,6 +528,10 @@
 <!-- data table plugin -->
 <script src='{{ URL::asset('/bower_components/datatables/media/js/jquery.dataTables.js') }}'></script>
 
+<!--<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+-->
 <!-- select or dropdown enhancer -->
 <script src="{{ URL::asset('/bower_components/chosen/chosen.jquery.min.js') }}"></script>
 <!-- plugin for gallery image view -->
@@ -502,6 +555,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.14/jquery.mask.min.js"></script>
 <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
 <script>
 $(document).ready(function(){
 

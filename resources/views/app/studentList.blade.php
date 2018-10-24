@@ -113,8 +113,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
-              <table id="studentList" class="table table-striped table-bordered table-hover">
+                    <div class="col-md-12" style="clear: both;margin-top: 18px;" >
+              <table id="studentList" class="table table-striped table-bordered" >
                                                          <thead>
                                                              <tr>
                                                                 <th>Regi No</th>
@@ -165,8 +165,17 @@
 <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
 $( document ).ready(function() {
-  $('#studentList').dataTable();
-  
+  //$('#studentList').dataTable();
+    $('#studentList').DataTable( {
+        pagingType: "simple",
+        //"pageLength": 5,
+      //  "pagingType": "full_numbers",
+        dom: 'Bfrtip',
+        buttons: [
+            'print'
+        ]
+    });
+      $('#studentList').removeClass( 'display' ).addClass('table table-striped table-bordered');
   $(".datepicker2").datepicker( {
     format: " yyyy", // Notice the Extra space at the beginning
     viewMode: "years",

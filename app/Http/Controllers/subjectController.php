@@ -24,7 +24,7 @@ class subjectController extends BaseController {
 	{
 		$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
 		$gpa =GPA::select('for')->distinct()->get();
-              
+           // echo "<pre>";print_r($gpa);exit;
 		//return View::Make('app.subjectCreate',compact('classes','gpa'));
 		return View('app.subjectCreate',compact('classes','gpa'));
 	}
@@ -41,24 +41,23 @@ class subjectController extends BaseController {
 //echo "<pre>";print_r(Input::get('class'));
     $classes =  Input::get('class');
 		$rules=[
-			'name' => 'required',
-			'code' => 'required',
-			'type' => 'required',
-			'subgroup' => 'required',
-			'stdgroup' => 'required',
-			'class' => 'required',
-			'gradeSystem' => 'required',
-			'totalfull' => 'required',
-			'wfull' => 'required',
-			'mfull' => 'required',
-			'sfull' => 'required',
-			'pfull' => 'required',
-			'totalpass' => 'required',
-			'wpass' => 'required',
-			'mpass' => 'required',
-			'spass' => 'required',
-			'ppass' => 'required'
-
+			'name'         => 'required',
+			'code'         => 'required',
+			'type'         => 'required',
+			'subgroup'     => 'required',
+			'stdgroup'     => 'required',
+			'class'        => 'required',
+			'gradeSystem'  => 'required',
+			'totalfull'    => 'required',
+			'wfull'        => 'required',
+			'mfull'        => 'required',
+			'sfull'        => 'required',
+			'pfull'        => 'required',
+			'totalpass'    => 'required',
+			'wpass'        => 'required',
+			'mpass'        => 'required',
+			'spass'        => 'required',
+			'ppass'        => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
@@ -85,7 +84,6 @@ class subjectController extends BaseController {
 				$subject->type = Input::get('type');
 				$subject->subgroup = Input::get('subgroup');
 				$subject->stdgroup = Input::get('stdgroup');
-
 				$subject->totalfull = Input::get('totalfull');
 				$subject->totalpass = Input::get('totalpass');
 				$subject->wfull = Input::get('wfull');

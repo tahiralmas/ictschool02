@@ -47,7 +47,7 @@
                               <option value="">--Select Class--</option>
 
                           @foreach($classes as $class)
-                              <option value="{{$class->code}}">{{$class->name}}</option>
+                              <option value="{{$class->code}}" @if($class_code==$class->code) selected @endif>{{$class->name}}</option>
                             @endforeach
 
                           </select>
@@ -62,7 +62,11 @@
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <select id="section" name="section"  class="form-control" >
                               <option value="">--Select Section--</option>
-                             
+                              @if($section)
+                              @foreach($sections as $sction)
+                              <option value="{{$sction->id}}" @if($sction->id==$section) selected @endif>{{$sction->name}}</option>
+                               @endforeach
+                               @endif
                            </select>
 
 
@@ -95,7 +99,7 @@
                          <div class="input-group">
 
                           <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                            <input type="text" id="session" required="true" class="form-control datepicker2" name="session"   data-date-format="yyyy">
+                            <input type="text" id="session" required="true" class="form-control datepicker2" name="session" value="{{$session}}"  data-date-format="yyyy">
                         </div>
                     </div>
                     </div>
@@ -122,6 +126,11 @@
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                           <select name="exam" id="exam" required="true" class="form-control" >
                            <option value="">-Select Exam-</option>
+                           @if($exams)
+                              @foreach($exams as $exm)
+                              <option value="{{$exm->id}}" @if($exm->id==$exam) selected @endif>{{$exm->type}}</option>
+                               @endforeach
+                               @endif
                             	<!--<option value="">-Select Exam-</option>
                             <option value="Class Test">Class Test</option>
                             <option value="Model Test">Model Test</option>
@@ -246,34 +255,26 @@
 <script type="text/javascript">
 //
     $( document ).ready(function() {
-
-
+      //$('#class').trigger('change');
+     <?php if($session){ ?>
+      getstudent();
+       subject();
+      <?php } ?>
      //  getsections();
   $('#class').on('change',function() {
+    //alert(434);
+
     getsections();
     getexam();
+    subject();
   });
   $('#session').on('change',function() {
-          getsections();
+          getstudent();
         });
        $('#btnsave').hide();
-        $('#class').on('change', function (e) {
-            var val = $(e.target).val();
-            $.ajax({
-                url:"{{url('/class/getsubjects')}}"+'/'+val,
-                type:'get',
-                dataType: 'json',
-                success: function( json ) {
-                    $('#subject').empty();
-                    $('#subject').append($('<option>').text("--Select Subject--").attr('value',""));
-                    $.each(json, function(i, subject) {
-                        // console.log(subject);
-
-                        $('#subject').append($('<option>').text(subject.name).attr('value', subject.code));
-                    });
-                }
-            });
-            });
+       /* $('#class').on('change', function (e) {
+           
+            });*/
 
 $(".datepicker2").datepicker( {
     format: " yyyy", // Notice the Extra space at the beginning
@@ -355,7 +356,24 @@ $(".datepicker2").datepicker( {
 
 
     });
+ function subject()
+ {
+   var val = $('#class').val();
+            $.ajax({
+                url:"{{url('/class/getsubjects')}}"+'/'+val,
+                type:'get',
+                dataType: 'json',
+                success: function( json ) {
+                    $('#subject').empty();
+                    $('#subject').append($('<option>').text("--Select Subject--").attr('value',""));
+                    $.each(json, function(i, subject) {
+                        // console.log(subject);
 
+                        $('#subject').append($('<option>').text(subject.name).attr('value', subject.code));
+                    });
+                }
+            });
+ }
 function getstudent()
 {
 
@@ -363,10 +381,11 @@ function getstudent()
 var aclass = $('#class').val();
      var section =  $('#section').val();
     // var shift = $('#shift').val();
-
+    
     var shift =  "Morning";
     
      var session = $('#session').val().trim();
+      //alert(session);
      $.ajax({
            url: "{{url('/student/getsList')}}"+'/'+aclass+'/'+section+'/'+shift+'/'+session,
            data: {
@@ -477,27 +496,27 @@ function getsections()
     // chkbox.type = "checkbox";
      //chkbox.name="chkbox[]";
     // cell1.appendChild(chkbox);
-var tm = $('#tfull').text();
+    var tm = $('#tfull').text();
 
-if(tm ==''){
-  tm = 25;
-}
-var wm = $('#wfull').text();
-if(wm ==''){
-  wm = 25;
-}
-var mm=$('#mfull').text();
-if(mm ==''){
-  mm = 25;
-}
-var pm=$('#pfull').text();
-if(pm ==''){
-  pm = 25;
-}
-var cm = $('#cfull').text();
-if(cm ==''){
-  cm = 25;
-}
+    if(tm ==''){
+    tm = 25;
+    }
+    var wm = $('#wfull').text();
+    if(wm ==''){
+    wm = 25;
+    }
+    var mm=$('#mfull').text();
+    if(mm ==''){
+    mm = 25;
+    }
+    var pm=$('#pfull').text();
+    if(pm ==''){
+    pm = 25;
+    }
+    var cm = $('#cfull').text();
+    if(cm ==''){
+    cm = 25;
+    }
      var cell2 = row.insertCell(0);
      var regiNo = document.createElement("label");
 

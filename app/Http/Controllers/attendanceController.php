@@ -71,10 +71,10 @@ class attendanceController extends BaseController {
 				$leave    = Input::get('leave');
                 //echo "<pre>present";print_r($presents);
                 //echo "<pre>leave";print_r($leave);
-                $leaves = array();
+               /* $leaves = array();
                 foreach($leave as $key=>$val){
                 	$leaves[] = $key;
-                }
+                }*/
 
 				$all = false;
 				if ($presents == null) {
@@ -130,7 +130,7 @@ class attendanceController extends BaseController {
 					foreach ($absentStudents as $absst) {
 					   $atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$absst)->first();
 	                    if(is_null($atten)){
-	                    	if(in_array($absst,$leaves)){
+	                    	/*if(in_array($absst,$leaves)){
 							$attenDataabsnt= [
 							'date' => $presentDate,
 							'regiNo' => $absst,
@@ -140,7 +140,7 @@ class attendanceController extends BaseController {
 							'session'=>Input::get('session'),
 							'created_at' => Carbon::now()
 							];
-							}else{
+							}else{*/
 							$attenDataabsnt= [
 							'date' => $presentDate,
 							'regiNo' => $absst,
@@ -150,7 +150,7 @@ class attendanceController extends BaseController {
 							'session'=>Input::get('session'),
 							'created_at' => Carbon::now()
 							];
-							}
+							//}
 						    Attendance::insert($attenDataabsnt);
 
 						    $i++;
@@ -1058,34 +1058,34 @@ class attendanceController extends BaseController {
         $section_data = SectionModel::select('id','name')->where('id','=',$section)->first();
         if($isPrint) {
 
-            $myPart = mb_split('-', $yearMonth);
+            $myPart   = mb_split('-', $yearMonth);
             if(count($myPart)!= 2) {
                 $errorMessages = new Illuminate\Support\MessageBag;
                 $errorMessages->add('Error', 'Please don\'t mess with inputs!!!');
                 return Redirect::to('/attendance/monthly-report')->withErrors($errorMessages);
             }
             if(Input::get('regiNo')==''){
-	            $students = Student::where('class', $class)
-	                ->where('isActive', 'Yes')
-	                ->where('session' , $session)
-	                ->where('shift'   , $shift)
-	                ->where('section' , $section)
-	                 //->lists('regiNo');
-	                ->pluck('regiNo');
-	            }else{
-	            	 $students = Student::where('class', $class)
-	                ->where('isActive', 'Yes')
-	                ->where('session' , $session)
-	                ->where('shift'   , $shift)
-	                ->where('section' , $section)
-	                ->where('regiNo' , Input::get('regiNo'))
-	                 //->lists('regiNo');
-	                ->pluck('regiNo');
-	            }
+              $students = Student::where('class', $class)
+                ->where('isActive', 'Yes')
+                ->where('session' , $session)
+                ->where('shift'   , $shift)
+                ->where('section' , $section)
+                 //->lists('regiNo');
+                ->pluck('regiNo');
+            }else{
+            	 $students = Student::where('class', $class)
+                ->where('isActive', 'Yes')
+                ->where('session' , $session)
+                ->where('shift'   , $shift)
+                ->where('section' , $section)
+                ->where('regiNo' , Input::get('regiNo'))
+                 //->lists('regiNo');
+                ->pluck('regiNo');
+            }
                 // echo "<pre>";print_r($students->toArray());
                // echo implode(',', $students->toArray());
               // exit;
-            if(!count($students)) {
+            if(empty($students)) {
                 $errorMessages = new \Illuminate\Support\MessageBag;
                 $errorMessages->add('Error', 'Students not found!');
                 return Redirect::to('/attendance/monthly-report')->withErrors($errorMessages);
@@ -1134,6 +1134,7 @@ class attendanceController extends BaseController {
             $data = DB::select($fullSql);
             //            return $data;
              //echo "<pre>";print_r($data);
+             //exit;
             $keys = array_keys((array)$data[0]);
             $type = Input::get('type');
             //            return $data;

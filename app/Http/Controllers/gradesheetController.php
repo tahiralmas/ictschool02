@@ -333,16 +333,19 @@ class gradesheetController extends BaseController {
 
 	public function printsheet($regiNo,$exam,$class)
 	{
-
+        $examed  = DB::table('exam')->where('id',$exam)->first();
+		$exam_name =  $examed->type;
 		$student =	DB::table('Student')
 		 ->join('Class', 'Student.class', '=', 'Class.code')
-		 ->select( 'Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session','Student.extraActivity')
+		 ->join('section','Student.section','=','section.id')
+		 ->select( 'Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session','Student.extraActivity','section.name as section_name')
 		 ->where('Student.regiNo','=',$regiNo)
 		 ->where('Student.class','=',$class)
-		 ->where('Student.isActive', '=', 'Yes')
-		 ->first();
-
-		if(!empty($student)) {
+		 ->where('Student.isActive', '=', 'Yes');
+		 //->first();
+        //echo "<pre>";print_r($student->first());exit;
+		if($student->count()>0) {
+           $student = $student->first();
 
 			$merit = DB::table('MeritList')
 			->select('regiNo', 'grade', 'point', 'totalNo')
@@ -354,15 +357,15 @@ class gradesheetController extends BaseController {
 			//->orderBy('point')
 			->orderBy('totalNo', 'DESC')->get();
 			//->orderBy('totalNo', 'DESC')->get();
-			if (empty($student) < 1 || empty($merit) < 1) {
+			//echo "<pre>";print_r($merit);exit;
+			if (empty($student)  || empty($merit)) {
 				return Redirect::back()->with('noresult', 'Result Not Found!');
 			} else {
 				$meritdata = new Meritdata();
 				$position  = 0;
 				foreach ($merit as $m) {
 					$position++;
-					if ($m->regiNo === $regiNo) {
-
+					if($m->regiNo === $regiNo) {
 						$meritdata->regiNo = $m->regiNo;
 						$meritdata->point = $m->point;
 						$meritdata->grade = $m->grade;
@@ -382,15 +385,18 @@ class gradesheetController extends BaseController {
 
 				$banglatotal = 0;
 				$banglatotalhighest = 0;
+				$urdu = 0;
 				$banglaArray = array();
 				$blextra = array();
 
 				$englishtotal = 0;
 				$englishtotalhighest = 0;
+				$english_total = 0;
 				$englishArray = array();
 				$enextra = array();
 
 				$totalHighest = 0;
+				$totalourall = 0;
 				$isBanglaFail=false;
 				$isEnglishFail=false;
 				foreach ($subjects as $subject) {
@@ -403,6 +409,7 @@ class gradesheetController extends BaseController {
 					$submarks["subcode"] = $subject->code;
 
 					$submarks["subname"] = $subject->name;
+					$submarks["outof"] = $subject->totalfull;
 
 
 					if ($this->getSubGroup($subjects, $subject->code) === "Bangla") {
@@ -414,8 +421,8 @@ class gradesheetController extends BaseController {
 
 						$banglatotal += $submarks->total;
 						$banglatotalhighest += $submarks->highest;
-
-						$bangla = array($submarks->subcode, $submarks->subname, $submarks->written, $submarks->mcq, $submarks->ca, $submarks->practical);
+                         $urdu += $subject->totalfull;
+						$bangla = array($submarks->subcode, $submarks->subname, $submarks->written, $submarks->mcq, $submarks->ca, $submarks->practical,$subject->totalfull);
 						array_push($banglaArray, $bangla);
 
 					} else if ($this->getSubGroup($subjects, $subject->code) === "English") {
@@ -425,14 +432,16 @@ class gradesheetController extends BaseController {
 						}
 						$englishtotal += $submarks->total;
 						$englishtotalhighest += $submarks->highest;
-
-						$english = array($submarks->subcode, $submarks->subname, $submarks->written, $submarks->mcq, $submarks->ca, $submarks->practical);
+                        $english_total += $subject->totalfull;
+						$english = array($submarks->subcode, $submarks->subname, $submarks->written, $submarks->mcq, $submarks->ca, $submarks->practical,$subject->totalfull);
 						array_push($englishArray, $english);
 
 					} else {
 						$totalHighest += $maxMarks->highest;
+						$totalourall +=$subject->totalfull;
 						array_push($subcollection, $submarks);
 					}
+					$outof[] = $subject->totalfull;
 				}
 				$gparules = GPA::select('gpa', 'grade', 'markfrom')->get();
 				$subgrpbl = false;
@@ -441,11 +450,13 @@ class gradesheetController extends BaseController {
 
 					$blt = floor($banglatotal / 2);
 					$totalHighest += $banglatotalhighest;
+					$totalourall +=$urdu;
 					$gcal = $this->gpaCalculator($blt, $gparules);
 
 					$subgrpbl = true;
 					array_push($blextra, $banglatotal);
-					array_push($blextra, $banglatotalhighest);
+					//array_push($blextra, $banglatotalhighest);
+					array_push($blextra, $urdu);
                    // echo $gcal[1].'uuu';
 					if($isBanglaFail)
 					{
@@ -461,12 +472,15 @@ class gradesheetController extends BaseController {
 				if ($englishtotal > 0) {
 					$ent = floor($englishtotal / 2);
 					$totalHighest += $englishtotalhighest;
+					$totalourall += $english_total;
 					$gcal = $this->gpaCalculator($ent, $gparules);
 					$subgrpen = true;
 					array_push($enextra, $englishtotal);
-					array_push($enextra, $englishtotalhighest);
+					//array_push($enextra, $englishtotalhighest);
+					array_push($enextra, $english_total);
 
-					//echo $isEnglishFail.'uuu';
+					//echo $ent.'uuu'.print_r($gcal,true);
+					//exit;
 					if($isEnglishFail)
 					{
 						array_push($enextra, "0.00");
@@ -481,10 +495,10 @@ class gradesheetController extends BaseController {
 				}
 
 
-				$extra = array($exam, $subgrpbl, $totalHighest, $subgrpen, $student->extraActivity);
-				$query="select left(MONTHNAME(STR_TO_DATE(m, '%m')),3) as month, count(regiNo) AS present from ( select 01 as m union all select 02 union all select 03 union all select 04 union all select 05 union all select 06 union all select 07 union all select 08 union all select 09 union all select 10 union all select 11 union all select 12 ) as months LEFT OUTER JOIN Attendance ON MONTH(Attendance.date)=m and Attendance.regiNo ='".$regiNo."' GROUP BY m";
+				$extra = array($exam_name, $subgrpbl, $totalHighest, $subgrpen, $student->extraActivity,$totalourall);
+				$query="select left(MONTHNAME(STR_TO_DATE(m, '%m')),3) as month, count(regiNo) AS present from ( select 01 as m union all select 02 union all select 03 union all select 04 union all select 05 union all select 06 union all select 07 union all select 08 union all select 09 union all select 10 union all select 11 union all select 12 ) as months LEFT OUTER JOIN Attendance ON MONTH(Attendance.date)=m and Attendance.regiNo ='".$regiNo."' and  Attendance.status IN ('Present','present','late','Late') GROUP BY m";
 				$attendance=DB::select(DB::RAW($query));
-				//echo "<pre>";print_r($subcollection);
+				//echo "<pre>";print_r($attendance);
 				//exit;
 				return View('app.stdgradesheet', compact('student', 'extra', 'meritdata', 'subcollection', 'blextra', 'banglaArray', 'enextra', 'englishArray','attendance'));
 
@@ -550,7 +564,7 @@ class gradesheetController extends BaseController {
 			->where('session', '=', trim(Input::get('session')))
 			->where('exam', '=', Input::get('exam'))
 			->get();
-			if(empty($isGenerated))
+			if(count($isGenerated)==0)
 			{
 				$subjects           = Subject::select('name', 'code', 'type', 'subgroup')->where('class', '=', Input::get('class'))->get();
 				$sectionsHas        = Student::select('section')->where('class', '=', Input::get('class'))->where('session', trim(Input::get('session')))->where('isActive', '=', 'Yes')->distinct()->orderBy('section', 'asc')->get();
@@ -586,9 +600,13 @@ class gradesheetController extends BaseController {
 						}
 
 
-						$students = Student::select('regiNo')->where('class', '=', Input::get('class'))->where('session', '=', trim(Input::get('session')))
-						->where('isActive', '=', 'Yes')->get();
-
+						$students = Student::select('regiNo')
+						->join('section','Student.section','=','section.id')
+						->select('Student.*','section.name')
+						->where('Student.class', '=', Input::get('class'))
+						->where('Student.session', '=', trim(Input::get('session')))
+						->where('Student.isActive', '=', 'Yes')->get();
+                      //  echo "<pre>";print_r($students->toArray());exit;
 						if (count($students) != 0) {
 							$marksSubmitStudents=Marks::select('Marks.regiNo')
 							->join('Student', 'Marks.regiNo', '=', 'Student.regiNo')

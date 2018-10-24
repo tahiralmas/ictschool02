@@ -28,8 +28,22 @@ class markController extends BaseController {
 	{
 		$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
 		$subjects = Subject::all();
+		$class_code =Input::get('class_id');
+		if($class_code !=''){
+           $sections = DB::table('section')->where('class_code',$class_code)->get();
+		}else{
+			$eections = array();
+		}
+		$section =Input::get('section');
+		$session =Input::get('session');
+		$exam =Input::get('exam');
+		if($exam !='' && $class_code!=''){
+			$exams = DB::table('exam')->where('id',$exam)->get();
+		}else{
+			$exams = array();
+		}
 		//return View::Make('app.markCreate',compact('classes','subjects'));
-		return View('app.markCreate',compact('classes','subjects'));
+		return View('app.markCreate',compact('classes','subjects','class_code','section','session','exam','sections','exams'));
 	}
 
 
@@ -56,7 +70,7 @@ class markController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-			return Redirect::to('/mark/create/')->withErrors($validator);
+			return Redirect::to('/mark/create?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&exam='.Input::get('exam'))->withErrors($validator);
 		}
 		else {
 			$subGradeing = Subject::select('gradeSystem')->where('code',Input::get('subject'))->where('class',Input::get('class'))->first();
@@ -65,8 +79,11 @@ class markController extends BaseController {
 				$gparules = GPA::select('gpa','grade','markfrom')->where('for',"1")->get();
 
 			}
-			else {
+			else if($subGradeing->gradeSystem=="2") {
 				$gparules = GPA::select('gpa','grade','markfrom')->where('for',"2")->get();
+			}else{
+				$gparules = GPA::select('gpa','grade','markfrom')->where('for',$subGradeing->gradeSystem)->get();
+
 			}
 
 			//	 $totalMark = Input
@@ -87,20 +104,19 @@ class markController extends BaseController {
 
 				}
 				else {
-
 					$marks = new Marks;
-					$marks->class=Input::get('class');
-					$marks->section=Input::get('section');
-					$marks->shift=Input::get('shift');
-					$marks->session=trim(Input::get('session'));
-					$marks->regiNo=$regiNos[$i];
-					$marks->exam=Input::get('exam');
-					$marks->subject=Input::get('subject');
-					$marks->written=$writtens[$i];
+					$marks->class = Input::get('class');
+					$marks->section = Input::get('section');
+					$marks->shift = Input::get('shift');
+					$marks->session = trim(Input::get('session'));
+					$marks->regiNo = $regiNos[$i];
+					$marks->exam = Input::get('exam');
+					$marks->subject = Input::get('subject');
+					$marks->written = $writtens[$i];
 					$marks->mcq = $mcqs[$i];
-					$marks->practical=$practicals[$i];
-					$marks->ca=$cas[$i];
-					$isExcludeClass=Input::get('class');
+					$marks->practical = $practicals[$i];
+					$marks->ca = $cas[$i];
+					$isExcludeClass = Input::get('class');
 					if($isExcludeClass=="cl3" ||  $isExcludeClass=="cl4" || $isExcludeClass=="cl5")
 					{
 						$totalmark = $writtens[$i]+$mcqs[$i]+$practicals[$i]+$cas[$i];
@@ -111,34 +127,32 @@ class markController extends BaseController {
 						$totalmark = $writtens[$i]+$mcqs[$i]+$practicals[$i]+$cas[$i];
 					}
 					$marks->total=$totalmark;
+					//echo "<pre>d";print_r($gparules->toArray());
 					foreach ($gparules as $gpa) {
+
 						if ($totalmark >= $gpa->markfrom){
-							$marks->grade=$gpa->gpa;
-							$marks->point=$gpa->grade;
+							$marks->grade = $gpa->gpa;
+							$marks->point = $gpa->grade;
 							break;
 						}
 					}
 
-					if($isabsent[$i]!=="")
+					if($isabsent[$i]!== "")
 					{
-						$marks->Absent=$isabsent[$i];
+						$marks->Absent = $isabsent[$i];
 					}
-
+                    //   echo "<pre>";print_r($marks);exit;
 					$marks->save();
 					$counter++;
 				}
-
-
-
 			}
 			if($counter==$len)
 			{
-
-				return Redirect::to('/mark/create')->with("success",$counter."'s student mark save Succesfully.");
+				return Redirect::to('/mark/create?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&exam='.Input::get('exam'))->with("success",$counter."'s student mark save Succesfully.");
 			}
 			else {
 				$already=$len-$counter;
-				return Redirect::to('/mark/create')->with("success",$counter." students mark save Succesfully and ".$already." Students marks already saved.</strong>");
+				return Redirect::to('/mark/create?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&exam='.Input::get('exam'))->with("success",$counter." students mark save Succesfully and ".$already." Students marks already saved.</strong>");
 			}
 		}
 	}

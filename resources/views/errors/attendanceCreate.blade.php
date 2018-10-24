@@ -154,8 +154,8 @@
                       <th>Name</th>
 
                       <th>Is Present? <input type="checkbox" id="allcheck" name="allcheck">All Select</th>
-                      <!--<th>Is Leave? </th>
-                       -->
+                     <!-- <th>Is Leave? </th>-->
+
                        
 
                     </tr>
@@ -387,6 +387,7 @@ function getsections()
 };
       function addRow(data,index) {
         var table = document.getElementById('studentList');
+        alert(JSON.stringify);
         var rowCount = table.rows.length;
         var row = table.insertRow(rowCount);
         // var cell1 = row.insertCell(0);

@@ -25,6 +25,18 @@
   </ul>
 </div>
 @endif
+<?php
+ 
+if(!empty($_GET) && $_GET['direct']=='yes'){
+  $direct = $_GET['direct'];
+  $month  = $_GET['month'];
+  $year   = $_GET['year'];
+  $class  = $_GET['class_id'];
+}else{
+   $direct ='NO';
+}
+
+?>
 <div class="row">
   <div class="box col-md-12">
     <div class="box-inner">
@@ -34,7 +46,7 @@
       </div>
       <div class="box-content">
 
-        <form role="form" action="{{url('/fees/classreport')}}" method="post" enctype="multipart/form-data">
+        <form role="form" id="defulter" name="defulter" action="{{url('/fees/classreport')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <div class="row">
             <div class="col-md-12">
@@ -70,8 +82,12 @@
                       'I'=>'I',
                       'J'=>'J'
                     ];?>
+                    @if($direct!='yes')
                     {{ Form::select('section',$data,$section,['class'=>'form-control','id'=>'section','required'=>'true'])}}
+                     @else
+                    {{ Form::select('section',$data,$section,['class'=>'form-control','id'=>'section'])}}
 
+                     @endif
 
 
                   </div>
@@ -277,14 +293,29 @@
           @section('script')
           <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
           <script type="text/javascript">
-          $( document ).ready(function() {
+          <?php if($direct=='yes'){ ?>
+               // document.forms['defulter'].submit();
+              <?php } ?>
 
+          $( document ).ready(function() {
+             <?php if($direct=='yes'){ ?>
+               // document.forms['defulter'].submit();
+              <?php } ?>
              getsections();
             $('#class').on('change',function() {
               getsections();
             });
-            $('#feeList').dataTable();
-            var session = $('#session').val().trim();
+            //$('#feeList').dataTable();
+             $('#feeList').DataTable( {
+                //pagingType: "simple",
+                //"pageLength": 5,
+                //  "pagingType": "full_numbers",
+                dom: 'Bfrtip',
+                buttons: [
+                    'print'
+                ]
+              });
+                    var session = $('#session').val().trim();
               getstudents();
             $(".datepicker2").datepicker( {
               format: " yyyy", // Notice the Extra space at the beginning
@@ -481,7 +512,7 @@
                   dataType: 'json',
                   success: function(data) {
                     $('#section').empty();
-                   //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
+                   $('#section').append($('<option>').text("--Select Section--").attr('value',""));
                     $.each(data, function(i, section) {
                       //console.log(student);
                      

@@ -154,8 +154,7 @@
                       <th>Name</th>
 
                       <th>Is Present? <input type="checkbox" id="allcheck" name="allcheck">All Select</th>
-                      <!--<th>Is Leave? </th>
-                       -->
+
                        
 
                     </tr>
@@ -433,14 +432,6 @@ function getsections()
         chkbox.name="present["+data['regiNo']+"]";
         chkbox.size="3";
         cell5.appendChild(chkbox);
-
-       /* var cell6 = row.insertCell(4);
-        var chkbox = document.createElement("input");
-        chkbox.type = "checkbox";
-        chkbox.checked=false;
-        chkbox.name="leave["+data['regiNo']+"]";
-        chkbox.size="4";
-        cell6.appendChild(chkbox);*/
 
       };
 

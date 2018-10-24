@@ -60,16 +60,21 @@ class tabulationController extends BaseController {
 		{
 			return  Redirect::to('/tabulation')->withInput(Input::all())->with("error","There are not student for this class!");
 		}
+		$exam = DB::table('exam')->where('id',$input->exam)->first();
 		$merit = DB::table('MeritList')
 		->select('regiNo','grade','point','totalNo')
 		->where('exam',$input->exam)
 		->where('class',$input->class)
 		->where('session',trim($input->session))
 		->orderBy('point', 'DESC')
-		->orderBy('totalNo', 'DESC') ->get() ;
-		if(count($merit)<1)
+		->orderBy('totalNo', 'DESC') ;
+
+		//echo "<pre>";print_r($merit->get());exit;
+		if($merit->count()==0)
 		{
 			return  Redirect::to('/tabulation')->withInput(Input::all())->with("error","Marks not submit or result not generate for this exam!");
+		}else{
+				$merit =$merit->get();
 		}
 		foreach($students as $student)
 		{
@@ -107,7 +112,10 @@ class tabulationController extends BaseController {
 
 
 		}
+       //echo "<pre>";print_r($student);
+       //echo "<pre>";print_r($merit);
 
+       //exit;
 		$cl = ClassModel::Select('name')->where('code',$input->class)->first();
 		$input->class=$cl->name;
 		$fileName=$input->class.'-'.$input->section.'-'.$input->session.'-'.$input->exam;
