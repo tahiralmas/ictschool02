@@ -34,6 +34,7 @@
                                              <option value="student">Student</option>
                                              <option value="teacher">Teacher</option>
                                              <!--<option value="parent">Parent</option>-->
+                                             <option value="all_student">All Student</option>
                                              <option value="testing">Testing</option>
                                         </select>
                                     </div>
@@ -146,6 +147,7 @@
                                             <option value="">Select Users Type</option>
                                             <option value="student">Student</option>
                                             <option value="teacher">Teacher</option>
+                                             <option value="all_student">All Student</option>
                                              <option value="testing">Testing</option>
                                         </select>
                                     </div>
@@ -247,6 +249,9 @@ $(document).ready(function()
         }else if(id=='student') {
          $("#studen").show();
          $("#testing").hide();
+        }else if(id=='all_student') {
+          $("#studen").hide();
+          // $("#testing").show();
         }else{
            $("#studen").hide();
            $("#testing").show();
@@ -282,6 +287,9 @@ $(document).ready(function()
         }else if(id=='student') {
          $("#studen1").show();
          $("#testing1").hide();
+         }else if(id=='all_student') {
+          $("#studen1").hide();
+          // $("#testing").show();
         }else{
            $("#studen1").hide();
            $("#testing1").show();
