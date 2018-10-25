@@ -69,7 +69,12 @@ class DashboardController extends BaseController {
 		//return View::Make('dashboard',compact('error','success','total','incomes','expences','balance'));
 		
         //paid or unpaid fee list
-		
+		$now   = Carbon::now();
+		$year  =  $now->year;
+        $month =  $now->month;
+        $attendances_b = array();
+		$scetionarray = array();
+	    $resultArray1 = array();
          $student_all12 =	DB::table('section')
              /*->where('session','=',$student->session)*/
              ->leftjoin('Student','section.id','=','Student.section')
@@ -90,9 +95,8 @@ class DashboardController extends BaseController {
 
 		if(count($all_section)>0){
 			$i=0;
-			$now   = Carbon::now();
-             $year  =  $now->year;
-            $month =  $now->month;
+			
+            
           
 			foreach($all_section as $section){
 				 $paid =0;
@@ -138,7 +142,7 @@ class DashboardController extends BaseController {
 			//array_push($resultArray[$i],$total,$paid,$unpaid);
             $scetionarray[] = array('section'=>$section->name,'class'=>$section->code);
             $resultArray1[] = array('total'=> $resultArray[$section->code.'_'.$section->name."_".'total'],'unpaid'=>$resultArray[$section->code.'_'.$section->name."_".'unpaid'],'paid'=>$resultArray[$section->code.'_'.$section->name."_".'paid']);
-			
+
 			}
 			
 		}
