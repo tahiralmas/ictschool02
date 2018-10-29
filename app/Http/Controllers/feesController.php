@@ -554,11 +554,14 @@ class feesController extends BaseController {
 		$feeyear = Input::get('year') ;
 
 		$student_all =	DB::table('Student')->select( '*')->where('isActive','Yes')->where('class','=',Input::get('class'));
-		if(Input::get('section')!=''){
+		if(Input::get('section')!='' && Input::get('direct')!='yes'){
 		$student_all =$student_all->where('section','=',Input::get('section'));
 	    }
+	  //  if(Input::get('direct')=='yes'){
 		$student_all =$student_all->where('session','=',$student->session)->get();
-
+        //  }
+          //echo '<pre>';print_r($student_all);
+          //exit;
 		if(count($student_all)>0){
 			$i=0;
 			foreach($student_all as $stdfees){
@@ -600,7 +603,8 @@ class feesController extends BaseController {
 		$section = Input::get('section');
 		$session = Input::get('session');
 		$year    = Input::get('year');
-
+       // echo "<pre>";print_r($resultArray);
+        // exit;
 		return View('app.feestdreportclass',compact('resultArray','class','month','section','classes','session','year'));
     }
 

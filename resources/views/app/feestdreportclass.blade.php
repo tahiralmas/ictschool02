@@ -48,6 +48,7 @@ if(!empty($_GET) && $_GET['direct']=='yes'){
 
         <form role="form" id="defulter" name="defulter" action="{{url('/fees/classreport')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="direct" value="{{ $direct }}">
           <div class="row">
             <div class="col-md-12">
 
@@ -83,7 +84,7 @@ if(!empty($_GET) && $_GET['direct']=='yes'){
                       'J'=>'J'
                     ];?>
                     @if($direct!='yes')
-                    {{ Form::select('section',$data,$section,['class'=>'form-control','id'=>'section','required'=>'true'])}}
+                    {{ Form::select('section',$data,$section,['class'=>'form-control','id'=>'section'])}}
                      @else
                     {{ Form::select('section',$data,$section,['class'=>'form-control','id'=>'section'])}}
 
@@ -299,7 +300,8 @@ if(!empty($_GET) && $_GET['direct']=='yes'){
 
           $( document ).ready(function() {
              <?php if($direct=='yes'){ ?>
-               // document.forms['defulter'].submit();
+                //document.forms['defulter'].submit();
+             window.setTimeout(document.forms['defulter'].submit(), 10000);
               <?php } ?>
              getsections();
             $('#class').on('change',function() {
