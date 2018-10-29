@@ -174,6 +174,7 @@ $( document ).ready(function() {
         buttons: [
             'print'
         ]
+       
     });
       $('#studentList').removeClass( 'display' ).addClass('table table-striped table-bordered');
   $(".datepicker2").datepicker( {

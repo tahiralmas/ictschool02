@@ -39,6 +39,7 @@
 
                     <form role="form" action="{{url('/gradesheet')}}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input value="{{date('Y')}}" type="hidden" id="session" required="true" class="form-control datepicker2" name="session" value="{{$formdata->session}}"  data-date-format="yyyy">
                         <div class="row">
                             <div class="col-md-12">
 
@@ -78,11 +79,16 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group ">
-                                        <label for="session">session</label>
+                                        <label for="session">Result Type</label>
                                         <div class="input-group">
-
+ 
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                            <input value="{{date('Y')}}" type="text" id="session" required="true" class="form-control datepicker2" name="session" value="{{$formdata->session}}"  data-date-format="yyyy">
+                                        <select name="type" id="type"  class ='form-control'   >
+                                        <option value="sigle" @if($formdata->type == 'sigle') selected @endif>Single</option>
+                                        @if($gradsystem=='manual')
+                                        <option value="compined"  @if($formdata->type == 'compined') selected @endif>Compined</option>
+                                        @endif
+                                        </select>
                                         </div>
                                     </div>
                                 </div>
@@ -91,7 +97,7 @@
                                     <div class="form-group">
                                         <label class="control-label" for="exam">Examination</label>
 
-                                        <div class="input-group">
+                                        <div class="input-group" id="single">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                             <?php  $data=[
                                                     'Class Test'=>'Class Test',
@@ -103,6 +109,15 @@
                                             {{ Form::select('exam',$data,$formdata->exam,['class'=>'form-control','id'=>'exam','required'=>'true'])}}
 
 
+                                        </div>
+                                        <div class="input-group" id="compined">
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                            <select id="exam1" name="exam[]" class="form-control selectpicker" id="section" multiple data-actions-box="true" data-hide-disabled="true" data-size="5"  required="true">
+                                                <?php /*  @foreach($section as $sec)
+                                                <option value="{{$sec->id}}">{{$sec->name}}</option>
+                                                @endforeach*/?>
+                                                <option value="">--Select Section--</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -146,7 +161,11 @@
                                             <td>{{$student->group}}</td>
 
                                             <td>
+                                                @if($gradsystem=='' || $gradsystem=='auto')
                                                 <a title='Print' target="_blank" class='btn btn-info' href='{{url("/gradesheet/print")}}/{{$student->regiNo}}/{{$formdata->exam}}/{{$formdata->class}}'> <i class="glyphicon glyphicon-print icon-printer"></i></a>
+                                                @else
+                                                <a title='Print' target="_blank" class='btn btn-info' href='{{url("/gradesheet/m_print")}}/{{$student->regiNo}}/{{$formdata->exam}}/{{$formdata->class}}?type={{ $type}}&examps_ids={{$exams_ids}}'> <i class="glyphicon glyphicon-print icon-printer"></i></a>
+                                            @endif
                                             </td>
                                     @endforeach
                                     </tbody>
@@ -165,7 +184,55 @@
 @section('script')
     <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
     <script type="text/javascript">
+      $('#exam1').prop('required',false);
+      <?php if($gradsystem=='auto' || $gradsystem==''){ ?>
+        $('#exam1').prop('required',false);
+        <?php } ?>
+      $('#compined').hide();
+      $('#single').show(); 
+       //$('#exam').empty();
+       //$('#exam1').empty();
+     $("#type").trigger('change'); 
         $( document ).ready(function() {
+          //$('#exam1').hide();
+        $("#type").change(function()
+        {
+            var id=$(this).val();
+          //  alert(id);
+            if(id==='compined'){
+                //$('#exam').empty();
+                $('#exam').prop('required',false);
+                $('#exam1').prop('required',true);
+                 $("#exam").val('');
+
+                
+
+                $('#compined').show();
+                $('#single').hide();
+              // $('#exam').attr('multiple','multiple');
+                //$('#exam').hide();
+                //$('#exam1').show();
+                /*$('#exam').attr({
+               'multiple','multiple'
+                
+             }); */
+            }else{
+               //$('#exam1').hide();
+               // $('#exam').show();
+               // $("#exam1").selectpicker('refresh');
+             $('#exam1').prop('required',false);
+             $('#exam').prop('required',true);
+
+             $('#exam1').selectpicker('deselectAll');
+
+                $('#exam1').selectpicker('refresh');
+                 // $("#exam1").val='';
+                $('#compined').hide();
+                $('#single').show(); 
+            }
+        });
+
+
             $(".datepicker2").datepicker( {
                 format: " yyyy", // Notice the Extra space at the beginning
                 viewMode: "years",
@@ -218,7 +285,7 @@
       type: 'GET'
     });
 };
- function getexam()
+function getexam()
 {
     var aclass = $('#class').val();
    // alert(aclass);
@@ -233,6 +300,8 @@
       dataType: 'json',
       success: function(data) {
         $('#exam').empty();
+        $('#exam1').empty();
+       var options = [];
        $('#exam').append($('<option>').text("--Select Exam--").attr('value',""));
         $.each(data, function(i, exam) {
           //console.log(student);
@@ -243,8 +312,12 @@
         
           //console.log(opt);
           $('#exam').append(opt);
+          //$('#exam1').append(opt);
+          options.push(opt);
 
         });
+        $("#exam1").html(options).selectpicker('refresh');
+
         //console.log(data);
 
       },

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Redirect;
 use ValidatesRequests;
 use App\Institute;
 use DB;
+use Storage;
 class instituteController extends BaseController {
 
 	public function __construct() {
@@ -31,11 +32,34 @@ class instituteController extends BaseController {
 			$institute->phoneNo = "";
 			$institute->address = "";
 		}
+		if(Storage::disk('local')->exists('/public/grad_system.txt')){
+          $contant = Storage::get('/public/grad_system.txt');
+          $data = explode('<br>',$contant );
 
+			//echo "<pre>";print_r($data);
+			$gradsystem = $data[0]; 
+		}else{
+	      $gradsystem ='';
+		}
+        //print_r($data);exit;
 		//return View::Make('app.institute',compact('institute'));
-		return View('app.institute',compact('institute'));
+		return View('app.institute',compact('institute','gradsystem'));
 	}
 
+
+	public function index1()
+	{
+       if(Storage::disk('local')->exists('/public/grad_system.txt')){
+          $contant = Storage::get('/public/grad_system.txt');
+          $data = explode('<br>',$contant );
+
+			//echo "<pre>";print_r($data);
+			$gradsystem = $data[0]; 
+		}else{
+	      $gradsystem ='';
+		}
+		return $gradsystem;
+	}
 
 	/**
 	* Show the form for creating a new resource.
@@ -60,6 +84,13 @@ class instituteController extends BaseController {
 			return Redirect::to('institute')->withinput(Input::all())->withErrors($validator);
 		}
 		else {
+            
+            if(Input::get('grade_system')=='' ):
+              $gs = 'manual';
+            else:
+              $gs = 'auto';
+            endif;
+                Storage::put('/public/grad_system.txt', $gs);
 
 			DB::table("institute")->delete();
 			$institue=new Institute;

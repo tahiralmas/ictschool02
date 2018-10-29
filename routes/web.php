@@ -198,16 +198,27 @@ Route::get('/smslog/delete/{id}','smsController@deleteLog');
 //Mark routes
 Route::get('/mark/create','markController@index');
 Route::post('/mark/create','markController@create');
+
+Route::get('/mark/m_create','markController@m_index');
+Route::post('/mark/m_create','markController@m_create');
+
 Route::get('/mark/list','markController@show');
 Route::post('/mark/list','markController@getlist');
+
+Route::get('/mark/m_list','markController@m_show');
+Route::post('/mark/m_list','markController@m_getlist');
+
 Route::get('/mark/edit/{id}','markController@edit');
+Route::get('/mark/m_edit/{id}','markController@m_edit');
 Route::post('/mark/update','markController@update');
+Route::post('/mark/m_update','markController@m_update');
 Route::get('/mark/delete/{id}','markController@delete');
 
 //Markssheet
 Route::group(['middleware' => 'admin'], function(){ 
 Route::get('/result/generate','gradesheetController@getgenerate');
 Route::post('/result/generate','gradesheetController@postgenerate');
+Route::post('/result/m_generate','gradesheetController@mpostgenerate');
 
 
 Route::get('/result/search','gradesheetController@search');
@@ -220,6 +231,7 @@ Route::post('/results','gradesheetController@postsearchpub');
 Route::get('/gradesheet','gradesheetController@index');
 Route::post('/gradesheet','gradesheetController@stdlist');
 Route::get('/gradesheet/print/{regiNo}/{exam}/{class}','gradesheetController@printsheet');
+Route::get('/gradesheet/m_print/{regiNo}/{exam}/{class}','gradesheetController@m_printsheet');
 });
 //tabulation sheet
 Route::group(['middleware' => 'admin'], function(){ 
@@ -455,9 +467,88 @@ Route::get('/class-off/delete/{id}', 'attendanceController@classOffDelete');
 
 
 
+/**
+     * Website contents routes
+     */
+
+    Route::get('/site/dashboard', 'SiteController@dashboard')
+        ->name('site.dashboard');
+        
+    Route::resource('slider','SliderController');
+
+    Route::get('/site/about-content', 'SiteController@aboutContent')
+        ->name('site.about_content');
+    Route::post('/site/about-content', 'SiteController@aboutContent')
+        ->name('site.about_content');
+    Route::get('site/about-content/images','SiteController@aboutContentImage')
+        ->name('site.about_content_image');
+    Route::post('site/about-content/images','SiteController@aboutContentImage')
+        ->name('site.about_content_image');
+    Route::post('site/about-content/images/{id}','SiteController@aboutContentImageDelete')
+        ->name('site.about_content_image_delete');
+    Route::get('site/service','SiteController@serviceContent')
+        ->name('site.service');
+    Route::post('site/service','SiteController@serviceContent')
+        ->name('site.service');
+    Route::get('site/statistic','SiteController@statisticContent')
+        ->name('site.statistic');
+    Route::post('site/statistic','SiteController@statisticContent')
+        ->name('site.statistic');
+
+    Route::get('site/testimonial','SiteController@testimonialIndex')
+        ->name('site.testimonial');
+    Route::post('site/testimonial','SiteController@testimonialIndex')
+        ->name('site.testimonial');
+    Route::get('site/testimonial/create','SiteController@testimonialCreate')
+        ->name('site.testimonial_create');
+    Route::post('site/testimonial/create','SiteController@testimonialCreate')
+    ->name('site.testimonial_create');
+
+    Route::get('site/subscribe','SiteController@subscribe')
+        ->name('site.subscribe');
+
+    Route::resource('class_profile','ClassProfileController');
+    Route::resource('teacher_profile','TeacherProfileController');
+    Route::resource('event','EventController');
+    Route::get('site/gallery','SiteController@gallery')
+        ->name('site.gallery');
+    Route::get('site/gallery/add-image','SiteController@galleryAdd')
+        ->name('site.gallery_image');
+    Route::post('site/gallery/add-image','SiteController@galleryAdd')
+        ->name('site.gallery_image');
+    Route::post('site/gallery/delete-images/{id}','SiteController@galleryDelete')
+        ->name('site.gallery_image_delete');
+    Route::get('site/contact-us','SiteController@contactUs')
+        ->name('site.contact_us');
+    Route::post('site/contact-us','SiteController@contactUs')
+        ->name('site.contact_us');
+    Route::get('site/fqa','SiteController@faq')
+        ->name('site.faq');
+    Route::post('site/fqa','SiteController@faq')
+        ->name('site.faq');
+    Route::post('site/faq/{id}','SiteController@faqDelete')
+        ->name('site.faq_delete');
+    Route::get('site/timeline','SiteController@timeline')
+        ->name('site.timeline');
+    Route::post('site/timeline','SiteController@timeline')
+        ->name('site.timeline');
+    Route::post('site/timeline/{id}','SiteController@timelineDelete')
+        ->name('site.timeline_delete');
+    Route::get('site/settings','SiteController@settings')
+        ->name('site.settings');
+    Route::post('site/settings','SiteController@settings')
+        ->name('site.settings');
+    Route::get('site/analytics','SiteController@analytics')
+        ->name('site.analytics');
+    Route::post('site/analytics','SiteController@analytics')
+        ->name('site.analytics');
+
+
+
 });
 
 
-
-
+Route::group(['middleware' => 'super_admin'], function(){
+Route::get('/gradsystem','gradesheetController@gradsystem');
+});
 Route::get('/cronjob/feenotification','cronjobController@feenotification');

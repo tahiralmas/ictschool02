@@ -8,6 +8,7 @@ use App\Student;
 use App\Marks;
 use App\GPA;
 use App\MeritList;
+use Storage;
 use DB;
 Class formfoo{
 
@@ -37,9 +38,17 @@ class gradesheetController extends BaseController {
 		$formdata->session="";
 		$students=array();
 		$classes = ClassModel::pluck('name','code');
+         if(Storage::disk('local')->exists('/public/grad_system.txt')){
+			          $contant = Storage::get('/public/grad_system.txt');
+			          $data = explode('<br>',$contant );
 
+						//echo "<pre>";print_r($data);
+						$gradsystem = $data[0]; 
+					}else{
+				      $gradsystem ='';
+					}
 		//return View::Make('app.gradeSheet',compact('classes','formdata','students'));
-		return View('app.gradeSheet',compact('classes','formdata','students'));
+		return View('app.gradeSheet',compact('classes','formdata','students','gradsystem'));
 	}
 
 
@@ -70,13 +79,32 @@ class gradesheetController extends BaseController {
 			return Redirect::to('/gradesheet')->withErrors($validator);
 		}
 		else {
-
-			$ispubl  = DB::table('MeritList')
-			->select('regiNo')
-			->where('class','=',Input::get('class'))
-			->where('session','=',trim(Input::get('session')))
-			->where('exam','=',Input::get('exam'))
-			->get();
+         // echo "<pre>";print_r(Input::all());
+          //exit;
+			if(is_array(Input::get('exam'))){
+				 $exams_ids =implode(',',Input::get('exam')) ;
+				$ispubl  = DB::table('MeritList')
+				->select('regiNo','exam')
+				->where('class','=',Input::get('class'))
+				->where('session','=',trim(Input::get('session')))
+				->where('section_id','=',trim(Input::get('section')))
+				->whereIn('exam',Input::get('exam'))
+				->orderBy('created_at','desc')
+				->groupBy('regiNo')
+				->get();
+		    }else{
+		    	$exams_ids='';
+		    	$ispubl  = DB::table('MeritList')
+				->select('regiNo','exam')
+				->where('class','=',Input::get('class'))
+				->where('session','=',trim(Input::get('session')))
+				->where('exam','=',Input::get('exam'))
+			    ->where('section_id','=',trim(Input::get('section')))
+               
+				->get();
+		    }
+		   // echo "<pre>";print_r($ispubl);
+		    //exit;
 			if(count($ispubl)>0) {
 				$classes = ClassModel::pluck('name', 'code');
 				$students = DB::table('Student')
@@ -94,11 +122,30 @@ class gradesheetController extends BaseController {
 				$formdata->class = Input::get('class');
 				$formdata->section = Input::get('section');
 				$formdata->session = Input::get('session');
-				$formdata->exam = Input::get('exam');
+				if(is_array(Input::get('exam'))){
+					$formdata->exam = Input::get('exam')[0];
+			    }else{
+			    	$formdata->exam = Input::get('exam');
+			    }
+				$formdata->type = Input::get('type');
 				$formdata->postclass = array_get($classes, Input::get('class'));
 
 				//return View::Make('app.gradeSheet', compact('classes', 'formdata', 'students'));
-				return View('app.gradeSheet', compact('classes', 'formdata', 'students'));
+				 if(Storage::disk('local')->exists('/public/grad_system.txt')){
+			          $contant = Storage::get('/public/grad_system.txt');
+			          $data = explode('<br>',$contant );
+
+						//echo "<pre>";print_r($data);
+						$gradsystem = $data[0]; 
+					}else{
+				      $gradsystem ='';
+					}
+					$type = Input::get('type');
+					
+                  // exit;
+				
+
+				return View('app.gradeSheet', compact('classes', 'formdata', 'students','gradsystem','type','exams_ids'));
 			}
 			else
 			{
@@ -346,12 +393,14 @@ class gradesheetController extends BaseController {
         //echo "<pre>";print_r($student->first());exit;
 		if($student->count()>0) {
            $student = $student->first();
+           $section = $student->section;
 
 			$merit = DB::table('MeritList')
-			->select('regiNo', 'grade', 'point', 'totalNo')
+			->select('regiNo', 'grade', 'point', 'totalNo','section_id')
 			->where('exam', $exam)
 			->where('class', $class)
 			->where('session', trim($student->session))
+			->where('section_id', trim($section))
 			//->where('regiNo',$regiNo)
 			//->orderBy('point', 'DESC')
 			//->orderBy('point')
@@ -365,7 +414,9 @@ class gradesheetController extends BaseController {
 				$position  = 0;
 				foreach ($merit as $m) {
 					$position++;
-					if($m->regiNo === $regiNo) {
+					//$test[] = $m->section_id .'==='. $section."909".$m->regiNo .'=== '.$regiNo;
+					
+					if($m->regiNo === $regiNo && $m->section_id == $section) {
 						$meritdata->regiNo = $m->regiNo;
 						$meritdata->point = $m->point;
 						$meritdata->grade = $m->grade;
@@ -374,7 +425,10 @@ class gradesheetController extends BaseController {
 						break;
 					}
 				}
-              //echo "<pre>";print_r($merit);
+				//echo $m->section_id .'==='. $section."909".$m->regiNo .'=== '.$regiNo;
+					// echo "<pre>";print_r($meritdata);
+					//exit;
+             
               //print_r($meritdata);
              // exit;
 				//sub group need to implement
@@ -494,7 +548,9 @@ class gradesheetController extends BaseController {
 					}
 				}
 
-
+                //echo "<pre>";print_r($englishArray);
+                //echo "<pre>f";print_r($banglaArray);
+               //exit;
 				$extra = array($exam_name, $subgrpbl, $totalHighest, $subgrpen, $student->extraActivity,$totalourall);
 				$query="select left(MONTHNAME(STR_TO_DATE(m, '%m')),3) as month, count(regiNo) AS present from ( select 01 as m union all select 02 union all select 03 union all select 04 union all select 05 union all select 06 union all select 07 union all select 08 union all select 09 union all select 10 union all select 11 union all select 12 ) as months LEFT OUTER JOIN Attendance ON MONTH(Attendance.date)=m and Attendance.regiNo ='".$regiNo."' and  Attendance.status IN ('Present','present','late','Late') GROUP BY m";
 				$attendance=DB::select(DB::RAW($query));
@@ -517,7 +573,18 @@ class gradesheetController extends BaseController {
 	{
 		$classes = ClassModel::pluck('name','code');
 		//return View::Make('app.resultgenerate',compact('classes'));
-		return View('app.resultgenerate',compact('classes'));
+		  if(Storage::disk('local')->exists('/public/grad_system.txt')){
+			          $contant = Storage::get('/public/grad_system.txt');
+			          $data = explode('<br>',$contant );
+
+						//echo "<pre>";print_r($data);
+						$gradsystem = $data[0]; 
+					}else{
+				      $gradsystem ='';
+					}
+
+
+		return View('app.resultgenerate',compact('classes','gradsystem'));
 	}
 
 	public  function getSubGroup($subjects,$subject)
@@ -529,7 +596,6 @@ class gradesheetController extends BaseController {
 			{
 				$group=$sub->subgroup;
 				break;
-
 			}
 		}
 		return $group;
@@ -568,10 +634,8 @@ class gradesheetController extends BaseController {
 			{
 				$subjects           = Subject::select('name', 'code', 'type', 'subgroup')->where('class', '=', Input::get('class'))->get();
 				$sectionsHas        = Student::select('section')->where('class', '=', Input::get('class'))->where('session', trim(Input::get('session')))->where('isActive', '=', 'Yes')->distinct()->orderBy('section', 'asc')->get();
-
 				$sectionMarksSubmit = Marks::select('section')->where('class', '=', Input::get('class'))->where('session', trim(Input::get('session')))->where('exam',Input::get('exam'))->distinct()->get();
 				//dd($sectionsHas);
-
 				if (count($sectionsHas)==count($sectionMarksSubmit))
 				{
 					$isAllSubSectionMarkSubmit =false;
@@ -590,7 +654,6 @@ class gradesheetController extends BaseController {
 							break;
 						}
 					}
-
 					if ($isAllSubSectionMarkSubmit) {
 						$fourthsubjectCode = "";
 						foreach ($subjects as $subject) {
@@ -683,25 +746,16 @@ class gradesheetController extends BaseController {
 
 									if ($englishmark > 0) {
 										$enmarks = floor($englishmark / 2);
-
-
 										$totalmarks += $englishmark;
-
 										$totalpoint += $this->pointCalculator($enmarks, $gparules);
-
 										$subcounter--;
-
 									}
-
 									$grandPoint = ($totalpoint / $subcounter);
-
-
 									if ($isfail) {
 										$grandGrade = $this->gradnGradeCal(0.00, $gparules);
 									} else {
 										$grandGrade = $this->gradnGradeCal($grandPoint, $gparules);
 									}
-
 									$merit          = new MeritList;
 									$merit->class   = Input::get('class');
 									$merit->session = trim(Input::get('session'));
@@ -710,13 +764,10 @@ class gradesheetController extends BaseController {
 									$merit->totalNo = $totalmarks;
 									$merit->point   = $grandPoint;
 									$merit->grade   = $grandGrade;
-
+									$merit->section_id   = $student->section;
                                 // echo "<pre>";print_r($merit );
 									$merit->save();
-
-                                     $test[] = $merit;
-
-
+                                    $test[] = $merit;
 								}
 
 								 //echo "<pre>";print_r($test );
@@ -727,16 +778,11 @@ class gradesheetController extends BaseController {
 
 								return Redirect::to('/result/generate')->withInput()->with("noresult", "All students examintaion marks not submited yet!!");
 							}
-
-
 						}
 						else
 						{
-
-
 							return Redirect::to('/result/generate')->withInput()->with("noresult", "There is no students in this class!!");
 						}
-
 						return Redirect::to('/result/generate')->with("success", "Result Generate and Publish Successfull.");
 					}
 					else
@@ -751,13 +797,13 @@ class gradesheetController extends BaseController {
 			}
 			else{
 				return Redirect::to('/result/generate')->withInput()->with("noresult", "Result already generated for this class,session and exam!");
-
 			}
 		}
 	}
 
 	public function gradnGradeCal($grandPoint)
 	{
+		return $grandPoint;
 		$grade="";
 		if($grandPoint>=5.00)
 		{
@@ -794,8 +840,6 @@ class gradesheetController extends BaseController {
 			'exam' => 'required',
 			'regiNo' => 'required',
 			'class' => 'required'
-
-
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
@@ -803,8 +847,6 @@ class gradesheetController extends BaseController {
 			return Redirect::to('/result/search')->withErrors($validator)->withInput(Input::all());
 		}
 		else {
-
-
 			return Redirect::to('/gradesheet/print/'.Input::get('regiNo').'/'.Input::get('exam').'/'.Input::get('class'));
 		}
 	}
@@ -835,4 +877,560 @@ class gradesheetController extends BaseController {
 			return Redirect::to('/gradesheet/print/'.Input::get('regiNo').'/'.Input::get('exam').'/'.Input::get('class'));
 		}
 	}
+	public function gradsystem()
+	{
+	    //return View('app.resultsearchpublic',compact(''));
+	}
+	public function m_printsheet($regiNo,$exam,$class)
+	{
+        $examed    = DB::table('exam')->where('id',$exam)->first();
+		$exam_name =  $examed->type;
+		$student   =	DB::table('Student')
+		 ->join('Class', 'Student.class', '=', 'Class.code')
+		 ->join('section','Student.section','=','section.id')
+		 ->select('Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session','Student.extraActivity','section.name as section_name')
+		 ->where('Student.regiNo','=',$regiNo)
+		 ->where('Student.class', '=',$class)
+		 ->where('Student.isActive', '=', 'Yes');
+		 //->first();
+        //echo "<pre>";print_r($student->first());exit;
+		if($student->count()>0) {
+           $student = $student->first();
+           $section = $student->section;
+			$merit = DB::table('MeritList')
+			->select('regiNo', 'grade', 'point', 'totalNo','section_id')
+			->where('exam', $exam)
+			->where('class', $class)
+			->where('session', trim($student->session))
+			->where('section_id', trim($section))
+			//->where('regiNo',$regiNo)
+			//->orderBy('point', 'DESC')
+			//->orderBy('point')
+			->orderBy('totalNo', 'DESC')->get();
+			//->orderBy('totalNo', 'DESC')->get();
+			//echo "<pre>";print_r($merit);exit;
+			if (empty($student)  || empty($merit)) {
+				return Redirect::back()->with('noresult', 'Result Not Found!');
+			} else {
+				$meritdata = new Meritdata();
+				$position  = 0;
+				foreach ($merit as $m) {
+					$position++;
+					//$test[] = $m->section_id .'==='. $section."909".$m->regiNo .'=== '.$regiNo;
+					
+					if($m->regiNo === $regiNo && $m->section_id == $section) {
+						$meritdata->regiNo = $m->regiNo;
+						$meritdata->point = $m->point;
+						$meritdata->grade = $m->grade;
+						$meritdata->position = $position;
+						$meritdata->totalNo = $m->totalNo;
+						break;
+					}
+				}
+				//echo $m->section_id .'==='. $section."909".$m->regiNo .'=== '.$regiNo;
+					// echo "<pre>";print_r($meritdata);
+					//exit;
+             
+              //print_r($meritdata);
+             // exit;
+				//sub group need to implement
+				$subjects = Subject::select('name', 'code', 'subgroup', 'totalfull')->where('class', '=', $student->classcode)->get();
+
+				$overallSubject = array();
+				$subcollection = array();
+
+				$banglatotal = 0;
+				$banglatotalhighest = 0;
+				$urdu = 0;
+				$banglaArray = array();
+				$blextra = array();
+
+				$englishtotal = 0;
+				$englishtotalhighest = 0;
+				$english_total = 0;
+				$englishArray = array();
+				$enextra = array();
+
+				$totalHighest = 0;
+				$totalourall = 0;
+				$isBanglaFail=false;
+				$isEnglishFail=false;
+				foreach ($subjects as $subject) {
+					$submarks = Marks::select('written', 'mcq', 'practical', 'ca', 'total', 'point', 'grade','total_marks')->where('regiNo', '=', $student->regiNo)
+					->where('subject', '=', $subject->code)->where('exam', '=', $exam)->where('class', '=', $class)->first();
+					$maxMarks = Marks::select(DB::raw('max(total) as highest'))->where('class', '=', $class)->where('session', '=', $student->session)
+					->where('subject', '=', $subject->code)->where('exam', '=', $exam)->first();
+
+					$submarks["highest"] = $maxMarks->highest;
+					$submarks["subcode"] = $subject->code;
+
+					$submarks["subname"] = $subject->name;
+					$submarks["outof"] = $submarks->total_marks;
+
+
+					if ($this->getSubGroup($subjects, $subject->code) === "Bangla") {
+
+						if($submarks->grade=="F")
+						{
+							$isBanglaFail=true;
+						}
+
+						$banglatotal += $submarks->total;
+						$banglatotalhighest += $submarks->highest;
+                         $urdu += $subject->totalfull;
+						$bangla = array($submarks->subcode, $submarks->subname, $submarks->written, $submarks->mcq, $submarks->ca, $submarks->practical,$subject->totalfull);
+						array_push($banglaArray, $bangla);
+
+					} else if ($this->getSubGroup($subjects, $subject->code) === "English") {
+						if($submarks->grade==="F")
+						{
+							$isEnglishFail=true;
+						}
+						$englishtotal += $submarks->total;
+						$englishtotalhighest += $submarks->highest;
+                        $english_total += $subject->totalfull;
+						$english = array($submarks->subcode, $submarks->subname, $submarks->written, $submarks->mcq, $submarks->ca, $submarks->practical,$subject->totalfull);
+						array_push($englishArray, $english);
+
+					} else {
+						$totalHighest += $maxMarks->highest;
+						$totalourall +=$submarks->total_marks;
+						array_push($subcollection, $submarks);
+					}
+					$outof[] = $subject->totalfull;
+				}
+				$gparules = GPA::select('gpa', 'grade', 'markfrom')->get();
+				$subgrpbl = false;
+
+				if ($banglatotal > 0) {
+
+					$blt = floor($banglatotal / 2);
+					$totalHighest += $banglatotalhighest;
+					$totalourall +=$urdu;
+					$gcal = $this->gpaCalculator($blt, $gparules);
+
+					$subgrpbl = true;
+					array_push($blextra, $banglatotal);
+					//array_push($blextra, $banglatotalhighest);
+					array_push($blextra, $urdu);
+                   // echo $gcal[1].'uuu';
+					if($isBanglaFail)
+					{
+						array_push($blextra, "0.00");
+						array_push($blextra, "F");
+					}
+					else {
+						array_push($blextra, $gcal[0]);
+						array_push($blextra, $gcal[1]);
+					}
+				}
+				$subgrpen = false;
+				if ($englishtotal > 0) {
+					$ent = floor($englishtotal / 2);
+					$totalHighest += $englishtotalhighest;
+					$totalourall += $english_total;
+					$gcal = $this->gpaCalculator($ent, $gparules);
+					$subgrpen = true;
+					array_push($enextra, $englishtotal);
+					//array_push($enextra, $englishtotalhighest);
+					array_push($enextra, $english_total);
+
+					//echo $ent.'uuu'.print_r($gcal,true);
+					//exit;
+					if($isEnglishFail)
+					{
+						array_push($enextra, "0.00");
+						array_push($enextra, "F");
+
+					}
+					else {
+						array_push($enextra, $gcal[0]);
+						array_push($enextra, $gcal[1]);
+
+					}
+				}
+
+                //echo "<pre>";print_r($englishArray);
+                //echo "<pre>f";print_r($banglaArray);
+               //exit;
+				$extra = array($exam_name, $subgrpbl, $totalHighest, $subgrpen, $student->extraActivity,$totalourall);
+				$query="select left(MONTHNAME(STR_TO_DATE(m, '%m')),3) as month, count(regiNo) AS present from ( select 01 as m union all select 02 union all select 03 union all select 04 union all select 05 union all select 06 union all select 07 union all select 08 union all select 09 union all select 10 union all select 11 union all select 12 ) as months LEFT OUTER JOIN Attendance ON MONTH(Attendance.date)=m and Attendance.regiNo ='".$regiNo."' and  Attendance.status IN ('Present','present','late','Late') GROUP BY m";
+				$attendance=DB::select(DB::RAW($query));
+				//echo "<pre>";print_r($subcollection);
+				//exit;
+				if(Input::get('type')=='sigle' || Input::get('type')==''):
+				return View('app.mstdgradesheet', compact('student', 'extra', 'meritdata', 'subcollection', 'blextra', 'banglaArray', 'enextra', 'englishArray','attendance'));
+				else:
+					//echo "<pre>";print_r($this->combined_results(Input::get('type'),$regiNo,$exam,$class));
+                     $data = $this->combined_results(Input::get('type'),$regiNo,$exam,$class);
+                     $result= $data['result_data'];
+                     $attendance= $data['attendance'];
+                     return View('app.mstdgradesheetc', compact('result','attendance'));
+
+                endif;
+
+
+
+
+			}
+		}
+		else
+		{
+			//echo "<h1 style='text-align: center;color: red'>Result Not Found</h1>";
+			return  Redirect::back()->with('noresult','Result Not Found!');
+
+		}
+	}
+
+public function combined_results($type,$regiNo,$exam,$class)
+{
+
+	/*$examed    = DB::table('exam')->where('id',$exam)->first();
+	$exam_name =  $examed->type;
+	$exam_ids = array('4','37','38','39','40');
+	$student   =	DB::table('Student')
+	->join('Class', 'Student.class', '=', 'Class.code')
+	->join('section','Student.section','=','section.id')
+	->select('Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session','Student.extraActivity','section.name as section_name')
+	->where('Student.regiNo','=',$regiNo)
+	->where('Student.class', '=',$class)
+	->where('Student.isActive', '=', 'Yes');
+	if($student->count()>0) {
+		$student = $student->first();
+		$section = $student->section;
+		foreach($exam_ids as $exm):
+		$merit[$exm] = DB::table('MeritList')
+		->select('regiNo', 'grade', 'point', 'totalNo','section_id')
+		->where('exam', $exm)
+		->where('class', $class)
+		->where('session', trim($student->session))
+		->where('section_id', trim($section))
+		//->where('regiNo',$regiNo)
+		//->orderBy('point', 'DESC')
+		//->orderBy('point')
+		->orderBy('totalNo', 'DESC')
+		->orderBy('created_at', 'ASC')
+		->get();
+		endforeach;
+		echo "<pre>";print_r($merit);
+		exit;
+		//->orderBy('totalNo', 'DESC')->get();
+		//echo "<pre>";print_r($merit);exit;
+			if (empty($student)  || empty($merit)) {
+				return Redirect::back()->with('noresult', 'Result Not Found!');
+			}else{
+				$meritdata = new Meritdata();
+				$position  = 0;
+				foreach ($merit as $m) {
+					$position++;
+					//$test[] = $m->section_id .'==='. $section."909".$m->regiNo .'=== '.$regiNo;
+					if($m->regiNo === $regiNo && $m->section_id == $section) {
+						$meritdata->regiNo = $m->regiNo;
+						$meritdata->point = $m->point;
+						$meritdata->grade = $m->grade;
+						$meritdata->position = $position;
+						$meritdata->totalNo = $m->totalNo;
+						break;
+					}
+				}
+				$subjects = Subject::select('name', 'code', 'subgroup', 'totalfull')->where('class', '=', $student->classcode)->get();
+
+				$overallSubject = array();
+				$subcollection = array();
+
+				$banglatotal = 0;
+				$banglatotalhighest = 0;
+				$urdu = 0;
+				$banglaArray = array();
+				$blextra = array();
+
+				$englishtotal = 0;
+				$englishtotalhighest = 0;
+				$english_total = 0;
+				$englishArray = array();
+				$enextra = array();
+				$totalHighest = 0;
+				$totalourall = 0;
+				$isBanglaFail=false;
+				$isEnglishFail=false;
+				foreach ($subjects as $subject) {
+					$submarks = Marks::select('written', 'mcq', 'practical', 'ca', 'total', 'point', 'grade','total_marks')->where('regiNo', '=', $student->regiNo)
+					->where('subject', '=', $subject->code)->where('exam', '=', $exam)->where('class', '=', $class)->first();
+					$maxMarks = Marks::select(DB::raw('max(total) as highest'))->where('class', '=', $class)->where('session', '=', $student->session)
+					->where('subject', '=', $subject->code)->where('exam', '=', $exam)->first();
+
+					$submarks["highest"] = $maxMarks->highest;
+					$submarks["subcode"] = $subject->code;
+
+					$submarks["subname"] = $subject->name;
+					$submarks["outof"] = $submarks->total_marks;
+					$totalHighest += $maxMarks->highest;
+					$totalourall +=$submarks->total_marks;
+					array_push($subcollection, $submarks);
+					$outof[] = $subject->totalfull;
+				}
+		    }
+		    echo "dsd";
+    }else{
+	return  Redirect::back()->with('noresult','Result Not Found!');
+	}*/
+	$exams_array = explode(',',Input::get('examps_ids'));
+	$result_data = DB::table('Student')
+       ->join('Class', 'Student.class', '=', 'Class.code')
+       ->join('section','Student.section','=','section.id')
+       ->join('Marks','Student.regiNo','=','Marks.regiNo')
+       // ->join('Marks','Student.regiNo','=','Marks.regiNo')
+       //->join('MeritList','Marks.regiNo','=','MeritList.regiNo')
+       ->join('Subject','Marks.subject','=','Subject.code')
+       ->join('exam','Marks.exam','=','exam.id')
+       ->select('Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session','Student.extraActivity','section.name as section_name','Marks.total','Marks.grade','Marks.point','Marks.total_marks','Marks.obtain_marks',DB::raw('MONTH(Marks.created_at) as month'),/*'MeritList.totalNo','MeritList.grade','MeritList.point',*/'exam.type','exam.id as exam_id','Subject.code as subject_code','Subject.name as subject_name')
+       ->where('Marks.class',$class)
+       ->where('Subject.class', '=', $class)
+       ->where('Marks.regiNo', '=', $regiNo)
+       ->whereIn('Marks.exam', $exams_array)
+        // ->where('Student.class',$class)
+       ->get();
+       foreach($result_data as $result){
+        $exam_name   = $result->exam_id;
+	        //if($result->subject_name=='urdu'){
+	          $ary[$result->subject_name][] = array('regiNo'=>$result->regiNo,'rollNo'=>$result->rollNo,'firstName'=>$result->firstName,'fatherName'=>$result->fatherName,'classcode'=>$result->classcode,'class'=>$result->class,'session'=>$result->session,'section_name'=>$result->section_name,'total'=>$result->total,'grade'=>$result->grade,'point'=>$result->point,'total_marks'=>$result->total_marks,'obtain_marks'=>$result->obtain_marks ,'month'=>$result->month,'type'=>$result->type,'subject_code'=>$result->subject_code,'subject_name'=>$result->subject_name);
+	          $res[$exam_name][]=$result; 
+	        //}
+       }
+
+       //$extra      = array($exam_name, $subgrpbl, $totalHighest, $subgrpen, $student->extraActivity,$totalourall);
+	   $query      = "select left(MONTHNAME(STR_TO_DATE(m, '%m')),3) as month, count(regiNo) AS present from ( select 01 as m union all select 02 union all select 03 union all select 04 union all select 05 union all select 06 union all select 07 union all select 08 union all select 09 union all select 10 union all select 11 union all select 12 ) as months LEFT OUTER JOIN Attendance ON MONTH(Attendance.date)=m and Attendance.regiNo ='".$regiNo."' and  Attendance.status IN ('Present','present','late','Late') GROUP BY m";
+	   $attendance = DB::select(DB::RAW($query));
+    //echo "<pre>";print_r($ary);
+	         return array('result_data'=>$ary,'attendance'=>$attendance);
+
+
+      //echo "<pre>";print_r($res);
+}
+
+
+	public  function  mpostgenerate()
+	{
+		$rules = [
+			'class' => 'required',
+			'exam' => 'required',
+			'session' => 'required'
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails()) {
+			return Redirect::to('/result/generate')->withErrors($validator)->withInput();
+		} else {
+			$isGenerated=DB::table('MeritList')
+			->select('regiNo')
+			->where('class', '=', Input::get('class'))
+			->where('session', '=', trim(Input::get('session')))
+			->where('exam', '=', Input::get('exam'))
+			->get();
+			if(count($isGenerated)==0)
+			{
+				$subjects           = Subject::select('name', 'code', 'type', 'subgroup')->where('class', '=', Input::get('class'))->get();
+				$sectionsHas        = Student::select('section')->where('class', '=', Input::get('class'))->where('session', trim(Input::get('session')))->where('isActive', '=', 'Yes')->distinct()->orderBy('section', 'asc')->get();
+				$sectionMarksSubmit = Marks::select('section')->where('class', '=', Input::get('class'))->where('session', trim(Input::get('session')))->where('exam',Input::get('exam'))->distinct()->get();
+				//dd($sectionsHas);
+				if (count($sectionsHas)==count($sectionMarksSubmit))
+				{
+					$isAllSubSectionMarkSubmit =false;
+					$notSubSection='';
+					foreach ($sectionsHas as $section) {
+						$marksubmit = Marks::select('subject')->where('class', '=', Input::get('class'))->where('section',$section->section)->where('session', trim(Input::get('session')))->where('exam',Input::get('exam'))->distinct()->get();
+
+						if(count($subjects) == count($marksubmit))
+						{
+							$isAllSubSectionMarkSubmit = true;
+							continue;
+						}
+						else{
+							$notSubSection=$section->section;
+							$isAllSubSectionMarkSubmit =false;
+							break;
+						}
+					}
+					if ($isAllSubSectionMarkSubmit) {
+						$fourthsubjectCode = "";
+						foreach ($subjects as $subject) {
+							if ($subject->type === "Electives") {
+								$fourthsubjectCode = $subject->code;
+							}
+						}
+
+
+						$students = Student::select('regiNo')
+						->join('section','Student.section','=','section.id')
+						->select('Student.*','section.name')
+						->where('Student.class', '=', Input::get('class'))
+						->where('Student.session', '=', trim(Input::get('session')))
+						->where('Student.isActive', '=', 'Yes')->get();
+                      //  echo "<pre>";print_r($students->toArray());exit;
+						if (count($students) != 0) {
+							$marksSubmitStudents=Marks::select('Marks.regiNo')
+							->join('Student', 'Marks.regiNo', '=', 'Student.regiNo')
+							->where('Student.isActive', '=', 'Yes')
+							->where('Student.class', '=', Input::get('class'))
+							->where('Marks.class', '=', Input::get('class'))
+							->where('Marks.session', '=', trim(Input::get('session')))
+							->where('Marks.exam', '=', Input::get('exam'))
+							->distinct()
+							->get();
+
+							if(count($students)==count($marksSubmitStudents))
+							{
+								$gparules = GPA::select('gpa', 'grade', 'markfrom')->get();
+								$foobar = array();
+								foreach ($students as $student) {
+									$marks = Marks::select('subject', 'grade', 'point', 'total','total_marks')->where('regiNo', '=', $student->regiNo)->where('exam', '=', Input::get('exam'))->get();
+
+									$totalpoint = 0;
+									$totalmarks = 0;
+									$subcounter = 0;
+									$banglamark = 0;
+									$englishmark = 0;
+									$totalexammarks = 0;
+									$isfail = false;
+									foreach ($marks as $mark) {
+
+
+										if ($this->getSubGroup($subjects, $mark->subject) === "Bangla") {
+											$banglamark += $mark->total;
+
+										} else if ($this->getSubGroup($subjects, $mark->subject) === "English") {
+											$englishmark += $mark->total;
+										} else {
+											if ($mark->subject === $fourthsubjectCode) {
+												if ($mark->point >= 2.00) {
+													$totalmarks += $mark->total;
+                                                    $totalexammarks +=$mark->total_marks;
+													//$totalpoint += $mark->point - 2;
+
+
+												} else {
+													$totalmarks += $mark->total;
+													$totalexammarks +=$mark->total_marks;
+												}
+												$subcounter--;
+
+											} else {
+												$totalmarks += $mark->total;
+												$totalpoint += $mark->point;
+												$totalexammarks +=$mark->total_marks;
+
+											}
+
+										}
+
+ 
+										$subcounter++;
+
+										if ($mark->subject !== $fourthsubjectCode && $mark->grade === "F") {
+											$isfail = true;
+										}
+									}
+
+
+									if ($banglamark > 0) {
+										$blmarks = floor($banglamark / 2);
+
+
+										$totalmarks += $banglamark;
+
+										$totalpoint += $this->pointCalculator($blmarks, $gparules);
+
+										$subcounter--;
+
+									}
+
+
+									if ($englishmark > 0) {
+										$enmarks = floor($englishmark / 2);
+										$totalmarks += $englishmark;
+										$totalpoint += $this->pointCalculator($enmarks, $gparules);
+										$subcounter--;
+									}
+									//echo "emarks".$subcounter ."gpa".print_r( $gparules,true) ;
+                                    $point = array('4','3.5','3','2.5','2');
+                                    //$percent  = array('100'=>'A+',)
+									$grandPoint = ($totalpoint / $subcounter);
+									if ($isfail) {
+										$grandGrade = $this->gradnGradeCal(0.00, $gparules);
+									} else {
+										$grandGrade = $this->gradnGradeCal($grandPoint, $gparules);
+									}
+									$grandtotal = $totalmarks/$totalexammarks * 100;
+                                   
+								     if ($grandtotal <= 100 && $grandtotal >= 95){
+								     	$grade = 'A+';
+								     	//$gpoint = '4.00' 
+								     }
+								     elseif ($grandtotal >= 90 &&$grandtotal < 95){
+								     	$grade = 'A';
+								     }
+								     elseif ($grandtotal < 90 && $grandtotal >= 80){
+								     	$grade = 'B+';
+								     }
+								     elseif ($grandtotal <= 79  && $grandtotal >= 70){
+								     	$grade = 'B';
+								     }
+								     elseif ($grandtotal <= 69 && $grandtotal >= 60 ){
+								     	$grade = 'C';
+								     }else{
+								     	$grade = 'F';
+								     }
+
+
+
+									//if($grandtotal)
+									//echo "<pre>dd".$grandPoint ;print_r($grandGrade);
+									//echo "grade = ".$grade;
+									$merit          = new MeritList;
+									$merit->class   = Input::get('class');
+									$merit->session = trim(Input::get('session'));
+									$merit->exam    = Input::get('exam');
+									$merit->regiNo  = $student->regiNo;
+									$merit->totalNo = $totalmarks;
+									$merit->point   = $grandPoint;
+									//$merit->grade   = $grandGrade;
+									$merit->grade   = $grade;
+									$merit->section_id   = $student->section;
+                                // echo "<pre>";print_r($merit );
+									$merit->save();
+                                    //$test[] = $merit;
+								 
+
+								}
+													//echo "<pre>";print_r($test );
+									//exit;
+								
+
+							}
+							else {
+
+								return Redirect::to('/result/generate')->withInput()->with("noresult", "All students examintaion marks not submited yet!!");
+							}
+						}
+						else
+						{
+							return Redirect::to('/result/generate')->withInput()->with("noresult", "There is no students in this class!!");
+						}
+						return Redirect::to('/result/generate')->with("success", "Result Generate and Publish Successfull.");
+					}
+					else
+					{
+						return Redirect::to('/result/generate')->withInput()->with("noresult", "Section ".$notSubSection." all subjects marks not submited yet!!");
+
+					}
+				}
+				else{
+					return Redirect::to('/result/generate')->withInput()->with("noresult", "All sections marks not submited yet!!");
+				}
+			}
+			else{
+				return Redirect::to('/result/generate')->withInput()->with("noresult", "Result already generated for this class,session and exam!");
+			}
+		}
+	}
+
 }

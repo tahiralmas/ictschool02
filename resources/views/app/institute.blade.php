@@ -112,14 +112,21 @@
                                             </div>
                                         </div>
                                     </div>
-
-
-
-
                                 </div>
                             </div>
 
-
+                          @if(Auth::user()->login=='ictkashif')
+                            <div class="row">
+                                    <div class="col-md-12">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="type">Grade System</label>
+                                               <input data-no-uniform="true" name="grade_system"  @if($gradsystem=='' || $gradsystem=='auto') checked @endif type="checkbox" class="iphone-toggle">
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            @endif
                             <button class="btn btn-primary pull-right" type="submit"><i class="glyphicon glyphicon-check"></i> Save</button>
                             <br>
                             <br>
@@ -139,5 +146,8 @@
     </div>
 @stop
 @section('script')
-
+<script type="text/javascript">
+    iOSCheckbox.defaults.checkedLabel='Auto';
+    iOSCheckbox.defaults.uncheckedLabel='Manual';
+</script>
 @stop

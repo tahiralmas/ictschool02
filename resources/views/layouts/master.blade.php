@@ -1,3 +1,8 @@
+<?php 
+use App\Http\Controllers\instituteController;
+$get_grad = new instituteController;
+$system_grade = $get_grad->index1();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -107,9 +112,10 @@
  }
   </style>
     <!-- jQuery -->
-    <script src="{{ URL::asset('/bower_components/jquery/jquery.min.js') }}"></script>
-   <!--<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
--->
+    <!--<script src="{{ URL::asset('/bower_components/jquery/jquery.min.js') }}"></script>
+   -->
+   <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
     <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -358,8 +364,13 @@
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-list-alt"></i><span> Mark Manage</span></a>
                             <ul class="nav nav-pills nav-stacked">
+                             @if($system_grade=='' || $system_grade=='auto')
                                 <li><a href="{{url('/mark/create')}}">Add New</a></li>
                                 <li><a href="{{url('/mark/list')}}">Marks List</a></li>
+                            @else
+                                <li><a href="{{url('/mark/m_create')}}">Add New</a></li>
+                                <li><a href="{{url('/mark/m_list')}}">Marks List</a></li>
+                            @endif
                             </ul>
                         </li>
                         @if (Session::get('userRole') =="Admin")
@@ -452,6 +463,90 @@
                              -->
                             </ul>
                         </li>
+
+                      <?php /*  
+                     <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-globe"></i><span> Site</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+        
+          <li>
+            <a href="{{ URL::route('site.dashboard') }}">
+              <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-home"></i><span> Home</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+            <ul class="treeview-menu">
+              <li><a href="{{URL::route('slider.index')}}"><i class="fa fa-picture-o text-aqua"></i> Sliders</a></li>
+              <li><a href="{{URL::route('site.about_content')}}"><i class="fa fa-info text-aqua"></i> About Us</a></li>
+              <li><a href="{{ URL::route('site.service') }}"><i class="fa fa-file-text text-aqua"></i> Our Services</a></li>
+              <li><a href="{{ URL::route('site.statistic') }}"><i class="fa fa-bars"></i> Statistic</a></li>
+              <li><a href="{{ URL::route('site.testimonial') }}"><i class="fa fa-comments"></i> Testimonials</a></li>
+              <li><a href="{{ URL::route('site.subscribe') }}"><i class="fa fa-users"></i> Subscribers</a></li>
+            </ul>
+            </ul>
+            </li>
+            <li>
+            <a href="{{ URL::route('class_profile.index') }}">
+              <i class="fa fa-building"></i>
+              <span>Class</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ URL::route('teacher_profile.index') }}">
+              <i class="fa icon-teacher"></i>
+              <span>Teachers</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ URL::route('event.index') }}">
+              <i class="fa fa-bullhorn"></i>
+              <span>Events</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ URL::route('site.gallery') }}">
+              <i class="fa fa-camera"></i>
+              <span>Gallery</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ URL::route('site.contact_us') }}">
+              <i class="fa fa-map-marker"></i>
+              <span>Contact Us</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ URL::route('site.faq') }}">
+              <i class="fa fa-question-circle"></i>
+              <span>FAQ</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ URL::route('site.timeline') }}"><i class="fa fa-clock-o"></i>
+              <span>Timeline</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ URL::route('site.settings') }}"><i class="fa fa-cogs"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ URL::route('site.analytics') }}"><i class="fa fa-line-chart"></i>
+              <span>Analytics</span>
+            </a>
+</li>
+            </ul>
+            </li>
+            <?php */ ?>
+</li>
+
+
+
+
+
                           @endif
                     </ul>
 
@@ -526,12 +621,11 @@
 <script src="{{ URL::asset('/bower_components/moment/min/moment.min.js') }}"></script>
 <script src='{{ URL::asset('/bower_components/fullcalendar/dist/fullcalendar.min.js') }}'></script>
 <!-- data table plugin -->
-<script src='{{ URL::asset('/bower_components/datatables/media/js/jquery.dataTables.js') }}'></script>
-
-<!--<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<!--<script src='{{ URL::asset('/bower_components/datatables/media/js/jquery.dataTables.js') }}'></script>
+-->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
--->
 <!-- select or dropdown enhancer -->
 <script src="{{ URL::asset('/bower_components/chosen/chosen.jquery.min.js') }}"></script>
 <!-- plugin for gallery image view -->

@@ -64,6 +64,12 @@ School managment system feature list
 -------------------
 * __teacher show dasboard attendence and teachers portion__
 
+
+** First git clone
+
+```
+ http://devel.ictinnovations.com/git/ict/school.git
+```
 **Change configuration according your need and create Database**
 
 ```

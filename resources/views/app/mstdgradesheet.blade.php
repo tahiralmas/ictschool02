@@ -19,6 +19,7 @@
     <script type="text/javascript" src="{{url('/markssheetcontent/admin.js')}}"></script>
 
 <style type="text/css">
+.attendenceReport{width:700px !important}
 .btn-print {
     color: #ffffff;
     background-color: #49b3e2;
@@ -116,10 +117,8 @@
             <h2 class="markTitle">Subject-Wise Grade &amp; Mark Sheet</h2>
             <table class="pagetble_middle">
                 <tbody><tr>
-                    <th class="res1" rowspan="2">CODE</th>
                     <th class="res2 cTitle" rowspan="2">SUBJECT</th>
-
-                    <th class="res8 examtitle" colspan="12">{{$extra[0]}} EXAMINATION MARKS</th>
+                    <th class="res8 examtitle" colspan="13">{{$extra[0]}} EXAMINATION MARKS</th>
                     <!--<th class="res3 examtitle" colspan="6">Final EXAMINATION MARKS</th>-->
                 </tr>
 
@@ -128,15 +127,15 @@
                     <td class="res2">&nbsp;</td>
                     <td class="res1">Total</td>
                     <td class="res1">GP</td>
-                    <td class="res3">Highest</td>-->
+                    <td class="res3">Highest</td>
                     <td class="res7" colspan="2">Written</td>
                     <td class="res7" colspan="2">MCQ</td>
                     <td class="res7" colspan="2">SBA</td>
-                    <td class="res7" colspan="2">Practical</td>
-                    <td class="res5">Obtain Marks</td>
-                    <td class="res5">Total Marks</td>
-                    <td class="res4">GP</td>
-                    <td class="res3">Grade</td>
+                    <td class="res7" colspan="2">Practical</td>-->
+                    <td class="res5" colspan="4">Total Marks</td>
+                    <td class="res5" colspan="4">Obtain Marks</td>
+                    <td class="res4" colspan="4">%age</td>
+                    <td class="res3" colspan="4">Grade</td>
                     <!--<td class="res3">Written</td>
                     <td class="res4">MCQ</td>
                     <td class="res5">SBA</td>
@@ -145,7 +144,7 @@
                     <td class="res6">Grade</td>-->
                 </tr>
 
-                <tr>
+                <?php /* <tr>
                     @if($extra[1])
 
                     <td>{{$banglaArray[0][0]}}</td>
@@ -246,21 +245,16 @@
                         <td><b>&nbsp;</b></td>-->
                     </tr>
                 @endif
-
+*/ ?>
                 @foreach($subcollection as $subject)
                 <tr>
-                    <td>{{$subject->subcode}}</td>
+                  <!--  <td>{{$subject->subcode}}</td>-->
                     <td class="cTitle">{{$subject->subname}}</td>
-                    <td colspan="2"><b>{{$subject->written}}</b></td>
-                    <td colspan="2"><b>{{$subject->mcq}}</b></td>
-                    <td colspan="2"><b>{{$subject->ca}}</b></td>
-                    <td colspan="2"><b>{{$subject->practical}}</b></td>
-
-
-                    <td><b>{{$subject->total}}</b></td>
-                    <td><b>{{$subject->outof}}</b></td>
-                    <td><b>{{$subject->point}}</b></td>
-                    <td><b>{{$subject->grade}} </b></td>
+                   <td colspan="4"><b>{{$subject->outof}}</b></td>
+                    <td colspan="4"><b>{{$subject->total}}</b></td>
+                    
+                    <td colspan="4"><b><?php $percentage = $subject->total/$subject->outof*100;  ?>{{ $percentage }}</b></td>
+                    <td colspan="4"><b>{{$subject->grade}} </b></td>
                     <!--<td><b>&nbsp;</b></td>
                     <td><b>&nbsp;</b></td>
                     <td><b>&nbsp;</b></td>
@@ -271,16 +265,7 @@
               @endforeach
                 <tr>
 
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td colspan="2"><b>&nbsp;</b></td>
-                    <td colspan="2"><b>&nbsp;</b></td>
-                    <td colspan="2"><b>&nbsp;</b></td>
-                    <td colspan="2"><b>&nbsp;</b></td>
-                    <td><b>&nbsp;</b></td>
-                    <td><b>&nbsp;</b></td>
-                    <td><b>&nbsp;</b></td>
-                    <td><b>&nbsp;</b></td>
+                   
                     <!--<td><b>&nbsp;</b></td>
                     <td><b>&nbsp;</b></td>
                     <td><b>&nbsp;</b></td>
@@ -290,12 +275,12 @@
                 </tr>
                 <tr class="lastitem">
                     <td>&nbsp;</td>
-                    <td class="markTotal" colspan="9">Total Marks &amp; GPA = </td>
+                    <td colspan="4"><b>{{$extra[5]}}</b></td>
+                    <td colspan="4"><b>{{intval($meritdata->totalNo)}}</b></td>
+                    <td colspan="4"><?php $pecnt = $meritdata->totalNo/$extra[5] * 100;  ?><b>{{$pecnt}}</b></td>
+                    <td colspan="4"><b>{{$meritdata->grade}}</b></td>
                     
-                    <td><b>{{intval($meritdata->totalNo)}}</b></td>
-                    <td><b>{{$extra[5]}}</b></td>
-                    <td><b>{{$meritdata->point}}</b></td>
-                    <td><b>{{$meritdata->grade}}</b></td>
+                    
                     <!--<td class="res3 markTotal2" colspan="3">Total marks &amp; GPA</td>
                     <td class="res3"><b>&nbsp;</b></td>
                     <td class="res3"><b>&nbsp;</b></td>
@@ -304,8 +289,8 @@
 
                 </tbody></table>
         </div><!-- end of resmidcontainer -->
-
-        <div class="btmcontainer">
+<div class="btmcontainer">
+        <?php /*<div class="btmcontainer">
             <div class="overalreport overalreportAll">
                 <h2 class="markTitle">Overall Report</h2>
                 <table class="pagetble" style="height:113px">
@@ -316,14 +301,14 @@
                     </tr>
                     @if($extra[1])
                     <tr>
-                        <td class="column1" style="width:110px; text-align:center">Urdu<?php /*{{$banglaArray[1][1]}}*/ ?></td>
+                        <!--<td class="column1" style="width:110px; text-align:center">Urdu {{$banglaArray[1][1]}}</td>-->
                         <td class="column2" style="width:130px">{{$blextra[0]}}</td>
                         <td class="column3"><b>{{$blextra[2]}}</b></td>
                     </tr>
                     @endif
                     @if($extra[3])
                         <tr>
-                            <td class="column1" style="width:110px; text-align:center">English<?php /*{{$englishArray[1][1]}} */?></td>
+                            <!--<td class="column1" style="width:110px; text-align:center">English{{$englishArray[1][1]}} </td>-->
                             <td class="column2" style="width:130px">{{$enextra[0]}}</td>
                             <td class="column3"><b>{{$enextra[2]}}</b></td>
                         </tr>
@@ -347,6 +332,7 @@
                     </tr>
                     </tbody></table>
             </div><!-- end of overalreport -->
+         */ ?>
 
             <div class="overalreport attendenceReport">
                 <h2 class="markTitle">Attendance Report</h2>
@@ -364,13 +350,11 @@
                   @endfor
                   </tbody></table>
 
-                <h2 class="markTitle">Extra Activities </h2>
-                <table class="pagetble" style="height:106px"><tbody>
-                    <tr><td>{{$extra[4]}}</td></tr>	</tbody></table>
+               
             </div><!-- end of overalreport -->
 
             <div class="overalreport gpagrading">
-                <h2 class="markTitle">GPA Grading</h2>
+                <?php /*<h2 class="markTitle">GPA Grading</h2>
                 <table class="pagetble" style="height:181px">
                     <tbody><tr>
                         <th class="column1">Range of Marks(%)</th>
@@ -414,19 +398,25 @@
                         <td class="column2">F</td>
                         <td class="column3">0.00</td>
                     </tr>
-                    </tbody></table>
+                    </tbody></table> */ ?>
+
+                     <h2 class="markTitle">Extra Activities </h2>
+                <table class="pagetble" style="height:106px"><tbody>
+                    <tr><td>{{$extra[4]}}</td></tr> </tbody></table>
 
                 <h2 class="markTitle">Achievement</h2>
                 <table class="pagetble" style="height:106px"><tbody>
                     <tr><th align="center" valign="middle">{{$extra[0]}}</th><th align="center" valign="middle">
                       @if($meritdata->grade!="F")
-                        @if($meritdata->point>=5.00)
+                        @if($meritdata->point>=4.00)
                         Excellent
-                        @elseif($meritdata->point>=4.00)
+                        @elseif($meritdata->point>=3.5)
                         Good
                         @elseif($meritdata->point>="3.00")
                         Average
-                        @elseif($meritdata->point>="2.00")
+                        @elseif($meritdata->point>="2.5")
+                        Average
+                         @elseif($meritdata->point>="2")
                         Poor
                         @else
                         Fail

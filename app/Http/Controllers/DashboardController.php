@@ -34,6 +34,7 @@ class DashboardController extends BaseController {
  		$totalAttendance = Attendance::groupBy('date')->get();
  		//echo Carbon::now()->format('Y-m-d');
  		$totalabsent = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Absent')->count();
+ 		$totallate = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Late')->count();
 
  		//echo "<pre>";print_r($totalabsent );exit;
  		$totalExam = Marks::groupBy('exam')->groupBy('subject')->get();
@@ -47,6 +48,7 @@ class DashboardController extends BaseController {
 			'book' => $book,
 			'totalabsent' => $totalabsent,
 			'teacher' => $teacher,
+			'totallate'=>$totallate
  		];
  	     // 	//graph data
  	  //dd($total);
@@ -81,7 +83,7 @@ class DashboardController extends BaseController {
              ->leftjoin('stdBill','Student.regiNo','=','stdBill.regiNo')
              ->leftJoin('billHistory', 'stdBill.billNo', '=', 'billHistory.billNo')
              ->select( 'stdBill.billNo','stdBill.payDate','stdBill.regiNo')
-             //->where('Student.class','=',$section->class_code)
+            
              //->where('Student.section','=',$section->id)
              ->get();
 
@@ -92,7 +94,8 @@ class DashboardController extends BaseController {
 		//$all_section =	DB::table('section')->select( '*')->get();
 		$all_section =	DB::table('Class')->select( '*')->get();
 		//$student_all =	DB::table('Student')->select( '*')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
-
+        $ourallpaid =0;
+        $ourallunpaid=0;
 		if(count($all_section)>0){
 			$i=0;
 			
@@ -102,7 +105,10 @@ class DashboardController extends BaseController {
 				 $paid =0;
                  $unpaid=0;
                  $total_s=0;
-             $student_all =	DB::table('Student')->select( '*')->where('class','=',$section->code)/*->where('section','=',$section->id)/**/->where('session','=',$year)->get();
+             $student_all =	DB::table('Student')->select( '*')->where('class','=',$section->code)/*->where('section','=',$section->id)/**/->where('session','=',$year)
+              //->where('Student.session','=',$year)
+             ->where('Student.isActive','=','Yes')
+             ->get();
 			   $resultArray[$section->code.'_'.$section->name."_".'total']=0;
           $resultArray[$section->code.'_'.$section->name."_".'unpaid']=0;
 		  $resultArray[$section->code.'_'.$section->name."_".'paid'] =  0;
@@ -120,7 +126,8 @@ class DashboardController extends BaseController {
 						//$resultArray[$i] = get_object_vars($stdfees);
 						//array_push($resultArray[$i],'Paid',$rey->payDate,$rey->billNo,$rey->fee);
 						$resultArray[$section->code.'_'.$section->name."_".'paid'] =  ++$paid;
-					  //$yes ='yes';
+					    //$yes ='yes';
+					   $ourallpaid = ++$ourallpaid;
 					}
 				}else{
 					//$status[$i] = "unpaid".'_'.$stdfees->regiNo."_";
@@ -129,6 +136,7 @@ class DashboardController extends BaseController {
 					
 					//$resultArray[$section->class_code.'_'.$section->name."_".'paid'] =  0;
 					$resultArray[$section->code.'_'.$section->name."_".'unpaid']=++$unpaid;
+				$ourallunpaid =++$ourallunpaid;
 				}
 				$resultArray[$section->code.'_'.$section->name."_".'total']=++$total_s;
 			}
@@ -195,16 +203,27 @@ class DashboardController extends BaseController {
 
 		// $test = $resultArray1 + $scetionarray;
         // $result = array_merge_recursive($scetionarray , $resultArray1);
-		//echo "<pre>";print_r($attendances_b);
+		//echo "<pre>".$ourallpaid;print_r($resultArray1);
 		//exit;
 		//echo "<pre>";print_r($scetionarray);
 		//echo "<pre>";print_r($resultArray1);
 		//echo "<pre>";print_r($total);
 		
      $month_n = $now->format('F');
-   
-		
-		return View('dashboard',compact('error','success','total','incomes','expences','balance','scetionarray','resultArray1','year','month_n','attendances_b','month'));
+         $class = array();
+         $present = array();
+         $absent = array();
+		 foreach($attendances_b as $attendance) :
+          $class[] = $attendance['class'];
+          $present[] = $attendance['present'];
+          $absent[] = $attendance['absent'];
+          
+		 endforeach;
+		/// echo "<pre>class";print_r($class);
+		//// echo "<pre>p";print_r($present);
+		// echo "<pre>a";print_r($absent);
+		// exit;
+		return View('dashboard',compact('error','success','total','incomes','expences','balance','scetionarray','resultArray1','year','month_n','attendances_b','month','class','present','absent','ourallunpaid','ourallpaid'));
 	}
 	private function datahelper($data)
  	{

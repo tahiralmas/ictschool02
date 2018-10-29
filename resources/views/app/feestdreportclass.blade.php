@@ -307,6 +307,7 @@ if(!empty($_GET) && $_GET['direct']=='yes'){
             });
             //$('#feeList').dataTable();
              $('#feeList').DataTable( {
+                    pagingType: "simple",
                 //pagingType: "simple",
                 //"pageLength": 5,
                 //  "pagingType": "full_numbers",

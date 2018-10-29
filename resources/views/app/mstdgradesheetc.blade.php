@@ -19,6 +19,7 @@
     <script type="text/javascript" src="{{url('/markssheetcontent/admin.js')}}"></script>
 
 <style type="text/css">
+.attendenceReport{width:700px !important}
 .btn-print {
     color: #ffffff;
     background-color: #49b3e2;
@@ -51,22 +52,39 @@
   color: #34BA1F;
   background-color: #ffffff;
 }
-@media print {
-  .page {
-    margin: 0;
-    border: initial;
-    border-radius: initial;
-    width: initial;
-    min-height: initial;
-    box-shadow: initial;
-    background: initial;
-    page-break-after: always;
-  }
-}
+
 </style>
 
 </head>
+<?php //echo 'fdf<pre>';print_r($result ); 
+   $result_array = array();
+   $i=0;
+   //echo '09<pre>';print_r( $result);
+  // exit;
+  foreach( $result as $key=>$rest){
+    //$first_names[] = array_column($rest[$i], $key);
+     //$typew[] = $rest[$i]['type'];
+ //echo $student = $rest['firstName'].' '.$rest['firstName'];
 
+   //echo 'fdf<pre>'.$key;print_r($rest['subject_name'] );
+  // exit;
+   /*$old_sub = $rest['subject_name'];
+   if($old_sub ==$rest['subject_name']){
+    $column[] =array_merge($rest);
+   }*/
+    $result_array[]     = $rest;
+    $student      = $rest[0]['firstName'];
+    $fatherName   = $rest[0]['fatherName'];
+    $class        = $rest[0]['class'];
+    $section_name = $rest[0]['section_name'];
+    $session      = $rest[0]['session'];
+    $rollNo      =   $rest [0]['rollNo'];
+    $subject  = $key;
+    $i++;
+    break;
+  }
+   //echo '656<pre>';print_r($first_names );
+    ?>
 <body class="scms-result-print page">
   <button class="btn-print" onclick="printDiv('printableArea')">Print</button>
 <div id="printableArea">
@@ -74,8 +92,8 @@
     <div class="resHdr">
         <img src="{{url('/markssheetcontent/res-logo.png')}}" alt="" class="resLogo">            <div class="schoolIdentity">
             <img src="{{url('/markssheetcontent/school-title.png')}}" alt="">                <div class="hdrText">
-                <span>{{$extra[0]}} EXAMINATION-{{$student->session}}</span>
-                <strong>{{$student->class}} / Equivalent Result Publication {{$student->session}} </strong>
+                <span> EXAMINATION-{{$student}}</span>
+                <strong>{{$class}} / Equivalent Result Publication {{$session }} </strong>
             </div><!-- end of hdrText -->
         </div><!-- end of schoolIdentity -->
     </div><!-- end of resHdr -->
@@ -83,30 +101,22 @@
     <div class="resContainer">
         <div class="resTophdr">
             <div class="restopleft">
-                <div><b>{{$student->firstName}} {{$student->middleName}} {{$student->lastName}}</b></div>
-                <div><span>FATHER'S NAME</span><i>: </i><em>{{$student->fatherName}}</em></div>
-                <div><span>CLASS</span><i>: </i><em>{{$student->class}}</em></div>
-                <div><span>GROUP</span><i>: </i><em>{{$student->group}}</em></div>
-                <div><span>SECTION</span><i>: </i><em>{{$student->section_name}}</em></div>
-                <div><span>ROLL NO</span><i>: </i><em>{{$student->rollNo}}</em></div>
-               <!-- <div><span>MOTHER'S NAME</span><i>: </i><em>{{$student->motherName}}</em></div>
-                <div><span>STUDENT ID</span><i>: </i><em>{{$student->regiNo}}</em></div>
-                <div><span>DATE OF BIRTH</span><i>: </i><em>{{$student->dob}}</em></div>
-                -->
-                <!--<div><span>NEW CLASS ROLL :  </span><em>02</em></div>-->
-                <!--<div><span>SHIFT</span><i>: </i><em>{{$student->shift}}</em></div>
-               -->
-                <!--<div><span>BOARD</span><i>: </i><em>KHULNA</em></div>
-            -->
+                <div><b>{{$student}} </b></div>
+                <div><span>FATHER'S NAME</span><i>: </i><em>{{$fatherName}}</em></div>
+                <div><span>CLASS</span><i>: </i><em>{{$class}}</em></div>
+                <div><span>SECTION</span><i>: </i><em>{{$section_name}}</em></div>
+                <div><span>ROLL NO</span><i>: </i><em>{{$rollNo}}</em></div>
+              
             </div><!-- end of restopleft -->
 
             <div class="restopleft rgttopleft">
                
 
-                <div><span>GPA</span><i>: </i><em>{{$meritdata->point}}</em></div>
+               <?php /* <div><span>GPA</span><i>: </i><em>{{$meritdata->point}}</em></div> 
 
                 <div><span>GRADE</span><i>: </i><em>{{$meritdata->grade}}</em></div>
                 <div><span>MERIT POSITION</span><i>: </i><em>{{$meritdata->position}}TH</em></div>
+                */ ?>
                 <!--<div><span>PROMOTED CLASS : </span><em>9 (B)</em></div>-->
             </div><!-- end of restopleft -->
         </div><!-- end of resTophdr -->
@@ -116,10 +126,8 @@
             <h2 class="markTitle">Subject-Wise Grade &amp; Mark Sheet</h2>
             <table class="pagetble_middle">
                 <tbody><tr>
-                    <th class="res1" rowspan="2">CODE</th>
                     <th class="res2 cTitle" rowspan="2">SUBJECT</th>
-
-                    <th class="res8 examtitle" colspan="12">{{$extra[0]}} EXAMINATION MARKS</th>
+                   
                     <!--<th class="res3 examtitle" colspan="6">Final EXAMINATION MARKS</th>-->
                 </tr>
 
@@ -128,24 +136,33 @@
                     <td class="res2">&nbsp;</td>
                     <td class="res1">Total</td>
                     <td class="res1">GP</td>
-                    <td class="res3">Highest</td>-->
+                    <td class="res3">Highest</td>
                     <td class="res7" colspan="2">Written</td>
                     <td class="res7" colspan="2">MCQ</td>
                     <td class="res7" colspan="2">SBA</td>
-                    <td class="res7" colspan="2">Practical</td>
-                    <td class="res5">Obtain Marks</td>
-                    <td class="res5">Total Marks</td>
-                    <td class="res4">GP</td>
-                    <td class="res3">Grade</td>
-                    <!--<td class="res3">Written</td>
-                    <td class="res4">MCQ</td>
-                    <td class="res5">SBA</td>
-                    <td class="res3">Total</td>
-                    <td class="res3">GP</td>
-                    <td class="res6">Grade</td>-->
+                    <td class="res7" colspan="2">Practical</td>-->
+                     
+            @foreach($result as $k=>$reslt)
+               @if($subject==$k)
+                   @foreach($reslt as $exam)
+                        <td class="res5" colspan="4">{{$exam['type']}}</td>
+                        
+                        <!--<td class="res3">Written</td>
+                        <td class="res4">MCQ</td>
+                        <td class="res5">SBA</td>
+                        <td class="res3">Total</td>
+                        <td class="res3">GP</td>
+                        <td class="res6">Grade</td>-->
+            @endforeach
+                @endif
+                    @endforeach
+                     <td class="res3">%</td>
+                     <td class="res3">Grage</td>
+                     <td class="res3">Comments</td>   
+
                 </tr>
 
-                <tr>
+                <?php /* <tr>
                     @if($extra[1])
 
                     <td>{{$banglaArray[0][0]}}</td>
@@ -246,21 +263,16 @@
                         <td><b>&nbsp;</b></td>-->
                     </tr>
                 @endif
-
-                @foreach($subcollection as $subject)
+*/ ?>
+                <?php /*@foreach($subcollection as $subject)
                 <tr>
-                    <td>{{$subject->subcode}}</td>
+                  <!--  <td>{{$subject->subcode}}</td>-->
                     <td class="cTitle">{{$subject->subname}}</td>
-                    <td colspan="2"><b>{{$subject->written}}</b></td>
-                    <td colspan="2"><b>{{$subject->mcq}}</b></td>
-                    <td colspan="2"><b>{{$subject->ca}}</b></td>
-                    <td colspan="2"><b>{{$subject->practical}}</b></td>
-
-
-                    <td><b>{{$subject->total}}</b></td>
-                    <td><b>{{$subject->outof}}</b></td>
-                    <td><b>{{$subject->point}}</b></td>
-                    <td><b>{{$subject->grade}} </b></td>
+                   <td colspan="4"><b>{{$subject->outof}}</b></td>
+                    <td colspan="4"><b>{{$subject->total}}</b></td>
+                    
+                    <td colspan="4"><b><?php $percentage = $subject->total/$subject->outof*100;  ?>{{ $percentage }}</b></td>
+                    <td colspan="4"><b>{{$subject->grade}} </b></td>
                     <!--<td><b>&nbsp;</b></td>
                     <td><b>&nbsp;</b></td>
                     <td><b>&nbsp;</b></td>
@@ -269,43 +281,55 @@
                     <td><b>&nbsp;</b></td>-->
                 </tr>
               @endforeach
-                <tr>
+               */ 
+           $obtmarks=0;
+           $total_marks=0;
+           $percentage=0;
+           $id=0;
+              ?>
+               @foreach($result as $subject=>$reslt)
+               <td class="cTitle">{{$subject}}</td>
+               @foreach($reslt as $total)
+               
+                   <td colspan="4"><b>{{$total['obtain_marks']}}/{{$total['total_marks']}}</b></td>
+                   
+                <?php $obtmarks    += $total['obtain_marks'];  ?>
+                <?php $total_marks += $total['total_marks'] ;  ?>
+            @endforeach
+            <?php $percentage = $obtmarks/$total_marks * 100;  
 
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                    <td colspan="2"><b>&nbsp;</b></td>
-                    <td colspan="2"><b>&nbsp;</b></td>
-                    <td colspan="2"><b>&nbsp;</b></td>
-                    <td colspan="2"><b>&nbsp;</b></td>
-                    <td><b>&nbsp;</b></td>
-                    <td><b>&nbsp;</b></td>
-                    <td><b>&nbsp;</b></td>
-                    <td><b>&nbsp;</b></td>
-                    <!--<td><b>&nbsp;</b></td>
-                    <td><b>&nbsp;</b></td>
-                    <td><b>&nbsp;</b></td>
-                    <td><b>&nbsp;</b></td>
-                    <td><b>&nbsp;</b></td>
-                    <td><b>&nbsp;</b></td>-->
-                </tr>
-                <tr class="lastitem">
-                    <td>&nbsp;</td>
-                    <td class="markTotal" colspan="9">Total Marks &amp; GPA = </td>
-                    
-                    <td><b>{{intval($meritdata->totalNo)}}</b></td>
-                    <td><b>{{$extra[5]}}</b></td>
-                    <td><b>{{$meritdata->point}}</b></td>
-                    <td><b>{{$meritdata->grade}}</b></td>
-                    <!--<td class="res3 markTotal2" colspan="3">Total marks &amp; GPA</td>
-                    <td class="res3"><b>&nbsp;</b></td>
-                    <td class="res3"><b>&nbsp;</b></td>
-                    <td class="res6"><b>&nbsp;</b></td>-->
-                </tr>
+               if ($percentage <= 100 && $percentage >= 95){
+                    $grade = 'A+';
+                    //$gpoint = '4.00' 
+                }
+                 elseif ($percentage >= 90 &&$percentage < 95){
+                    $grade = 'A';
+                 }
+                 elseif ($percentage < 90 && $percentage >= 80){
+                    $grade = 'B+';
+                 }
+                 elseif ($percentage <= 79  && $percentage >= 70){
+                    $grade = 'B';
+                 }
+                 elseif ($percentage <= 69 && $percentage >= 60 ){
+                    $grade = 'C';
+                 }else{
+                    $grade = 'F';
+                 }
 
+          
+            ?>
+              <td >{{ $percentage }}</td>
+                <td>{{$grade}}</td>
+                  <td ><div id="{{$id}}" ></div><input type="text" value="" name='coment'></td>
+             <tr>
+               <?php $id++; ?>
+            @endforeach
+                </tr>
                 </tbody></table>
         </div><!-- end of resmidcontainer -->
-
-        <div class="btmcontainer">
+<div class="btmcontainer">
+        <?php /*<div class="btmcontainer">
             <div class="overalreport overalreportAll">
                 <h2 class="markTitle">Overall Report</h2>
                 <table class="pagetble" style="height:113px">
@@ -316,14 +340,14 @@
                     </tr>
                     @if($extra[1])
                     <tr>
-                        <td class="column1" style="width:110px; text-align:center">Urdu<?php /*{{$banglaArray[1][1]}}*/ ?></td>
+                        <!--<td class="column1" style="width:110px; text-align:center">Urdu {{$banglaArray[1][1]}}</td>-->
                         <td class="column2" style="width:130px">{{$blextra[0]}}</td>
                         <td class="column3"><b>{{$blextra[2]}}</b></td>
                     </tr>
                     @endif
                     @if($extra[3])
                         <tr>
-                            <td class="column1" style="width:110px; text-align:center">English<?php /*{{$englishArray[1][1]}} */?></td>
+                            <!--<td class="column1" style="width:110px; text-align:center">English{{$englishArray[1][1]}} </td>-->
                             <td class="column2" style="width:130px">{{$enextra[0]}}</td>
                             <td class="column3"><b>{{$enextra[2]}}</b></td>
                         </tr>
@@ -347,6 +371,7 @@
                     </tr>
                     </tbody></table>
             </div><!-- end of overalreport -->
+         */ ?>
 
             <div class="overalreport attendenceReport">
                 <h2 class="markTitle">Attendance Report</h2>
@@ -364,13 +389,11 @@
                   @endfor
                   </tbody></table>
 
-                <h2 class="markTitle">Extra Activities </h2>
-                <table class="pagetble" style="height:106px"><tbody>
-                    <tr><td>{{$extra[4]}}</td></tr>	</tbody></table>
+               
             </div><!-- end of overalreport -->
 
             <div class="overalreport gpagrading">
-                <h2 class="markTitle">GPA Grading</h2>
+                <?php /*<h2 class="markTitle">GPA Grading</h2>
                 <table class="pagetble" style="height:181px">
                     <tbody><tr>
                         <th class="column1">Range of Marks(%)</th>
@@ -414,26 +437,16 @@
                         <td class="column2">F</td>
                         <td class="column3">0.00</td>
                     </tr>
-                    </tbody></table>
+                    </tbody></table> */ ?>
+
+                     <h2 class="markTitle">Extra Activities </h2>
+                <table class="pagetble" style="height:106px"><tbody>
+                    <tr><td></td></tr> </tbody></table>
 
                 <h2 class="markTitle">Achievement</h2>
                 <table class="pagetble" style="height:106px"><tbody>
-                    <tr><th align="center" valign="middle">{{$extra[0]}}</th><th align="center" valign="middle">
-                      @if($meritdata->grade!="F")
-                        @if($meritdata->point>=5.00)
-                        Excellent
-                        @elseif($meritdata->point>=4.00)
-                        Good
-                        @elseif($meritdata->point>="3.00")
-                        Average
-                        @elseif($meritdata->point>="2.00")
-                        Poor
-                        @else
-                        Fail
-                        @endif
-                      @else
-                        Fail
-                      @endif
+                    <tr><th align="center" valign="middle"></th><th align="center" valign="middle">
+                     
 
                     </th></tr>                    </tbody></table>
             </div><!-- end of overalreport -->
@@ -453,11 +466,30 @@
 
    <script>
     function printDiv(divName) {
-        var printContents = document.getElementById(divName).innerHTML;
+      // alert(JSON.stringify(document.getElementsByTagName("input").length));
+         for($i=0;$i<document.getElementsByTagName("input").length;$i++){
+          inpText=JSON.stringify(document.getElementsByTagName("input")[$i].value);
+          //alert(inpText);
+          //var neww = document.getElementById($i).innerHTML =inpText ;
+          var neww =  $("#"+$i).append(JSON.parse(inpText));
+          // alert(neww)
+
+           printContents += inpText;
+       }
+       $('input').hide();
+         var printContents = document.getElementById(divName).innerHTML;
         var originalContents = document.body.innerHTML;
+       
+        //var inpText = document.getElementsByTagName("input").value;
+       
+        
+        //alert(JSON.stringify( printContents));
+      //console.log(JSON.stringify( printContents));
         document.body.innerHTML = printContents;
         window.print();
         document.body.innerHTML = originalContents;
+        //document.write(printContents + originalContents);
+       //$(this).attr('value',val);
     }
 
    </script>

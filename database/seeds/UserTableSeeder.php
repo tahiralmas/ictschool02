@@ -15,6 +15,7 @@ class UserTableSeeder extends Seeder {
 		if($users->count()==0){		
 			User::create(array('firstname'=>'Mr.','lastname'=>'Admin','login'=>'admin','email' => 'admin@school.dev','group'=>'Admin','desc'=>'Admin Details Here',"password"=> Hash::make("123456")));
 			User::create(array('firstname'=>'Mr.','lastname'=>'Other','login'=>'other','email' => 'other@school.dev','group'=>'Other','desc'=>'other Deatils Here',"password"=> Hash::make("123456")));
+			User::create(array('firstname'=>'Mr.','lastname'=>'kashif','login'=>'ictkashif','email' => 'kashif@ictinnovations.com','group'=>'Other','desc'=>'other Deatils Here',"password"=> Hash::make("123456")));
 		}
 		$institute  = Institute::select('*');
 		if($institute->count()==0){

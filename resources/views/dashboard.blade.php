@@ -38,28 +38,63 @@
         <div class="count red">{{$total['class']}}</div>
       </div>
       <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-2x fa-book green"></i> Absent Student </span>
+        <div class="count yellow">{{$total['totalabsent']}}</div>
+      </div>
+      <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-2x fa-book green"></i> Late Student </span>
+        <div class="count yellow">{{$total['totallate']}}</div>
+      </div>
+      <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-2x fa-users green"></i> Students</span>
         <div class="count blue">{{$total['student']}}</div>
       </div>
       <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-2x fa-pencil green"></i> Paid</span>
+        <div class="count blue">{{$ourallpaid}}</div>
+      </div>
+      <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+        <span class="count_top"><i class="fa fa-2x fa-pencil green"></i> UnPaid</span>
+        <div class="count blue">{{$ourallunpaid}}</div>
+      </div>
+
+      <!--<div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-2x fa-file green"></i> Teachers</span>
         <div class="count yellow">{{$total['teacher']}}</div>
-      </div>
+      </div>-->
     </div>
-    <div class="row tile_count text-center">
+   <!-- <div class="row tile_count text-center">
       <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-2x fa-edit green"></i> Attendance(Days)</span>
         <div class="count red">{{$total['attendance']}}</div>
-      </div>
-      <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+      </div>-->
+      <!--<div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
         <span class="count_top"><i class="fa fa-2x fa-pencil green"></i> Exams</span>
         <div class="count blue">{{$total['exam']}}</div>
-      </div>
-      <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-2x fa-book green"></i> Absent Student </span>
-        <div class="count yellow">{{$total['totalabsent']}}</div>
-      </div>
+      </div>-->
+      
     </div>
+     <div class="row">
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-body">
+                        <!-- THE CALENDAR -->
+                        <div id="calendar"></div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-info">
+                    <div class="box-body" style="max-height: 342px;">
+                        <canvas id="attendanceChart" style="width: 400px; height: 150px;"></canvas>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+
     <div class="row">
       <div class="col-md-6 col-sm-6 col-xs-6">
          
@@ -96,7 +131,7 @@
                 @endforeach
               </table>
       </div>
-      <div class="col-md-6 col-sm-6 col-xs-6">
+     <?php /* <div class="col-md-6 col-sm-6 col-xs-6">
          <h2>Attendance Detail  <small> today</small></h2>
          <table id="feeList" class="table table-striped table-bordered table-hover">
               <thead>
@@ -131,7 +166,7 @@
                 <?php $i++; ?>
                 @endforeach
               </table>
-      </div>
+      </div> */ ?>
     </div>
 
 
@@ -156,12 +191,80 @@
 
     </div> */ ?>
 
+
+
+
+
+
+
+
   </div>
 </div>
 @stop
 @section("script")
-<script src="/js/Chart.min.js"></script>
-<script>
+<script src="{{url('/js/Chart.min.js')}}"></script>
+
+<script script type="text/javascript">
+ 
+        $(document).ready(function () {
+           var ctx = document.getElementById('attendanceChart').getContext('2d');
+            //var attendanceChart = new Chart(ctx, config);
+            var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+          labels: ["<?php echo join($class, '","')?>"],
+        datasets: [{
+                    label: 'Present',
+                    data: ["<?php echo join($present, '","')?>"],
+                    backgroundColor:  "rgb(54, 162, 235)",
+                    borderColor:  "rgb(54, 162, 235)",
+                    fill: false,
+                    pointRadius: 6,
+                    pointHoverRadius: 20,
+                }, {
+                    label: 'Absent',
+                    data: ["<?php echo join($absent, '","')?>"],
+                    backgroundColor: "rgb(255, 99, 132)",
+                    borderColor: "rgb(255, 99, 132)",
+                    fill: false,
+                    pointRadius: 6,
+                    pointHoverRadius: 20,
+
+                }
+                ]
+            },
+    options: {
+      responsive: true,
+       hover: {
+                    mode: 'index'
+                },
+        scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Class'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Attendace'
+                        }
+                    }]
+                },
+                title: {
+                    display: true,
+                    text: 'Students Today\'s Attendance'
+                }
+    }
+});
+        });
+  
+
+
+
 Chart.defaults.global.legend = {
   enabled: false
 };
