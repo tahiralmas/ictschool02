@@ -402,8 +402,8 @@ class AttendanceController extends Controller
 				 $attendance = DB::table('Student')
 				->join('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
 				->select( 'Attendance.id','Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.date')
-                ->where('Student.section',  $section_id);
-                ->where('Student.isActive','Yes')
+                ->where('Student.section',  $section_id)
+                ->where('Student.isActive','Yes');
                 //->get();
 					 /*$attendance->when(request('regiNo', false), function ($q, $regiNo) { 
 						return $q->where('Student.regiNo', $regiNo);
