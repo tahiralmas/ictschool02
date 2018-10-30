@@ -691,4 +691,90 @@ $ictcore_fees = Ictcore_fees::select("*")->first();
 		//return View('app.feestdreportclass',compact('resultArray','class','month','section','classes','session','year'));
     }
 
+    public function fee_detail()
+    {
+    	$action = Input::get('action');
+    	if($action!=''):
+    		$now   = Carbon::now();
+		    $year  =  $now->year;
+		    $month =  $now->month;
+          // $all_section =	DB::table('section')->select( '*')->get();
+		$all_section =	DB::table('Class')->select( '*')->get();
+		//$student_all =	DB::table('Student')->select( '*')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
+        $ourallpaid =0;
+        $ourallunpaid=0;
+        $unpaidArray=array();
+        $resultArray=array();
+		if(count($all_section)>0){
+			$i=0;
+            $paid =0;
+            $unpaid=0;
+            $total_s=0;
+			foreach($all_section as $section){
+				 
+             $student_all =	DB::table('Student')
+             ->join('section','Student.section','=','section.id')
+             ->select( 'Student.*','section.name as section_name')->where('class','=',$section->code)/*->where('section','=',$section->id)/**/->where('session','=',$year)
+              //->where('Student.session','=',$year)
+             ->where('Student.isActive','=','Yes')
+             ->get();
+		  
+         // $unpaidArray[$section->code.'_'.$section->name."_".'unpaid']=0;
+		  //$resultArray[$section->code.'_'.$section->name."_".'paid'] =  0;
+			  if(count($student_all) >0){
+			foreach($student_all as $stdfees){
+				$student =	DB::table('billHistory')->leftJoin('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
+				->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo')
+				// ->whereYear('stdBill.payDate', '=', 2017)
+				->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', $year)->where('billHistory.month','=',$month)->where('billHistory.month','<>','-1')
+				//->orderby('stdBill.payDate')
+				->get();
+				if(count($student)>0 ){
+					foreach($student as $rey){
+						//$status[] = "paid".'_'.$stdfees->regiNo."_";
+						//$resultArray[$i] = get_object_vars($stdfees);
+						//array_push($resultArray[$i],'Paid',$rey->payDate,$rey->billNo,$rey->fee);
+						//$resultArray[$section->code.'_'.$section->name."_".'paid'] =  ++$paid;
+						$resultArray[$section->code.'_'.$section->name."_".'paid_'.$stdfees->regiNo] =  $stdfees;
+					}
+				}else{
+					
+				$unpaidArray[$section->code.'_'.$section->name."_".'unpaid_'.$stdfees->regiNo]=$stdfees;
+				//$ourallunpaid =++$ourallunpaid;
+				}
+				//$resultArray[$section->code.'_'.$section->name."_".'total']=++$total_s;
+			}
+		}else{
+          //$resultArray[$section->code.'_'.$section->name."_".'total']=0;
+          //$resultArray[$section->code.'_'.$section->name."_".'unpaid']=array();
+		 // $unpaidArray[$section->code.'_'.$section->name."_".'paid'] =  array();
+
+		}
+			//$resultArray[] = get_object_vars($section);
+			//array_push($resultArray[$i],$total,$paid,$unpaid);
+            //$scetionarray[] = array('section'=>$section->name,'class'=>$section->code);
+            //$resultArray1[] = array('total'=> $resultArray[$section->code.'_'.$section->name."_".'total'],'unpaid'=>$resultArray[$section->code.'_'.$section->name."_".'unpaid'],'paid'=>$resultArray[$section->code.'_'.$section->name."_".'paid']);
+
+			}
+			
+		}
+		else{
+		//$resultArray = array();
+		}
+		if($action=='unpaid'){
+           $fee_detail = $unpaidArray;
+           $status = 'Unpaid';
+        }else{
+             $fee_detail = $resultArray;
+              $status = 'Paid';
+        }
+             
+             
+
+             //echo "<pre>";print_r( $attendances_detail);
+        return View('app.fee_detail', compact('fee_detail','status'));
+
+    	endif;
+    }
+
 }

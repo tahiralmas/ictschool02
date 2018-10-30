@@ -33,29 +33,43 @@
   <div class="col-md-12 col-sm-12 col-xs-12">
     <!-- /top tiles -->
     <div class="row tile_count text-center">
-      <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+      <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+         <a href="{{url('/class/list')}}">
         <span class="count_top"><i class="fa fa-2x fa-home green"></i>Class</span>
         <div class="count red">{{$total['class']}}</div>
+      </a>
       </div>
-      <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-2x fa-book green"></i> Absent Student </span>
-        <div class="count yellow">{{$total['totalabsent']}}</div>
-      </div>
-      <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-2x fa-book green"></i> Late Student </span>
-        <div class="count yellow">{{$total['totallate']}}</div>
-      </div>
-      <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
+            <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+         <a href="{{url('/student/list')}}">
         <span class="count_top"><i class="fa fa-2x fa-users green"></i> Students</span>
         <div class="count blue">{{$total['student']}}</div>
+      </a>
       </div>
-      <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-2x fa-pencil green"></i> Paid</span>
-        <div class="count blue">{{$ourallpaid}}</div>
+
+      <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+        <a href="{{url('/attendance_detail?action=absent')}}">
+        <span class="count_top"><i class="fa fa-2x fa-book green"></i> Absent Student <small>(today)</small> </span>
+        <div class="count yellow">{{$total['totalabsent']}}</div>
+      </a>
       </div>
-      <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
-        <span class="count_top"><i class="fa fa-2x fa-pencil green"></i> UnPaid</span>
+      <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+       <a href="{{url('/fee_detail?action=paid')}}">
+        <span class="count_top"><i class="fa fa-2x fa-book green"></i> Paid <small>({{$month_n}})</small></span>
+        <div class="count yellow">{{$ourallpaid}}</div>
+      </a>
+      </div>
+
+      <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+         <a href="{{url('/attendance_detail?action=late')}}">
+        <span class="count_top"><i class="fa fa-2x fa-pencil green"></i>Late Student <small>(today)</small> </span>
+        <div class="count blue">{{$total['totallate']}}</div>
+      </a>
+      </div>
+      <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+        <a href="{{url('/fee_detail?action=unpaid')}}">
+        <span class="count_top"><i class="fa fa-2x fa-pencil green"></i> UnPaid <small>({{$month_n}})</small></span>
         <div class="count blue">{{$ourallunpaid}}</div>
+     </a>
       </div>
 
       <!--<div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">

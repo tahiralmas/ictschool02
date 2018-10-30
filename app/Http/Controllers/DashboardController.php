@@ -25,11 +25,15 @@ class DashboardController extends BaseController {
 	*/
 	public function index()
 	{
+		
+        $now   = Carbon::now();
+		$year  =  $now->year;
+        $month =  $now->month;
 		$error = \Session::get('error');
 		$success=\Session::get('success');
 		$tclass = ClassModel::count();
 		$tsubject = Subject::count();
-		$tstudent=Student::count();
+		$tstudent=Student::where('isActive','Yes')->where('session',$year)->count();
 		$teacher=Teacher::count();
  		$totalAttendance = Attendance::groupBy('date')->get();
  		//echo Carbon::now()->format('Y-m-d');
@@ -71,9 +75,7 @@ class DashboardController extends BaseController {
 		//return View::Make('dashboard',compact('error','success','total','incomes','expences','balance'));
 		
         //paid or unpaid fee list
-		$now   = Carbon::now();
-		$year  =  $now->year;
-        $month =  $now->month;
+		
         $attendances_b = array();
 		$scetionarray = array();
 	    $resultArray1 = array();
@@ -83,8 +85,7 @@ class DashboardController extends BaseController {
              ->leftjoin('stdBill','Student.regiNo','=','stdBill.regiNo')
              ->leftJoin('billHistory', 'stdBill.billNo', '=', 'billHistory.billNo')
              ->select( 'stdBill.billNo','stdBill.payDate','stdBill.regiNo')
-            
-             //->where('Student.section','=',$section->id)
+             ->where('Student.isActive','Yes')
              ->get();
 
             // echo "<pre>";print_r($student_all);exit;
@@ -110,8 +111,8 @@ class DashboardController extends BaseController {
              ->where('Student.isActive','=','Yes')
              ->get();
 			   $resultArray[$section->code.'_'.$section->name."_".'total']=0;
-          $resultArray[$section->code.'_'.$section->name."_".'unpaid']=0;
-		  $resultArray[$section->code.'_'.$section->name."_".'paid'] =  0;
+                $resultArray[$section->code.'_'.$section->name."_".'unpaid']=0;
+		        $resultArray[$section->code.'_'.$section->name."_".'paid'] =  0;
 			  if(count($student_all) >0){
 			foreach($student_all as $stdfees){
 				$student =	DB::table('billHistory')->leftJoin('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')

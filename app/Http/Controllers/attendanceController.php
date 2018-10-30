@@ -1172,4 +1172,27 @@ class attendanceController extends BaseController {
 
         return $selectCol;
     }
+
+    public function attendance_detail()
+    {
+    	$action = Input::get('action');
+    	if($action!=''):
+    		$now   = Carbon::now();
+		    $year  =  $now->year;
+          $attendances_detail = DB::table('Attendance')
+             ->join('Student','Attendance.regiNo','=','Student.regiNo')
+             ->join('Class', 'Attendance.class_id', '=', 'Class.id')
+		     ->join('section', 'Attendance.section_id', '=', 'section.id')
+             ->select('Student.firstName','Student.lastName','Student.fatherName','Student.fatherCellNo','Class.id as class_id','Class.name as class','section.name as section','Attendance.regiNo','Attendance.status')
+             ->where('Attendance.session',$year)
+             ->where('Attendance.status','like','%'.$action.'%')
+            // ->where('Attendance.class_id',$teacher->id)
+             ->where('date',Carbon::today()->toDateString())
+             ->get();
+
+             //echo "<pre>";print_r( $attendances_detail);
+             return View('app.attendace_detail', compact('attendances_detail'));
+
+    	endif;
+    }
 }

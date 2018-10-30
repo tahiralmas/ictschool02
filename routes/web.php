@@ -147,6 +147,7 @@ Route::get('/attendance/report','attendanceController@report');
 Route::post('/attendance/report','attendanceController@getReport');
 Route::get('/attendance/student_report','attendanceController@stdatdreportindex');
 Route::get('/attendance/print_student_report/{b_form}','attendanceController@stdatdreport');
+Route::get('/attendance_detail','attendanceController@attendance_detail');
 /*Route::get('/attendance/report', 'attendanceController@report');
 Route::post('/attendance/report', 'attendanceController@getReport');
 */
@@ -368,6 +369,7 @@ Route::get('/fee/detail','feesController@detail');
 
 //Route::post('/fees/classview','feesController@classview');
 Route::post('/fees/unpaid_notification','feesController@ictcorefees');
+Route::get('/fee_detail','feesController@fee_detail');
 
 
 
