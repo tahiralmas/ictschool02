@@ -132,7 +132,9 @@ class sectionController extends Controller
           $student = DB::table('Student')
           ->join('Class', 'Student.class', '=', 'Class.code')
           ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-          'Class.Name as class','Student.section' ,'Student.group' ,'Student.session','Student.presentAddress', 'Student.gender', 'Student.religion')->get();
+          'Class.Name as class','Student.section' ,'Student.group' ,'Student.session','Student.presentAddress', 'Student.gender', 'Student.religion')
+          ->where('Student.isActive','Yes')
+          ->get();
 
          /*->join('Class', 'Student.class', '=', 'Class.code')
           ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',

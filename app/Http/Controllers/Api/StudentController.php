@@ -49,7 +49,7 @@ class StudentController extends Controller
           ->join('Class', 'Student.class', '=', 'Class.code')
 		  ->join('section', 'Student.section', '=', 'section.id')
 		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo','Student.b_form as Bform', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		  'Class.Name as class','Student.section' ,'section.name as section_name','Student.session','Student.group' ,'Student.presentAddress', 'Student.gender', 'Student.religion','Student.fatherCellNo');
+		  'Class.Name as class','Student.section' ,'section.name as section_name','Student.session','Student.group' ,'Student.presentAddress', 'Student.gender', 'Student.religion','Student.fatherCellNo')->where('Student.isActive','Yes');
 
 		  $students->when(request('regiNo', false), function ($q, $regiNo) { 
             return $q->where('regiNo', $regiNo);
@@ -107,7 +107,8 @@ class StudentController extends Controller
 		  ->join('Class', 'Student.class', '=', 'Class.code')
 		  ->select('Student.id','Student.session', 'Student.regiNo', 'Student.rollNo','Student.b_form as Bform', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
 		  'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion')
-		  ->where('class',$class_level)
+		  ->where('Student.isActive','Yes')
+          ->where('class',$class_level)
 		  ->where('section',$section)
 		  ->where('shift',$shift)
 		  ->where('session',trim($session))
@@ -127,7 +128,9 @@ class StudentController extends Controller
     	 ->join('Class', 'Student.class', '=', 'Class.code')
 		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo','Student.b_form as Bform', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
 		  'Class.Name as class','Student.section','Student.session' ,'Student.group','Student.session','Student.presentAddress','Student.dob','Student.gender', 'Student.religion')
-		    ->where('Student.id',$student_id)->first();
+		    ->where('Student.isActive','Yes')
+            ->where('Student.id',$student_id)
+            ->first();
 
         if(!empty($student)){
            return response()->json($student,200);
@@ -184,7 +187,7 @@ class StudentController extends Controller
 		}
 		else{
 			$student = Student::select('id', 'regiNo', 'rollNo', 'firstName', 'middleName', 'lastName', 'fatherName', 'motherName', 'fatherCellNo', 'motherCellNo', 'localGuardianCell',
-          'class','section' ,'group','session','presentAddress','dob','gender', 'religion')->where('Student.id',$student_id)->first();
+          'class','section' ,'group','session','presentAddress','dob','gender', 'religion')->where('Student.isActive','Yes')->where('Student.id',$student_id)->first();
 			$student->firstName = Input::get('firstname');
 			$student->lastName= Input::get('lastname');
             $student->dob= Input::get('dob');

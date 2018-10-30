@@ -207,6 +207,48 @@
 <script script type="text/javascript">
  
         $(document).ready(function () {
+
+        $('#calendar').fullCalendar({
+        header: {
+            left: 'prev,next',
+            center: 'title',
+
+        },
+        today: 'true',
+        height: 300,
+   <?php if($json_event_data!=''){ ?>
+    events: /*[
+    {
+      title  : 'event1',
+      start  : '2018-10-01'
+    },
+    {
+      title  : 'event2',
+      start  : '2018-10-05',
+      end    : '2018-10-07'
+    },
+    {
+      title  : 'event3',
+      start  : '2018-10-09T12:30:00',
+      allDay : false // will make the time show
+    }
+  ]*/
+  <?php echo $json_event_data;
+   }
+   ?>
+ 
+    });
+
+
+
+
+
+
+
+
+
+
+
            var ctx = document.getElementById('attendanceChart').getContext('2d');
             //var attendanceChart = new Chart(ctx, config);
             var myChart = new Chart(ctx, {
@@ -297,5 +339,7 @@ Chart.defaults.global.legend = {
        }]
      },
    });
+
+
 </script>
 @stop

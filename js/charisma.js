@@ -276,17 +276,7 @@ function docReady() {
     });
 
 
-    $('#calendar').fullCalendar({
-        header: {
-            left: 'prev,next',
-            center: 'title'
-
-        },
-        today: 'true',
-        height: 300
-
-
-    });
+    
 
 }
 

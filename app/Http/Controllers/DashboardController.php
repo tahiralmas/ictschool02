@@ -77,7 +77,7 @@ class DashboardController extends BaseController {
         $attendances_b = array();
 		$scetionarray = array();
 	    $resultArray1 = array();
-         $student_all12 =	DB::table('section')
+        $student_all12 =	DB::table('section')
              /*->where('session','=',$student->session)*/
              ->leftjoin('Student','section.id','=','Student.section')
              ->leftjoin('stdBill','Student.regiNo','=','stdBill.regiNo')
@@ -221,9 +221,30 @@ class DashboardController extends BaseController {
 		 endforeach;
 		/// echo "<pre>class";print_r($class);
 		//// echo "<pre>p";print_r($present);
-		// echo "<pre>a";print_r($absent);
+		// echo "<pre>a";print_r($absent);whereYear('created_at', '=', date('Y')
 		// exit;
-		return View('dashboard',compact('error','success','total','incomes','expences','balance','scetionarray','resultArray1','year','month_n','attendances_b','month','class','present','absent','ourallunpaid','ourallpaid'));
+		 $holidays = DB::table('Holidays')->whereMonth('holiDate',$month)->get();
+		 $class_off = DB::table('ClassOffDay')->whereMonth('offDate',$month)->get();
+		
+foreach($holidays as $holiday){
+          $calender_event[] = array('title'=>$holiday->description,'start'=>$holiday->holiDate);
+		}
+		foreach($class_off as $class_of){
+          $calender_event[] = array('title'=>$class_of->description,'start'=>$class_of->offDate);
+		}
+//$test = array_merge($class_off->toArray(),$holidays->toArray());
+ //echo "<pre>a";print_r($class_off);
+if(!empty($calender_event)){
+$json_event_data = json_encode($calender_event);
+}
+else{
+	$json_event_data = '';
+}
+//echo $json_event_data;
+//echo "<pre>a";print_r($calender_event);
+
+ //exit;
+		return View('dashboard',compact('error','success','total','incomes','expences','balance','scetionarray','resultArray1','year','month_n','attendances_b','month','class','present','absent','ourallunpaid','ourallpaid','json_event_data'));
 	}
 	private function datahelper($data)
  	{

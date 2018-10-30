@@ -298,7 +298,9 @@ class AttendanceController extends Controller
 				 
 				 $std_atd = DB::table('Student')
 				->join('Attendance', 'Attendance.regiNo', '=', 'Student.regiNo')
-				->select('Attendance.id','Student.RegiNo','Student.rollNo','Student.firstName','Student.lastName','Student.class','Student.section','Attendance.status', 'Attendance.date')->where('Attendance.id','=',$attendance_id)
+				->select('Attendance.id','Student.RegiNo','Student.rollNo','Student.firstName','Student.lastName','Student.class','Student.section','Attendance.status', 'Attendance.date')
+                ->where('Student.isActive','Yes')
+				->where('Attendance.id','=',$attendance_id)
 				->get();
 				  //return response()->json(['error'=> $std_atd], 401);
 
@@ -320,6 +322,7 @@ class AttendanceController extends Controller
 				   $attendance = DB::table('Student')
 				   ->join('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
 				   ->select( 'Attendance.id','Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.date')
+                   ->where('Student.isActive','Yes')
                    ->where('Student.class',  $classc->code);
                
 					 /*$attendance->when(request('regiNo', false), function ($q, $regiNo) { 
@@ -382,7 +385,9 @@ class AttendanceController extends Controller
 				->leftJoin('Attendance',function ($join) {
 					$join->on('Attendance.regiNo', '=' , 'Student.regiNo') ;
 					$join->where('Attendance.date','=',Carbon::today()->toDateString()) ;
-				})->where('Student.class',  $classc->code)->where('Student.session',2018)->get();
+				})
+				->where('Student.isActive','Yes')
+				->where('Student.class',  $classc->code)->where('Student.session',2018)->get();
 				
 				if($attendance->isEmpty()) {
 					return response()->json(['error'=>'Attendance Not Found'], 404);
@@ -398,6 +403,7 @@ class AttendanceController extends Controller
 				->join('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
 				->select( 'Attendance.id','Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.date')
                 ->where('Student.section',  $section_id);
+                ->where('Student.isActive','Yes')
                 //->get();
 					 /*$attendance->when(request('regiNo', false), function ($q, $regiNo) { 
 						return $q->where('Student.regiNo', $regiNo);
@@ -449,7 +455,11 @@ class AttendanceController extends Controller
 				->leftJoin('Attendance',function ($join) {
 					$join->on('Attendance.regiNo', '=' , 'Student.regiNo') ;
 					$join->where('Attendance.date','=',Carbon::today()->toDateString()) ;
-				})->where('Student.section',  $section_id)->where('Student.session', $year)->get();
+				})
+				->where('Student.isActive','Yes')
+				->where('Student.section',  $section_id)
+				->where('Student.session', $year)
+				->get();
 				
 				if($attendance->isEmpty()) {
 					return response()->json(['error'=>'Attendance Not Found'], 404);
@@ -519,6 +529,7 @@ class AttendanceController extends Controller
 				->join('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
 				->select( 'Attendance.id','Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.date')
                 ->where('Student.id',  $student_id)
+                ->where('Student.isActive','Yes')
                 ->get();
 					 /*$attendance->when(request('regiNo', false), function ($q, $regiNo) { 
 						return $q->where('Student.regiNo', $regiNo);
@@ -567,7 +578,11 @@ class AttendanceController extends Controller
 				->leftJoin('Attendance',function ($join) {
 					$join->on('Attendance.regiNo', '=' , 'Student.regiNo') ;
 					$join->where('Attendance.date','=',Carbon::today()->toDateString()) ;
-				})->where('Student.id',  $id)->where('Student.session',2018)->first();
+				})
+				->where('Student.isActive','Yes')
+				->where('Student.id',  $id)
+				->where('Student.session',2018)
+				->first();
 				
 				if(empty($attendance)) {
 					return response()->json(['error'=>'Attendance Not Found'], 404);
@@ -621,7 +636,9 @@ class AttendanceController extends Controller
 							   $student =	DB::table('Student')
 								->join('Class', 'Student.class', '=', 'Class.code')
 								->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Class.Name as class')
-								->where('Student.regiNo','=',$students)->where('Student.section','=',$section_id)
+								->where('Student.isActive','Yes')
+								->where('Student.regiNo','=',$students)
+								->where('Student.section','=',$section_id)
 								//->where('class',Input::get('class'))
 								->first();
 							
@@ -743,7 +760,14 @@ class AttendanceController extends Controller
 				/*->Join('Attendance',function ($join) {
 					$join->on('Attendance.regiNo', '=' , 'Student.regiNo') ;
 					$join->where('Attendance.date','=',Carbon::today()->toDateString()) ;
-				})*/->where('Student.section',  $section_id)->where('Student.session',2018)->where('Attendance.date','=',Carbon::today()->toDateString())->whereIn('Attendance.status',$status)->get();
+				})*/
+            ->where('Student.isActive','Yes')
+           ->where('Student.section',  $section_id)
+           ->where('Student.session',2018)
+           ->where('Attendance.date','=',Carbon::today()
+           	->toDateString())
+           ->whereIn('Attendance.status',$status)
+           ->get();
 			//return response()->json($attendance, 200);
                 if($attendance->count()){
                     //return response()->json('878878787', 200);
