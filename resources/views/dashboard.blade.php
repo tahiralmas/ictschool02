@@ -46,28 +46,28 @@
       </a>
       </div>
 
-      <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+      <div class="col-md-6 col-sm-6 col-xs-6  tile_stats_countw">
         <a href="{{url('/attendance_detail?action=absent')}}">
-        <span class="count_top"><i class="fa fa-2x fa-book green"></i> Absent Student <small>(today)</small> </span>
-        <div class="count yellow">{{$total['totalabsent']}}</div>
+        <span class="count_top"><i class="fa fa-2x fa-calendar green"></i> Absent Student <small>(today)</small> </span>
+        <div class="count yellow" style="font-size: 40px;">{{$total['totalabsent']}}</div>
       </a>
       </div>
       <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
        <a href="{{url('/fee_detail?action=paid')}}">
-        <span class="count_top"><i class="fa fa-2x fa-book green"></i> Paid <small>({{$month_n}})</small></span>
+        <span class="count_top"><i class="fa fa-2x fa-check-circle green"></i> Paid <small>({{$month_n}})</small></span>
         <div class="count yellow">{{$ourallpaid}}</div>
       </a>
       </div>
 
-      <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+      <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_countw">
          <a href="{{url('/attendance_detail?action=late')}}">
-        <span class="count_top"><i class="fa fa-2x fa-pencil green"></i>Late Student <small>(today)</small> </span>
-        <div class="count blue">{{$total['totallate']}}</div>
+        <span class="count_top"><i class="fa fa-2x fa-bell-o green"></i>Late Student <small>(today)</small> </span>
+        <div class="count blue" style="font-size: 40px;">{{$total['totallate']}}</div>
       </a>
       </div>
       <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
         <a href="{{url('/fee_detail?action=unpaid')}}">
-        <span class="count_top"><i class="fa fa-2x fa-pencil green"></i> UnPaid <small>({{$month_n}})</small></span>
+        <span class="count_top"><i class="fa fa-2x fa-bullhorn green"></i> UnPaid <small>({{$month_n}})</small></span>
         <div class="count blue">{{$ourallunpaid}}</div>
      </a>
       </div>
@@ -87,6 +87,7 @@
         <div class="count blue">{{$total['exam']}}</div>
       </div>-->
       
+    </div>
     </div>
      <div class="row">
             <div class="col-md-6">
@@ -110,19 +111,17 @@
         </div>
 
     <div class="row">
-      <div class="col-md-6 col-sm-6 col-xs-6">
+      <div class="col-md-12 col-sm-12 col-xs-12">
          
         <h2>Fee Detail <small> {{$month_n}}</small></h2>
          <table id="feeList" class="table table-striped table-bordered table-hover">
               <thead>
                 <tr>
                   <th>Class</th>
-               
                   <th>Number of paid</th>
                   <th>Number of Upaid</th>
                   <th>Number of Student</th>
                   <th>Action</th>
-                
                 </tr>
               </thead>
               <tbody>
@@ -204,29 +203,18 @@
       </div>
 
     </div> */ ?>
-
-
-
-
-
-
-
-
-  </div>
-</div>
 @stop
 @section("script")
 <script src="{{url('/js/Chart.min.js')}}"></script>
 
 <script script type="text/javascript">
  
-        $(document).ready(function () {
+  $(document).ready(function () {
 
         $('#calendar').fullCalendar({
         header: {
             left: 'prev,next',
             center: 'title',
-
         },
         today: 'true',
         height: 300,
@@ -252,16 +240,6 @@
    ?>
  
     });
-
-
-
-
-
-
-
-
-
-
 
            var ctx = document.getElementById('attendanceChart').getContext('2d');
             //var attendanceChart = new Chart(ctx, config);

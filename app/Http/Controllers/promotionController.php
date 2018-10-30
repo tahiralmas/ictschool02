@@ -35,12 +35,11 @@ class promotionController extends BaseController {
 	* @return Response
 	*/
 	public function store()
-	{      $rules = [
+	{  $rules = [
 		'nclass' => 'required',
 		'nsection' => 'required',
 		'nshift' => 'required',
 		'nsession' => 'required'
-
 	];
 	$validator = \Validator::make(Input::all(), $rules);
 	if ($validator->fails()) {
@@ -62,21 +61,17 @@ class promotionController extends BaseController {
 			{
 				//$errorMessages = new Illuminate\Support\MessageBag;
 				//$errorMessages->add('validation', 'Select Student!');
-
 				$errorMessages = 'Select Student!';
-
 				return Redirect::to('/promotion')->withInput(Input::all())->withErrors($errorMessages);
 			}
 			$realPromot=array();
 			for($i=0;$i<count($promotion);$i++)
 			{
-
 				$rollnumber=$this->checkRollno($promotion[$i],$ids,$newrollNo);
 				if($rollnumber=='')
 				{
 					//$errorMessages = new Illuminate\Support\MessageBag;
 					$errorMessages = 'New Roll number can not be empty!';
-
 					return Redirect::to('/promotion')->withInput(Input::all())->withErrors($errorMessages);
 				}
 				if($rollnumber!='No')
@@ -86,12 +81,8 @@ class promotionController extends BaseController {
 				}
 			}
 			//get new regiNo and student info
-
 			foreach($realPromot as $rpromt) {
 				$studentIno = Student::select('*')->where('regiNo', $rpromt[0])->first();
-
-
-
 				$newStudent = new Student();
 				if (Input::get('nclass') == "cl10" || Input::get('nclass') == "cl12") {
 					$newStudent->regiNo = $rpromt[0];
@@ -129,10 +120,7 @@ class promotionController extends BaseController {
 				$newStudent->parmanentAddress=$studentIno->parmanentAddress;
 				$newStudent->isActive="Yes";
 				$newStudent->save();
-
-
 			}
-
 			return Redirect::to('/promotion')->with('success', count($realPromot).' Students Promoted.');
 
 		}
