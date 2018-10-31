@@ -778,10 +778,10 @@ class feesController extends BaseController {
               $status = 'Paid';
         }
              
-             
+             $month_n = $now->format('F');
 
              //echo "<pre>";print_r( $attendances_detail);
-        return View('app.fee_detail', compact('fee_detail','status'));
+        return View('app.fee_detail', compact('fee_detail','status','month_n','year'));
 
     	endif;
     }

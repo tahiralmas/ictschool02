@@ -26,19 +26,19 @@ class DashboardController extends BaseController {
 	public function index()
 	{
 		
-        $now   = Carbon::now();
-		$year  =  $now->year;
-        $month =  $now->month;
-		$error = \Session::get('error');
-		$success=\Session::get('success');
-		$tclass = ClassModel::count();
-		$tsubject = Subject::count();
-		$tstudent=Student::where('isActive','Yes')->where('session',$year)->count();
-		$teacher=Teacher::count();
+        $now             =  Carbon::now();
+		$year            =  $now->year;
+        $month           =  $now->month;
+		$error           = \Session::get('error');
+		$success         = \Session::get('success');
+		$tclass          =  ClassModel::count();
+		$tsubject        =  Subject::count();
+		$tstudent        =  Student::where('isActive','Yes')->where('session',$year)->count();
+		$teacher         =  Teacher::count();
  		$totalAttendance = Attendance::groupBy('date')->get();
  		//echo Carbon::now()->format('Y-m-d');
- 		$totalabsent = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Absent')->count();
- 		$totallate = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Late')->count();
+ 		$totalabsent     = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Absent')->count();
+ 		$totallate       = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Late')->count();
 
  		//echo "<pre>";print_r($totalabsent );exit;
  		$totalExam = Marks::groupBy('exam')->groupBy('subject')->get();

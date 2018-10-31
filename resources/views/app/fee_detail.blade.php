@@ -148,8 +148,25 @@
                 //  "pagingType": "full_numbers",
                 dom: 'Bfrtip',
                 buttons: [
-                    'print'
-                ]
+            {
+                extend: 'print',
+                customize: function ( win ) {
+                    $(win.document.body)
+                        .css( 'font-size', '10pt' )
+                        .prepend(
+                            @if($status!='Paid')
+                            '<h2>Fee Defaulter List <small>{{$month_n}}-{{$year}}</small></h2>'
+                           @else
+                          '<h2>Fee Paid List <small>{{$month_n}}-{{$year}}</small></h2>'
+                           @endif
+                        );
+ 
+                    $(win.document.body).find( 'table' )
+                        .addClass( 'compact' )
+                        .css( 'font-size', 'inherit' );
+                }
+            }
+        ]
             });
 
             $( "#btnPrint" ).click(function() {

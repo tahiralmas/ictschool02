@@ -21,7 +21,7 @@ $system_grade = $get_grad->index1();
         ===
     -->
     <meta charset="utf-8">
-    <title>School Manage</title>
+    <title>@if(Session::get('inName')=='') Ict Innovations School @else {{Session::get('inName')}} @endif</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
