@@ -43,7 +43,7 @@
                 
               </div>
               <div class="col-md-4">
-                <img class="img responsive-img" style="height:150px;width:200px;" src="{{url('/images/'.$student->photo)}}" alt="Photo">
+                <img class="img responsive-img" style="height:150px;width:200px;" src="{{url('/public/images/'.$student->photo)}}" alt="Photo">
               </div>
               <div class="col-md-4">
                 
