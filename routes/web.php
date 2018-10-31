@@ -369,6 +369,7 @@ Route::get('/fee/detail','feesController@detail');
 
 //Route::post('/fees/classview','feesController@classview');
 Route::post('/fees/unpaid_notification','feesController@ictcorefees');
+Route::post('/fee/unpaid_notification','feesController@sendnotification');
 Route::get('/fee_detail','feesController@fee_detail');
 
 

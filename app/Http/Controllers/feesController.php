@@ -620,9 +620,15 @@ class feesController extends BaseController {
 		$student->session = Input::get('session');
 		$student->regiNo  = Input::get('student');
 		$feeyear          = Input::get('year') ;
-
-		$student_all =	DB::table('Student')->select( '*')->where('isActive','Yes')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
-$ictcore_fees = Ictcore_fees::select("*")->first();
+        if(Input::get('all')=='yes'){
+          //$student_all =unserialize(Input::get('result'));
+        
+        }else{
+			$student_all =	DB::table('Student')->select( '*')->where('isActive','Yes')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
+        }
+        //$data = preg_replace('!s:(\d+):"(.*?)";!e', "'s:'.strlen('$2').':\"$2\";'", Input::get('result'));
+        
+        $ictcore_fees    = Ictcore_fees::select("*")->first();
 						// echo "<pre>";print_r($student_all);
 						// exit;
 		if(count($student_all)>0){
@@ -764,6 +770,9 @@ $ictcore_fees = Ictcore_fees::select("*")->first();
 		if($action=='unpaid'){
            $fee_detail = $unpaidArray;
            $status = 'Unpaid';
+           session()->forget('upaid');
+           session(['upaid' => $fee_detail]);
+
         }else{
              $fee_detail = $resultArray;
               $status = 'Paid';
@@ -777,4 +786,104 @@ $ictcore_fees = Ictcore_fees::select("*")->first();
     	endif;
     }
 
+	public function sendnotification()
+	{
+		 // $student_all     = \Session::get('upaid');
+         //echo "d<pre>d";print_r($student_all );
+         // exit;
+		$student_all =	\Session::get('upaid');
+		 //echo "d<pre>d";print_r($student_all );
+		if(!empty($student_all)){
+			$ict  = new ictcoreController();
+			$i=0;
+			$attendance_noti     = DB::table('notification_type')->where('notification','fess')->first();
+			$ictcore_fees        = Ictcore_fees::select("*")->first();
+			$ictcore_integration = Ictcore_integration::select("*")->where('type',$attendance_noti->type)->first();
+			//echo $ictcore_integration->method;
+			//exit;
+			if($ictcore_integration->method=="telenor"){
+				$group_id = $ict->telenor_apis('group','','','','','');
+			}else{
+				if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){ 
+
+					$data = array(
+					'name' => 'Fee Notification',
+					'description' => 'fee notification',
+					);
+
+					echo  $group_id= $ict->ictcore_api('groups','POST',$data );
+				}else{
+				 return Redirect::to('fee_detail?action=unpaid')->withErrors("Please Add ictcore integration in Setting Menu");
+				exit();
+				}
+			}
+			foreach($student_all as $stdfees)
+			{
+				//if(count($student)>0 ){
+					//$datanot[]=array($stdfees->regiNo);
+				//}else{
+				if (preg_match("~^0\d+$~", $stdfees->fatherCellNo)) {
+						$to = preg_replace('/0/', '92', $stdfees->fatherCellNo, 1);
+					}else {
+						$to =$stdfees->fatherCellNo;  
+					}
+					$data = array(
+					//'registrationNumber' =>$stdfees->regiNo,
+					'first_name'         => $stdfees->firstName,
+					'last_name'          =>  $stdfees->lastName,
+					'phone'              =>  $to,
+					'email'              => '',
+					);
+					if($ictcore_integration->method=="telenor"){
+
+						$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$stdfees->fatherCellNo,'','','');
+						//break;
+					}else{
+						$contact_id = $ict->ictcore_api('contacts','POST',$data );
+
+						$group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+					}
+				//}
+			}
+		}else{
+			//echo 'sdsd';
+			//$resultArray = array();
+			exit();
+		}
+
+		if($ictcore_integration->method=="telenor"){
+			$fee_msg = DB::table('ictcore_fees');
+			if($fee_msg->count()>0 && $fee_msg->first()->description!=''){
+			$msg = $fee_msg->first()->description;
+			}else{
+			$msg= "please submit your child  fee for this month";
+			}
+			//$group_id='410598';
+			  $campaign      = $ict->telenor_apis('campaign_create',$group_id,'',$msg,$fee_msg->first()->telenor_file_id,$attendance_noti->type);
+			// echo $campaign;
+			// $this->info('Notification sended successfully'.$campaign);
+
+			 $send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
+	           		return Redirect::to('fee_detail?action=unpaid')->with('success',"Notification sended");
+
+		}else{
+			//echo 'sded';
+			if(!empty($ictcore_fees) && $ictcore_fees->ictcore_program_id!=''){
+				$data = array(
+				'program_id' => $ictcore_fees->ictcore_program_id,
+				'group_id' => $group_id,
+				'delay' => '',
+				'try_allowed' => '',
+				'account_id' => 1,
+				);
+				$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
+				$campaign_id = $ict->ictcore_api('campaigns/$campaign_id/start','PUT',$data=array() );
+					echo 'campi';
+				return Redirect::to('fee_detail?action=unpaid')->with('success',"Notification sended");
+
+			}
+			//echo 'testing';
+		}
+		session()->forget('upaid');
+	}
 }

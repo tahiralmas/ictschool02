@@ -328,8 +328,11 @@ class ictcoreController {
                     if(empty($ictcore_fess) || $ictcore_fess->recording != $inpet_attendance_file_fee){
                       $fileName_fee    =    $name_fee.'_'.time().'.'.Input::file('fee_message')->getClientOriginalExtension();
                         Input::file('fee_message')->move($drctry ,$fileName_fee);
+						
 						sleep(2);
+						echo 'sox '.$drctry.'/'.$fileName_fee .' -b 16 -r 8000 -c 1 -e signed-integer '.$drctry.'/'.'fee.wav';
                         echo exec('sox '.$drctry.'/'.$fileName_fee .' -b 16 -r 8000 -c 1 -e signed-integer '.$drctry.'/'.'fee.wav');
+						//exit;
 						$name_fe               =  $drctry .'fee.wav';
 						$finfo_fe              =  new \finfo(FILEINFO_MIME_TYPE);
 						$mimetype_fe          =  $finfo_fe->file($name_fe);

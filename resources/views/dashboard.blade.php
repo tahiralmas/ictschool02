@@ -54,7 +54,7 @@
       </div>
       <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
        <a href="{{url('/fee_detail?action=paid')}}">
-        <span class="count_top"><i class="fa fa-2x fa-check-circle green"></i> Paid <small>({{$month_n}})</small></span>
+        <span class="count_top"><i class="fa fa-2x fa-check-circle green"></i> Fee Paid <small>({{$month_n}})</small></span>
         <div class="count yellow">{{$ourallpaid}}</div>
       </a>
       </div>
@@ -67,7 +67,7 @@
       </div>
       <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
         <a href="{{url('/fee_detail?action=unpaid')}}">
-        <span class="count_top"><i class="fa fa-2x fa-bullhorn green"></i> UnPaid <small>({{$month_n}})</small></span>
+        <span class="count_top"><i class="fa fa-2x fa-bullhorn green"></i> Fee UnPaid <small>({{$month_n}})</small></span>
         <div class="count blue">{{$ourallunpaid}}</div>
      </a>
       </div>

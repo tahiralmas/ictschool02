@@ -48,6 +48,23 @@
 
                    
                     @if($fee_detail)
+                     @if($status!="Paid")
+                    <form action="{{url('/fee/unpaid_notification')}}" method="post">
+                          <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="result" value="">
+                        <input type="hidden" name="all" value="yes">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                              <label class="control-label" for="">&nbsp;</label>
+
+                              <div class="input-group">
+                                <button class="btn btn-primary pull-right" id="btnsave" type="submit"><i class="glyphicon glyphicon-th"></i> Send voice Notification  </button>
+
+                              </div>
+                            </div>
+                          </div>
+                     </form>
+                     @endif
                         <div class="row">
                             <div class="col-md-12">
                                 <table id="attendanceList" class="table table-striped table-bordered table-hover">
@@ -119,7 +136,17 @@
 
             });
 
-            $('#attendanceList').dataTable();
+            $('#attendanceList').dataTable({
+
+                  pagingType: "simple",
+                //pagingType: "simple",
+                "pageLength": 100,
+                //  "pagingType": "full_numbers",
+                dom: 'Bfrtip',
+                buttons: [
+                    'print'
+                ]
+            });
 
             $( "#btnPrint" ).click(function() {
                 var aclass  =   $('#class').val();
