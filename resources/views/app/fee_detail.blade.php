@@ -1,7 +1,12 @@
 @extends('layouts.master')
 @section('style')
     <link href="{{ URL::asset('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
+<style type="text/css">
+    
+  
 
+
+</style>
 @stop
 @section('content')
     @if (Session::get('success'))
@@ -135,7 +140,6 @@
                 todayHighlight: true
 
             });
-
             $('#attendanceList').dataTable({
 
                   pagingType: "simple",

@@ -212,7 +212,16 @@
 
             });
 
-            $('#attendanceList').dataTable();
+            $('#attendanceList').dataTable({
+
+                 pagingType: "simple",
+                //"pageLength": 5,
+              //  "pagingType": "full_numbers",
+                dom: 'Bfrtip',
+                buttons: [
+                    'print'
+                ]
+            });
 
             $( "#btnPrint" ).click(function() {
                 var aclass  =   $('#class').val();

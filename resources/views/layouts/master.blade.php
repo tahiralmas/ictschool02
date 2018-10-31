@@ -27,8 +27,11 @@ $system_grade = $get_grad->index1();
     <meta name="author" content="">
 
     <!-- The styles -->
-    <link id="bs-css" href="{{ URL::asset('css/bootstrap-cerulean.min.css') }}" rel="stylesheet">
+  <link id="bs-css" href="{{ URL::asset('css/bootstrap-cerulean.min.css') }}" rel="stylesheet">
+  
 
+   <!-- <link id="bs-css" href="{{ URL::asset('css/bootstrap-lumen.min.css') }}" rel="stylesheet">
+-->
     <link href="{{ URL::asset('css/charisma-app.css') }}" rel="stylesheet">
     <link href='{{ URL::asset('/bower_components/fullcalendar/dist/fullcalendar.css') }}' rel='stylesheet'>
     <link href='{{ URL::asset('/bower_components/fullcalendar/dist/fullcalendar.print.css') }}' rel='stylesheet' media='print'>
@@ -110,6 +113,133 @@ $system_grade = $get_grad->index1();
 .paginate_button.previous  {         
       background: rgba(0, 0, 0, 0) url("prev1.gif") no-repeat scroll right center;
  }
+
+ #studentList_next{
+    margin-top: 7px;
+   background-image: -webkit-linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5) !important;
+background-image: -o-linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5) !important;
+background-image: linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5);
+background-repeat: no-repeat !important;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff54b4eb', endColorstr='#ff1d9ce5', GradientType=0);
+filter: none !important;
+border-bottom: 1px solid #178acc !important;
+color: #ffffff !important;
+background-color: #2fa4e7 !important;
+border-color: #2fa4e7 !important;
+
+display: inline-block !important;
+margin-bottom: 0 !important;
+font-weight: normal !important;
+text-align: center !important;
+vertical-align: middle !important;
+cursor: pointer !important;
+background-image: none !important;
+border: 1px solid transparent !important;
+white-space: nowrap !important;
+padding: 20px 12px !important;
+font-size: 14px !important;
+line-height: 1.42857143 !important;
+border-radius: 4px !important;
+-webkit-user-select: none !important;
+-moz-user-select: none !important;
+-ms-user-select: none !important;
+user-select: none !important;
+}
+#studentList_previous{
+margin-top: 7px;
+margin-right: 5px;
+background-image: -webkit-linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5) !important;
+background-image: -o-linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5) !important;
+background-image: linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5);
+background-repeat: no-repeat !important;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff54b4eb', endColorstr='#ff1d9ce5', GradientType=0);
+filter: none !important;
+border-bottom: 1px solid #178acc !important;
+color: #ffffff !important;
+background-color: #2fa4e7 !important;
+border-color: #2fa4e7 !important;
+
+display: inline-block !important;
+margin-bottom: 0 !important;
+font-weight: normal !important;
+text-align: center !important;
+vertical-align: middle !important;
+cursor: pointer !important;
+background-image: none !important;
+border: 1px solid transparent !important;
+white-space: nowrap !important;
+padding: 20px 12px !important;
+font-size: 14px !important;
+line-height: 1.42857143 !important;
+border-radius: 4px !important;
+-webkit-user-select: none !important;
+-moz-user-select: none !important;
+-ms-user-select: none !important;
+user-select: none !important;
+}
+#attendanceList_next{
+    margin-top: 7px;
+   background-image: -webkit-linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5) !important;
+background-image: -o-linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5) !important;
+background-image: linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5);
+background-repeat: no-repeat !important;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff54b4eb', endColorstr='#ff1d9ce5', GradientType=0);
+filter: none !important;
+border-bottom: 1px solid #178acc !important;
+color: #ffffff !important;
+background-color: #2fa4e7 !important;
+border-color: #2fa4e7 !important;
+
+display: inline-block !important;
+margin-bottom: 0 !important;
+font-weight: normal !important;
+text-align: center !important;
+vertical-align: middle !important;
+cursor: pointer !important;
+background-image: none !important;
+border: 1px solid transparent !important;
+white-space: nowrap !important;
+padding: 20px 12px !important;
+font-size: 14px !important;
+line-height: 1.42857143 !important;
+border-radius: 4px !important;
+-webkit-user-select: none !important;
+-moz-user-select: none !important;
+-ms-user-select: none !important;
+user-select: none !important;
+}
+#attendanceList_previous{
+margin-top: 7px;
+margin-right: 5px;
+background-image: -webkit-linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5) !important;
+background-image: -o-linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5) !important;
+background-image: linear-gradient(#54b4eb, #2fa4e7 60%, #1d9ce5);
+background-repeat: no-repeat !important;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff54b4eb', endColorstr='#ff1d9ce5', GradientType=0);
+filter: none !important;
+border-bottom: 1px solid #178acc !important;
+color: #ffffff !important;
+background-color: #2fa4e7 !important;
+border-color: #2fa4e7 !important;
+
+display: inline-block !important;
+margin-bottom: 0 !important;
+font-weight: normal !important;
+text-align: center !important;
+vertical-align: middle !important;
+cursor: pointer !important;
+background-image: none !important;
+border: 1px solid transparent !important;
+white-space: nowrap !important;
+padding: 20px 12px !important;
+font-size: 14px !important;
+line-height: 1.42857143 !important;
+border-radius: 4px !important;
+-webkit-user-select: none !important;
+-moz-user-select: none !important;
+-ms-user-select: none !important;
+user-select: none !important;
+}
   </style>
     <!-- jQuery -->
     <!--<script src="{{ URL::asset('/bower_components/jquery/jquery.min.js') }}"></script>
@@ -347,7 +477,8 @@ $system_grade = $get_grad->index1();
                            @if (Session::get('userRole') =="Admin")
                               <!-- <li><a href="/attendance/create-file">Add from file</a></li>-->
                                @endif
-                               <li><a href="{{url('/attendance/create')}}">Add</a></li>
+                               <!--<li><a href="{{url('/attendance/create')}}">Add</a></li>
+                               -->
                                <li><a href="{{url('/attendance/list')}}">View</a></li>
                                 <li><a href="{{url('/attendance/monthly-report')}}"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report</a></li>
                                 <!--<li><a href="/teacher-attendance/monthly-report-2"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report Two</a></li>-->
