@@ -224,8 +224,8 @@ class DashboardController extends BaseController {
 		//// echo "<pre>p";print_r($present);
 		// echo "<pre>a";print_r($absent);whereYear('created_at', '=', date('Y')
 		// exit;
-		 $holidays = DB::table('Holidays')->whereMonth('holiDate',$month)->get();
-		 $class_off = DB::table('ClassOffDay')->whereMonth('offDate',$month)->get();
+		 $holidays = DB::table('Holidays')/*->whereMonth('holiDate',$month)*/->get();
+		 $class_off = DB::table('ClassOffDay')/*->whereMonth('offDate',$month)*/->get();
 		
 foreach($holidays as $holiday){
           $calender_event[] = array('title'=>$holiday->description,'start'=>$holiday->holiDate);
