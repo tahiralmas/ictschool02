@@ -339,7 +339,7 @@ if(!empty($_GET)){
                         <label class="control-label" for="paidamount">Paid Amount:</label>
                       </div>
                       <div class="col-md-6">
-                        <input type="text" class="form-control" id="paidamount" required="true" name="paidamount" value="0.00">
+                        <input type="number" min='0' class="form-control" id="paidamount" required="true" name="paidamount" value="0.00">
                       </div>
                     </div>
                   </div>
@@ -851,15 +851,20 @@ if(!empty($_GET)){
       $('#paidamount').on('input change keyup paste mouseup propertychange', function() {
         try {
           var paidamount =parseFloat($('#paidamount').val());
-          if(isNaN(paidamount))
-          {
-            throw "Invalid Number Format!";
-          }
-          else {
+         // if(isNaN(paidamount))
+          //{
+           // throw "Invalid Number Format!";
+          //}
+          //else {
             var grandTotal = parseFloat($('#gtotal').val());
             var due = grandTotal-paidamount;
+            //alert(paidamount);
+            if(isNaN(paidamount) || paidamount==''){
+             $('#dueamount').val(0);
+            }else{
             $('#dueamount').val(due);
           }
+         // }
 
         }
         catch (e) {
