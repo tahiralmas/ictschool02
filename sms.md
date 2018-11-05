@@ -37,7 +37,10 @@ Teacher Create update and delete.Also set teacher timetable assaign class,sectio
 ### Marks and Result
 ---------------------
 
-Add Marks subject,class and section wise to specific session student .Create Marks, Define your own Marking Grade, Manage Subject-wise Marks for exams or generate tabulation sheets in Result portion to clicking generate result. 
+Add Marks subject,class and section wise to specific session student .Create Marks, Define your own Marking Grade, Manage Subject-wise Marks for exams or generate tabulation sheets in Result portion to clicking generate result.
+
+`NOTE` __Result management custom login to super admin UserName:`ictkashif`,Password:'123456' 
+go to setting institute select grade system `manual or auto by defult auto ` then add marks class and section wise if all class section marks and all subjects marks added then go to result generate__
 
 ### Fees
 ---------
