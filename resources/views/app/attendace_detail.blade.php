@@ -77,7 +77,7 @@
                                               <span class="text-success">Present</span>
                                               @else
 
-                                              <span class="text-danger">Absent</span>
+                                              <span class="text-danger">{{$atd->status}}</span>
 
                                               @endif
                                             </td>
@@ -119,7 +119,9 @@
 
             });
 
-            $('#attendanceList').dataTable();
+            $('#attendanceList').dataTable({
+                "sPaginationType": "bootstrap",
+            });
 
             $( "#btnPrint" ).click(function() {
                 var aclass  =   $('#class').val();
