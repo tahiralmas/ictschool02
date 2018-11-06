@@ -847,8 +847,8 @@ class feesController extends BaseController {
 			}
 		}else{
 			//echo 'sdsd';
-			//$resultArray = array();
-			exit();
+			//$resultArray = array()
+		    return Redirect::to('fee_detail?action=unpaid')->withErrors("Student not found");
 		}
 
 		if($ictcore_integration->method=="telenor"){
@@ -856,10 +856,10 @@ class feesController extends BaseController {
 			if($fee_msg->count()>0 && $fee_msg->first()->description!=''){
 			$msg = $fee_msg->first()->description;
 			}else{
-			$msg= "please submit your child  fee for this month";
+			$msg = "please submit your child  fee for this month";
 			}
 			//$group_id='410598';
-			  $campaign      = $ict->telenor_apis('campaign_create',$group_id,'',$msg,$fee_msg->first()->telenor_file_id,$attendance_noti->type);
+			$campaign      = $ict->telenor_apis('campaign_create',$group_id,'',$msg,$fee_msg->first()->telenor_file_id,$attendance_noti->type);
 			// echo $campaign;
 			// $this->info('Notification sended successfully'.$campaign);
 
