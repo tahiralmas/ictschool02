@@ -42,11 +42,20 @@ class ictcoreController {
 
 	public function create()
 	{
-		$rules=[
-		'ictcore_url' => 'required',
-		'ictcore_user' => 'required',
-		'ictcore_password' => 'required',
-		];
+		if(Input::get('method')==''){
+			$rules=[
+			//'ictcore_url' => 'required',
+			'ictcore_user' => 'required',
+			'ictcore_password' => 'required',
+			];
+	    }else{
+			$rules=[
+			'ictcore_url' => 'required',
+			'ictcore_user' => 'required',
+			'ictcore_password' => 'required',
+			];
+
+	    }
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails()){
 			return Redirect::to('ictcore')->withinput(Input::all())->withErrors($validator);
