@@ -159,7 +159,7 @@ class messageController extends BaseController {
 					//echo "<pre>";print_r($ictcore_integration);
 
 					//exit;
-					if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
+					if(!empty($ictcore_integration)   && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 
 	                  
 	                  $role = Input::get('role');
