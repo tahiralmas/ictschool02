@@ -65,12 +65,18 @@ class ictcoreController {
 			}else{
 				$method = 'ictcore';
 			}
+
+			if(Input::get('ictcore_url')==''){
+				$url = '';
+			}else{
+				$url =Input::get('ictcore_url');
+			}
 			
 			DB::table("ictcore_integration")->where('type',Input::get('type'))->delete();
 			$ictcore_integration=new Ictcore_integration;
-			$ictcore_integration->ictcore_url =Input::get('ictcore_url');;
-			$ictcore_integration->ictcore_user = Input::get('ictcore_user');;
-			$ictcore_integration->ictcore_password = Input::get('ictcore_password');;
+			$ictcore_integration->ictcore_url =$url;
+			$ictcore_integration->ictcore_user = Input::get('ictcore_user');
+			$ictcore_integration->ictcore_password = Input::get('ictcore_password');
 			$ictcore_integration->method = $method;
 			$ictcore_integration->type = Input::get('type');
 			$ictcore_integration->save();
