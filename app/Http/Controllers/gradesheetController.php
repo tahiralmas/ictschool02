@@ -36,6 +36,7 @@ class gradesheetController extends BaseController {
 		$formdata->shift="";
 		$formdata->exam="";
 		$formdata->session="";
+		$formdata->type="";
 		$students=array();
 		$classes = ClassModel::pluck('name','code');
          if(Storage::disk('local')->exists('/public/grad_system.txt')){
