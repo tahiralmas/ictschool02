@@ -58,7 +58,7 @@ class ictcoreController {
 	    }
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails()){
-			return Redirect::to('ictcore')->withinput(Input::all())->withErrors($validator);
+			return Redirect::to('ictcore?type='.Input::get('type'))->withinput(Input::all())->withErrors($validator);
 		}else {
 			if(Input::get('method')==''){
 				$method = 'telenor';
