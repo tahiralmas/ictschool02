@@ -309,14 +309,15 @@ if(!empty($_GET) && $_GET['direct']=='yes'){
             });
             //$('#feeList').dataTable();
              $('#feeList').DataTable( {
-                    pagingType: "simple",
+                    //pagingType: "simple",
                 //pagingType: "simple",
                 //"pageLength": 5,
                 //  "pagingType": "full_numbers",
                 dom: 'Bfrtip',
                 buttons: [
                     'print'
-                ]
+                ],
+                "sPaginationType": "bootstrap",
               });
                     var session = $('#session').val().trim();
               getstudents();
@@ -515,7 +516,7 @@ if(!empty($_GET) && $_GET['direct']=='yes'){
                   dataType: 'json',
                   success: function(data) {
                     $('#section').empty();
-                   $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+                   //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
                     $.each(data, function(i, section) {
                       //console.log(student);
                      
