@@ -727,6 +727,10 @@ class feesController extends BaseController {
 		  
          // $unpaidArray[$section->code.'_'.$section->name."_".'unpaid']=0;
 		  //$resultArray[$section->code.'_'.$section->name."_".'paid'] =  0;
+			  
+
+
+
 			  if(count($student_all) >0){
 			foreach($student_all as $stdfees){
 				$student =	DB::table('billHistory')->leftJoin('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
@@ -792,7 +796,9 @@ class feesController extends BaseController {
          //echo "d<pre>d";print_r($student_all );
          // exit;
 		$student_all =	\Session::get('upaid');
-		 //echo "d<pre>d";print_r($student_all );
+		// echo "d<pre>d";print_r($student_all );
+
+		 //exit;
 		if(!empty($student_all)){
 			$ict  = new ictcoreController();
 			$i=0;
@@ -817,6 +823,7 @@ class feesController extends BaseController {
 				exit();
 				}
 			}
+			//$i=0;
 			foreach($student_all as $stdfees)
 			{
 				//if(count($student)>0 ){
@@ -836,13 +843,15 @@ class feesController extends BaseController {
 					);
 					if($ictcore_integration->method=="telenor"){
 
-						$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$stdfees->fatherCellNo,'','','');
+						$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$to,'','','');
 						//break;
 					}else{
 						$contact_id = $ict->ictcore_api('contacts','POST',$data );
 
 						$group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
 					}
+					
+					//$i++;
 				//}
 			}
 		}else{
@@ -861,9 +870,14 @@ class feesController extends BaseController {
 			//$group_id='410598';
 			$campaign      = $ict->telenor_apis('campaign_create',$group_id,'',$msg,$fee_msg->first()->telenor_file_id,$attendance_noti->type);
 			// echo $campaign;
+			// print_r($campaign);
+			 //exit;
 			// $this->info('Notification sended successfully'.$campaign);
 
 			 $send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
+	           //	echo $send_campaign;
+			 //print_r($send_campaign);	exit;
+			 session()->forget('upaid');
 	           		return Redirect::to('fee_detail?action=unpaid')->with('success',"Notification sended");
 
 		}else{
@@ -879,11 +893,12 @@ class feesController extends BaseController {
 				$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
 				$campaign_id = $ict->ictcore_api('campaigns/$campaign_id/start','PUT',$data=array() );
 					echo 'campi';
+					session()->forget('upaid');
 				return Redirect::to('fee_detail?action=unpaid')->with('success',"Notification sended");
 
 			}
 			//echo 'testing';
 		}
-		session()->forget('upaid');
+		
 	}
 }
