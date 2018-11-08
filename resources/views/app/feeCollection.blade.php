@@ -610,6 +610,7 @@ if(!empty($_GET)){
               success: function(data) {
                 //$('#LateFeeAmount').val(data[0].Latefee);
                 $('#LateFeeAmount1').html(data[0].Latefee);
+                //alert( $('#LateFeeAmount1').html(data[0].Latefee));
                 //$('#feeAmount').val(data[0].fee);
                 var damnt =  $("#disc").html();
                 //alert("www"+damnt);
@@ -715,23 +716,34 @@ if(!empty($_GET)){
         var table = document.getElementById('feeList');
         var rowCount = table.rows.length;
         var row = table.insertRow(rowCount);
-
+       var late = 0;
         //total fee
-        var totalFee=parseFloat($('#feeAmount').val())+parseFloat($('#LateFeeAmount').val());
 
-        var cell1 = row.insertCell(0);
-        var chkbox = document.createElement("input");
-        chkbox.type = "checkbox";
-        chkbox.checked=false;
-        chkbox.name="sl[]";
-        chkbox.size="3";
+         if(isNaN($('#LateFeeAmount').val())==true || $('#LateFeeAmount').val()==''){
+        // alert('nan');
+
+         late =0;
+        }else{
+          //alert('notnan');
+          
+            late=$('#LateFeeAmount').val();
+        }
+
+
+        var totalFee   = parseFloat($('#feeAmount').val())+parseFloat(late);
+        var cell1      = row.insertCell(0);
+        var chkbox     = document.createElement("input");
+        chkbox.type    = "checkbox";
+        chkbox.checked = false;
+        chkbox.name    = "sl[]";
+        chkbox.size    = "3";
         cell1.appendChild(chkbox);
 
-        var cell2 = row.insertCell(1);
-        var title = document.createElement("input");
-        title.name="gridFeeTitle[]";
-        title.readOnly="true";
-        title.value=$('#fee option:selected').text();
+        var cell2      = row.insertCell(1);
+        var title      = document.createElement("input");
+        title.name     = "gridFeeTitle[]";
+        title.readOnly = "true";
+        title.value    = $('#fee option:selected').text();
         cell2.appendChild(title);
 
 
@@ -765,7 +777,16 @@ if(!empty($_GET)){
         var LateFeeAmount = document.createElement("input");
         LateFeeAmount.name="gridLateFeeAmount[]";
         LateFeeAmount.readOnly="true";
-        LateFeeAmount.value=$('#LateFeeAmount').val();
+        if(isNaN($('#LateFeeAmount').val())==true || $('#LateFeeAmount').val()==''){
+        // alert('nan');
+         LateFeeAmount.value=0;
+        }else{
+          //alert('notnan');
+          
+            LateFeeAmount.value=$('#LateFeeAmount').val();
+        }
+          // alert(LateFeeAmount.value);
+       // LateFeeAmount.value=$('#LateFeeAmount').val();
         cell5.appendChild(LateFeeAmount);
 
         var cell6 = row.insertCell(5);
@@ -829,12 +850,9 @@ if(!empty($_GET)){
           success: function(data) {
             $('#previousdue').val(data);
             console.log(data);
-
           },
           type: 'GET'
         });
-
-
       });
       function addTotalWithDue() {
         try {
@@ -851,11 +869,11 @@ if(!empty($_GET)){
       $('#paidamount').on('input change keyup paste mouseup propertychange', function() {
         try {
           var paidamount =parseFloat($('#paidamount').val());
-         // if(isNaN(paidamount))
-          //{
-           // throw "Invalid Number Format!";
-          //}
-          //else {
+           // if(isNaN(paidamount))
+           //{
+            // throw "Invalid Number Format!";
+           //}
+           //else {
             var grandTotal = parseFloat($('#gtotal').val());
             var due = grandTotal-paidamount;
             //alert(paidamount);
@@ -864,7 +882,7 @@ if(!empty($_GET)){
             }else{
             $('#dueamount').val(due);
           }
-         // }
+          // }
 
         }
         catch (e) {
