@@ -89,8 +89,14 @@ class attendanceNotification extends Command
                            $msg = $get_msg->telenor_file_id_late;         
                         }
                     }
-                    $snd_msg  = $ict->verification_number_telenor_sms($student->fatherCellNo,$msg,'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$attendance_noti->type);
-
+                    if (preg_match("~^0\d+$~", $student->fatherCellNo)) {
+                        $to = preg_replace('/0/', '92', $student->fatherCellNo, 1);
+                    }else {
+                        $to =$student->fatherCellNo;  
+                    }
+                     if(strlen($to)==12){
+                        $snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$attendance_noti->type);
+                       }
                     $smsLog = new SMSLog();
                         $smsLog->type      = "Attendance";
                         $smsLog->sender    = "telenor ";
