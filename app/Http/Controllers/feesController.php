@@ -824,6 +824,7 @@ class feesController extends BaseController {
 				}
 			}
 			//$i=0;
+			 $contacts = array();
 			foreach($student_all as $stdfees)
 			{
 				//if(count($student)>0 ){
@@ -842,8 +843,10 @@ class feesController extends BaseController {
 					'email'              => '',
 					);
 					if($ictcore_integration->method=="telenor"){
-
-						$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$to,'','','');
+                         if(strlen($to)==12){
+                         $contacts[] = $to;
+                        }
+						//$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$to,'','','');
 						//break;
 					}else{
 						$contact_id = $ict->ictcore_api('contacts','POST',$data );
@@ -854,6 +857,13 @@ class feesController extends BaseController {
 					//$i++;
 				//}
 			}
+			if($ictcore_integration->method=="telenor" && !empty($contacts)){
+				$comseprated= implode(',',$contacts);
+
+				$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$comseprated,'','','');
+			    //echo "<pre>rrtrt";print_r($group_contact_id);exit;
+			}
+			//exit;
 		}else{
 			//echo 'sdsd';
 			//$resultArray = array()
@@ -867,6 +877,7 @@ class feesController extends BaseController {
 			}else{
 			$msg = "please submit your child  fee for this month";
 			}
+			
 			//$group_id='410598';
 			$campaign      = $ict->telenor_apis('campaign_create',$group_id,'',$msg,$fee_msg->first()->telenor_file_id,$attendance_noti->type);
 			// echo $campaign;
