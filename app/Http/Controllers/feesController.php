@@ -852,7 +852,7 @@ class feesController extends BaseController {
 					'email'              => '',
 					);
 				if($ictcore_integration->method=="telenor"){
-					if(strlen($to)==12){
+					if(strlen(trim($to))==12){
 						$contacts[] = $to;
 					}
 						//$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$to,'','','');
@@ -870,6 +870,7 @@ class feesController extends BaseController {
 				$comseprated= implode(',',$contacts);
 
 				$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$comseprated,'','','');
+			    exit;
 			    //echo "<pre>rrtrt";print_r($group_contact_id);exit;
 			}
 			//exit;
