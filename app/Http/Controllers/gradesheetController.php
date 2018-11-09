@@ -1354,6 +1354,9 @@ public function combined_results($type,$regiNo,$exam,$class)
 									//echo "emarks".$subcounter ."gpa".print_r( $gparules,true) ;
                                     $point = array('4','3.5','3','2.5','2');
                                     //$percent  = array('100'=>'A+',)
+                                    if( $subcounter ==0){
+                                    	return Redirect::to('/result/generate')->withInput()->with("noresult", "please add GPA rule in setting");
+                                    }
 									$grandPoint = ($totalpoint / $subcounter);
 									if ($isfail) {
 										$grandGrade = $this->gradnGradeCal(0.00, $gparules);
