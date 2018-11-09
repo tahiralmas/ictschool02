@@ -781,8 +781,8 @@ class feesController extends BaseController {
             $defulters[$i]=$defulter->fatherCellNo;
             $i++;
 			}
-			echo "<pre>";print_r($defulters);
-			exit;
+			//echo "<pre>";print_r($defulters);
+			//exit;
 
 		}else{
 			$fee_detail = $resultArray;
