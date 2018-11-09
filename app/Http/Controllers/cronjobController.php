@@ -58,7 +58,7 @@ class cronjobController extends BaseController {
 		           // return Redirect::to('/fees/classreport')->withErrors("Please Add ictcore integration in Setting Menu");
                     exit();
 		     	}
-		     }
+		     }$contacts =array();
 				foreach($student_all as $stdfees)
 				{
 
@@ -86,8 +86,11 @@ class cronjobController extends BaseController {
 						);
                         if($ictcore_integration->method=="telenor"){
                         	
-                        	$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$stdfees->fatherCellNo,'','','');
-                             break;
+                        	if(strlen(trim($to))==12){
+						     $contacts[] = $to;
+					        }
+                        	//$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$stdfees->fatherCellNo,'','','');
+                             //break;
                         }else{
 					   $contact_id = $ict->ictcore_api('contacts','POST',$data );
 
@@ -95,6 +98,17 @@ class cronjobController extends BaseController {
 					 }
 					}
 				}
+
+				if($ictcore_integration->method=="telenor" && !empty($contacts)){
+				$comseprated= implode(',',$contacts);
+                     
+				$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$comseprated,'','','');
+			    /*echo "1<pre>1<br>";print_r($contacts1);echo "<br>";
+			    echo "<pre><br>";print_r($contacts);
+
+			    exit;*/
+			    //echo "<pre>rrtrt";print_r($group_contact_id);exit;
+			}
 			}
 			else{
 			//$resultArray = array();
