@@ -136,8 +136,9 @@ class subjectController extends BaseController {
 	{
 		$classes = ClassModel::pluck('name','code');
 		$subject = Subject::find($id);
+		$gpa =GPA::select('for')->distinct()->get();
 		//return View::Make('app.subjectEdit',compact('subject','classes'));
-		return View('app.subjectEdit',compact('subject','classes'));
+		return View('app.subjectEdit',compact('subject','classes','gpa'));
 
 	}
 
