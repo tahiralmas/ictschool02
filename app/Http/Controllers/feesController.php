@@ -834,6 +834,7 @@ class feesController extends BaseController {
 			}
 			//$i=0;
 			$contacts = array();
+			$contacts1 = array();
 			foreach($student_all as $stdfees)
 			{
 				//if(count($student)>0 ){
@@ -852,6 +853,7 @@ class feesController extends BaseController {
 					'email'              => '',
 					);
 				if($ictcore_integration->method=="telenor"){
+					$contacts1[] = $to;
 					if(strlen(trim($to))==12){
 						$contacts[] = $to;
 					}
@@ -868,8 +870,11 @@ class feesController extends BaseController {
 			}
 			if($ictcore_integration->method=="telenor" && !empty($contacts)){
 				$comseprated= implode(',',$contacts);
-
+                     
 				$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$comseprated,'','','');
+			    echo "1<pre>1<br>";print_r($contacts1);echo "<br>";
+			    echo "<pre><br>";print_r($contacts);
+
 			    exit;
 			    //echo "<pre>rrtrt";print_r($group_contact_id);exit;
 			}
