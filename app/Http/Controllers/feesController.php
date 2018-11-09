@@ -776,11 +776,11 @@ class feesController extends BaseController {
 			session(['upaid' => $fee_detail]);
 			
 			$defulters = array();
-			$i=0;
+			/*$i=0;
 			foreach($fee_detail as $defulter){
             $defulters[$i]=$defulter->fatherCellNo;
             $i++;
-			}
+			}*/
 			//echo "<pre>";print_r($defulters);
 			//exit;
 
@@ -872,10 +872,10 @@ class feesController extends BaseController {
 				$comseprated= implode(',',$contacts);
                      
 				$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$comseprated,'','','');
-			    echo "1<pre>1<br>";print_r($contacts1);echo "<br>";
+			    /*echo "1<pre>1<br>";print_r($contacts1);echo "<br>";
 			    echo "<pre><br>";print_r($contacts);
 
-			    exit;
+			    exit;*/
 			    //echo "<pre>rrtrt";print_r($group_contact_id);exit;
 			}
 			//exit;
