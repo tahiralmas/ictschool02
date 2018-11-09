@@ -49,7 +49,7 @@
                              </div>
                          </div>
                        </div>
-                       <div class="col-md-4">
+                       <div class="col-md-4" style="display:none">
                          <div class="form-group">
                          <label class="control-label" for="type">Type</label>
 
@@ -67,7 +67,7 @@
 
                    <div class="row">
                      <div class="col-md-12">
-                         <div class="col-md-2">
+                         <div class="col-md-2" style="display:none">
                              <div class="form-group">
                                  <label class="control-label" for="stdgroup">Subject Group</label>
                                  <div class="input-group">
@@ -107,13 +107,20 @@
                        <div class="input-group">
                            <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                            <select name="gradeSystem" class="form-control">
-                             @if($subject->gradeSystem=="1")
+                            {{-- @if($subject->gradeSystem=="1")
                              <option value="1" selected>100 Marks </option>
                              <option value="2">50 Marks </option>
                            @else
                              <option value="1">100 Marks </option>
                              <option value="2" selected>50 Marks </option>
-                           @endif
+                           @endif --}}
+
+                            @if($gpa)
+                             @foreach($gpa as $gp)
+                              <option  value="{{$gp->for}}" @if($subject->gradeSystem==$gp->for) selected @endif> @if($gp->for=="1") 100 Marks @elseif($gp->for=="3") 75 Marks  @elseif($gp->for=="2") 50 Marks  @elseif($gp->for=="4") 30 Marks  @elseif($gp->for=="5") 25 Marks  @elseif($gp->for=="6") 20 Marks @elseif($gp->for=="7") 15 Marks @elseif($gp->for=="8") 10 Marks @endif </option>
+                              <!--<option value="2">50 Marks </option>-->
+                            @endforeach
+                            @endif
 
                            </select>
                        </div>
