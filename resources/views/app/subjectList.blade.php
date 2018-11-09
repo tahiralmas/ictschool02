@@ -43,11 +43,27 @@
                                                                              <td>{{$subject->subgroup}}</td>
                                                                              <td>{{$subject->stdgroup}}</td>
                                                                   <td>{{$subject->class}}</td>
-                                                                  @if($subject->gradeSystem=="1")
-                                                                  <td>100 Marks</td>
-                                                                @else
-                                                                    <td>50 Marks</td>
-                                                                @endif
+                                                                 
+                                                                  
+                                                                       @if($subject->gradeSystem=="1") 
+                                                                       <td>100 Marks</td> 
+                                                                       @elseif($subject->gradeSystem=="3") 
+                                                                      <td> 75 Marks </td> 
+                                                                       @elseif($subject->gradeSystem=="2") 
+                                                                       <td>50 Marks </td> 
+                                                                       @elseif($subject->gradeSystem=="4") 
+                                                                      <td> 30 Marks </td> 
+                                                                       @elseif($subject->gradeSystem=="5") 
+                                                                      <td> 25 Marks</td> 
+                                                                        @elseif($subject->gradeSystem=="6") 
+                                                                        <td>20 Marks </td>
+                                                                        @elseif($subject->gradeSystem=="7") 
+                                                                       <td> 15 Marks </td>
+                                                                        @elseif($subject->gradeSystem=="8") 
+                                                                       <td> 10 Marks </td>
+                                                                        @endif 
+
+
                                                                     <td>
                                                                     {{$subject->totalfull.' [Total] '}}
                                                                       {{$subject->wfull.' [Written] '}}
@@ -79,7 +95,9 @@
 @section('script')
 <script type="text/javascript">
     $( document ).ready(function() {
-        $('#subjectList').dataTable();
+        $('#subjectList').dataTable({
+           "sPaginationType": "bootstrap",
+        });
     });
 </script>
 @stop
