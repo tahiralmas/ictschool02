@@ -59,14 +59,14 @@
                               </div>
                           </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4" style="display:none">
                           <div class="form-group">
                           <label class="control-label" for="type">Type</label>
 
                           <div class="input-group">
                               <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign  blue"></i></span>
                               <select name="type" class="form-control" required>
-                              <option value="Core">Core</option>
+                              <option value="Core" selected>Core</option>
                                 <option value="Comprehensive">Comprehensive</option>
                                 <option value="Electives">Electives</option>
                               </select>
@@ -79,13 +79,13 @@
 
                     <div class="row">
                       <div class="col-md-12">
-                          <div class="col-md-2">
+                          <div class="col-md-2" style="display:none">
                               <div class="form-group">
                                   <label class="control-label" for="stdgroup">Subject Group</label>
                                   <div class="input-group">
                                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign  blue"></i></span>
                                       <select name="subgroup" class="form-control" required >
-                                          <option value="N/A">N/A</option>
+                                          <option value="N/A" selected>N/A</option>
                                           <option value="Bangla">Urdu</option>
                                           <option value="English">English</option>
 
