@@ -251,9 +251,13 @@ class feesController extends BaseController {
 		else{
 			$student=array();
 		}
+		    $now             =  Carbon::now();
+			$year            =  $now->year;
+			$month      =  $now->month;
+
 		//echo "<pre>";print_r($fees->toArray());exit;
 		//return View::Make('app.feeCollection',compact('classes'));
-		return View('app.feeCollection',compact('classes','sections','fees','student'));
+		return View('app.feeCollection',compact('classes','sections','fees','student','month'));
 	}
 	public function postCollection()
 	{
