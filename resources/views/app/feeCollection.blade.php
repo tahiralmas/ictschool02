@@ -33,7 +33,7 @@ if(!empty($_GET)){
    $class1   = '';
   $section = '';
   $session = '';
-  $month   = '';
+  $month   = $month;
   $type    = '';
   $fee     = '';
   //$regiNo ='';
@@ -133,7 +133,7 @@ if(!empty($_GET)){
                     <select id="type" name="type" class="form-control" required>
                       <option>--Select Fee Type--</option>
                       <option value="Other" @if($type=='Other') Selected @endif >Other</option>
-                      <option value="Monthly" @if($type=="Monthly") Selected @endif >Monthly</option>
+                      <option value="Monthly" @if($type=="Monthly") Selected @endif Selected>Monthly</option>
 
                     </select>
                   </div>
@@ -644,6 +644,7 @@ if(!empty($_GET)){
         <?php } ?>
               $('#class').on('change',function() {
                 getsections();
+                $('#type').trigger("change");
               });
       btnSaveIsvisibale();
       <?php if(empty($student)){ ?>
