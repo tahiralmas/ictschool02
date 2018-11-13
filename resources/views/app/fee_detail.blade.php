@@ -63,7 +63,7 @@
                               <label class="control-label" for="">&nbsp;</label>
 
                               <div class="input-group">
-                                <button class="btn btn-primary pull-right" id="btnsave" type="submit"><i class="glyphicon glyphicon-th"></i> Send voice Notification  </button>
+                                <button class="btn btn-primary pull-right" id="btnsave" onclick="return confirm('Are you sure you want to send notification?');" type="submit" ><i class="glyphicon glyphicon-th"></i> Send voice Notification  </button>
 
                               </div>
                             </div>
@@ -142,12 +142,17 @@
             });
             $('#attendanceList').dataTable({
 
-                  pagingType: "simple",
+                  //pagingType: "simple",
                 //pagingType: "simple",
                 "pageLength": 100,
                 //  "pagingType": "full_numbers",
                 dom: 'Bfrtip',
-                buttons: [
+                
+       
+       
+
+
+            buttons: [
             {
                 extend: 'print',
                 customize: function ( win ) {
@@ -166,7 +171,9 @@
                         .css( 'font-size', 'inherit' );
                 }
             }
-        ]
+        ],
+        // "sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-12'i><'col-md-12 center-block'p>>",
+        "sPaginationType": "bootstrap",
             });
 
             $( "#btnPrint" ).click(function() {
