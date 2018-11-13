@@ -56,6 +56,7 @@ class studentController extends BaseController {
 			$data=DB::table('Student')->where('isActive', '=', 'Yes')->where('firstName','LIKE','%'.$query."%")->orwhere('lastName','LIKE','%'.$query."%")->orwhere('fatherName','LIKE','%'.$query."%")->orwhere('b_form','LIKE','%'.$query."%")
 			->orwhere('session','LIKE','%'.$query."%")->orwhere('class','LIKE','%'.$query."%")->orwhere('dob','LIKE','%'.$query."%")
 			->orwhere('parmanentAddress','LIKE','%'.$query."%")->orwhere('discount_id','LIKE','%'.$query."%")
+			->orwhere('regiNo','LIKE','%'.$query."%")
 			->orderBy('session', 'desc')
 			->orderBy('class', 'asc')
 			->limit(20)
