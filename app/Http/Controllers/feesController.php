@@ -922,8 +922,7 @@ class feesController extends BaseController {
 					);
 				$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
 				$campaign_id = $ict->ictcore_api('campaigns/'.$campaign_id.'/start','PUT',$data=array() );
-				echo 'campi';
-				session()->forget('upaid');
+				//session()->forget('upaid');
 				return Redirect::to('fee_detail?action=unpaid')->with('success',"Notification sended");
 
 			}
