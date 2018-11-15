@@ -809,8 +809,7 @@ class feesController extends BaseController {
          //echo "d<pre>d";print_r($student_all );
          // exit;
 		$student_all =	\Session::get('upaid');
-		// echo "d<pre>d";print_r($student_all );
-
+		 //echo "d<pre>d";print_r($student_all );
 		 //exit;
 		if(!empty($student_all)){
 			$ict  = new ictcoreController();
@@ -849,11 +848,12 @@ class feesController extends BaseController {
 				}else {
 					$to =$stdfees->fatherCellNo;  
 				}
+
 				$data = array(
 					//'registrationNumber' =>$stdfees->regiNo,
 					'first_name'         => $stdfees->firstName,
 					'last_name'          =>  $stdfees->lastName,
-					'phone'              =>  $to,
+					'phone'              =>  NULL,
 					'email'              => '',
 					);
 				if($ictcore_integration->method=="telenor"){
@@ -921,7 +921,7 @@ class feesController extends BaseController {
 					'account_id' => 1,
 					);
 				$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
-				$campaign_id = $ict->ictcore_api('campaigns/$campaign_id/start','PUT',$data=array() );
+				$campaign_id = $ict->ictcore_api('campaigns/'.$campaign_id.'/start','PUT',$data=array() );
 				echo 'campi';
 				session()->forget('upaid');
 				return Redirect::to('fee_detail?action=unpaid')->with('success',"Notification sended");
