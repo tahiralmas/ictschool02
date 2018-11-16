@@ -80,14 +80,25 @@ class studentController extends BaseController {
 		$stdcount = Student::select(DB::raw('count(*) as total'))->where('class','=',$class)->where('session','=',$ses)->first();
 
 		$stdseccount = Student::select(DB::raw('count(*) as total'))->where('class','=',$class)->where('session','=',$ses)->where('section','=',$section)->first();
+		$regiNolast  = Student::where('class','=',$class)->where('session','=',$ses)->where('section','=',$section)->orderBy('id', 'desc')->first();
 		$r = intval($stdcount->total)+1;
+		//echo substr($regiNolast->regiNo,4);
+		
 		if(strlen($r)<2)
 		{
 			$r='0'.$r;
 		}
 		$c = intval($stdseccount->total)+1;
-		$cl=substr($class,2);
 
+
+
+
+		$cl=substr($class,2);
+       
+        if(!empty($regiNolast) && $r == substr($regiNolast->regiNo,4)){
+         	$r   = intval($stdcount->total)+2;
+         	$c = intval($stdseccount->total)+2;
+		}
 		$foo = array();
 		if(strlen($cl)<2) {
 			$foo[0]= substr($ses, 2) .'0'.$cl.$r;
