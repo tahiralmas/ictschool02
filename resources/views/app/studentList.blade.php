@@ -34,7 +34,16 @@
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="row">
                                 <div class="col-md-12">
+                                    <div class="col-md-3">
+                                        <div class="form-group ">
+                                            <label for="session">session</label>
+                                            <div class="input-group">
 
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                                                <input type="text" value="{{date('Y')}}" id="session" required="true" class="form-control datepicker2" name="session" value="{{$formdata->session}}"   data-date-format="yyyy">
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label" for="class">Class</label>
@@ -45,6 +54,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                     
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label" for="section">Section</label>
@@ -88,16 +98,7 @@
                                     </div>-->
 
                                     <input type="hidden" name="shift" value="Morning">
-                                    <div class="col-md-3">
-                                        <div class="form-group ">
-                                            <label for="session">session</label>
-                                            <div class="input-group">
-
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                                <input type="text" value="{{date('Y')}}" id="session" required="true" class="form-control datepicker2" name="session" value="{{$formdata->session}}"   data-date-format="yyyy">
-                                            </div>
-                                        </div>
-                                    </div>
+                                   
 
                                 </div>
                             </div>
@@ -167,13 +168,14 @@
 $( document ).ready(function() {
   //$('#studentList').dataTable();
     $('#studentList').DataTable( {
-        pagingType: "simple",
+        //pagingType: "simple",
         //"pageLength": 5,
       //  "pagingType": "full_numbers",
         dom: 'Bfrtip',
         buttons: [
             'print'
-        ]
+        ],
+         "sPaginationType": "bootstrap",
        
     });
       $('#studentList').removeClass( 'display' ).addClass('table table-striped table-bordered');
