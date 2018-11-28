@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 
 //use App\Api_models\User;
-
+use Closure;
 use Illuminate\Support\Facades\Auth;
 
 use Validator;
@@ -101,7 +101,7 @@ class AttendanceController extends Controller
 			 *
 			 * @return \Illuminate\Http\Response
 			 */
-		public function attendance_create()
+		public function attendance_create(Request $request)
 		{
 			$rules = [
 			    'class_id'=>'required',
@@ -117,7 +117,11 @@ class AttendanceController extends Controller
 					 return response()->json($validator->errors(), 422);
 			} else 
 			{
+				//$response = $next($request);
 
+            //$response = $response instanceof RedirectResponse ? $response : response($response);
+
+                return request()->getHttpHost(); 
 					$absentStudents = array();
 					$students = Input::get('regiNo');
 					$status = Input::get('status');
