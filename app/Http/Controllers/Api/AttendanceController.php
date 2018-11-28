@@ -121,7 +121,10 @@ class AttendanceController extends Controller
 
             //$response = $response instanceof RedirectResponse ? $response : response($response);
 
-                return request()->getHttpHost(); 
+                //return ; 
+                if(request()->getHttpHost()=='localhost' || request()->getHttpHost()=='school.ictcore.org'){
+              		$attendance =  Attendance::where('date',Carbon::parse(Input::get('date'))->format('Y-m-d'))->delete();
+				}
 					$absentStudents = array();
 					$students = Input::get('regiNo');
 					$status = Input::get('status');
@@ -153,6 +156,18 @@ class AttendanceController extends Controller
 						}else{
 						 return response()->json(['error'=>'Attendance already added'], 400);
 						}
+						if(request()->getHttpHost()=='localhost' || request()->getHttpHost()=='school.ictcore.org'){
+						//if(request()->getHttpHost()=='school.ictcore.org'){
+                              $student =	DB::table('Student')
+								->join('Class', 'Student.class', '=', 'Class.code')
+								->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Student.fatherName','Class.Name as class')
+								->where('Student.regiNo','=',$students)
+								->where('Student.section','=',$section_id)
+								->where('Student.session','=',Input::get('session'))
+								->first();
+
+							   $this->sendnotification($student);
+						} 
 						/*$ictcore_integration = Ictcore_integration::select("*")->first();
                  
 						if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url !='' && $ictcore_integration->ictcore_user !='' && $ictcore_integration->ictcore_password !=''){ 
@@ -260,6 +275,87 @@ class AttendanceController extends Controller
 				  return response()->json(['success'=>"Students attendance save Succesfully.",'id' => $attendence_id]);
 			}
 		}
+
+			public function sendnotification($student)
+			{
+				 $get_msg  = DB::table('ictcore_attendance')->first();
+                 $ictcore_attendance  = Ictcore_attendance::select("*")->first();
+                 $ictcore_integration_sms = Ictcore_integration::select("*")->where('type','sms')->first();
+                 $ictcore_integration_voice = Ictcore_integration::select("*")->where('type','voice')->first();
+                 $ict                 = new ictcoreController();
+               if (preg_match("~^0\d+$~", $student->fatherCellNo)) {
+                	$to = preg_replace('/0/', '92', $student->fatherCellNo, 1);
+                }else {
+                    $to =$student->fatherCellNo;  
+                }
+				$data = array(
+					   'first_name' => $student->firstName,
+						'last_name' => $student->lastName,
+						'phone'     => $to,
+						'email'     => '',
+					);
+				$contact_id = $ict->ictcore_api('contacts','POST',$data );
+                            //if($student->status=="Absent"){
+                             $program_id = 'program_id =>'.$get_msg->ictcore_program_id;
+                             $msg=$get_msg->recording;
+                             
+                            
+                             $data = array(
+                                        'title'      => 'Attendance',
+                                        'program_id' =>$get_msg->ictcore_program_id,
+                                        'account_id' => 1,
+                                        'contact_id' => $contact_id,
+                                        'origin'     => 1,
+                                        'direction'  => 'outbound',
+                                    );
+                             
+
+                             $transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+                            
+                            $transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+                            if(!empty($transmission_send->error)){
+                                $status =$transmission_send->error->message;
+                            }else{
+                                $status = "Completed";
+                            }
+
+                                 //echo "bhutta<pre>".$status;exit;
+                            //$msg    = $recoding;
+                            $smsLog = new SMSLog();
+                            $smsLog->type      = "Attendancehello";
+                            $smsLog->sender    = "ictcore voice";
+                            $smsLog->message   = $msg;
+                            $smsLog->recipient = $student->fatherCellNo;
+                            $smsLog->regiNo    = $student->regiNo;
+                            $smsLog->status    = $status;
+                            $smsLog->save();
+
+                            $get_msg  = DB::table('ictcore_attendance')->first();
+
+	                        $name     = $student->firstName.' '.$student->lastName;
+	                       
+	                        $msg      =  str_replace("<<parent>>",$student->fatherName,$get_msg->description);
+	                        $msg      =  str_replace("<<name>>",$name,$msg);
+	                       // echo "<pre>";print_r($msg);
+	                      //  exit;
+	                        if (preg_match("~^0\d+$~", $student->fatherCellNo)) {
+		                        $to = preg_replace('/0/', '92', $student->fatherCellNo, 1);
+		                    }else {
+		                        $to =$student->fatherCellNo;  
+		                    }
+		                     
+		                    if(strlen($to)==12){
+		                        $snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'ICT VISION',$ictcore_integration_sms->ictcore_user,$ictcore_integration_sms->ictcore_password,'sms');
+		                    }
+		                        $smsLog = new SMSLog();
+		                        $smsLog->type      = "Attendance";
+		                        $smsLog->sender    = "telenor ";
+		                        $smsLog->message   = $msg;
+		                        $smsLog->recipient = $student->fatherCellNo;
+		                        $smsLog->regiNo    = $student->regiNo;
+		                        $smsLog->status    = $snd_msg;
+		                        $smsLog->save();
+			}
 		
 			/**
 			 * attendance_view api
