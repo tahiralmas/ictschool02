@@ -12,6 +12,7 @@ use App\Ictcore_integration;
 use App\Institute;
 use DB;
 use Excel;
+use Auth;
 use App\SMSLog;
 use App\SectionModel;
 use App\Holidays;
@@ -35,13 +36,21 @@ class attendanceController extends BaseController {
 		{
 	      
 			$classes=array();
+
 			$classes2 = ClassModel::select('code','name')->orderby('code','asc')->get();
 			$subjects = Subject::pluck('name','code');
 			$attendance=array();
 			$messages = DB::table('message')
 				    ->select(DB::raw('message.id,message.name,message.description,message.recording'))
 				    ->get();
-				   
+		    if(!empty(FixData()['classes'])){
+		 		$classes =FixData()['classes'];
+		 		$classes2  = ClassModel::select('name','code')->whereIn('code',$classes)->orderBy('created_at', 'asc')->get();
+
+				/// 
+		 		//$classes  = ClassModel::select('namew','code')->whereIn('code',$classes_data)->orderBy('created_at', 'asc')->get();
+	    	}
+				  
 			//return View::Make('app.attendanceCreate',compact('classes2','classes','subjects','attendance'));
 			return View('app.attendanceCreate',compact('classes2','classes','subjects','attendance','messages'));
 		}
@@ -469,6 +478,22 @@ class attendanceController extends BaseController {
 			$formdata->session=date('Y');
 			$formdata->date=date('d-m-Y');
 			$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
+			
+              if(Auth::user()->group=="Teacher"){
+
+		    	$get_classess = DB::table('section')->where('teacher_id',Auth::user()->group_id)->get();
+		    	$class_code = array();
+		    	$section_id = array();
+		    	foreach($get_classess as $class ){
+		    		$class_code[] = $class->class_code;
+                    $section_id[] =$class->id;
+		    	}
+		    	//print_r($class_code);
+		    	$classes = ClassModel::select('code','name')->whereIn('code',$class_code)->orderby('code','asc')->get();
+		    }
+
+
+
 			//$attendance=array();
               $date = $this->parseAppDate(Carbon::now()->format('d-m-Y'));
 			$attendance = DB::table('Student')
@@ -702,13 +727,13 @@ class attendanceController extends BaseController {
 			->select('Attendance.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.section_id','Attendance.date','section.name as section');
 				if(Input::get('class')!='all'){
 			     $classc = DB::table('Class')->select('*')->where('code','=',Input::get('class'))->first();
-				$attendance=$attendance->where('Attendance.class_id','=',$classc->id);
+				 $attendance=$attendance->where('Attendance.class_id','=',$classc->id);
 				//->where('Student.section','=',Input::get('section'))
 				 $attendance=$attendance->whereIn('Attendance.section_id', Input::get('section'));
 				}else{
-				$attendance=$attendance->where('Attendance.class_id','!=',NULL);
-				//->where('Student.section','=',Input::get('section'))
-				 $attendance=$attendance->where('Attendance.section_id','!=', NULL);
+					$attendance=$attendance->where('Attendance.class_id','!=',NULL);
+					//->where('Student.section','=',Input::get('section'))
+				 	$attendance=$attendance->where('Attendance.section_id','!=', NULL);
 				}
 				//$attendance=$attendance->Where('Student.shift','=','Morning');
 				//->where('Student.session','=',trim(Input::get('session')))
@@ -1054,7 +1079,11 @@ class attendanceController extends BaseController {
         $yearMonth    = Input::get('yearMonth', date('Y-m'));
 
         $classes2     = ClassModel::select('code', 'name')->orderby('code', 'asc')->get();
-
+           if(!empty(FixData()['classes'])){
+                    	
+					 $classes =FixData()['classes'];
+					 $classes2  = ClassModel::select('name','code')->whereIn('code',$classes)->orderBy('created_at', 'asc')->get();
+			}
         $section_data = SectionModel::select('id','name')->where('id','=',$section)->first();
         if($isPrint) {
 
@@ -1194,5 +1223,12 @@ class attendanceController extends BaseController {
              return View('app.attendace_detail', compact('attendances_detail'));
 
     	endif;
+    }
+    public function today_delete()
+    {
+    	if(request()->getHttpHost()=='localhost' || request()->getHttpHost()=='school.ictcore.org'){
+             $attendance =  Attendance::where('date',Carbon::parse(Input::get('date'))->format('Y-m-d'))->delete();
+		}
+		 return Redirect::to('dashboard');
     }
 }
