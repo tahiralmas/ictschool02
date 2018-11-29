@@ -123,7 +123,7 @@ class AttendanceController extends Controller
 
                 //return ; 
                 if(request()->getHttpHost()=='localhost' || request()->getHttpHost()=='school.ictcore.org'){
-              		$attendance =  Attendance::where('date',Carbon::parse(Input::get('date'))->format('Y-m-d'))->delete();
+              		//$attendance =  Attendance::where('date',Carbon::parse(Input::get('date'))->format('Y-m-d'))->delete();
 				}
 					$absentStudents = array();
 					$students = Input::get('regiNo');
