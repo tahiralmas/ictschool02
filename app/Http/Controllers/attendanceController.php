@@ -7,6 +7,7 @@ use App\Subject;
 use App\Attendance;
 use App\Student;
 use App\Message;
+use App\SectionAttendance;
 use App\Ictcore_attendance;
 use App\Ictcore_integration;
 use App\Institute;
