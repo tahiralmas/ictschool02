@@ -1227,7 +1227,8 @@ class attendanceController extends BaseController {
     public function today_delete()
     {
     	if(request()->getHttpHost()=='localhost' || request()->getHttpHost()=='school.ictcore.org'){
-             $attendance =  Attendance::where('date',Carbon::parse(Input::get('date'))->format('Y-m-d'))->delete();
+             $attendance =  Attendance::where('date',Carbon::today()->toDateString())->delete();
+             $attendance =  SectionAttendance::where('date',Carbon::today()->toDateString())->delete();
 		}
 		 return Redirect::to('dashboard');
     }
