@@ -166,7 +166,7 @@ class AttendanceController extends Controller
 								->where('Student.session','=',Input::get('session'))
 								->first();
 
-							   $this->sendnotification($student);
+							   //$this->sendnotification($student);
 						} 
 						/*$ictcore_integration = Ictcore_integration::select("*")->first();
                  
@@ -607,6 +607,23 @@ class AttendanceController extends Controller
 				$attendance_done->date =Carbon::today()->toDateString();
 				$attendance_done->attendance = 'Done';
 				$attendance_done->save();
+
+                    if(request()->getHttpHost()=='localhost' || request()->getHttpHost()=='school.ictcore.org'){
+						//if(request()->getHttpHost()=='school.ictcore.org'){
+                        $attendances =	DB::table('Attendance')->where('section_id',$section_id)->where('date',Carbon::parse(Input::get('date'))->format('Y-m-d'))->where('status','Absent')->get();
+                        if($attendances){
+                            foreach($attendances as $attendance){
+                                $student =	DB::table('Student')
+								->join('Class', 'Student.class', '=', 'Class.code')
+								->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Student.fatherName','Class.Name as class')
+								->where('Student.regiNo','=',$students)
+								->where('Student.section','=',$section_id)
+								->where('Student.session','=',Input::get('session'))
+								->first();
+							   $this->sendnotification($student);
+							}
+						}
+					} 
 				 return response()->json("Section Attendance Complete today",200);
 			    }else{
 			     return response()->json("Already Done",200);
