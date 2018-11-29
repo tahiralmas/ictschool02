@@ -616,9 +616,9 @@ class AttendanceController extends Controller
                                 $student =	DB::table('Student')
 								->join('Class', 'Student.class', '=', 'Class.code')
 								->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Student.fatherName','Class.Name as class')
-								->where('Student.regiNo','=',$students)
+								->where('Student.regiNo','=',$attendance->regiNo)
 								->where('Student.section','=',$section_id)
-								->where('Student.session','=',Input::get('session'))
+								->where('Student.session','=','2018')
 								->first();
 							   $this->sendnotification($student);
 							}
