@@ -283,6 +283,7 @@ class AttendanceController extends Controller
                  $ictcore_integration_sms = Ictcore_integration::select("*")->where('type','sms')->first();
                  $ictcore_integration_voice = Ictcore_integration::select("*")->where('type','voice')->first();
                  $ict                 = new ictcoreController();
+                 $snd_msg ='';
                if (preg_match("~^0\d+$~", $student->fatherCellNo)) {
                 	$to = preg_replace('/0/', '92', $student->fatherCellNo, 1);
                 }else {
