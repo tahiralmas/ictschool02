@@ -610,7 +610,7 @@ class AttendanceController extends Controller
 
                     if(request()->getHttpHost()=='localhost' || request()->getHttpHost()=='school.ictcore.org'){
 						//if(request()->getHttpHost()=='school.ictcore.org'){
-                        $attendances =	DB::table('Attendance')->where('section_id',$section_id)->where('date',Carbon::parse(Input::get('date'))->format('Y-m-d'))->where('status','Absent')->get();
+                        $attendances =	DB::table('Attendance')->where('section_id',$section_id)->where('date',Carbon::today()->toDateString())->where('status','Absent')->get();
                         if($attendances){
                             foreach($attendances as $attendance){
                                 $student =	DB::table('Student')
