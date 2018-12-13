@@ -63,7 +63,13 @@
                               <label class="control-label" for="">&nbsp;</label>
 
                               <div class="input-group">
-                                <button class="btn btn-primary pull-right" id="btnsave" onclick="return confirm('Are you sure you want to send notification?');" type="submit" ><i class="glyphicon glyphicon-th"></i> Send voice Notification  </button>
+                                <button class="btn btn-primary pull-right" name="action" value="voice" id="btnsave" onclick="return confirm('Are you sure you want to send notification?');" type="submit" ><i class="glyphicon glyphicon-th"></i> Send voice Notification  </button>
+                                
+
+                              </div>
+                              <div class="input-group" style="margin-top: -38px;/* margin-bottom: -178px; */margin-left: 210px;">
+                                <button class="btn btn-primary pull-right" name='action' value='sms' id="btnsave" onclick="return confirm('Are you sure you want to send notification?');" type="submit" ><i class="glyphicon glyphicon-th"></i> Send Sms Notification  </button>
+                                
 
                               </div>
                             </div>
