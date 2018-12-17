@@ -212,6 +212,21 @@ class TeacherController extends Controller
            	$attendances_b[] = array('total_attendance'=>$attendances_a->total_attendance,'absent'=>$attendances_a->absent,'present'=>$attendances_a->present,'leaves'=>$attendances_a->leaves,'section_id'=>$teacher->section_id,'section'=>$teacher->section,'class_id'=>$teacher->class_id,'class'=>$teacher->class,'total_student'=>$count_student1->total_student);
            //	$attendances_b[] =;
            }
+            /**
+            * Get teacher timetable
+            **/
+
+            /* $teacher_timetbale = array();
+           $teacher_timetbale   = DB::table('timetable')
+			->join('Class', 'timetable.class_id', '=', 'Class.code')
+			->join('Subject', 'timetable.subject_id', '=', 'Subject.id')
+			->select('Subject.name as subject', 'Class.name as class')
+			->where('timetable.teacher_id',$teacher_id)->groupby('timetable.class_id')->get();
+			if(!is_null($teacher_timetbale) && count($teacher_timetbale)>0){
+				$teacher_timetbale['timetable'][] = $teacher_timetbale;
+			}else{
+				$teacher_timetbale['timetable'] = array();
+			}*/
 
           // $attendances_b['total_student'.'_'.$teacher->section] =$count_student1->total_student; 
           // $attendances_b['76']=65;
@@ -232,11 +247,11 @@ class TeacherController extends Controller
 		
    
 
-		return response()->json($attendances_b);
+		return response()->json($attendances_b,200);
 	      $merage = $attendances_a;
 		
 			if(!empty($merage)){
-				return response()->json($merage,200);
+				return response()->json(array($merage,$teacher_timetbale),200);
 			}else{
 				return response()->json(['error'=>'teacher Not Found'], 404);
 			}
