@@ -645,7 +645,8 @@ class AttendanceController extends Controller
 				  // $classc = DB::table('Class')->select('*')->where('id','=',$class_id)->first();
 				 $attendance = DB::table('Student')
 				->join('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
-				->select( 'Attendance.id','Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','Attendance.status','Attendance.date')
+				->join('section', 'Student.section', '=', 'section.id')
+				->select( 'Attendance.id','Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.class','section.name as section_name','Attendance.status','Attendance.date')
                 ->where('Student.id',  $student_id)
                 ->where('Student.isActive','Yes')
                 ->get();
