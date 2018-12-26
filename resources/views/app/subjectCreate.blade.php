@@ -142,7 +142,7 @@
                       </div>
                   </div>
                 </div>
-
+               <div style="display:none">
                 <div class="row">
                   <div class="col-md-12">
                       <h3 class="text-info">Exam Details</h3>
@@ -169,7 +169,7 @@
                         <div class="form-group">
                       <label for="totalfull" class="col-md-3 control-label">Total: </label>
                         <div class="col-md-3">
-                            <input type="text" class="form-control" required="true" name="totalfull"  placeholder="0">
+                            <input type="text" class="form-control" value="0" name="totalfull"  placeholder="0">
                             </div>
                             </div>
                </div>
@@ -177,7 +177,7 @@
                  <div class="form-group">
                <label for="totalpass" class="col-md-3 control-label">Total: </label>
                  <div class="col-md-3">
-                     <input type="text" class="form-control" required name="totalpass"  placeholder="0">
+                     <input type="text" class="form-control" required value="0" name="totalpass"  placeholder="0">
                      </div>
                      </div>
                </div>
@@ -191,7 +191,7 @@
                        <div class="form-group">
                      <label for="wfull" class="col-md-3 control-label">Written: &nbsp;</label>
                        <div class="col-md-3">
-                           <input type="text" class="form-control" name="wfull" required="true"  placeholder="0">
+                           <input type="text" class="form-control" name="wfull" value="0" required="true"  placeholder="0">
                            </div>
                            </div>
               </div>
@@ -199,7 +199,7 @@
                 <div class="form-group">
               <label for="wpass" class="col-md-3 control-label">Written: &nbsp;</label>
                 <div class="col-md-3">
-                    <input type="text" class="form-control" required name="wpass"  placeholder="0">
+                    <input type="text" class="form-control" required name="wpass" value="0"  placeholder="0">
                     </div>
                     </div>
               </div>
@@ -213,7 +213,7 @@
                       <div class="form-group">
                     <label for="mfull" class="col-md-3 control-label">MCQ: </label>
                       <div class="col-md-3">
-                          <input type="text" class="form-control" name="mfull" required="true" placeholder="0">
+                          <input type="text" class="form-control" name="mfull" value="0" required="true" placeholder="0">
                           </div>
                           </div>
              </div>
@@ -221,7 +221,7 @@
                <div class="form-group">
              <label for="mpass" class="col-md-3 control-label">MCQ: </label>
                <div class="col-md-3">
-                   <input type="text" class="form-control" required name="mpass"  placeholder="0">
+                   <input type="text" class="form-control" required name="mpass" value="0"  placeholder="0">
                    </div>
                    </div>
              </div>
@@ -235,7 +235,7 @@
                      <div class="form-group">
                    <label for="sfull" class="col-md-3 control-label">SBA: </label>
                      <div class="col-md-3">
-                         <input type="text" class="form-control" name="sfull" required="true" placeholder="0">
+                         <input type="text" class="form-control" name="sfull" value="0" required="true" placeholder="0">
                          </div>
                          </div>
             </div>
@@ -243,7 +243,7 @@
               <div class="form-group">
             <label for="spass" class="col-md-3 control-label">SBA: </label>
               <div class="col-md-3">
-                  <input type="text" class="form-control" required name="spass"  placeholder="0">
+                  <input type="text" class="form-control" required name="spass"  value="0" placeholder="0">
                   </div>
                   </div>
             </div>
@@ -257,7 +257,7 @@
                     <div class="form-group">
                   <label for="pfull" class="col-md-3 control-label">Practical:&nbsp; </label>
                     <div class="col-md-3">
-                        <input type="text" class="form-control" name="pfull" required="true"  placeholder="0">
+                        <input type="text" class="form-control" name="pfull" value="0" required="true"  placeholder="0">
                         </div>
                         </div>
            </div>
@@ -265,9 +265,10 @@
              <div class="form-group">
            <label for="ppass" class="col-md-3 control-label">Practical:&nbsp;</label>
              <div class="col-md-3">
-                 <input type="text" class="form-control" name="ppass"  placeholder="0">
+                 <input type="text" class="form-control" name="ppass"  value="0" placeholder="0">
                  </div>
                  </div>
+           </div>
            </div>
            <div class="col-md-2"></div>
            </div>
