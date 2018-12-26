@@ -25,12 +25,12 @@
                                                                  <th>Student Group</th>
                                                                  <th>Class</th>
                                                                  <th>Grade System</th>
-                                                                    <th>
+                                                                   <!-- <th>
                                                                       Full Marks
                                                                     </th>
                                                                     <th>
                                                                       Pass Marks
-                                                                    </th>
+                                                                    </th>-->
 
                                                                   <th>Action</th>
                                                              </tr>
@@ -64,7 +64,7 @@
                                                                         @endif 
 
 
-                                                                    <td>
+                                                                    {{--<td>
                                                                     {{$subject->totalfull.' [Total] '}}
                                                                       {{$subject->wfull.' [Written] '}}
                                                                         {{$subject->mfull.' [MCQ] '}}
@@ -77,7 +77,7 @@
                                                                       {{$subject->mpass.' [MCQ] '}}
                                                                         {{$subject->spass.' [SBA] '}}
                                                                           {{$subject->ppass.' [Practical] '}}
-                                                                    </td>
+                                                                    </td>--}}
                                                        <td>
                                                   <a title='Edit' class='btn btn-info' href='{{url("/subject/edit")}}/{{$subject->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/subject/delete")}}/{{$subject->id}}'> <i class="glyphicon glyphicon-trash icon-white"></i></a>
                                                                </td>
