@@ -547,9 +547,9 @@ class AttendanceController extends Controller
 
 			public function get_attendance_section_today($section_id)
 			{
-                $now   = Carbon::now();
-                $year  =  $now->year;
-                 $month =  $now->month;
+                $now        = Carbon::now();
+                $year       =  $now->year;
+                $month      =  $now->month;
 				$attendance = DB::table('Student')
 				->select(DB::raw("Student.id as student_id ,Student.regiNo, Student.rollNo, Student.firstName, Student.middleName, Student.lastName,Student.class,Student.session,Attendance.status,Attendance.date,Class.id as class_id" ))
 				->join('Class','Student.class','=', 'Class.code')
@@ -640,7 +640,6 @@ class AttendanceController extends Controller
 				 }
 				 return response()->json($attendance_done ,200);
 			}
-
 			public function get_attendance_student($student_id){
 				  // $classc = DB::table('Class')->select('*')->where('id','=',$class_id)->first();
 				 $attendance = DB::table('Student')
