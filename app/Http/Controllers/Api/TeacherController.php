@@ -203,6 +203,7 @@ class TeacherController extends Controller
                            SUM(Attendance.status="Absent") as absent,
                            SUM(Attendance.status="Present" ) as present ,
                            SUM(Attendance.status="Late" ) as late ,
+                           SUM(Attendance.status="Leave" ) as leaves ,
                            SUM(Attendance.coments="sick_leave" OR Attendance.coments="leave") as leaves'),'section.id as section_id','section.name as section','Class.id as class_id','Class.name as class')->where('Attendance.session',2018)->where('Attendance.section_id',$teacher->section_id)->where('date',Carbon::today()->toDateString())->first();
            //$tst[] = $attendances_a[$i]->total_attendance;
            //$attendances_a = $attendances_a + $count_student; 
