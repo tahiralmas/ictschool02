@@ -365,7 +365,7 @@ class feesController extends BaseController {
 								$feehistory->lateFee = $feeLateAmounts[$i];
 								$feehistory->total   = $feeTotalAmounts[$i];
 								$feehistory->month   = $feeMonths[$i];
-								$feehistory->save();
+								//$feehistory->save();
 								$j++;
 							}
 
@@ -380,7 +380,7 @@ class feesController extends BaseController {
 							$feeCol->dueAmount     = Input::get('dueamount');
 							$feeCol->payDate       = Carbon::now()->format('Y-m-d');
 						//echo "<pre>";print_r(Carbon::now()->format('Y-m-d'));exit;
-							$feeCol->save();
+							//$feeCol->save();
 							\Session::put('not_save', $j);
 						}else{
 							\Session::put('not_save', 0);
@@ -401,7 +401,17 @@ class feesController extends BaseController {
 					});
 	if(\Session::get('not_save')!=0){
 		\Session::forget('not_save');
-		return Redirect::to('/fee/collection?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&type='.Input::get('type').'&month='.$month.'&fee_name='.Input::get('fee'))->with("success","Fee collection succesfull.");
+		$mesg = '';
+		if(Input::get('save_sms')=='save_sms'){
+
+			$send_sms = $this->send_sms(Input::get('student'),Input::get('class'),Input::get('paidamount'));
+           if($send_sms == 200){
+           	 $mesg = "and Send sms";
+           }else{
+             	 $mesg = "and sms not send some thing wrong";
+           }
+		}
+		return Redirect::to('/fee/collection?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&type='.Input::get('type').'&month='.$month.'&fee_name='.Input::get('fee'))->with("success","Fee collection succesfull ".$mesg);
 	}else{
 		\Session::forget('not_save');
 		$messages = "Student already add fee for this month"; 
@@ -424,6 +434,65 @@ class feesController extends BaseController {
 	}
 
 	}
+	}
+
+	public function send_sms($regiNo,$class,$amount)
+	{
+		$student_all = DB::table('Student')->where('regiNo',$regiNo)->where('class',$class)->where('isActive','Yes')->first();
+		if(!empty($student_all)){
+			$ict     = new ictcoreController();
+			$i       =0;
+			$attendance_noti     = DB::table('notification_type')->where('notification','fess')->first();
+			$ictcore_fees        = Ictcore_fees::select("*")->first();
+			$ictcore_integration = Ictcore_integration::select("*")->where('type','sms');
+			//echo $ictcore_integration->method;
+			//exit;
+			if($ictcore_integration->count()>0){
+				$ictcore_integration = $ictcore_integration->first();
+			}else{
+				//return Redirect::to('fee_detail?action=unpaid')->withErrors("Sms credential not found");
+				return 404;
+			}
+				//$group_id = $ict->telenor_apis('group','','','','','');
+				$contacts = array();
+				$contacts1 = array();
+				$i=0;
+			
+
+			if (preg_match("~^0\d+$~", $student_all->fatherCellNo)) {
+					$to = preg_replace('/0/', '92', $student_all->fatherCellNo, 1);
+				}else {
+					$to =$student_all->fatherCellNo;  
+				}
+				//$contacts1[] = $to;
+				if(strlen(trim($to))==12){
+					$contacts = $to;
+					//$i++;
+				}
+				//$comseprated= implode(',',$contacts);
+				//$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$contacts,'','','');
+		}else{
+			return 403;
+		}
+			$col_msg = DB::table('message')->first();
+			if(empty($col_msg)){
+				$msg = 'Fee Paid paid amount is '.$amount ;
+	      	}else{
+	      		$msg =$col_msg->description;
+	      		$msg1 = str_replace("[name]",$student_all->firstName.''.$student_all->lastName,$msg);
+	      		//$msg2 = str_replace("[month]",$month,$msg1);
+	      		$msg = str_replace("[amount]",$amount,$msg1);
+	      	}
+			/*if($fee_msg->count()>0 && $fee_msg->first()->description!=''){
+				$msg = $fee_msg->first()->description;
+			}else{
+				$msg = "please submit your child  fee for this month";
+			}*/
+			$snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
+			//$campaign      = $ict->telenor_apis('campaign_create',$group_id,'',$msg,'','sms');
+			//$send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
+			//session()->forget('upaid');
+			return 200;
 	}
 
 	public function getListjson($class,$type)
