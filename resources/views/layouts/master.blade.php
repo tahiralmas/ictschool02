@@ -385,6 +385,7 @@ user-select: none !important;
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
+                <li><a href="{{url('/template/create')}}"><i class="glyphicon glyphicon-folder-open"></i><span> Fee Collection Message</span></a></li>
                 <li><a href="{{url('/fees/view')}}"><i class="glyphicon glyphicon-search"></i> Student Fees</a></li>
                 <!--<li><a href="/fee/vouchar"><i class="glyphicon glyphicon-pencil"></i> Create Vouchar</a></li>-->
                 <li><a href="{{url('/fee/collection')}}"><i class="glyphicon glyphicon-pencil"></i> Fees Collection</a></li>
@@ -520,13 +521,19 @@ user-select: none !important;
                         </li>
                         
                         
-                      <?php /*  <li class="accordion">
+                      {{--<li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-folder-open"></i><span> Message Template</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="/template/create">Add New</a></li>
-                                <li><a href="/template/list">Message List</a></li>
+                                <li><a href="{{url('/template/create')}}">Add New</a></li>
+                                <li><a href="{{url('/template/list')}}">Message List</a></li>
                             </ul>
-                        </li> */ ?>
+                        </li>--}}
+
+                        {{--<li class="">
+                            <a href="{{url('/template/create')}}"><i class="glyphicon glyphicon-folder-open"></i><span> Fee Collection Message</span></a>
+                        </li>--}}
+
+
                         <li class="">
                             <a href="{{url('/message')}}"><i class="glyphicon glyphicon-envelope"></i><span> Voice / SMS</span></a>
                         </li>

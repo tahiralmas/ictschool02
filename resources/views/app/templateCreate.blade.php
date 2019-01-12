@@ -12,7 +12,7 @@
 <div class="box col-md-12">
         <div class="box-inner">
             <div data-original-title="" class="box-header well">
-                <h2><i class="glyphicon glyphicon-th"></i> Message Create</h2>
+                <h2><i class="glyphicon glyphicon-th"></i> Fee Collection Message</h2>
 
             </div>
              <div class="box-content">
@@ -32,19 +32,19 @@
                                 <div class="form-group row">
                                     <label for="name" class="col-sm-2 col-form-label">Description</label>
                                     <div class="input-group col-md-6">
-
+                                       <span><?php echo "[name],[amount]";?></span>
                                         <textarea type="text" class="form-control"  name="description" placeholder="Class Description"></textarea>
                                     </div>
                                 </div>
 
 
-                                 <div class="form-group row">
+                                 {{--<div class="form-group row">
                                     <label for="name" class="col-sm-2 col-form-label">Upload Message File</label>
                                     <div class="input-group col-md-6">
 
                                         <input type="file" class="form-control" required name="message" placeholder=""></textarea>
                                     </div>
-                                </div>
+                                </div>--}}
 
                                 
                                 <div class="clearfix"></div>

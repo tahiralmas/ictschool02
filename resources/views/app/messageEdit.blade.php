@@ -4,9 +4,17 @@
 <div class="box col-md-12">
         <div class="box-inner">
             <div data-original-title="" class="box-header well">
-                <h2><i class="glyphicon glyphicon-home"></i> Message Edit</h2>
+                <h2><i class="glyphicon glyphicon-home"></i> Fee Collection Message Edit</h2>
 
             </div>
+            @if (Session::get('success'))
+
+<div class="alert alert-success">
+  <button data-dismiss="alert" class="close" type="button">×</button>
+    <strong>Process Success.</strong> {{ Session::get('success')}}<br><br>
+
+</div>
+@endif
             <div class="box-content">
               @if (isset($message))
               <form role="form" action="{{url('/message/update')}}" method="post" enctype="multipart/form-data">
@@ -23,6 +31,7 @@
 
                     <div class="form-group">
                         <label for="name">Description</label>
+                        <span><?php echo "[name],[amount]";?></span>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <textarea type="text" class="form-control" required name="description" placeholder="Class Description">{{$message->description}}</textarea>
@@ -30,13 +39,13 @@
                     </div>
 
                 
-                    <div class="form-group">
+                    {{--<div class="form-group">
                         <label for="name">Message</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <input type="file" class="form-control"  name="message" placeholder="">
                         </div>
-                    </div>
+                    </div>--}}
 
 
                     <div class="clearfix"></div>
