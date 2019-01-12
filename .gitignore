@@ -1,5 +1,6 @@
 /.env
 /storage/*.key
+/img/
 /docss.zip
 /docs/uml.zip
 Homestead.json
