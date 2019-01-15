@@ -386,12 +386,12 @@ class gradesheetController extends BaseController {
 		$student =	DB::table('Student')
 		 ->join('Class', 'Student.class', '=', 'Class.code')
 		 ->join('section','Student.section','=','section.id')
-		 ->select( 'Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session','Student.extraActivity','section.name as section_name')
+		 ->select( 'Student.photo','Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session','Student.extraActivity','section.name as section_name')
 		 ->where('Student.regiNo','=',$regiNo)
 		 ->where('Student.class','=',$class)
 		 ->where('Student.isActive', '=', 'Yes');
 		 //->first();
-        //echo "<pre>";print_r($student->first());exit;
+       // echo "<pre>";print_r($student->first());exit;
 		if($student->count()>0) {
            $student = $student->first();
            $section = $student->section;
@@ -889,7 +889,7 @@ class gradesheetController extends BaseController {
 		$student   =	DB::table('Student')
 		 ->join('Class', 'Student.class', '=', 'Class.code')
 		 ->join('section','Student.section','=','section.id')
-		 ->select('Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session','Student.extraActivity','section.name as section_name')
+		 ->select('Student.photo','Student.regiNo','Student.rollNo','Student.dob', 'Student.firstName','Student.middleName','Student.lastName','Student.fatherName','Student.motherName', 'Student.group','Student.shift','Student.class as classcode','Class.Name as class','Student.section','Student.session','Student.extraActivity','section.name as section_name')
 		 ->where('Student.regiNo','=',$regiNo)
 		 ->where('Student.class', '=',$class)
 		 ->where('Student.isActive', '=', 'Yes');

@@ -23,7 +23,7 @@
                         <label for="name">Section Name</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                            <input type="text" class="form-control" autofocus required name="name" placeholder="Class Name">
+                            <input type="text" class="form-control" autofocus required name="name" placeholder="Section Name">
                         </div>
                     </div>
                     
@@ -64,7 +64,7 @@
                         <label for="name">Description</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                            <textarea type="text" class="form-control" required name="description" placeholder="Class Description"></textarea>
+                            <textarea type="text" class="form-control"  name="description" placeholder="Class Description"></textarea>
                         </div>
                     </div>
                     <div class="clearfix"></div>

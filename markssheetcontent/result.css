@@ -26,16 +26,34 @@ img.result-bg{
     margin:0;
     z-index:1;
 }
-
+.wraperResult hr{
+    background: #02adef;
+    border: 0px;
+    height: 1px;
+}
+.hdr-result h2{
+    font-family: "Times New Roman", Times, serif;
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.5em;
+    border:0px;
+    padding:0px;
+    margin:0px;
+}
+.hdr-result h4{
+    padding:0px;
+    margin:0px;
+}
 
 .resHdr{
     width:660px;
     height:138px;
-    padding:53px 0 0;
+    padding:53px 0 70px  0;
     margin:0 auto;
     /*background:url(../images/reshdr-bg.png) no-repeat center bottom;*/
     position:relative;
     z-index:2;
+    text-align:center;
 }
 .resContainer{
     width:712px;
@@ -50,19 +68,46 @@ img.result-bg{
     margin-top:5px;
     display:block;
 }
-.schoolIdentity{
-    width:428px;
-    padding:0 0 0 10px;
-    margin:0;
+.restopleft .resLogo{
     float:left;
+    margin-top:35px;
+    display:block;
 }
-.hdrText{
+.restopright{
+    float: right;
+    font-size: 14px;
+    width: 50%;
+    text-transform: uppercase;
+}
+.std-information {
+    width: 94%;
+}
+table.std-information .left{
+    text-align:left;
+}
+table.std-information .right{
+    text-align:right;
+}
+.std-information h2{
+    font-family: "Times New Roman", Times, serif;
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.5em;
+    border:0px;
+    padding:0px;
+    margin:0px;
+}
+
+.schoolIdentity{
+    width:100%
+    margin:0;
+}
+
+ .hdrText{
     width:100%;
-    padding:0;
-    margin:-18px 0 0;
-    position:relative;
-    text-align:center;
+    margin:-10px 0 0;
 }
+*/
 .hdrText strong, .hdrText span{
     display:block;
     text-transform:uppercase;
@@ -76,21 +121,16 @@ img.result-bg{
 }
 /*---------------------*/
 .resTophdr{
-    width:100%;
+    width:85%;
     padding:0;
     margin:0 auto;
     overflow:hidden;
 }
 .restopleft{
-    width:445px;
-    padding:0 0 0 5px;
-    margin:0;
-    float:left;
-    border-left:2px solid #afafaf;
-    line-height:16px;
+    width:50%;
     font-size:14px;
     text-transform:uppercase;
-    min-height:112px;
+    float:left;
 }
 .rgttopleft{
     width:210px;
@@ -237,7 +277,7 @@ img.result-bg{
     width:100%;
     position:absolute;
     left:0;
-    bottom:137px;
+    bottom:60px;
 }
 .signatureCont{
     width:85%;
@@ -323,6 +363,13 @@ img.result-bg{
     .table_title{background:initial}
     .tabulation{ -webkit-print-color-adjust:exact; }
 	body.scms-result-print{ background-color:#fff}
-	.resHdrTabu{ margin-top:250px; page-break-after:always}
+	.resHdrTabu{ margin-top:250px; page-break-after:alway60
+.btn-print {display:none;}
+.wraperResult{
+    page-break-before: avoid;
+    width:95%;
+    height:95%;
+    zoom: 90%    }
+@page {size: A4 landscape; }
 
 }

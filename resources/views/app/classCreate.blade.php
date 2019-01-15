@@ -31,7 +31,7 @@
                      <!-- <label for="name">Level</label>-->
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                          <input type="number" min="-2" max="10" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">
+                          <input type="number" min="-2" max="12" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">
                           
                          <?php /* <select class="form-control"  name="code" required >
                           <option value="">---Select Level---</option>
@@ -48,7 +48,7 @@
                         <label for="name">Description</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                            <textarea type="text" class="form-control" required name="description" placeholder="Class Description"></textarea>
+                            <textarea type="text" class="form-control" name="description" placeholder="Class Description"></textarea>
                         </div>
                     </div>
                     <div class="clearfix"></div>

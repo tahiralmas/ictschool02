@@ -83,27 +83,32 @@
     <div class="resContainer">
         <div class="resTophdr">
             <div class="restopleft">
-                <div><b>{{$student->firstName}} {{$student->middleName}} {{$student->lastName}}</b></div>
-                <div><span>FATHER'S NAME</span><i>: </i><em>{{$student->fatherName}}</em></div>
-                <div><span>CLASS</span><i>: </i><em>{{$student->class}}</em></div>
-                <div><span>GROUP</span><i>: </i><em>{{$student->group}}</em></div>
-                <div><span>SECTION</span><i>: </i><em>{{$student->section_name}}</em></div>
-                <div><span>ROLL NO</span><i>: </i><em>{{$student->rollNo}}</em></div>
-               <!-- <div><span>MOTHER'S NAME</span><i>: </i><em>{{$student->motherName}}</em></div>
-                <div><span>STUDENT ID</span><i>: </i><em>{{$student->regiNo}}</em></div>
-                <div><span>DATE OF BIRTH</span><i>: </i><em>{{$student->dob}}</em></div>
-                -->
-                <!--<div><span>NEW CLASS ROLL :  </span><em>02</em></div>-->
-                <!--<div><span>SHIFT</span><i>: </i><em>{{$student->shift}}</em></div>
-               -->
-                <!--<div><span>BOARD</span><i>: </i><em>KHULNA</em></div>
-            -->
+            				<img src="{{url('/public/images/'.$student->photo)}}" alt="" class="resLogo">
             </div><!-- end of restopleft -->
 
             <div class="restopleft rgttopleft">
-               
-
                 <div><span>GPA</span><i>: </i><em>{{$meritdata->point}}</em></div>
+                <table class="std-information">
+                	<tr>
+                		<td colspan="2">{{$student->firstName}} {{$student->middleName}} {{$student->lastName}}</td>
+                		<td>FATHER'S NAME :</td>
+                		<td>CLASS : </td>
+                		<td>SECTION : </td>
+                		<td>ROLL NO</td>
+                		<td>GRADE</td>
+                		<td>POSITION</td>
+                		<td>GPA</td>
+                	</tr>
+                	<tr>
+                		<td>{{$student->fatherName}}</td>
+                		<td>{{$student->class}}</td>
+                		<td>{{$student->section_name}}</td>
+                		<td>{{$student->rollNo}}</td>
+                		<td>{{$meritdata->grade}}</td>
+                		<td>{{$meritdata->position}}TH</td>
+                		<td>{{$meritdata->point}}</td>
+                	</tr>
+                </table>
 
                 <div><span>GRADE</span><i>: </i><em>{{$meritdata->grade}}</em></div>
                 <div><span>MERIT POSITION</span><i>: </i><em>{{$meritdata->position}}TH</em></div>
@@ -463,3 +468,4 @@
    </script>
 </body><!-- end of fromwrapper-->
 </html>
+
