@@ -29,6 +29,9 @@ $system_grade = $get_grad->index1();
     <!-- The styles -->
   <link id="bs-css" href="{{ URL::asset('css/bootstrap-cerulean.min.css') }}" rel="stylesheet">
   
+<script type="text/javascript">
+window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
+</script>
 
    <!-- <link id="bs-css" href="{{ URL::asset('css/bootstrap-lumen.min.css') }}" rel="stylesheet">
 -->
