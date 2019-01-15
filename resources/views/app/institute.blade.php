@@ -113,7 +113,18 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="type">Logo</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                                <input type="file" class="form-control"  name="logo">
+
+                                            </div>
+                                        </div>
+                                    </div>
                             </div>
+
 
                           @if(Auth::user()->login=='ictkashif')
                             <div class="row">

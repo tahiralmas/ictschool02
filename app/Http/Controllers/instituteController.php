@@ -75,9 +75,11 @@ class instituteController extends BaseController {
 			'email' => 'required',
 			'phoneNo' => 'required',
 			'address' => 'required',
+			'log' => 'mimes:png',
 
 
 		];
+		//echo "<pre>";print_r(Input::file('logo'));exit;
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
@@ -102,6 +104,17 @@ class instituteController extends BaseController {
 			$institue->phoneNo = Input::get('phoneNo');
 			$institue->address = Input::get('address');
 			$institue->save();
+
+			if(Input::file('logo')!=''){
+
+				$fileName='logo.'.Input::file('logo')->getClientOriginalExtension();
+			    //echo base_path() .'/img/',$fileName;exit;
+			    $check = Input::file('logo')->move(base_path() .'/img/',$fileName);
+			      //print_r($check );
+			      //echo base_path() .'/img/',$fileName;exit;
+			}else{
+				$fileName='';
+		}
 
 			return Redirect::to('institute')->with('success', 'Institute  Information saved.');
 

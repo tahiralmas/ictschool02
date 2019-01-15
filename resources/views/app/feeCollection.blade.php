@@ -355,7 +355,11 @@ if(!empty($_GET)){
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <button class="btn btn-primary pull-right" id="btnsave" type="submit"><i class="glyphicon glyphicon-plus"></i>Save</button>
+                  <button class="btn btn-primary pull-right" id="btnsave" name='only_save' value="only_save" type="submit"><i class="glyphicon glyphicon-plus" ></i>Save</button>&nbsp; &nbsp; &nbsp; 
+                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                </div>
+                <div class="col-md-6">
+                   <button class="btn btn-primary" id="btnsave1" name='save_sms'  value="save_sms" type="submit"  style="margin-top: -58px; margin-left: 440px;"><i class="glyphicon glyphicon-plus"></i>Save and Sms</button>
                 </div>
               </div>
             </div>
@@ -425,9 +429,11 @@ if(!empty($_GET)){
       if(rowCount>1)
       {
         $('#btnsave').show();
+        $('#btnsave1').show();
       }
       else {
         $('#btnsave').hide();
+        $('#btnsave1').hide();
       }
     }
     var getStudents = function () {

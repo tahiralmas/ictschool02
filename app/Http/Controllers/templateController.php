@@ -26,6 +26,10 @@ class templateController extends BaseController {
 	*/
 	public function index()
 	{
+		$message = Message::first();
+		if(!empty($message)){
+			return Redirect::to('/message/edit/'.$message ->id);
+		}
 	         
 		return View('app.templateCreate');
 	}
@@ -38,9 +42,9 @@ class templateController extends BaseController {
 	{
 		$rules=[
 			'title' => 'required',
-			//'message' => 'required'
+			'description' => 'required'
 			//'message' => 'required|mimes:audio/wav',
-			'message' => 'required|mimes:wav',
+			//'message' => 'required|mimes:wav',
 
 		];
 		$validator = \Validator::make(Input::all(), $rules);
@@ -61,6 +65,18 @@ class templateController extends BaseController {
 				return Redirect::to('/template/create')->withErrors($errorMessages);
 			}
 			else {
+
+
+				$ictcore_message = new Message;
+				$ictcore_message->name = Input::get('title');
+				$ictcore_message->description = Input::get('description');
+			    $ictcore_message->recording ='';
+			    $ictcore_message->ictcore_recording_id ='';
+                $ictcore_message->ictcore_program_id  ='';
+                $ictcore_message->telenor_file_id  ='';
+				$ictcore_message->save();
+				return Redirect::to('/message/edit/'.$ictcore_message->id)->with("success", "Message Created Succesfully.");
+
                /* $remove_spaces =  str_replace(" ","_",Input::get('title'));
 
 				$fileName= $remove_spaces.'.'.Input::file('message')->getClientOriginalExtension();
@@ -75,7 +91,7 @@ class templateController extends BaseController {
 
 				return Redirect::to('/template/create')->with("success", "Message Created Succesfully.");*/
 
-               $ictcore_integration = Ictcore_integration::select("*")->first();
+               /*$ictcore_integration = Ictcore_integration::select("*")->first();
                    
 		    if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 				$ictcore_api  = new ictcoreController();
@@ -105,14 +121,7 @@ class templateController extends BaseController {
 
                  $upload_audio  = $ictcore_api->verification_number_telenor_voice($telenor_api_data,$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password);
                   
-                $ictcore_message = new Message;
-				$ictcore_message->name = Input::get('title');
-				$ictcore_message->description = Input::get('description');
-			    $ictcore_message->recording =$fileName;
-			    $ictcore_message->ictcore_recording_id ='';
-                $ictcore_message->ictcore_program_id  ='';
-                $ictcore_message->telenor_file_id  =$upload_audio;
-				$ictcore_message->save();
+              
 
 			     unlink($drctry .'mono.wav');
 
@@ -158,7 +167,7 @@ class templateController extends BaseController {
 
           }else{
           	  return Redirect::to('/template/create')->withErrors("Please Add ictcore integration in Setting Menu");
-          }
+          }*/
 		}
 
 		}
@@ -223,7 +232,7 @@ class templateController extends BaseController {
 		else {
 
 
-        if(Input::hasFile('message'))
+        /*if(Input::hasFile('message'))
 		{
 
 			
@@ -248,7 +257,7 @@ class templateController extends BaseController {
 		else {
 			   $fileName = Input::get('recording');
 
-		}
+		}*/
 
 
 
@@ -258,10 +267,10 @@ class templateController extends BaseController {
 			$message->name= Input::get('title');
 
 			$message->description=Input::get('description');
-			$message->recording=$fileName;
+			//$message->recording=$fileName;
 
 			$message->save();
-			return Redirect::to('/template/list')->with("success","Message Updated Succesfully.");
+			return Redirect::to('/message/edit/'.Input::get('id'))->with("success","Message Updated Succesfully.");
 
 		}
 	}
