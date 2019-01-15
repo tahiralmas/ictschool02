@@ -353,13 +353,16 @@ if(!empty($_GET)){
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <button class="btn btn-primary pull-right" id="btnsave" name='only_save' value="only_save" type="submit"><i class="glyphicon glyphicon-plus" ></i>Save</button>&nbsp; &nbsp; &nbsp; 
-                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
-                </div>
-                <div class="col-md-6">
-                   <button class="btn btn-primary" id="btnsave1" name='save_sms'  value="save_sms" type="submit"  style="margin-top: -58px; margin-left: 440px;"><i class="glyphicon glyphicon-plus"></i>Save and Sms</button>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="col-md-6">
+                      </div>
+                      <br>
+                      <div class="col-md-6"><button class="btn btn-primary" id="btnsave1" name='save_sms'  value="save_sms" type="submit"><i class="glyphicon glyphicon-plus"></i>Save and SMS</button>
+                   		   <button class="btn btn-primary pull-right" id="btnsave" name='only_save' value="only_save" type="submit"><i class="glyphicon glyphicon-plus" ></i>Save</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -935,3 +938,4 @@ function getsections()
     </script>
 
     @stop
+
