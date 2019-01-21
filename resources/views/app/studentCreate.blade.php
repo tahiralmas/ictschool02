@@ -107,24 +107,14 @@
             </div>
           </div>
             <div class="row">
-                <div class="col-md-12">
-                  <div class="form-group ">
-                     <label for="session">Discount</label>
-                         <div class="input-group">
-                          <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                            <select class="form-control" name="discount_id">
-                              <option value="">---Select Discount---</option>
-                              <option value="2" >10 %</option>
-                              <option value="3">20 %</option>
-                              <option value="4" >30 %</option>
-                              <option value="5" >40 %</option>
-                              <option value="6" >50 %</option>
-                              <option value="7">60 %</option>
-                              <option value="8" >65 %</option>
-                              <option value="9" >90 %</option>
-                            </select>
-                        </div>
-                 </div>
+              <div class="col-md-4">
+                <div class="form-group ">
+                  <label for="session">Monthly Fee Discount</label>
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                    <input type="text" id="discount_id" value="00.00" class="form-control" name="discount_id">
+                  </div>
+                </div>
               </div>
           </div>
           <div class="row">
@@ -566,3 +556,4 @@ getsections();
 
 </script>
 @stop
+

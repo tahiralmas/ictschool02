@@ -224,7 +224,7 @@ if(!empty($_GET)){
             <div class="col-md-12">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="feeAmount">Total Fee</label>
+                  <label for="feeAmount">Class Fee</label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <input id="total_fee" type="text" class="form-control" readonly="true"  name="total_fee" placeholder="0.00">
@@ -237,7 +237,7 @@ if(!empty($_GET)){
             <div class="col-md-12">
             <div class="col-md-3">
                 <div class="form-group">
-                  <label for="discount">Discount  (discount parcentage: <i id="per"> </i> ) </label>
+                  <label for="discount">Student Fee Discount</label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <input  type="text" id="discount" readonly class="form-control" name="discount"  placeholder="0.00">
@@ -246,7 +246,7 @@ if(!empty($_GET)){
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="feeAmount">Fee</label>
+                  <label for="feeAmount">Total Fee</label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <input id="feeAmount" type="text" class="form-control" readonly="true"  name="feeAmount" placeholder="0.00">
@@ -255,7 +255,7 @@ if(!empty($_GET)){
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label for="LateFeeAmount">Late Fee ( <i id="LateFeeAmount1"> </i> )</label>
+                  <label for="LateFeeAmount">Late Fee Fine( <i id="LateFeeAmount1"> </i> )</label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <input id="LateFeeAmount" type="text" class="form-control" name="LateFeeAmount" value="0.00" placeholder="0.00">
@@ -626,8 +626,8 @@ if(!empty($_GET)){
                 if($("#disc").html()!=''){
                 //alert("hello testing");
                 //alert(damnt);
-                var fee = data[0].fee/100 * dis;
-                var total = data[0].fee - fee;
+                var fee = dic_amount;
+                var total = data[0].fee - dic_amount;
                 $('#total_fee').val(data[0].fee);
                 $('#feeAmount').val(total);
                 //$('#paidamount').val(total);
@@ -888,7 +888,7 @@ if(!empty($_GET)){
             var due = grandTotal-paidamount;
             //alert(paidamount);
             if(isNaN(paidamount) || paidamount==''){
-             $('#dueamount').val(0);
+             $('#dueamount').val(due);
             }else{
             $('#dueamount').val(due);
           }
@@ -938,4 +938,3 @@ function getsections()
     </script>
 
     @stop
-

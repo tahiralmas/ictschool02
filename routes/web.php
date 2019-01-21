@@ -23,6 +23,7 @@ return 'other';
 }
    // return $data;
 });
+Route::get('/attendance/today_delete','attendanceController@today_delete');
 Route::get('/','HomeController@index')->name("login");
 Route::get('/dashboard/','DashboardController@index');
 Route::post('/users/login','UsersController@postSignin');
