@@ -15,6 +15,7 @@ use App\Notification;
 use App\SMSLog;
 use App\Attendance;
 use DB;
+use Storage;
 use Carbon\Carbon;
 
 
@@ -51,14 +52,38 @@ class attendanceNotification extends Command
      */
     public function handle()
     {
-        $now        = Carbon::now();
+
+        $now        = Carbon::now('Asia/Karachi');
         $year       =  $now->year;
         $status     = array('Absent','Late','late');
+         //echo $now->format('H:i:s');
+         //exit;
+    if(Storage::disk('local')->exists('/public/cronsettings.txt')){
+        
+        $contant = Storage::get('/public/cronsettings.txt');
+        $data = explode('<br>',$contant );
+        $attendance_time = $data[0]; 
+
+        if($now->format('H:i')>=$attendance_time){
+        $previouse_sended_sms = SMSLog::whereDate('created_at', '=', $now->toDateString())->where('status','ok')->get();
+        $previus_sended_ids = array();
+
+       foreach($previouse_sended_sms as $get_ids)
+       {
+         $previus_sended_ids[]  = $get_ids->regiNo;
+       }
+
+       // echo "bhutta<pre>".$now->toDateString();print_r( $previouse_sended_sms);exit;
         $attendance = DB::table('Student')
                       ->select('Student.id as student_id','Student.firstName', 'Student.middleName', 'Student.lastName','Student.fatherCellNo','Student.fatherName','Attendance.status','Attendance.regiNo')
                       ->join('Attendance' ,'Student.regiNo', '=' , 'Attendance.regiNo')
-                      /*->where('Student.section',  $section_id)*/->where('Student.session',$year)->where('Attendance.date','=',Carbon::today()->toDateString())->whereIn('Attendance.status',$status);
-     // echo "<pre>";print_r($attendance->get());
+                      /*->where('Student.section',  $section_id)->where('Student.session',$year)*/
+                      ->where('Attendance.date','=',Carbon::today()->toDateString())
+                      ->whereIn('Attendance.status',$status);
+                      if(!empty($previus_sended_ids)){
+                        $attendance =$attendance->whereNotIn('Attendance.regiNo',$previus_sended_ids);
+                      }
+        //echo "<pre>";print_r($attendance->get());
         if($attendance->count()){
             $attendance = $attendance->get();
             $attendance_noti     = DB::table('notification_type')->where('notification','attendance')->first();
@@ -96,6 +121,9 @@ class attendanceNotification extends Command
                     }
                      if(strlen($to)==12){
                         $snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$attendance_noti->type);
+                       $snd_msg =  $snd_msg->response;
+                       print_r( $snd_msg);
+
                        }
                     $smsLog = new SMSLog();
                         $smsLog->type      = "Attendance";
@@ -161,4 +189,6 @@ class attendanceNotification extends Command
             }
         }
     }
+}
+}
 }
