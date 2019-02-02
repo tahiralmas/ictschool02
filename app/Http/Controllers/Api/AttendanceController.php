@@ -346,7 +346,7 @@ class AttendanceController extends Controller
 		                    }
 		                     
 		                    if(strlen($to)==12){
-		                        $snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'ICT VISION',$ictcore_integration_sms->ictcore_user,$ictcore_integration_sms->ictcore_password,'sms');
+		                        $snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'SidraSchool',$ictcore_integration_sms->ictcore_user,$ictcore_integration_sms->ictcore_password,'sms');
 		                    }
 		                        $smsLog = new SMSLog();
 		                        $smsLog->type      = "Attendance";

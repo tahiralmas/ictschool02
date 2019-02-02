@@ -252,7 +252,7 @@ class attendanceController extends BaseController {
                             }
                             
                             //if($attendance_noti->type=='sms'){
-                            $snd_msg  = $ict->verification_number_telenor_sms($student->fatherCellNo,$msg,'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$attendance_noti->type);
+                            $snd_msg  = $ict->verification_number_telenor_sms($student->fatherCellNo,$msg,'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$attendance_noti->type);
                             //}elseif($attendance_noti->type=='voice'){
                              //$msg =$ictcore_attendance->recording;
                              //$snd_msg  = $ict->verification_number_telenor_voice($student->fatherCellNo,$msg,'USTADONLINE',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password);

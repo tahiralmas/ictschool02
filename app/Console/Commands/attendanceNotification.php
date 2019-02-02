@@ -95,7 +95,7 @@ class attendanceNotification extends Command
                         $to =$student->fatherCellNo;  
                     }
                      if(strlen($to)==12){
-                        $snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$attendance_noti->type);
+                        $snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$attendance_noti->type);
                        }
                     $smsLog = new SMSLog();
                         $smsLog->type      = "Attendance";

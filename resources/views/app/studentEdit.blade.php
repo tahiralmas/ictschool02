@@ -149,7 +149,7 @@
                 </div>
               </div>
 
-              <div class="col-md-12">
+              <!-- <div class="col-md-12">
                 <div class="col-md-4">
                   <div class="form-group">
                   <label class="control-label" for="shift">Shift</label>
@@ -167,7 +167,8 @@
                 </div>
                   </div>
                 </div>
-              </div>-->
+              </div>
+-->
           <input type="hidden" value="Morning" name="shift" >
 
             <div class="row">

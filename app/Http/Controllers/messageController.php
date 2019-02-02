@@ -235,7 +235,7 @@ class messageController extends BaseController {
                                     if($msg_type!='quick'){
                                 		$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$to,'','','');
                                     }else{
-                                        $snd_msg  = $ict->verification_number_telenor_sms($to,Input::get('message'),'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$type);
+                                        $snd_msg  = $ict->verification_number_telenor_sms($to,Input::get('message'),'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$type);
 
                                     }
                                 }else{
@@ -287,7 +287,7 @@ class messageController extends BaseController {
                                    if($msg_type!='quick'){
                                 		$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$to,'','','');
                                     }else{
-                                        $snd_msg  = $ict->verification_number_telenor_sms($to,Input::get('message'),'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$type);
+                                        $snd_msg  = $ict->verification_number_telenor_sms($to,Input::get('message'),'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$type);
                                     }
                                 }else{
 								//$contact_id = $ict->ictcore_api('contacts','POST',$data );
@@ -331,7 +331,7 @@ class messageController extends BaseController {
                                 if($msg_type!='quick'){
                                 		$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$to,'','','');
                                     }else{
-                                        $snd_msg  = $ict->verification_number_telenor_sms($to,Input::get('message'),'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$type);
+                                        $snd_msg  = $ict->verification_number_telenor_sms($to,Input::get('message'),'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,$type);
                                     }
                                 }else{
                                      $data = array(

@@ -840,7 +840,7 @@ public function send_sms()
 {
     $ictcore_integration  = Ictcore_integration::select("*")->where('type','sms')->first();
     $ict                  = new ictcoreController();
-    $snd_msg  = $ict->verification_number_telenor_sms(Input::get('phone'),Input::get('message'),'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
+    $snd_msg  = $ict->verification_number_telenor_sms(Input::get('phone'),Input::get('message'),'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
     //echo "<pre>";print_r( $snd_msg);
     //exit;
     if($snd_msg->response!='OK'){

@@ -488,7 +488,7 @@ class feesController extends BaseController {
 			}else{
 				$msg = "please submit your child  fee for this month";
 			}*/
-			$snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'ICT VISION',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
+			$snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
 			//$campaign      = $ict->telenor_apis('campaign_create',$group_id,'',$msg,'','sms');
 			//$send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
 			//session()->forget('upaid');

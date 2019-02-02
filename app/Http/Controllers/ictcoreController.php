@@ -936,7 +936,7 @@ class ictcoreController {
 	    if($method == 'campaign_create' && $type =='sms'){
 	    	//echo "<=sms_msg=>".$sms_msg;
 	    	 date_default_timezone_set('Asia/Karachi');
-	    	$planetbeyondApi="https://telenorcsms.com.pk:27677/corporate_sms2/api/campaign.jsp?session_id=#session_id#&name=fee_defulter_".time()."&group_ids=".$group_id."&text=".urlencode($sms_msg)."&time=".urlencode(date("Y-m-d H:i:s", strtotime("+1 hours")))."&mask=".urlencode("ICT VISION");
+	    	$planetbeyondApi="https://telenorcsms.com.pk:27677/corporate_sms2/api/campaign.jsp?session_id=#session_id#&name=fee_defulter_".time()."&group_ids=".$group_id."&text=".urlencode($sms_msg)."&time=".urlencode(date("Y-m-d H:i:s", strtotime("+1 hours")))."&mask=".urlencode("SidraSchool");
 
 	    }
 	    if($method == 'campaign_create' && $type =='voice'){
