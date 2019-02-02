@@ -8,8 +8,11 @@ use App\Student;
 use App\Marks;
 use App\GPA;
 use App\MeritList;
+use App\Ictcore_fees;
+use App\Ictcore_integration;
 use Storage;
 use DB;
+use App\Http\Controllers\ictcoreController;
 Class formfoo{
 
 }
@@ -17,7 +20,7 @@ Class Meritdata{
 
 }
 class gradesheetController extends BaseController {
-
+ public $data = array();
 	public function __construct() {
 		/*$this->beforeFilter('csrf', array('on'=>'post'));
 		$this->beforeFilter('auth',array('except' => array('searchpub','postsearchpub','printsheet')));*/
@@ -82,6 +85,10 @@ class gradesheetController extends BaseController {
 		else {
          // echo "<pre>";print_r(Input::all());
           //exit;
+			if(Input::get('send_sms')=='yes'){
+				$send = $this->send_sms(Input::get('class'),Input::get('section'),Input::get('exam'),Input::get('session'));
+			    //exit;
+			}
 			if(is_array(Input::get('exam'))){
 				 $exams_ids =implode(',',Input::get('exam')) ;
 				$ispubl  = DB::table('MeritList')
@@ -107,15 +114,16 @@ class gradesheetController extends BaseController {
 		   // echo "<pre>";print_r($ispubl);
 		    //exit;
 			if(count($ispubl)>0) {
+				
 				$classes = ClassModel::pluck('name', 'code');
 				$students = DB::table('Student')
 				->join('Marks', 'Student.regiNo', '=', 'Marks.regiNo')
-				->select(DB::raw('DISTINCT(Student.regiNo)'), 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.group', 'Marks.shift', 'Marks.class', 'Marks.section')
+				->select(DB::raw('DISTINCT(Student.regiNo)'), 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.group', 'Student.section', 'Marks.shift', 'Marks.class')
 				->where('Student.isActive', '=', 'Yes')
 				->where('Student.class', '=', Input::get('class'))
-				->where('Marks.class', '=', Input::get('class'))
-				->where('Marks.section', '=', Input::get('section'))
-				->where('Marks.session', '=', trim(Input::get('session')))
+				//->where('Marks.class', '=', Input::get('class'))
+				->where('Student.section', '=', Input::get('section'))
+				->where('Student.session', '=', trim(Input::get('session')))
 				->where('Marks.exam', '=', Input::get('exam'))
 				->get();
 
@@ -155,6 +163,155 @@ class gradesheetController extends BaseController {
 
 
 		}
+	}
+
+
+
+
+
+	/**
+** Send result sms
+**/
+
+public function send_sms($class,$section,$exam,$session)
+{
+
+	//echo "heelo";
+//echo $section;
+        $examed    = DB::table('exam')->where('id',$exam)->first();
+		$exam_name =  $examed->type;
+		
+          $students = DB::table('Student')
+                      ->where('Student.isActive', '=', 'Yes')
+				      ->where('Student.class', '=', $class)
+				      ->where('Student.section', '=', $section)
+				      ->where('Student.session', '=', $session)
+				      ->get();
+				      $rr  = array();
+				    foreach($students as $student){
+				    	//echo $student->regiNo;
+				      	$marks = DB::table('Marks')
+				      			->join('Subject', 'Marks.subject', '=', 'Subject.code')
+				      			->select('Marks.section','Marks.exam','Marks.regiNo','Marks.shift', 'Marks.class', 'Marks.section','Marks.obtain_marks','Marks.total_marks','Subject.name as subject_name')
+				      			//->where('Marks.class',   '=', $class)
+								->where('Subject.class', '=', $class)
+								//->where('Marks.section', '=', $section)
+								->where('Marks.session', '=', $session)
+								->where('Marks.exam',    '=', $exam)
+								->where('Marks.regiNo',  '=', $student->regiNo)
+								->get();
+								//echo "<pre>";print_r($marks);
+
+								$save_data = array();
+								foreach($marks as $mark){
+									$save_data[] =array('total'=>$mark->total_marks,'obtain'=>$mark->obtain_marks,'subject'=>$mark->subject_name);
+								    //$rr[] = $save_data;
+								}
+
+								$test  = $this->send_noti($save_data,$student->fatherCellNo,$student->firstName.''.$student->lastName );
+								//echo "<pre>";print_r($test);
+								//$newCompete = array('phone'=>$student->fatherCellNo);
+								
+								//$rr[] = array()
+				      }
+				     // echo "<pre>";print_r();
+				/*->join('Marks', 'Student.regiNo', '=', 'Marks.regiNo')
+				->join('Subject', 'Marks.subject', '=', 'Subject.code')
+				->select('Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.group', 'Marks.shift', 'Marks.class', 'Marks.section','Marks.obtain_marks','Marks.total_marks','Subject.name as subject_name')
+				->where('Student.isActive', '=', 'Yes')
+				->where('Student.class', '=', $class)
+				->where('Marks.class', '=', $class)
+				->where('Subject.class', '=', $class)
+				->where('Marks.section', '=', $section)
+				->where('Marks.session', '=', $session)
+				->where('Marks.exam', '=', $exam)
+				->get();*/
+				/*foreach($students as $student){
+					if($student)
+				}*/
+				//echo "<pre>";print_r($rr);
+				//exit;
+	}
+
+	public function send_noti($data=array(),$phone,$name){
+          $this->data = $data;
+          //return $this->data;
+
+        $subject = '';
+        $message1 = '';
+        $message2 = '';
+        $message3 = '';
+         
+		if(!empty($data)){
+         $message = 'your child [name]';
+         $sub = " subject [sub]";
+         $obtain = ' obtains marks [obt]';
+         $total = ' out of  [total] marks';
+			 $message = str_replace("[name]",$name,$message);
+         
+			for($i=0;$i<count($data);$i++){
+				
+				 //$message1 .= str_replace("[sub]",$data[$i]['subject'],$message);
+				 $message1 .= ' subject '.$data[$i]['subject'].' obtatain marks:'.$data[$i]['obtain'].' out of:' .$data[$i]['total'] .'<br>';
+				 //$message2 .= str_replace("[obt]",$data[$i]['obtain'],$message1);
+				 //$message3 .= str_replace("[total]",$data[$i]['total'],$message2);
+				 //$subject2 .= str_replace("[number]",$dta['obtain'],$subject1);
+				 //$subject3 .= str_replace("[total]",$dta['total'],$subject2);
+			}
+			$body = $message.'<br>'. $message1  ;
+			//return  $body  ;
+			//exit;
+			$ict     = new ictcoreController();
+			$i       =0;
+			$attendance_noti     = DB::table('notification_type')->where('notification','fess')->first();
+			$ictcore_fees        = Ictcore_fees::select("*")->first();
+			$ictcore_integration = Ictcore_integration::select("*")->where('type','sms');
+			//echo $ictcore_integration->method;
+			//exit;
+			if($ictcore_integration->count()>0){
+				$ictcore_integration = $ictcore_integration->first();
+			}else{
+				//return Redirect::to('fee_detail?action=unpaid')->withErrors("Sms credential not found");
+				return 404;
+			}
+				//$group_id = $ict->telenor_apis('group','','','','','');
+				$contacts = array();
+				$contacts1 = array();
+				$i=0;
+			
+
+			if (preg_match("~^0\d+$~", $phone)) {
+					$to = preg_replace('/0/', '92', $phone, 1);
+				}else {
+					$to =$phone;  
+				}
+				//$contacts1[] = $to;
+				if(strlen(trim($to))==12){
+					$contacts = $to;
+					//$i++;
+				}
+				//$comseprated= implode(',',$contacts);
+				//$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$contacts,'','','');
+		}else{
+			return 403;
+		}
+			/*$col_msg = DB::table('message')->first();
+			if(empty($col_msg)){
+				$msg = $body ;
+	      	}else{
+	      		$body 
+	      	}*/
+	      	$msg = $body ;
+			/*if($fee_msg->count()>0 && $fee_msg->first()->description!=''){
+				$msg = $fee_msg->first()->description;
+			}else{
+				$msg = "please submit your child  fee for this month";
+			}*/
+			$snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
+			//$campaign      = $ict->telenor_apis('campaign_create',$group_id,'',$msg,'','sms');
+			//$send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
+			//session()->forget('upaid');
+			return 200;
 	}
 
 	public  function gradeCalculator($point,$gparules)
@@ -1082,7 +1239,6 @@ class gradesheetController extends BaseController {
 
 		}
 	}
-
 public function combined_results($type,$regiNo,$exam,$class)
 {
 

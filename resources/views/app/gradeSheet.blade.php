@@ -39,7 +39,7 @@
 
                     <form role="form" action="{{url('/gradesheet')}}" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <input value="{{date('Y')}}" type="hidden" id="session" required="true" class="form-control datepicker2" name="session" value="{{$formdata->session}}"  data-date-format="yyyy">
+                        <input value="{{date('Y')}}" type="text" id="session" required="true" class="form-control datepicker2" name="session" value="{{$formdata->session}}"  data-date-format="yyyy">
                         <div class="row">
                             <div class="col-md-12">
 
@@ -127,8 +127,13 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-9">
                                 <button class="btn btn-primary pull-right"  type="submit"><i class="glyphicon glyphicon-th"></i>Get List</button>
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <button class="btn btn-primary pull-right" name="send_sms" value="yes"  type="submit"><i class="glyphicon glyphicon-th"></i>Send Sms</button>
 
                             </div>
                         </div>
