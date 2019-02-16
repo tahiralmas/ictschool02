@@ -488,6 +488,14 @@ user-select: none !important;
                                 <!--<li><a href="/teacher-attendance/monthly-report-2"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report Two</a></li>-->
                            </ul>
                        </li>
+
+                      {{--<li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-bullhorn"></i><span> Papers</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="{{url('/paper/create')}}">Add New</a></li>
+                                <li><a href="{{url('/paper/list')}}">Paper List</a></li>
+                            </ul>
+                        </li>--}}
                     <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-fire"></i><span> Exams</span></a>
                             <ul class="nav nav-pills nav-stacked">

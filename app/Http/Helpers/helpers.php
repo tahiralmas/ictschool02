@@ -1,5 +1,6 @@
 <?php
 use App\ClassModel;
+use App\Subject;
 //use Storage;
 if (! function_exists('FixData')) {
 	function FixData(){
@@ -98,4 +99,26 @@ if(! function_exists('php_curl')) {
 		//echo "<pre>";print_r($curl_response);exit;
 		return json_decode($curl_response);  
 	}
+if (! function_exists('getsubjecclass')) {
+	function getsubjecclass($class){
+		$subjects = Subject::select('id','name')->where('class','=',$class)->get();
+		
+		$output ='';
+		$name ='';
+		$suject_aray = array();
+		foreach($subjects as $subject){
+			$suject_aray[] = array("id"=>$subject->id,"name"=>$subject->name);
+			$output .='&nbsp;  ';
+			$url = url('/').'/create/marks?sub_id='.$subject->id.'&class='.$class;
+			$link = "'".$url."','enter marks','width=1500','height=500'";
+			$output .='<a href="'.$url.'" onclick="window.open('."$link".'); 
+              return false;">'.$subject->name.'</a>';
+              //$output .=$url. $subject->name;
+              $name .= '&nbsp;  '.$subject->name;
+		}
+
+		return array('url'=>$output,'sub_name'=>$suject_aray);
+	}
+}
+
 }

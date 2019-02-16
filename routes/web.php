@@ -155,7 +155,17 @@ Route::post('/attendance/report', 'attendanceController@getReport');
 Route::get('/attendance/monthly-report', 'attendanceController@monthlyReport');
 
 
+/**
+* papers route
+**/
 
+Route::get('/paper/create','paperController@index');
+Route::post('/paper/create','paperController@create');
+Route::get('/paper/list','paperController@show');
+Route::get('/paper/edit/{id}','paperController@edit');
+Route::post('/paper/update','paperController@update');
+Route::get('/paper/delete/{id}','paperController@delete');
+Route::get('/paper/getList/{class}','paperController@getexams');
 //Exam
 
 Route::get('/exam/create','examController@index');
@@ -200,6 +210,9 @@ Route::get('/smslog/delete/{id}','smsController@deleteLog');
 //Mark routes
 Route::get('/mark/create','markController@index');
 Route::post('/mark/create','markController@create');
+Route::post('/new/mark/create','markController@newcreate');
+Route::get('/marks/section/{class}','markController@getForMarksjoin');
+Route::get('/create/marks','markController@createmarks');
 
 Route::get('/mark/m_create','markController@m_index');
 Route::post('/mark/m_create','markController@m_create');

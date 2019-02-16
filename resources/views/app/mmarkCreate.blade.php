@@ -54,7 +54,7 @@
                       </div>
                   </div>
                     </div>
-                      <div class="col-md-4">
+                      {{--<div class="col-md-4">
                         <div class="form-group">
                         <label class="control-label" for="section">Section</label>
 
@@ -90,8 +90,8 @@
                           </div>-->
                           <input type="hidden" name="shift" value="Morning">
                   </div>
-                </div>
-                <div class="row">
+                </div>--}}
+                {{--<div class="row">
                 <div class="col-md-12">
                   <div class="col-md-3">
                     <div class="form-group ">
@@ -102,8 +102,9 @@
                             <input type="text" id="session" required="true" class="form-control datepicker2" name="session" value="{{$session}}"  data-date-format="yyyy">
                         </div>
                     </div>
-                    </div>
-                    <div class="col-md-5">
+                    </div>--}}
+                    <input type="hidden" id="session" required="true" class="form-control datepicker2" name="session" value="{{$session}}"  data-date-format="yyyy">
+                   {{--<div class="col-md-5">
                       <div class="form-group">
                       <label class="control-label" for="subject">subject</label>
 
@@ -156,7 +157,7 @@
 
                       </div>
                     </div>
-                      </div>
+                      </div>--}}
 
                 </div>
               </div>
@@ -229,27 +230,26 @@
         <div class="row">
                            <div class="col-md-12">
                                <div class="table-responsive">
-                                   <table id="studentList" class="table table-striped table-bordered table-hover">
+                                  <table id="" class="table table-striped table-bordered table-hover">
                                        <thead>
                                        <tr>
 
-                                           <th>Registration No</th>
-                                           <th>Roll No</th>
-                                          <th>Name</th>
-                                          <th>Obtain Marks</th>
-                                            
-                                                  <th>Absent</th>
+                                        
+                                           <th>Section</th>
+                                           <th>Sujects</th>
+                                         
                                        </tr>
                                        </thead>
-                                       <tbody>
+                                       <tbody id='sectionList'>
 
 
-                                       <tbody>
+                                       </tbody>
                                </table>
                            </div>
                        </div>
 
         </div>
+
 
         <!--button save -->
         <div class="row">
@@ -268,20 +268,21 @@
 //
     $( document ).ready(function() {
       //$('#class').trigger('change');
+      getstudent();
      <?php if($session){ ?>
       getstudent();
-       subject();
+      // subject();
       <?php } ?>
      //  getsections();
   $('#class').on('change',function() {
     //alert(434);
-
-    getsections();
-    getexam();
-    subject();
+    getstudent();
+   // getsections();
+    //getexam();
+    //subject();
   });
   $('#session').on('change',function() {
-          getstudent();
+        //  getstudent();
         });
        $('#btnsave').hide();
        /* $('#class').on('change', function (e) {
@@ -399,17 +400,19 @@ var aclass = $('#class').val();
      var session = $('#session').val().trim();
       //alert(session);
      $.ajax({
-           url: "{{url('/student/getsList')}}"+'/'+aclass+'/'+section+'/'+shift+'/'+session,
+           //url: "{{url('/student/getsList')}}"+'/'+aclass+'/'+section+'/'+shift+'/'+session,
+           url: "{{url('/marks/section')}}"+'/'+aclass,
            data: {
                format: 'json'
            },
            error: function(error) {
-              alert(error);
+              //alert(54);
            },
-           dataType: 'json',
+           
            success: function(data) {
-
-             $("#studentList").find("tr:gt(0)").remove();
+            //alert(45);
+             //$("#sectionList").find("tr:gt(0)").remove();
+             /*$("#sectionList").find("tr:gt(0)").remove();
              if(data.length>0)
              {
                $('#btnsave').show();
@@ -417,8 +420,9 @@ var aclass = $('#class').val();
              for(var i =0;i < data.length;i++)
               {
                 addRow(data[i],i);
-              }
-
+              }*/
+              //$("#sectionList").append();
+              $("#sectionList").html(data);
            },
            type: 'GET'
        });

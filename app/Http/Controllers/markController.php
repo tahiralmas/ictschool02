@@ -1,13 +1,19 @@
 <?php
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\Student;
 use App\ClassModel;
 use App\Subject;
+use App\SectionModel;
 use App\GPA;
 use App\Marks;
+use App\Ictcore_fees;
+use App\Ictcore_integration;
+use Storage;
 use DB;
+use App\Http\Controllers\ictcoreController;
 Class formfoo{
 
 }
@@ -26,6 +32,7 @@ class markController extends BaseController {
 	*/
 	public function index()
 	{
+		
 		$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
 		$subjects = Subject::all();
 		$class_code =Input::get('class_id');
@@ -47,6 +54,7 @@ class markController extends BaseController {
 	}
 	public function m_index()
 	{
+		//echo "<pre>";print_r(getsubjecclass('cl1'));exit;
 		$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
 		$subjects = Subject::all();
 		$class_code =Input::get('class_id');
@@ -644,4 +652,254 @@ class markController extends BaseController {
 
 		}
 	}
+
+	public function getForMarksjoin($class)
+	{
+		$sections  = SectionModel::select('id','name')->where('class_code','=',$class)->get();
+		//$sections['subjects'] = Subject::select('id','name')->where('class','=',$class)->get();
+		
+		/* $students=	DB::table('Student')
+		->leftjoin('Marks', 'Student.regiNo', '=', 'Marks.regiNo')
+		->select('Student.id', 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName',
+		'Student.discount_id','Marks.written','Marks.written','Marks.mcq','Marks.practical','Marks.ca','Marks.Absent')
+		->where('Student.section','=',$section)->where('Student.shift','=',$shift)->where('Student.session','=',$session)->get();
+
+	*/
+		//print_r(getsubjecclass($class)['sub_name']);
+		//echo count(getsubjecclass($class)['sub_name']);
+		
+		//for($i=0;$i<count(getsubjecclass($class)['sub_name']);$i++){
+			//$subjecname .= getsubjecclass($class)['sub_name'][$i]['name'];
+		//}
+		//echo $subjecname;
+		//if(count(getsubjecclass($class)['sub_name']))
+
+	
+
+		$output ='';
+		foreach($sections as $section){
+			$subjecname = '';
+			for($i=0;$i<count(getsubjecclass($class)['sub_name']);$i++){
+				
+				$url = url('/').'/create/marks?sub_id='.getsubjecclass($class)['sub_name'][$i]['id'].'&class='.$class.'&section='.$section->id;
+				$link = "'".$url."','enter marks','width=1500','height=500'";
+				$subjecname .='&nbsp;  ';
+				$subjecname .='<a href="'.$url.'" onclick="window.open('."$link".'); 
+	              return false;">'.getsubjecclass($class)['sub_name'][$i]['name'].'</a>';
+			}
+			$output .='<tr><td>'.$section->name.'</td><td>'.$subjecname.'</td></tr>'; 
+		}
+		return $output;
+	}
+
+	public function createmarks(Request $request){
+
+		//echo "<pre>";print_r(getsubjecclass('cl1'));exit;
+		$class = ClassModel::select('id','name')->where('code',$request->get('class'))->first();
+		
+		$exams = DB::table('exam')->where('section_id',$request->get('section'))->where('class_id',$class->id)->get();
+		$param1 = $request->get('exam');
+		$param2 = $request->get('total_marks');
+		$session = $request->get('session');
+		$subject_id = $request->get('sub_id');
+		$class_code = $request->get('class');
+		$section = $request->get('section');
+		$students = array();
+		if($request->get('show')){
+			
+			$students = DB::table('Student')
+						//->leftjoin('Marks','Student.regiNo','=','Marks.regiNo')
+						->leftJoin('Marks', function($join) use ($param1,$subject_id)
+					    {
+					        $join->on('Student.regiNo', '=', 'Marks.regiNo');
+					        $join->on('Marks.exam','=',DB::raw("'".$param1."'"));
+					        $join->on('Marks.subject','=',DB::raw("'".$subject_id."'"));
+
+					    })
+
+						->select(DB::raw("CONCAT(Student.firstName,' ',Student.lastName) as fullname"),'Student.regiNo as student_id','Marks.*')
+						//->where('Marks.exam',$request->get('exam'))
+						->where('Student.class',$request->get('class'))
+						->where('Student.section',$request->get('section'))
+						->groupBy('Student.regiNo')
+						->get();
+
+						//echo "<pre>hgg";print_r($students);exit;
+		}
+		//return View::Make('app.markCreate',compact('classes','subjects'));
+		return View('app.markscreate',compact('class','exams','subject_id','students','param1','param2','session','class_code','section'));
+	}
+
+
+	public function newcreate()
+	{
+		//echo "<pre>";print_r(Input::get('sms'));exit;
+
+		
+
+		$rules=[
+			'class'       => 'required',
+			'section'     => 'required',
+			'shift'       => 'required',
+			'session'     => 'required',
+			'regiNo'      => 'required',
+			'exam'        => 'required',
+			'subject'     => 'required',
+			'written'     => 'required',
+			'total_marks' => 'required',
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails())
+		{
+			return Redirect::to('/create/marks?class='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&exam='.Input::get('exam').'&sub_id='.Input::get('subject'))->withErrors($validator);
+		}
+		else {
+			$total_marks = Input::get('total_marks');
+			if($total_marks==100){
+				$grade = 1;
+			}
+			if($total_marks==50){
+				$grade = 2;
+			}
+			if($total_marks==75){
+				$grade = 3;
+			}
+			if($total_marks==30){
+				$grade = 4;
+			}
+			if($total_marks==25){
+				$grade = 5;
+			}
+			if($total_marks==20){
+				$grade = 6;
+			}
+			if($total_marks==15){
+				$grade = 7;
+			}
+			if($total_marks==10){
+				$grade = 8;
+			}
+			if($total_marks==5){
+				$grade = 9;
+			}
+			$gparules = GPA::select('gpa','grade','markfrom')->where('for',$grade )->orderBy('markfrom','desc')->get();
+           
+			$len = count(Input::get('regiNo'));
+
+			$regiNos = Input::get('regiNo');
+			$writtens=Input::get('written');
+			//$mcqs =Input::get('mcq');
+			//$practicals=Input::get('practical');
+			//$cas=Input::get('ca');
+			$isabsent = Input::get('absent');
+			$sms = Input::get('sms');
+			//print_r($isabsent);exit;
+			$counter  = 0;
+
+			for ( $i  = 0; $i< $len;$i++) {
+				$isAddbefore = Marks::where('regiNo','=',$regiNos[$i])->where('exam','=',Input::get('exam'))->where('subject','=',Input::get('subject'))->first();
+				
+				if($isAddbefore)
+				{
+					$marks = Marks::find($isAddbefore->id);
+				}
+				else {
+					$marks = new Marks;
+				}
+					$marks->class = Input::get('class');
+					$marks->section = Input::get('section');
+					$marks->shift = Input::get('shift');
+					$marks->session = trim(Input::get('session'));
+					$marks->regiNo = $regiNos[$i];
+					$marks->exam = Input::get('exam');
+					$marks->subject = Input::get('subject');
+					$marks->written = '';
+					$marks->mcq = '';
+					$marks->practical = '';
+					$marks->ca = '';
+					$marks->obtain_marks = $writtens[$i];
+					$marks->total_marks = $total_marks;
+					$marks->ca = '';
+					$isExcludeClass = Input::get('class');
+					
+					$marks->total=$writtens[$i];
+					//echo "<pre>d";print_r($gparules->toArray());
+					foreach ($gparules as $gpa) {
+
+						if ($writtens[$i] >= $gpa->markfrom){
+							$marks->grade = $gpa->gpa;
+							$marks->point = $gpa->grade;
+							break;
+						}
+					}
+					if($isabsent[$regiNos[$i]]== "yes")
+					{
+						$marks->Absent = $isabsent[$regiNos[$i]];
+						$writtens[$i]  = 0;
+						$marks->total=$writtens[$i];
+						$marks->obtain_marks = $writtens[$i];
+					}
+                    //echo "<pre>";print_r($marks);exit;
+					//$test[] = $marks;
+					if($marks->save()){
+					    if($sms[$regiNos[$i]]== "yes"){
+					    	$send_sms = $this->send_sms($regiNos[$i],$total_marks,$writtens[$i],Input::get('subject'));
+						}
+						$counter++;
+					}
+				//}
+
+				
+			}
+			//echo "<pre>";print_r($test);
+				//exit;
+			if($counter==$len)
+			{
+				return Redirect::to('/mark/m_create?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&exam='.Input::get('exam'))->with("success",$counter."'s student mark save Succesfully.");
+			}
+			else {
+				$already=$len-$counter;
+				return Redirect::to('/mark/m_create?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&exam='.Input::get('exam'))->with("success",$counter." students mark save Succesfully and ".$already." Students marks already saved.</strong>");
+			}
+		}
+	}
+
+
+	public function send_sms($regiNo,$total,$obtain,$sub)
+	{
+
+	
+		$student = DB::table('Student')->where('regiNo',$regiNo)->first();
+		$subject = DB::table('Subject')->where('id',$sub)->first();
+		$phone   = $student->fatherCellNo;
+		$message = 'your Child '.$student->firstName.' '.$student->lastName. ' subject '.$subject->name.' obtains marks '.$obtain.' out of '.$total.' marks ';
+		$body    = $message;
+		$ict     = new ictcoreController();
+		$i       = 0;
+		$attendance_noti     = DB::table('notification_type')->where('notification','fess')->first();
+		$ictcore_fees        = Ictcore_fees::select("*")->first();
+		$ictcore_integration = Ictcore_integration::select("*")->where('type','sms');
+		if($ictcore_integration->count()>0){
+			$ictcore_integration = $ictcore_integration->first();
+		}else{
+			return 404;
+		}
+		$contacts = array();
+		$contacts1 = array();
+		$i=0;
+		if (preg_match("~^0\d+$~", $phone)) {
+			$to = preg_replace('/0/', '92', $phone, 1);
+		}else {
+			$to =$phone;  
+		}
+		if(strlen(trim($to))==12){
+			$contacts = $to;
+		}
+		
+		$msg = $body ;
+		$snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
+		return 200;
+	}
+
+
 }
