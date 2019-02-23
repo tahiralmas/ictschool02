@@ -510,9 +510,11 @@ user-select: none !important;
                              @if($system_grade=='' || $system_grade=='auto')
                                 <li><a href="{{url('/mark/create')}}">Add New</a></li>
                                 <li><a href="{{url('/mark/list')}}">Marks List</a></li>
+                                 <li><a href="{{url('/template/creates')}}">Template</a></li>
                             @else
                                 <li><a href="{{url('/mark/m_create')}}">Add New</a></li>
                                 <li><a href="{{url('/mark/m_list')}}">Marks List</a></li>
+                                <li><a href="{{url('/template/creates')}}">Template</a></li>
                             @endif
                             </ul>
                         </li>

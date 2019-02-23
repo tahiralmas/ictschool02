@@ -228,6 +228,8 @@ Route::get('/mark/m_edit/{id}','markController@m_edit');
 Route::post('/mark/update','markController@update');
 Route::post('/mark/m_update','markController@m_update');
 Route::get('/mark/delete/{id}','markController@delete');
+Route::get('/template/creates','markController@template');
+Route::get('/template/message/edit/{message_id}','markController@edittemplate');
 
 //Markssheet
 Route::group(['middleware' => 'admin'], function(){ 

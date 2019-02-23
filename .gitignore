@@ -4,6 +4,7 @@
 /public/images/*
 /docss.zip
 /docs/uml.zip
+/backups/*
 Homestead.json
 Homestead.yaml
 npm-debug.log

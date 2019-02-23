@@ -75,7 +75,7 @@
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                       <?php  $data=[
-                        'A'=>'A',
+                        '1'=>'A',
                         
                       ];?>
                       {{ Form::select('section',$data,$formdata->section,['class'=>'form-control','id'=>'section','required'=>'true'])}}
@@ -228,7 +228,7 @@
           $.each(json, function(i, subject) {
              console.log(subject);
 
-            $('#subject').append($('<option>').text(subject.name).attr('value', subject.code));
+            $('#subject').append($('<option>').text(subject.name).attr('value', subject.id));
           });
         }
       });
@@ -272,9 +272,10 @@ function getsections()
  function getexam()
 {
     var aclass = $('#class').val();
+    var section = $('#section').val();
    // alert(aclass);
     $.ajax({
-      url: "{{url('/exam/getList')}}"+'/'+aclass,
+      url: "{{url('/exam/getList')}}"+'/'+aclass+'?section='+section,
       data: {
         format: 'json'
       },
@@ -316,6 +317,11 @@ function getsections()
       $('#class').on('change', function (e) {
         getSubjects();
         getsections();
+        getexam();
+      });
+      $('#section').on('change', function (e) {
+        //getSubjects();
+        //getsections();
         getexam();
       });
       getSubjects();

@@ -50,6 +50,9 @@ class templateController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
+			if(Input::get('title')=='mark_notification'){
+				return Redirect::to('/template/creates')->withErrors($validator);
+			}
 			return Redirect::to('/template/create')->withErrors($validator);
 		}
 		else {
@@ -62,6 +65,9 @@ class templateController extends BaseController {
 
 				$errorMessages = new \Illuminate\Support\MessageBag;
 				$errorMessages->add('deplicate', 'Title all ready exists!!');
+				if(Input::get('title')=='mark_notification'){
+					return Redirect::to('/template/creates')->withErrors($errorMessages);
+				}
 				return Redirect::to('/template/create')->withErrors($errorMessages);
 			}
 			else {
@@ -75,6 +81,11 @@ class templateController extends BaseController {
                 $ictcore_message->ictcore_program_id  ='';
                 $ictcore_message->telenor_file_id  ='';
 				$ictcore_message->save();
+				if(Input::get('title')=='mark_notification'){
+					//return Redirect::to('/template/creates')->withErrors($errorMessages);
+					return Redirect::to('/template/message/edit/'.$ictcore_message->id)->with("success", "Message Created Succesfully.");
+
+				}
 				return Redirect::to('/message/edit/'.$ictcore_message->id)->with("success", "Message Created Succesfully.");
 
                /* $remove_spaces =  str_replace(" ","_",Input::get('title'));
@@ -227,6 +238,13 @@ class templateController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
+			if(Input::get('title')=='mark_notification'){
+					//return Redirect::to('/template/creates')->withErrors($errorMessages);
+					return Redirect::to('/message/edit/'.$ictcore_message->id)->with("success", "Message Created Succesfully.");
+
+				}
+
+
 			return Redirect::to('/message/edit/'.Input::get('id'))->withErrors($validator);
 		}
 		else {

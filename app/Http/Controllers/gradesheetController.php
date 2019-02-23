@@ -741,8 +741,14 @@ public function send_sms($class,$section,$exam,$session)
 				      $gradsystem ='';
 					}
 
-
-		return View('app.resultgenerate',compact('classes','gradsystem'));
+		 $formdata = new formfoo;
+		$formdata->class="";
+		$formdata->section="";
+		$formdata->shift="";
+		$formdata->exam="";
+		$formdata->session="";
+		$formdata->type="";
+		return View('app.resultgenerate',compact('classes','gradsystem','formdata'));
 	}
 
 	public  function getSubGroup($subjects,$subject)
@@ -776,6 +782,7 @@ public function send_sms($class,$section,$exam,$session)
 		$rules = [
 			'class' => 'required',
 			'exam' => 'required',
+			//'section' => 'required',
 			'session' => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
@@ -787,6 +794,7 @@ public function send_sms($class,$section,$exam,$session)
 			->where('class', '=', Input::get('class'))
 			->where('session', '=', trim(Input::get('session')))
 			->where('exam', '=', Input::get('exam'))
+			//->where('section_id', '=', 1)
 			->get();
 			if(count($isGenerated)==0)
 			{
@@ -1092,7 +1100,7 @@ public function send_sms($class,$section,$exam,$session)
               //print_r($meritdata);
              // exit;
 				//sub group need to implement
-				$subjects = Subject::select('name', 'code', 'subgroup', 'totalfull')->where('class', '=', $student->classcode)->get();
+				$subjects = Subject::select('id as code','name', 'code as codee', 'subgroup', 'totalfull')->where('class', '=', $student->classcode)->get();
 
 				$overallSubject = array();
 				$subcollection = array();
@@ -1113,12 +1121,14 @@ public function send_sms($class,$section,$exam,$session)
 				$totalourall = 0;
 				$isBanglaFail=false;
 				$isEnglishFail=false;
+				//echo $exam."<pre>";print_r($subjects->toArray());exit;
 				foreach ($subjects as $subject) {
 					$submarks = Marks::select('written', 'mcq', 'practical', 'ca', 'total', 'point', 'grade','total_marks')->where('regiNo', '=', $student->regiNo)
 					->where('subject', '=', $subject->code)->where('exam', '=', $exam)->where('class', '=', $class)->first();
 					$maxMarks = Marks::select(DB::raw('max(total) as highest'))->where('class', '=', $class)->where('session', '=', $student->session)
 					->where('subject', '=', $subject->code)->where('exam', '=', $exam)->first();
 
+					//echo "<pre>";print_r($submarks);exit;
 					$submarks["highest"] = $maxMarks->highest;
 					$submarks["subcode"] = $subject->code;
 
@@ -1371,7 +1381,8 @@ public function combined_results($type,$regiNo,$exam,$class)
 		$rules = [
 			'class' => 'required',
 			'exam' => 'required',
-			'session' => 'required'
+			'session' => 'required',
+			'section' => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails()) {
@@ -1382,12 +1393,16 @@ public function combined_results($type,$regiNo,$exam,$class)
 			->where('class', '=', Input::get('class'))
 			->where('session', '=', trim(Input::get('session')))
 			->where('exam', '=', Input::get('exam'))
+			->where('section_id', '=', Input::get('section'))
 			->get();
 			if(count($isGenerated)==0)
 			{
 				$subjects           = Subject::select('name', 'code', 'type', 'subgroup')->where('class', '=', Input::get('class'))->get();
-				$sectionsHas        = Student::select('section')->where('class', '=', Input::get('class'))->where('session', trim(Input::get('session')))->where('isActive', '=', 'Yes')->distinct()->orderBy('section', 'asc')->get();
-				$sectionMarksSubmit = Marks::select('section')->where('class', '=', Input::get('class'))->where('session', trim(Input::get('session')))->where('exam',Input::get('exam'))->distinct()->get();
+				 $sectionsHas        = Student::select('section')->where('class', '=', Input::get('class'))->where('section', '=', Input::get('section'))->where('session', trim(Input::get('session')))->where('isActive', '=', 'Yes')->distinct()->orderBy('section', 'asc')->get();
+				 $sectionMarksSubmit = Marks::select('section')->where('class', '=', Input::get('class'))->where('section', '=', Input::get('section'))->where('session', trim(Input::get('session')))->where('exam',Input::get('exam'))->distinct()->get();
+				//echo "ee<pre>ew";print_r($sectionsHas);
+				//echo "ew<pre>ee";print_r($sectionMarksSubmit);
+				//exit;
 				//dd($sectionsHas);
 				if (count($sectionsHas)==count($sectionMarksSubmit))
 				{
@@ -1420,6 +1435,7 @@ public function combined_results($type,$regiNo,$exam,$class)
 						->join('section','Student.section','=','section.id')
 						->select('Student.*','section.name')
 						->where('Student.class', '=', Input::get('class'))
+						->where('Student.section', '=', Input::get('section'))
 						->where('Student.session', '=', trim(Input::get('session')))
 						->where('Student.isActive', '=', 'Yes')->get();
                       //  echo "<pre>";print_r($students->toArray());exit;
@@ -1433,7 +1449,7 @@ public function combined_results($type,$regiNo,$exam,$class)
 							->where('Marks.exam', '=', Input::get('exam'))
 							->distinct()
 							->get();
-
+								//echo count($students).'mm'.count($marksSubmitStudents);exit;
 							if(count($students)==count($marksSubmitStudents))
 							{
 								$gparules = GPA::select('gpa', 'grade', 'markfrom')->get();

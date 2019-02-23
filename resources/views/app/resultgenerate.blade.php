@@ -54,6 +54,31 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label" for="section">Section</label>
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                            <?php  $data=[
+                                                    '1'=>'A',
+                                                    'B'=>'B',
+                                                    'C'=>'C',
+                                                    'D'=>'D',
+                                                    'E'=>'E',
+                                                    'F'=>'F',
+                                                    'G'=>'G',
+                                                    'H'=>'H',
+                                                    'I'=>'I',
+                                                    'J'=>'J'
+                                            ];?>
+                                           {{ Form::select('section',$data,$formdata->section,['class'=>'form-control','id'=>'section','required'=>'true'])}}
+
+
+                                        </div>
+                                    </div>
+                                </div>
                                <div class="col-md-3">
                                     <div class="form-group ">
                                         <label for="session">session</label>
@@ -105,6 +130,7 @@
     <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
     <script type="text/javascript">
         $( document ).ready(function() {
+            getsections();
             $(".datepicker2").datepicker( {
                 format: " yyyy", // Notice the Extra space at the beginning
                 viewMode: "years",
@@ -116,7 +142,13 @@
             
              $('#class').on('change', function (e) {
        
-              getexam();
+                //getexam();
+                getsections();
+               });
+             $('#section').on('change', function (e) {
+       
+                    getexam();
+                    //getsections();
                });
         getexam();
         });
@@ -124,29 +156,66 @@
         
 function getexam()
 {
+    var aclass  = $('#class').val();
+    var section = $('#section').val();
+     //alert(section);
+    $.ajax({
+
+          url: "{{url('/exam/getList')}}"+'/'+aclass+'?section='+section,
+          data: {
+            format: 'json'
+          },
+          error: function(error) {
+            alert("Please fill all inputs correctly!");
+          },
+          dataType: 'json',
+          success: function(data) {
+            $('#exam').empty();
+           $('#exam').append($('<option>').text("--Select Exam--").attr('value',""));
+            $.each(data, function(i, exam) {
+              //console.log(student);
+             
+              
+                var opt="<option value='"+exam.id+"'>"+exam.type + " </option>"
+
+            
+              //console.log(opt);
+              $('#exam').append(opt);
+
+            });
+            //console.log(data);
+
+          },
+          type: 'GET'
+    });
+};
+
+
+function getsections()
+{
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
-      url: "{{url('/exam/getList')}}"+'/'+aclass,
+      url: "{{url('/section/getList')}}"+'/'+aclass,
       data: {
         format: 'json'
       },
       error: function(error) {
-        alert("Please fill all inputs correctly!");
+        //alert("Please fill all inputs correctly!");
       },
       dataType: 'json',
       success: function(data) {
-        $('#exam').empty();
-       $('#exam').append($('<option>').text("--Select Exam--").attr('value',""));
-        $.each(data, function(i, exam) {
+        $('#section').empty();
+      // $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $.each(data, function(i, section) {
           //console.log(student);
          
           
-            var opt="<option value='"+exam.id+"'>"+exam.type + " </option>"
+            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
 
         
           //console.log(opt);
-          $('#exam').append(opt);
+          $('#section').append(opt);
 
         });
         //console.log(data);

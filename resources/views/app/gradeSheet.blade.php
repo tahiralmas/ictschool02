@@ -60,7 +60,7 @@
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                             <?php  $data=[
-                                                    'A'=>'A',
+                                                    '1'=>'A',
                                                     'B'=>'B',
                                                     'C'=>'C',
                                                     'D'=>'D',
@@ -247,18 +247,24 @@
             });
             $('#markList').dataTable();
             
-             $('#class').on('change', function (e) {
+      $('#class').on('change', function (e) {
+    
+                getsections();
+                getexam();
+      });
+      $('#section').on('change', function (e) {
 		
-		getsections();
-		getexam();
+		
+		          getexam();
 	      });
      
        getsections();
         getexam();
-        });
+  });
         
-        function getsections()
+function getsections()
 {
+
     var aclass = $('#class').val();
    // alert(aclass);
     $.ajax({
@@ -293,9 +299,10 @@
 function getexam()
 {
     var aclass = $('#class').val();
-   // alert(aclass);
+    var section = $('#section').val();
+    //alert(section);
     $.ajax({
-      url: "{{url('/exam/getList')}}"+'/'+aclass,
+      url: "{{url('/exam/getList')}}"+'/'+aclass+'?section='+section,
       data: {
         format: 'json'
       },

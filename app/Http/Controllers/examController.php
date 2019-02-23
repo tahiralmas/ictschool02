@@ -178,7 +178,12 @@ class examController extends BaseController {
 	{
 		 $class_id = DB::table('Class')->select("*")->where('code','=',$class)->first();
                 
-		 $class_data = Exam::select('id','type')->where('class_id','=',$class_id->id)->get();
+		 $class_data = Exam::select('id','type')
+		 ->where('class_id','=',$class_id->id);
+		 if(Input::get('section')!=''){
+		 	$class_data = $class_data->where('section_id','=',Input::get('section'));
+		 }
+		 $class_data =$class_data->get();
 	return $class_data;
 	}
 

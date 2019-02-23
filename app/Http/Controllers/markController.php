@@ -11,6 +11,7 @@ use App\GPA;
 use App\Marks;
 use App\Ictcore_fees;
 use App\Ictcore_integration;
+use App\Message;
 use Storage;
 use DB;
 use App\Http\Controllers\ictcoreController;
@@ -754,6 +755,8 @@ class markController extends BaseController {
 			return Redirect::to('/create/marks?class='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&exam='.Input::get('exam').'&sub_id='.Input::get('subject'))->withErrors($validator);
 		}
 		else {
+			$getexam       = DB::table('exam')->where('id',Input::get('exam'))->first();
+				$exam_name = $getexam->type;
 			$total_marks = Input::get('total_marks');
 			if($total_marks==100){
 				$grade = 1;
@@ -843,7 +846,7 @@ class markController extends BaseController {
 					//$test[] = $marks;
 					if($marks->save()){
 					    if($sms[$regiNos[$i]]== "yes"){
-					    	$send_sms = $this->send_sms($regiNos[$i],$total_marks,$writtens[$i],Input::get('subject'));
+					    	$send_sms = $this->send_sms($regiNos[$i],$total_marks,$writtens[$i],Input::get('subject'),$exam_name);
 						}
 						$counter++;
 					}
@@ -865,14 +868,32 @@ class markController extends BaseController {
 	}
 
 
-	public function send_sms($regiNo,$total,$obtain,$sub)
+	public function send_sms($regiNo,$total,$obtain,$sub,$exam_name)
 	{
 
 	
 		$student = DB::table('Student')->where('regiNo',$regiNo)->first();
 		$subject = DB::table('Subject')->where('id',$sub)->first();
+		
 		$phone   = $student->fatherCellNo;
-		$message = 'your Child '.$student->firstName.' '.$student->lastName. ' subject '.$subject->name.' obtains marks '.$obtain.' out of '.$total.' marks ';
+		
+		//$message = 'your Child '.$student->firstName.' '.$student->lastName. ' subject '.$subject->name.' obtains marks '.$obtain.' out of '.$total.' marks ';
+		
+		$col_msg = DB::table('message')->where('name','mark_notification')->first();
+			if(empty($col_msg)){
+				$message = 'your Child '.$student->firstName.' '.$student->lastName. ' subject '.$subject->name.' obtains marks '.$obtain.' out of '.$total.' marks ';
+	      	}else{
+	      		$message =$col_msg->description;
+	      		$msg1 = str_replace("[student_name]",$student->firstName.''.$student->lastName,$message);
+	      		$msg2 = str_replace("[marks]",$obtain,$msg1);
+	      		$msg3 = str_replace("[outoff]",$total,$msg2);
+	      		$msg4 = str_replace("[subject]",$subject->name,$msg3);
+	      		$message = str_replace("[exam]",$exam_name,$msg4);
+	      	}
+
+
+
+
 		$body    = $message;
 		$ict     = new ictcoreController();
 		$i       = 0;
@@ -899,6 +920,22 @@ class markController extends BaseController {
 		$msg = $body ;
 		$snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
 		return 200;
+	}
+
+	public function template()
+	{
+		
+		$message = Message::where('name','mark_notification')->first();
+		if(!empty($message)){
+			return Redirect::to('/message/edit/'.$message ->id);
+		}
+		return View('app.markstemplate');
+	}
+	public function edittemplate($id)
+	{
+		$message = Message::find($id);
+		//return View::Make('app.classEdit',compact('class'));
+		return View('app.messageEdit',compact('message'));
 	}
 
 

@@ -4,7 +4,7 @@
 <div class="box col-md-12">
         <div class="box-inner">
             <div data-original-title="" class="box-header well">
-                <h2><i class="glyphicon glyphicon-home"></i> Fee Collection Message Edit</h2>
+                <h2><i class="glyphicon glyphicon-home"></i> Message Edit</h2>
 
             </div>
             @if (Session::get('success'))
@@ -21,6 +21,7 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                    <input type="hidden" name="id" value="{{$message->id }}">
                    <input type="hidden" name="recording" value="{{$message->recording}}">
+                      @if($message->name!='mark_notification')
                       <div class="form-group">
                         <label for="name">Name</label>
                         <div class="input-group">
@@ -28,10 +29,15 @@
                             <input type="text" class="form-control" required name="title" value="{{$message->name}}" placeholder="Class Name">
                         </div>
                     </div>
+                    @endif
 
                     <div class="form-group">
                         <label for="name">Description</label>
+                         @if($message->name=='mark_notification')
+                       <span><?php echo "[student_name],[subjects],[marks],[outoff],[exam]";?></span>
+                        @else
                         <span><?php echo "[name],[amount]";?></span>
+                        @endif
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <textarea type="text" class="form-control" required name="description" placeholder="Class Description">{{$message->description}}</textarea>

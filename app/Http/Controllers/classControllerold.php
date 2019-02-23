@@ -142,7 +142,7 @@ class classController extends BaseController {
 
 	public function getSubjects($class)
 	{
-		$subjects = Subject::select('name','code')->where('class',$class)->orderby('code','asc')->get();
+		$subjects = Subject::select('id','name','code')->where('class',$class)->orderby('code','asc')->get();
 		return $subjects;
 	}
 
