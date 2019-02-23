@@ -212,6 +212,37 @@
     @section('script')
     <script src="/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript">
+     $( document ).ready(function() {
+      
+ 
+      $(".datepicker2").datepicker( {
+        format: " yyyy", // Notice the Extra space at the beginning
+        viewMode: "years",
+        minViewMode: "years",
+        autoclose:true
+
+      });
+      $('#markList').dataTable();
+      $('#class').on('change', function (e) {
+        getSubjects();
+        getsections();
+        getexam();
+      });
+      $('#section').on('change', function (e) {
+          //getSubjects();
+          //getsections();
+          getexam();
+      });
+          getSubjects();
+          getsections();
+          getexam();
+
+        $('#session').on('change',function() {
+          getsections();
+          getexam();
+        });
+         //getexam();
+    });
     var getSubjects = function () {
       var val = $('#class').val();
 
@@ -269,11 +300,12 @@ function getsections()
       type: 'GET'
     });
 };
- function getexam()
+function getexam()
 {
     var aclass = $('#class').val();
-    var section = $('#section').val();
-   // alert(aclass);
+     section = $('#section').val();
+
+     //alert(section);
     $.ajax({
       url: "{{url('/exam/getList')}}"+'/'+aclass+'?section='+section,
       data: {
@@ -284,9 +316,9 @@ function getsections()
       },
       dataType: 'json',
       success: function(data) {
-        $('#exam').empty();
+       $('#exam').empty();
        $('#exam').append($('<option>').text("--Select Exam--").attr('value',""));
-        $.each(data, function(i, exam) {
+       $.each(data, function(i, exam) {
           //console.log(student);
          
           
@@ -303,34 +335,6 @@ function getsections()
       type: 'GET'
     });
 };
-    $( document ).ready(function() {
-      
- 
-      $(".datepicker2").datepicker( {
-        format: " yyyy", // Notice the Extra space at the beginning
-        viewMode: "years",
-        minViewMode: "years",
-        autoclose:true
-
-      });
-      $('#markList').dataTable();
-      $('#class').on('change', function (e) {
-        getSubjects();
-        getsections();
-        getexam();
-      });
-      $('#section').on('change', function (e) {
-        //getSubjects();
-        //getsections();
-        getexam();
-      });
-      getSubjects();
-       getsections();
-        getexam();
-
-         $('#session').on('change',function() {
-          getsections();
-        });
-    });
+   
     </script>
     @stop
