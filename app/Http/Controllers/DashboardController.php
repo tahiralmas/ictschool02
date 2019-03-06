@@ -27,13 +27,16 @@ class DashboardController extends BaseController {
 	{
 		
         $now             =  Carbon::now();
-		$year            =  $now->year;
+		//$year            =  $now->year;
+		$year            =  get_current_session()->id;
         $month           =  $now->month;
 		$error           = \Session::get('error');
 		$success         = \Session::get('success');
 		$tclass          =  ClassModel::count();
 		$tsubject        =  Subject::count();
 		$tstudent        =  Student::where('isActive','Yes')->where('session',$year)->count();
+
+		//echo get_current_session()->id. $tstudent;exit;
 		$teacher         =  Teacher::count();
  		$totalAttendance = Attendance::groupBy('date')->get();
  		//echo Carbon::now()->format('Y-m-d');

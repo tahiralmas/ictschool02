@@ -182,7 +182,15 @@ Route::get('/exam/getList/{class}','examController@getexams');
 });
 
 
-
+// Acadamic Year
+Route::get('/academicYear','AcadamicYearController@index');
+Route::get('/academicYear/create','AcadamicYearController@add')->name('year.add');
+Route::post('/academicYear/create','AcadamicYearController@create')->name('year.create');
+Route::get('/academicYear/list','AcadamicYearController@show');
+Route::get('/academicYear/edit/{id}','AcadamicYearController@edit');
+Route::post('/academicYear/update','AcadamicYearController@update')->name('year.update');
+Route::get('/academicYear/delete/{id}','AcadamicYearController@delete');
+Route::get('/academicYear/status/{id}','AcadamicYearController@status');
 //GPA Routes
 Route::get('/gpa','gpaController@index');
 Route::post('/gpa/create','gpaController@create');

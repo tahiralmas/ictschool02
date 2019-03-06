@@ -595,6 +595,7 @@ user-select: none !important;
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-cog"></i><span> Settings</span></a>
                             <ul class="nav nav-pills nav-stacked">
+                                <li><a href="{{url('/academicYear')}}">Academic Year</a></li>
                                 <li><a href="{{url('/gpa')}}">GPA Ruels</a></li>
 
                                 <li><a href="{{url('/users')}}">Users</a></li>

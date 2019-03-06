@@ -121,7 +121,7 @@
                                 </div>
                             </div>
                         </div>
-                         <div class="col-md-3">
+                         {{--<div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label" for="exam">Session</label>
                                 <div class="input-group">
@@ -129,7 +129,9 @@
                                     <input name="session" id="session" value="{{$session}}" required="true" class="form-control datepicker2" >
                                 </div>
                             </div>
-                        </div>
+                        </div>--}}
+                        <input type="hidden" id="session"  class="form-control " name="session" value="{{get_current_session()->id}}"   data-date-format="yyyy">
+
                          <div class="col-md-3">
                             <input type="submit" name="show" class="btn" style="margin-top: 25px;" value="Show Student">
                          </div>

@@ -33,7 +33,8 @@
               <td>{{$section->name}}</td>
               <td>{{$section->class_code}}</td>
               <td>{{$section->description}}</td>
-              <td>{{$section->students}}</td>
+              <td>{{count_student($section->id,$section->class_code)}}</td>
+              {{--<td>{{$section->students}}</td>--}}
               <td>{{$section->firstName}} {{$section->lastName}}</td>
 
               <td>

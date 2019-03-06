@@ -76,6 +76,8 @@ class studentController extends BaseController {
 	}
 	public  function getRegi($class,$session,$section)
 	{
+
+		
 		$ses =trim($session);
 		$stdcount = Student::select(DB::raw('count(*) as total'))->where('class','=',$class)->where('session','=',$ses)->first();
 
@@ -101,11 +103,11 @@ class studentController extends BaseController {
 		}
 		$foo = array();
 		if(strlen($cl)<2) {
-			$foo[0]= substr($ses, 2) .'0'.$cl.$r;
+			$foo[0]= substr(date("Y"), 2) .'0'.$cl.$r;
 		}
 		else
 		{
-			$foo[0]=  substr($ses, 2) .$cl.$r;
+			$foo[0]=  substr(date("Y"), 2) .$cl.$r;
 		}
 		if(strlen($c)<2) {
 			$foo[1] ='0'.$c;
@@ -152,7 +154,7 @@ class studentController extends BaseController {
 	$validator = \Validator::make(Input::all(), $rules);
 	if ($validator->fails())
 	{
-		return Redirect::to('/student/create')->withErrors($validator);
+		return Redirect::to('/student/create')->withErrors($validator)->withInput();
 	}
 	else {
 
@@ -190,16 +192,17 @@ class studentController extends BaseController {
 		$student->bloodgroup="";
 
 		}
-		$student->dob= Input::get('dob');
-		$student->session= trim(Input::get('session'));
-		$student->class= Input::get('class');
-		$student->section= Input::get('section');
-		$student->group= Input::get('group');
-		$student->rollNo= Input::get('rollNo');
-		$student->shift= Input::get('shift');
+		$student->dob         = Input::get('dob');
+		$student->session     = get_current_session()->id;
+		//$student->session= trim(Input::get('session'));
+		$student->class       = Input::get('class');
+		$student->section     = Input::get('section');
+		$student->group       = Input::get('group');
+		$student->rollNo      = Input::get('rollNo');
+		$student->shift       = Input::get('shift');
 
-		$student->photo= $fileName;
-		$student->nationality= Input::get('nationality');
+		$student->photo       = $fileName;
+		$student->nationality = Input::get('nationality');
 		if(Input::get('nationality') ==''){
 			$student->nationality="";
 		}
@@ -422,21 +425,21 @@ if(Input::get('search')==''){
 
 public function view($id)
 {
-	$student=	DB::table('Student')
+	$student = DB::table('Student')
 	->join('Class', 'Student.class', '=', 'Class.code')
 	->join('section', 'Student.section', '=', 'section.id')
+	->join('acadamic_year', 'Student.session', '=', 'acadamic_year.id')
 	//->leftjoin('Attendance', 'Student.regiNo', '=', 'Attendance.regiNo')
 	->select('Student.id', 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName',
 	'Student.fatherName','Student.motherName', 'Student.fatherCellNo','Student.motherCellNo','Student.localGuardianCell',
-	'Class.Name as class','Class.code as class_code','Student.presentAddress','Student.gender','Student.religion','Student.section','Student.shift','Student.session',
+	'Class.Name as class','Class.code as class_code','Student.presentAddress','Student.gender','Student.religion','Student.section','Student.shift',
 	'Student.group','Student.dob','Student.bloodgroup','Student.nationality','Student.photo','Student.extraActivity','Student.remarks',
-	'Student.localGuardian','Student.parmanentAddress','section.name as section_name')
+	'Student.localGuardian','Student.parmanentAddress','section.name as section_name','acadamic_year.title as session','acadamic_year.id as session_id')
 	->where('Student.id','=',$id)
-	
 	->first();
 	$attendances = DB::table('Attendance')->where('Attendance.date',Carbon::today()->toDateString())->where('regiNo',$student->regiNo)->first();
 	   //return View::Make("app.studentView",compact('student'));
-	$fees= FeeSetup::select('id','title')->where('class','=',$student->class_code)->where('type','=','Monthly')->first();
+	$fees  = FeeSetup::select('id','title')->where('class','=',$student->class_code)->where('type','=','Monthly')->first();
 
 	$now   = Carbon::now();
              $year  =  $now->year;

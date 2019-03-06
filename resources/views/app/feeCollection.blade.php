@@ -109,7 +109,7 @@ if(!empty($_GET)){
             </div>
            */?>
            <input type="hidden" value="Morning" name="shift">
-             <div class="col-md-4">
+             {{--<div class="col-md-4">
                 <div class="form-group ">
                   <label for="session">session</label>
                   <div class="input-group">
@@ -118,7 +118,9 @@ if(!empty($_GET)){
                     <input value="{{date('Y')}}" type="text" id="session" required="true" class="form-control datepicker2" name="session"   data-date-format="yyyy">
                   </div>
                 </div>
-              </div>
+              </div>--}}
+              <input value="{{get_current_session()->id}}" type="hidden" id="session" required="true" class="form-control " name="session"   data-date-format="yyyy">
+
  </div>
           
           <hr class="hrclass">
@@ -564,6 +566,9 @@ if(!empty($_GET)){
             //  $('#fee').append($('<option>').text("--Select Fee--").attr('value',"-1"));
             var dic_amount = JSON.stringify(data.discount_id);
             //alert("sd"+dic_amount);
+            /*if(dic_amount=='null'){
+              dic_amount = 0;
+            }*/
             var dis = 0;
             if(dic_amount==2){
               $('#disc').html(10);
@@ -627,7 +632,11 @@ if(!empty($_GET)){
                 //alert("hello testing");
                 //alert(damnt);
                 var fee = dic_amount;
-                var total = data[0].fee - dic_amount;
+                if (fee == 'null'){
+                  fee=0;
+                }
+                var total = data[0].fee - fee;
+                alert(fee);
                 $('#total_fee').val(data[0].fee);
                 $('#feeAmount').val(total);
                 //$('#paidamount').val(total);

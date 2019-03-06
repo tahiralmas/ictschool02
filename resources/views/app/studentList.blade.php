@@ -34,7 +34,7 @@
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="col-md-3">
+                                    {{--<div class="col-md-3">
                                         <div class="form-group ">
                                             <label for="session">session</label>
                                             <div class="input-group">
@@ -43,7 +43,8 @@
                                                 <input type="text" value="{{date('Y')}}" id="session" required="true" class="form-control datepicker2" name="session" value="{{$formdata->session}}"   data-date-format="yyyy">
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>--}}
+                                    <input type="hidden"  id="session"  class="form-control datepicker2" name="session" value="{{get_current_session()->id}}"  >
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label" for="class">Class</label>

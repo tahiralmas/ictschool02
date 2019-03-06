@@ -31,7 +31,8 @@
               <td>{{$class->code}}</td>
               <td>{{$class->name}}</td>
               <td>{{$class->description}}</td>
-              <td>{{$class->students}}</td>
+              <td>{{count_student('',$class->code)}}</td>
+              {{--<td>{{$class->students}}</td>--}}
 
               <td>
                 <a title='Edit' class='btn btn-info' href='{{url("/class/edit")}}/{{$class->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/class/delete")}}/{{$class->id}}' onclick="return confirm('Are you sure you want to delete this Class?');"> <i class="glyphicon glyphicon-trash icon-white"></i></a>

@@ -106,7 +106,7 @@
 
                <input type="hidden" value="Morning" name="shift">
 
-               <div class="col-md-4">
+               {{--<div class="col-md-4">
                   <div class="form-group ">
                     <label for="session">session</label>
                     <div class="input-group">
@@ -115,7 +115,9 @@
                       <input type="text" id="session" value="{{date('Y')}}" required="true" class="form-control datepicker2" name="session" value="{{$formdata->session}}"   data-date-format="yyyy">
                     </div>
                   </div>
-                </div>
+                </div>--}}
+              <input type="hidden" id="session"  class="form-control " name="session" value="{{get_current_session()->id}}"   data-date-format="yyyy">
+
              
             </div>
             <div class="row">
@@ -183,27 +185,25 @@
                 </thead>
                 <tbody>
                   @foreach($marks as $mark)
-                  <tr>
-                    <td>{{$mark->regiNo}}</td>
-                    <td>{{$mark->rollNo}}</td>
-                    <td>{{$mark->firstName}} {{$mark->middleName}} {{$mark->lastName}}</td>
-                    <td>{{$mark->obtain_marks}}</td>
-                    <td>{{$mark->grade}}</td>
-                    <td>{{$mark->point}}</td>
-                    <td>{{$mark->total_marks}}</td>
-                    <td>{{$mark->Absent}}</td>
-                    <td>
-                      <a title='Edit' class='btn btn-info' href='{{url("/mark/m_edit")}}/{{$mark->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
-                    </td>
-                    @endforeach
+                      <tr>
+                        <td>{{$mark->regiNo}}</td>
+                        <td>{{$mark->rollNo}}</td>
+                        <td>{{$mark->firstName}} {{$mark->middleName}} {{$mark->lastName}}</td>
+                        <td>{{$mark->obtain_marks}}</td>
+                        <td>{{$mark->grade}}</td>
+                        <td>{{$mark->point}}</td>
+                        <td>{{$mark->total_marks}}</td>
+                        <td>{{$mark->Absent}}</td>
+                        <td>
+                          <a title='Edit' class='btn btn-info' href='{{url("/mark/m_edit")}}/{{$mark->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
+                        </td>
+                      </tr>
+                  @endforeach
                   </tbody>
                 </table>
               </div>
-
             </div>
             @endif
-
-
           </div>
         </div>
       </div>

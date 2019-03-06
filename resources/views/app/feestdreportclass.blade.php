@@ -141,7 +141,7 @@ if(!empty($_GET) && $_GET['direct']=='yes'){
         </div>
           <div class="row">
             <div class="col-md-12">
-              <div class="col-md-4">
+              {{--<div class="col-md-4">
                 <div class="form-group ">
                   <label for="session">session</label>
                   <div class="input-group">
@@ -150,7 +150,9 @@ if(!empty($_GET) && $_GET['direct']=='yes'){
                     <input  value="{{date('Y')}}" type="text" id="session" required="true" class="form-control datepicker2" name="session"   data-date-format="yyyy" value="{{$session}}">
                   </div>
                 </div>
-              </div>
+              </div>--}}
+              <input   type="hidden" id="session" required="true" class="form-control datepicker2" name="session"   data-date-format="yyyy" value="{{get_current_session()->id}}">
+
              <?php /* <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label" for="student">Student</label>

@@ -54,14 +54,16 @@
                   </div>
                     </div>
                     <div class="col-md-4">
-                      <div class="form-group ">
+                      {{--<div class="form-group ">
                                        <label for="session">session</label>
                                            <div class="input-group">
 
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
                                               <input type="text" value="{{$student->session}}"  class="form-control datepicker2" name="session" required  data-date-format="yyyy">
                                           </div>
-                                   </div>
+                                   </div>--}}
+                      <input type="hidden" value="{{get_current_session()->id}}"  class="form-control" name="session" required  data-date-format="yyyy">
+
                       </div>
                       </div>
 

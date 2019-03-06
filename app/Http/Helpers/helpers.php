@@ -1,6 +1,8 @@
 <?php
 use App\ClassModel;
 use App\Subject;
+use App\AcadamicYear;
+use App\Student;
 //use Storage;
 if (! function_exists('FixData')) {
 	function FixData(){
@@ -121,4 +123,36 @@ if (! function_exists('getsubjecclass')) {
 	}
 }
 
+}
+
+if (! function_exists('get_current_session')) {
+
+	function get_current_session()
+	{
+		$years = AcadamicYear::where('status',1)->orderBy('id','desc');
+		if($years->count()>0){
+			$years = $years->first();
+		}else{
+			$years =array();
+		}
+
+		return $years;
+	}
+}
+if (! function_exists('count_student')) {
+
+	function count_student($section,$class){
+		
+		$count_student = Student::where('isActive','Yes')->where('session',get_current_session()->id);
+		if($class!=''){
+		  $count_student =	$count_student->where('class',$class);
+		}
+		if($section!=''){
+			$count_student =$count_student->where('section',$section);
+		}
+
+		$count_student =$count_student->count();
+		
+		return $count_student;
+	}
 }

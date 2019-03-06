@@ -125,7 +125,7 @@
                                     </div>
                                 </div>-->
                                 <input type="hidden" name="shift" value="Morning">
-                                <div class="col-md-2">
+                               {{--<div class="col-md-2">
                                     <div class="form-group ">
                                         <label for="session">session</label>
                                         <div class="input-group">
@@ -133,7 +133,9 @@
                                             <input type="text" id="session" value="{{date('Y')}}" class="form-control datepicker2" name="session"   data-date-format="yyyy">
                                         </div>
                                     </div>
-                                </div>
+                                </div>--}}
+                                <input type="hidden" id="session"  class="form-control " name="session" value="{{get_current_session()->id}}"   data-date-format="yyyy">
+
                                 <div class="col-md-2">
                                     <div class="form-group ">
                                         <label for="dob">attendance Month <span class="text-danger">*</span></label>

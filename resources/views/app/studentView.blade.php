@@ -357,7 +357,7 @@
             </div>
             <div class="row">
               <div class="col-md-12">
-                <a href='{{url("/fee/collection?class_id=$student->class_code&section=$student->section&session=$student->session&type=Monthly&month=$month&fee_name=$fee_name&regiNo=$student->regiNo")}}'><h4>Add Fees</h4></a>
+                <a href='{{url("/fee/collection?class_id=$student->class_code&section=$student->section&session=$student->session_id&type=Monthly&month=$month&fee_name=$fee_name&regiNo=$student->regiNo")}}'><h4>Add Fees</h4></a>
               </div>
             </div>
             <div class="row">

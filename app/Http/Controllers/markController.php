@@ -445,7 +445,7 @@ class markController extends BaseController {
 		else {
 			$classes2 = ClassModel::orderby('code','asc')->pluck('name','code');
 			$subjects = Subject::where('class',Input::get('class'))->pluck('name','code');
-			$marks=	DB::table('Marks')
+			$marks    =	DB::table('Marks')
 			->join('Student', 'Marks.regiNo', '=', 'Student.regiNo')
 			->select('Marks.id','Marks.regiNo','Student.rollNo', 'Student.firstName','Student.middleName','Student.lastName', 'Marks.written','Marks.mcq','Marks.practical','Marks.ca','Marks.total','Marks.obtain_marks','Marks.total_marks','Marks.grade','Marks.point','Marks.Absent')
 			->where('Student.isActive', '=', 'Yes')
@@ -458,13 +458,13 @@ class markController extends BaseController {
 			->where('Marks.exam','=',Input::get('exam'))
 			->get();
 
-			$formdata = new formfoo;
-			$formdata->class=Input::get('class');
-			$formdata->section=Input::get('section');
-			$formdata->shift=Input::get('shift');
-			$formdata->session=Input::get('session');
-			$formdata->subject=Input::get('subject');
-			$formdata->exam=Input::get('exam');
+			$formdata          = new formfoo;
+			$formdata->class   = Input::get('class');
+			$formdata->section = Input::get('section');
+			$formdata->shift   = Input::get('shift');
+			$formdata->session = Input::get('session');
+			$formdata->subject = Input::get('subject');
+			$formdata->exam    = Input::get('exam');
 
 			if(count($marks)==0)
 			{

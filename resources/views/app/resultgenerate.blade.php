@@ -79,7 +79,7 @@
                                         </div>
                                     </div>
                                 </div>
-                               <div class="col-md-3">
+                               {{--<div class="col-md-3">
                                     <div class="form-group ">
                                         <label for="session">session</label>
                                         <div class="input-group">
@@ -88,7 +88,9 @@
                                             <input value="{{date('Y')}}" type="text" id="session" required="true" class="form-control datepicker2" name="session"  data-date-format="yyyy">
                                         </div>
                                     </div>
-                                </div>
+                                </div>--}}
+                                 <input type="hidden" id="session"  class="form-control " name="session" value="{{get_current_session()->id}}"   data-date-format="yyyy">
+
 
                                 <div class="col-md-3">
                                     <div class="form-group">
