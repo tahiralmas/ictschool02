@@ -4,6 +4,9 @@ use App\Subject;
 use App\AcadamicYear;
 use App\Student;
 //use Storage;
+class emtysession{
+
+}
 if (! function_exists('FixData')) {
 	function FixData(){
 		
@@ -133,7 +136,8 @@ if (! function_exists('get_current_session')) {
 		if($years->count()>0){
 			$years = $years->first();
 		}else{
-			$years =array();
+			$years     = new emtysession;
+			$years->id = date("Y");
 		}
 
 		return $years;
