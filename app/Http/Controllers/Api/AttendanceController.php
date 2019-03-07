@@ -104,12 +104,12 @@ class AttendanceController extends Controller
 		public function attendance_create(Request $request)
 		{
 			$rules = [
-			    'class_id'=>'required',
-				'section_id'=>'required',
-				'regiNo' => 'required',
-				'date' => 'required',
-				'session'=>'required',
-				'status' =>'required'
+			    'class_id'  => 'required',
+				'section_id'=> 'required',
+				'regiNo'    => 'required',
+				'date'      => 'required',
+				'session'   => 'required',
+				'status'    => 'required'
 			];
 			$validator = \Validator::make(Input::all(), $rules);
 			if ($validator->fails()) 
@@ -121,7 +121,7 @@ class AttendanceController extends Controller
 
             //$response = $response instanceof RedirectResponse ? $response : response($response);
 
-                //return ; 
+                //return Carbon::parse(Input::get('date'))->format('Y-m-d') ; 
                 if(request()->getHttpHost()=='localhost' || request()->getHttpHost()=='school.ictcore.org'){
               		//$attendance =  Attendance::where('date',Carbon::parse(Input::get('date'))->format('Y-m-d'))->delete();
 				}
@@ -142,15 +142,15 @@ class AttendanceController extends Controller
                         //return response()->json($atten,200);
 						if(empty($atten)){
 							$attenData= [
-									'date' => $presentDate,
-									'class_id' => $class_id,
-									'section_id'=> $section_id,
-									'regiNo' => $students,
-									'session'=>Input::get('session'),
-									'status' =>$status,
-									'coments' =>$comments,
-									'created_at' => Carbon::now()
-								];
+								'date' => $presentDate,
+								'class_id' => $class_id,
+								'section_id'=> $section_id,
+								'regiNo' => $students,
+								'session'=>Input::get('session'),
+								'status' =>$status,
+								'coments' =>$comments,
+								'created_at' => Carbon::now()
+							];
 
 						$attendence_id = Attendance::insertGetId($attenData);
 						}else{
