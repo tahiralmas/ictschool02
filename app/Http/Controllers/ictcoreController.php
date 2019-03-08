@@ -708,12 +708,23 @@ class ictcoreController {
          if(Storage::disk('local')->exists('/public/cronsettings.txt')){
           $contant = Storage::get('/public/cronsettings.txt');
           $data = explode('<br>',$contant );
-
-			//echo "<pre>";print_r($data);
-			$attendance_time = $data[0]; 
+		 	//echo "<pre>";print_r($data);
+		  $attendance_time = $data[0]; 
 		}else{
 	      $attendance_time ='';
 		}
+
+		if(Storage::disk('local')->exists('/public/cronsettingdiary.txt')){
+         $contant_diary = Storage::get('/public/cronsettingdiary.txt');
+          $data_diary = explode('<br>',$contant_diary );
+
+			//echo "<pre>";print_r($data);
+			$diary_time = $data_diary[0]; 
+		}else{
+	      $diary_time ='';
+		}
+
+
 		 $schedule = Schedule::select('date','time')->first();
 		if(is_null($schedule)){
 			$schedule=new Schedule;
@@ -725,7 +736,7 @@ class ictcoreController {
 		$year= date('Y');
 	//	echo $attendance_time;
 	   //exit;
-	    return View('app.notifications',compact('notification_types','attendance_time','schedule','datee','year'));
+	    return View('app.notifications',compact('notification_types','attendance_time','schedule','datee','year','diary_time'));
 	}
 
 	public function noti_create()
@@ -755,16 +766,18 @@ class ictcoreController {
 			//	echo $value;
 				//exit;
 				$add_noti = new Notification;
-			     if($value=='sms' || $value=='voice'){
+			    if($value=='sms' || $value=='voice'){
 			     $add_noti->type = $value;
 			     $add_noti->notification = $key;
 			     $add_noti->save();
 			    }else{
-
+			    	if(Storage::disk('local')->exists('/public/cronsettingdiary.txt')){
+			    		//unlink(Storage::disk('local').'/public/cronsettingdiary.txt');
+			    		unlink(storage_path('app/public/cronsettingdiary.txt'));
+			    	}
 			    }
 			     //echo $key;echo $value;
 			     //echo "<br>";
-
 			}  
 			 DB::table("cronschedule")->delete();
 				$schedule=new Schedule;
@@ -776,8 +789,16 @@ class ictcoreController {
         //exit;
         $time = DATE("H:i", STRTOTIME($data[0]['time']));
             $setting = $time."<br>".'';
-           
+        if(Input::get('diary_time')!=''){
+        $dairy_time = DATE("H:i", STRTOTIME(Input::get('diary_time')));
+            $setting = $time."<br>".'';
+             $dairy_setting  = $dairy_time."<br>".'';
+             Storage::put('/public/cronsettingdiary.txt', $dairy_setting);
+        }else{
+
+        }
            Storage::put('/public/cronsettings.txt', $setting);
+           
   
 			return Redirect::to('/notification_type')->with("success", "Notifications setting Created Succesfully.");
 	    }

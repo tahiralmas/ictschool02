@@ -11,10 +11,12 @@ use App\SectionModel;
 use App\ClassModel;
 use App\Subject;
 use App\Timetable;
+use App\Diary;
 use DB;
 use Hash;
 use App\Ictcore_integration;
 use App\Http\Controllers\ictcoreController;
+use Carbon\Carbon;
 class foobar{
 
 }
@@ -844,5 +846,155 @@ class teacherController extends BaseController {
 	   }
 	   return Redirect::to('/teacher/list')->with("error","Student not found.");
 	}
+	/**
+    * Diary Show
+    **/
+    public function diaryshow($teacher_id)
+    {
+    	$diaries  = Diary::join('Class','diaries.class','=','Class.code')
+    						->join('section','diaries.section','=','section.id')
+    						->join('Subject','diaries.subject','=','Subject.id')
+						    ->select('diaries.id','diaries.diary','diaries.diary_date','Class.name as class_name','section.name as section_name','Subject.name as subject_name')
+						    ->where('diaries.diary_date',Carbon::today()->toDateString())
+						    ->where('diaries.teacher_id',$teacher_id)
+						    ->get(); 
+		return view('app.teacher.index',compact('diaries','teacher_id'));
 
+    }
+	/**
+	* teacher add diary date class and section wise
+	**/
+	public function diary_add($teacher_id)
+	{
+		$teacher_sections = array();
+		$teachers_class   = array();
+		$teacher_subjects = array();
+
+		$teacher_classes = DB::table('timetable')->where('teacher_id',$teacher_id)->get();
+		if($teacher_classes){
+
+			$sections  = array();
+			$classes   = array();
+			$subjects  = array();
+
+			foreach($teacher_classes as $teacher_timetable){
+				$sections[] = $teacher_timetable->section_id;
+				$classes[]  = $teacher_timetable->class_id;
+				$subjects[] = $teacher_timetable->subject_id;
+			}
+			$teacher_sections = DB::table('section')->whereIn('id',$sections)->get();
+			$teachers_class   = DB::table('Class')->whereIn('code',$classes)->get();
+			$teacher_subjects = DB::table('Subject')->whereIn('id',$subjects)->get();
+			//echo "<pre>";print_r($teachers_class);exit;
+		}
+
+		return view('app.teacher.diary',compact('teacher_sections','teachers_class','teacher_subjects','teacher_id'));
+	}
+
+	/**
+	* Create diary
+	**/
+	public function diary_create()
+	{
+		$rules=[//'regiNo' => 'required',
+		'class' => 'required',
+		'section.*' => 'required',
+		'subject' => 'required',
+		'description' => 'required',
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails())
+		{
+		return Redirect::to('/timetable/edit/'.Input::get('tid'))->withErrors($validator)->withInput();
+		}
+		else{
+				$teacher_id = Input::get('id');
+				$sections = Input::get('section');
+				$count = 0;
+				foreach($sections as $section){
+					$getolddiary  = Diary::where('section',$section)
+									->where('subject',Input::get('subject'))
+									->where('teacher_id',$teacher_id)
+									->where('class',Input::get('class'))
+									->where('diary_date',Carbon::today()->toDateString())
+									->count();
+					if($getolddiary==0){
+
+						$diary               =  new Diary;
+						$diary->subject      =  Input::get('subject');
+						$diary->section      =  $section;
+						$diary->class        =  Input::get('class');
+						$diary->teacher_id   =  $teacher_id;
+						$diary->diary        =  Input::get('description');
+						$diary->diary_date   =  Carbon::now();
+						$diary->save();
+					}else{
+						$count++;
+					}
+
+				}
+				if($count==count($sections)){
+					return Redirect::to('/teacher/diary/'.$teacher_id)->with("success","Diary allready Created.")->withInput();
+				}
+					return Redirect::to('/teacher/diary/'.$teacher_id)->with("success","Diary Created Succesfully.")->withInput();
+					//return Redirect::to('/teacher/diary/'.$teacher_id)->withErrors($validator)->withInput();
+
+		}
+	}
+	/**
+	** get teacher wise subject
+	***/
+
+	public function teachersubject($class,$teacher_id)
+	{
+
+
+		$teacher_subjects = array();
+		$teacher_classes = DB::table('timetable')->where('teacher_id',$teacher_id)->where('class_id',$class)->get();
+		if($teacher_classes){
+
+			$sections  = array();
+			foreach($teacher_classes as $teacher_timetable){
+				$subjects[] = $teacher_timetable->subject_id;
+			}
+			$teacher_subjects = DB::table('Subject')->whereIn('id',$subjects)->get();
+			//echo "<pre>";print_r($teachers_class);exit;
+		}
+		
+		return $teacher_subjects;
+	}
+
+	/**
+	** get teacher wise section
+	***/
+	public function teachersection($class,$teacher_id)
+	{
+
+		$teacher_sections = array();
+		$teacher_classes = DB::table('timetable')->where('teacher_id',$teacher_id)->where('class_id',$class)->get();
+		if($teacher_classes){
+
+			$sections  = array();
+			foreach($teacher_classes as $teacher_timetable){
+				$sections[] = $teacher_timetable->section_id;
+			}
+			$teacher_sections = DB::table('section')->whereIn('id',$sections)->get();
+			//echo "<pre>";print_r($teachers_class);exit;
+		}
+		
+		return $teacher_sections;
+	}
+
+	/**
+	* DELEte Diary
+	**/
+	public function delete_diary($id)
+	{
+		$get_teacher = Diary::find($id);
+		$teacher_id = $get_teacher->teacher_id;
+		$dele = DB::table('diaries')->where('id',$id)->delete();
+		
+		return Redirect::to('/teacher/diary/show/'.$teacher_id)->with("success","Diary Deleted Succesfully.")->withInput();
+
+	}
 }

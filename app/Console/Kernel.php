@@ -17,9 +17,9 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
-    
     '\App\Console\Commands\feeNotification',
     '\App\Console\Commands\attendanceNotification',
+    '\App\Console\Commands\DiaryJob',
     ];
 
     /**
@@ -32,22 +32,30 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-       if (Schema::hasTable('cronschedule')){
-        $cronschedule = DB::table('cronschedule')->first();
-        if(!empty($cronschedule)){
-        $schedule->command('feeNotification:notification')
-       // ->everyMinute();
-         ->monthlyOn($cronschedule->date, $cronschedule->time)->timezone('Asia/Karachi');
-         }
-         }
+        if (Schema::hasTable('cronschedule')){
+            $cronschedule = DB::table('cronschedule')->first();
+            if(!empty($cronschedule)){
+                 $schedule->command('feeNotification:notification')
+                // ->everyMinute();
+                ->monthlyOn($cronschedule->date, $cronschedule->time)->timezone('Asia/Karachi');
+             }
+        }
         //$test = $schedule->exec('touch /tmp/mytest____')->everyMinute();
            if(Storage::disk('local')->exists('/public/cronsettings.txt')){
               $contant = Storage::get('/public/cronsettings.txt');
-              $data = explode('<br>',$contant );
+              $data    = explode('<br>',$contant );
 
                 //echo "<pre>";print_r($data);
-                $attendance_time = $data[0]; 
-             $schedule->command('attendanceNotification:attendacenotification')->everyFiveMinutes()/*->dailyAt($attendance_time)->timezone('Asia/Karachi')*/;
+              $attendance_time = $data[0]; 
+              $schedule->command('attendanceNotification:attendacenotification')->everyFiveMinutes()/*->dailyAt($attendance_time)->timezone('Asia/Karachi')*/;
+            } 
+            if(Storage::disk('local')->exists('/public/cronsettingdiary.txt')){
+              $contant_diary = Storage::get('/public/cronsettingdiary.txt');
+              $data_diary    = explode('<br>',$contant_diary );
+
+                //echo "<pre>";print_r($data);
+                $diary_time = $data_diary[0]; 
+                $schedule->command('DiaryJob:notification')->dailyAt($diary_time)->timezone('Asia/Karachi');
             }
     }
 
@@ -55,7 +63,7 @@ class Kernel extends ConsoleKernel
      * Register the commands for the application.
      *
      * @return void
-     */
+    */
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');

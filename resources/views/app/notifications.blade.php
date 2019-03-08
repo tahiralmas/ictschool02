@@ -85,6 +85,18 @@
                                 </div>
                                 </div>
 
+                                <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="name"  class=" col-form-label">Diary</label>
+                                    <div class="input-group col-md-6">
+                                    </div>
+                                    <label for="name"  class=" col-form-label">Schedule Setting</label>
+                                    <div class="input-group col-md-6">
+                                        <input type="text" name="diary_time" value="{{$diary_time}}" id="timepicker2">
+                                    </div>
+                                </div>
+                                </div>
+
 
 
 
@@ -170,6 +182,18 @@
                               
                                 </div>
                                 </div>
+                                 <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="name"  class=" col-form-label">Diary</label>
+                                    <div class="input-group col-md-6">
+                                    </div>
+                                    <label for="name"  class=" col-form-label">Schedule Setting</label>
+                                    <div class="input-group col-md-6">
+                                        <input type="text" name="diary_time" value="" id="timepicker2">
+                                    </div>
+                                </div>
+                                </div>
+
 
 
 
@@ -206,6 +230,14 @@ $( document ).ready(function() {
     });
 
             $('#timepicker1').timepicker();
+            @if($diary_time=='')
+              $('#timepicker2').timepicker().val('');
+            @else
+              $('#timepicker2').timepicker();
+            @endif
+            /*$('#timepicker2').timepicker({
+              timeFormat: 'HH:mm:ss',
+            });*/
     
 });
 </script>

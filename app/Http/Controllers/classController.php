@@ -1,20 +1,29 @@
-<?php  
+<?php
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\ClassModel;
 use App\Subject;
 use DB;
+use App\Student;
+use App\SectionModel;
+use App\GPA;
+use App\Marks;
+use App\Ictcore_fees;
+use App\Ictcore_integration;
+use App\Message;
+use App\Diary;
+use Carbon\Carbon;
+
 class classController extends BaseController {
-	public function __construct() 
-	{
+
+	public function __construct() {
 		/*$this->beforeFilter('csrf', array('on'=>'post'));
 		$this->beforeFilter('auth');
 		$this->beforeFilter('userAccess',array('only'=> array('delete')));*/
 		
 	       $this->middleware('auth');
-	       
-              // $this->middleware('userAccess',array('only'=> array('delete')));
+               $this->middleware('userAccess',array('only'=> array('delete')));
 	}
 	/**
 	* Display a listing of the resource.
@@ -23,10 +32,7 @@ class classController extends BaseController {
 	*/
 	public function index()
 	{
-		$levels = DB::table('level')
-		->select(DB::raw('level.id,level.name,level.description'))
-		->get();
-		return View('app.classCreate',compact('levels'));
+		return View('app.classCreate');
 	}
 
 
@@ -52,7 +58,7 @@ class classController extends BaseController {
 			$cexists=ClassModel::select('*')->where('code','=',$clcode)->get();
 			if(count($cexists)>0){
 
-				$errorMessages = new \Illuminate\Support\MessageBag;
+				$errorMessages = new Illuminate\Support\MessageBag;
 				$errorMessages->add('deplicate', 'Class all ready exists!!');
 				return Redirect::to('/class/create')->withErrors($errorMessages);
 			}
@@ -64,7 +70,9 @@ class classController extends BaseController {
 				$class->save();
 				return Redirect::to('/class/create')->with("success", "Class Created Succesfully.");
 			}
+
 		}
+
 	}
 
 
@@ -77,9 +85,8 @@ class classController extends BaseController {
 	{
 		//$Classes = ClassModel::orderby('code','asc')->get();
 		$Classes = DB::table('Class')
-		->select(DB::raw('Class.id,Class.code,Class.name,Class.description,(select count(Student.id) from Student where class=Class.code and Student.session=get_current_session()->id)as students'))
+		->select(DB::raw('Class.id,Class.code,Class.name,Class.description,(select count(Student.id) from Student where class=Class.code)as students'))
 		->get();
-		echo "<pre>";print_r($Classes->toArray());exit;
 		//return View::Make('app.classList',compact('Classes'));
 		return View('app.classList',compact('Classes'));
 	}
@@ -124,6 +131,7 @@ class classController extends BaseController {
 			$class->description=Input::get('description');
 			$class->save();
 			return Redirect::to('/class/list')->with("success","Class Updated Succesfully.");
+
 		}
 	}
 
@@ -143,7 +151,137 @@ class classController extends BaseController {
 
 	public function getSubjects($class)
 	{
+	
 		$subjects = Subject::select('id','name','code')->where('class',$class)->orderby('code','asc')->get();
 		return $subjects;
 	}
+
+	public function diary($class)
+	{
+		return view('app.classdiary',compact('class'));
+	}
+
+	public function getForsectionjoin($class)
+	{
+		
+		$teacher_classes = DB::table('timetable')->where('class_id',$class)->get();
+		if($teacher_classes){
+
+			$sections  = array();
+			
+
+			foreach($teacher_classes as $teacher_timetable){
+				$sections[] = $teacher_timetable->section_id;
+			}
+		}
+
+
+
+		$sections        = SectionModel::/*join('timetable','section.id','=','timetable.section_id')*/
+		select('section.id','section.name')->where('section.class_code','=',$class)->whereIn('id',$sections)->get();
+		$output ='';
+		$output .='<input type="hidden" name="class" value="'.$class.'">';
+		foreach($sections as $section){
+			
+			$subjecname = '';
+			for($i=0;$i<count(getsubjecclass($class)['sub_name']);$i++){
+				$teachers   = DB::table('timetable')
+				->join('teacher','timetable.teacher_id','=','teacher.id')
+				->select('timetable.teacher_id','teacher.firstName','teacher.lastName')
+				->where('section_id',$section->id)
+				->where('subject_id',getsubjecclass($class)['sub_name'][$i]['id'])
+				->first();
+				if(!empty($teachers)){
+					$teacher_id   = $teachers->teacher_id;
+					$teacher_name = $teachers->firstName.''.$teachers->lastName;
+				}else{
+					$teacher_id   = '';
+					$teacher_name = '';
+				}
+
+				$getolddiary  = Diary::where('section',$section->id)
+									->where('subject',getsubjecclass($class)['sub_name'][$i]['id'])
+								  //->where('teacher_id',$teacher_id)
+									->where('class',$class)
+									->where('diary_date',Carbon::today()->toDateString());
+									//->count();
+				if($getolddiary->count()>0){
+					$value   = $getolddiary->first()->diary; 
+					$output .='<input type="hidden" value="'.$getolddiary->first()->id.'" name="dairy_id[]">' ;
+				}else{
+					$value   = '';
+				    $output .='<input type="hidden" value="" name="dairy_id[]">' ;
+
+				}
+					/*$url = url('/').'/create/marks?sub_id='.getsubjecclass($class)['sub_name'][$i]['id'].'&class='.$class.'&section='.$section->id;
+					$link = "'".$url."','enter marks','width=1500','height=500'";
+					$subjecname .='&nbsp;  ';
+					$subjecname .='<a href="'.$url.'" onclick="window.open('."$link".'); 
+		            return false;">'.getsubjecclass($class)['sub_name'][$i]['name'].'</a>';*/
+				$output .='<tr><td>'.$section->name.'<input type="hidden" value="'.$section->id.'" name="section[]"><input type="hidden" value="'.getsubjecclass($class)['sub_name'][$i]['id'].'" name="subject[]"><input type="hidden" name="teacher_id[]" value="'.$teacher_id.'"></td><td>'.$teacher_name.'</td><td>'.getsubjecclass($class)['sub_name'][$i]['name'].' <textarea name="description[]" required>'.$value.'</textarea></td></tr>'; 
+
+			}
+			//$output .='<tr><td>'.$section->name.'</td><td>'.$subjecname.'</td></tr>'; 
+		}
+		return $output;
+	}
+
+	/**
+	* Create diary
+	**/
+	public function diary_create()
+	{
+		$rules=[//'regiNo' => 'required',
+		
+		'section.*' => 'required',
+		'subject.*' => 'required',
+		'description.*' => 'required',
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails())
+		{
+		return Redirect::to('/timetable/edit/'.Input::get('tid'))->withErrors($validator)->withInput();
+		}
+		else{
+			// echo "<pre>";print_r(Input::all());exit;
+				$teacher_id = Input::get('teacher_id');
+				$section = Input::get('section');
+				$class = Input::get('class');
+				$subject = Input::get('subject');
+				$description = Input::get('description');
+				$count = 0;
+
+				//foreach($sections as $section){
+				for($i=0;$i<count($section);$i++){
+					$getolddiary  = Diary::where('section',$section[$i])
+									->where('subject',$subject[$i])
+									->where('teacher_id',$teacher_id[$i])
+									->where('class',$class)
+									->where('diary_date',Carbon::today()->toDateString());
+									//->count();
+					if($getolddiary->count()==0){
+
+						$diary               =  new Diary;
+					}else{
+						$diary               =  Diary::find($getolddiary->first()->id);
+						$count++;
+					}
+						$diary->subject      =  $subject[$i];
+						$diary->section      =  $section[$i];
+						$diary->class        =  $class;
+						$diary->teacher_id   =  $teacher_id[$i];
+						$diary->diary        =  $description[$i];
+						$diary->diary_date   =  Carbon::now();
+						$diary->save();
+
+				}
+				if($count==count($section)){
+					return Redirect::to('/class/diary/'.$class)->with("success","Diary Updated Succesfully.")->withInput();
+				}
+					return Redirect::to('/class/diary/'.$class)->with("success","Diary Created Succesfully.")->withInput();
+					//return Redirect::to('/teacher/diary/'.$teacher_id)->withErrors($validator)->withInput();
+
+		}
+	}
+
 }

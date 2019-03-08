@@ -61,12 +61,12 @@ class attendanceNotification extends Command
     if(Storage::disk('local')->exists('/public/cronsettings.txt')){
         
         $contant = Storage::get('/public/cronsettings.txt');
-        $data = explode('<br>',$contant );
+        $data    = explode('<br>',$contant );
         $attendance_time = $data[0]; 
 
         if($now->format('H:i')>=$attendance_time){
-        $previouse_sended_sms = SMSLog::whereDate('created_at', '=', $now->toDateString())->where('status','ok')->get();
-        $previus_sended_ids = array();
+            $previouse_sended_sms = SMSLog::whereDate('created_at', '=', $now->toDateString())->where('status','ok')->get();
+            $previus_sended_ids   = array();
 
        foreach($previouse_sended_sms as $get_ids)
        {

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 @stop
 @section('content')
     @if (Session::get('success'))
@@ -135,6 +135,12 @@
                                                <input data-no-uniform="true" name="grade_system"  @if($gradsystem=='' || $gradsystem=='auto') checked @endif type="checkbox" class="iphone-toggle">
                                         </div>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="type">Family</label>
+                                                <input   id="toggle-one" @if($family=='on') checked @endif name="family" type="checkbox">                                        </div>
+                                    </div>
                                     </div>
                                 </div>
                             @endif
@@ -158,6 +164,9 @@
 @stop
 @section('script')
 <script type="text/javascript">
+$(function() {
+    $('#toggle-one').bootstrapToggle();
+  })
     iOSCheckbox.defaults.checkedLabel='Auto';
     iOSCheckbox.defaults.uncheckedLabel='Manual';
 </script>

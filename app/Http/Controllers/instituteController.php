@@ -41,9 +41,19 @@ class instituteController extends BaseController {
 		}else{
 	      $gradsystem ='';
 		}
+
+		if(Storage::disk('local')->exists('/public/family.txt')){
+          $contant_family = Storage::get('/public/family.txt');
+          $data_family = explode('<br>',$contant_family );
+
+			//echo "<pre>";print_r($data);
+			$family = $data_family[0]; 
+		}else{
+	      $family ='';
+		}
         //print_r($data);exit;
 		//return View::Make('app.institute',compact('institute'));
-		return View('app.institute',compact('institute','gradsystem'));
+		return View('app.institute',compact('institute','gradsystem','family'));
 	}
 
 
@@ -93,10 +103,15 @@ class instituteController extends BaseController {
               $gs = 'auto';
             endif;
                 Storage::put('/public/grad_system.txt', $gs);
-
+               //echo Input::get('family');exit;
+            if(Input::get('family')=='' ):
+              $fm = 'off';
+            else:
+              $fm = 'on';
+            endif;
+            Storage::put('/public/family.txt', $fm);
 			DB::table("institute")->delete();
 			$institue=new Institute;
-
 			$institue->name = Input::get('name');
 			$institue->establish = Input::get('establish');
 			$institue->web = Input::get('web');

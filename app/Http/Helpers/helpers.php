@@ -160,3 +160,19 @@ if (! function_exists('count_student')) {
 		return $count_student;
 	}
 }
+
+if(! function_exists('family_check')) {
+	function family_check()
+	{
+		if(Storage::disk('local')->exists('/public/family.txt')){
+          $fm = Storage::get('/public/family.txt');
+          $fm_data = explode('<br>',$fm );
+
+			//echo "<pre>";print_r($data);
+			$famly = $fm_data[0]; 
+		}else{
+	      $famly ='';
+		}
+		return $famly;
+	}
+}

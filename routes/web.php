@@ -46,6 +46,9 @@ Route::post('/class/update','classController@update');
 Route::get('/class/delete/{id}','classController@delete');
 });
 Route::get('/class/getsubjects/{class}','classController@getSubjects');
+Route::get('/class/diary/{class_id}','classController@diary');
+Route::get('/class/section/{class_id}','classController@getForsectionjoin');
+Route::post('/class/diary/save','classController@diary_create');
 
 // section routes
 Route::group(['middleware' => 'admin'], function(){ 
@@ -128,6 +131,16 @@ Route::get('/teacher/create-timetable','teacherController@index_timetable');
 Route::post('/teacher/create_timetable','teacherController@create_timetable');
 Route::get('/timetable/edit/{timetable_id}','teacherController@edit_timetable');
 Route::post('/timetable/update','teacherController@update_timetable');
+
+Route::get('/teacher/diary/{teacher_id}','teacherController@diary_add');
+Route::post('/teacher/diary','teacherController@diary_create');
+
+Route::get('/teacher/getsubjects/{class_id}/{teacher_id}','teacherController@teachersubject');
+Route::get('/teacher/getsections/{class_id}/{teacher_id}','teacherController@teachersection');
+Route::get('/teacher/diary/show/{teacher_id}','teacherController@diaryshow');
+Route::get('/diary/delete/{diary_id}','teacherController@delete_diary');
+
+
 });
 Route::get('/teacher/view-timetable/{id}','teacherController@view_timetable');
 Route::get('/section/getList/{class}/{session}','sectionController@getsections');
