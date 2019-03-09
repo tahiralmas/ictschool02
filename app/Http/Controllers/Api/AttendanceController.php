@@ -135,7 +135,11 @@ class AttendanceController extends Controller
 					$presentDate = Carbon::parse(Input::get('date'))->format('Y-m-d');
 					 // return response()->json($presentDate);
 
+						$std = DB::table('Student')->where('regiNo',$students)->count();
+						if($std==0){
+							return response()->json(['error'=>'Student not found'], 404);
 
+						}
 					  if($status =='Absent' || $status =='absent' || $status =='leave' || $status =='Leave') {
 
 						$atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$students)->first();
@@ -146,7 +150,8 @@ class AttendanceController extends Controller
 								'class_id' => $class_id,
 								'section_id'=> $section_id,
 								'regiNo' => $students,
-								'session'=>Input::get('session'),
+								//'session'=>Input::get('session'),
+								'session'=>get_current_session()->id,
 								'status' =>$status,
 								'coments' =>$comments,
 								'created_at' => Carbon::now()
@@ -163,7 +168,7 @@ class AttendanceController extends Controller
 								->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Student.fatherName','Class.Name as class')
 								->where('Student.regiNo','=',$students)
 								->where('Student.section','=',$section_id)
-								->where('Student.session','=',Input::get('session'))
+								->where('Student.session','=',get_current_session()->id)
 								->first();
 
 							   //$this->sendnotification($student);
@@ -242,17 +247,18 @@ class AttendanceController extends Controller
 					if(empty($atten)){
 					
 						$attenData= [
-
 						    'class_id' => $class_id,
 						    'section_id'=> $section_id,
-							'session'=>Input::get('session'),
+							//'session'=>Input::get('session'),
+							'session'=>get_current_session()->id,
 							'date' => $presentDate,
 							'regiNo' => $students,
 							'status' =>$status,
 							//'coments' =>NULL,
 							'created_at' => Carbon::now()
 						];
-						// return response()->json($attenData);
+						 //return response()->json($attenData);
+
 						$attendence_id = Attendance::insertGetId($attenData);
 
 				}else{
@@ -366,6 +372,7 @@ class AttendanceController extends Controller
 			public function attendance_view($class_level,$section,$shift,$session,$date)
 			{
 			   $date = $this->parseAppDate($date);
+			   $session = get_current_session()->id;
 				$attendance = \App\Student::with(['attendance' => function($query) use($date){
 					 $query->where('date','=',$date);
 				}])
@@ -440,7 +447,7 @@ class AttendanceController extends Controller
 
 					   $attendance->when(request('session', false), function ($q, $session) { 
 
-						return $q->where('Attendance.session',  $session);
+						return $q->where('Attendance.session',  get_current_session()->id);
 					  });
 
 					   $attendance->when(request('section', false), function ($q, $section) { 
@@ -467,8 +474,8 @@ class AttendanceController extends Controller
 			public function classaten_history($class_id)
 			{
                    $classc = DB::table('Class')->select('*')->where('id','=',$class_id)->first();
-				   $attendances_a = DB::table('Attendance')->select(DB::raw('count(id) as absent'))->where('session',2018)->where('class_id',$class_id)->where('status','Absent')/*->where('date',Carbon::today())*/->first();
-				   $attendances_p = DB::table('Attendance')->select(DB::raw('count(id) as present'))->where('session',2018)->where('class_id',$class_id)->where('status','Present')/*->where('date',Carbon::today())*/->first();
+				   $attendances_a = DB::table('Attendance')->select(DB::raw('count(id) as absent'))->where('session',get_current_session()->id)->where('class_id',$class_id)->where('status','Absent')/*->where('date',Carbon::today())*/->first();
+				   $attendances_p = DB::table('Attendance')->select(DB::raw('count(id) as present'))->where('session',get_current_session()->id)->where('class_id',$class_id)->where('status','Present')/*->where('date',Carbon::today())*/->first();
 			       $data = array('Absent'=>$attendances_a->absent,'Present'=>$attendances_p->present);
 			      if(empty($data)) {
 				  return response()->json(['error'=>'Attendance Not Found'], 404);
@@ -488,7 +495,7 @@ class AttendanceController extends Controller
 					$join->where('Attendance.date','=',Carbon::today()->toDateString()) ;
 				})
 				->where('Student.isActive','Yes')
-				->where('Student.class',  $classc->code)->where('Student.session',2018)->get();
+				->where('Student.class',  $classc->code)->where('Student.session',get_current_session()->id)->get();
 				
 				if($attendance->isEmpty()) {
 					return response()->json(['error'=>'Attendance Not Found'], 404);
@@ -520,7 +527,7 @@ class AttendanceController extends Controller
 
 					   $attendance->when(request('session', false), function ($q, $session) { 
 
-						return $q->where('Attendance.session',  $session);
+						return $q->where('Attendance.session',  get_current_session()->id);
 					  });
 
 					   $attendance->when(request('section', false), function ($q, $section) { 
@@ -549,6 +556,7 @@ class AttendanceController extends Controller
 			{
                 $now        = Carbon::now();
                 $year       =  $now->year;
+                $year       =  get_current_session()->id;
                 $month      =  $now->month;
 				$attendance = DB::table('Student')
 				->select(DB::raw("Student.id as student_id ,Student.regiNo, Student.rollNo, Student.firstName, Student.middleName, Student.lastName,Student.class,Student.session,Attendance.status,Attendance.date,Class.id as class_id" ))
@@ -588,8 +596,8 @@ class AttendanceController extends Controller
 		    public function sectionaten_history($section_id)
 			{
                    //$classc = DB::table('Class')->select('*')->where('id','=',$class_id)->first();
-				   $attendances_a = DB::table('Attendance')->select(DB::raw('count(id) as absent'))->where('session',2018)->where('section_id',$section_id)->where('status','Absent')->where('date',Carbon::today())->first();
-				   $attendances_p = DB::table('Attendance')->select(DB::raw('count(id) as present'))->where('session',2018)->where('section_id',$section_id)->where('status','Present')->where('date',Carbon::today())->first();
+				   $attendances_a = DB::table('Attendance')->select(DB::raw('count(id) as absent'))->where('session',get_current_session()->id)->where('section_id',$section_id)->where('status','Absent')->where('date',Carbon::today())->first();
+				   $attendances_p = DB::table('Attendance')->select(DB::raw('count(id) as present'))->where('session',get_current_session()->id)->where('section_id',$section_id)->where('status','Present')->where('date',Carbon::today())->first();
 			       $data = array('Absent'=>$attendances_a->absent,'Present'=>$attendances_p->present);
 			       //return response()->json($data,200);
 			    if(empty($data)) {
@@ -619,7 +627,7 @@ class AttendanceController extends Controller
 								->select( 'Student.regiNo','Student.rollNo','Student.firstName','Student.middleName','Student.lastName','Student.fatherCellNo','Student.fatherName','Class.Name as class')
 								->where('Student.regiNo','=',$attendance->regiNo)
 								->where('Student.section','=',$section_id)
-								->where('Student.session','=','2018')
+								->where('Student.session','=',get_current_session()->id)
 								->first();
 							   $this->sendnotification($student);
 							}
