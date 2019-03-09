@@ -57,13 +57,10 @@
                     @if(isset($classes2))
                     {{ Form::select('class',$classes2,$formdata->class,['class'=>'form-control','id'=>'class','required'=>'true'])}}
                     @else
-
-
                     <select id="class" id="class" name="class" required="true" class="form-control" >
                       @foreach($classes as $class)
                       <option value="{{$class->code}}">{{$class->name}}</option>
                       @endforeach
-
                     </select>
                     @endif                                 </div>
                   </div>
@@ -225,25 +222,34 @@
       $('#markList').dataTable();
       $('#class').on('change', function (e) {
         getSubjects();
-        getsections();
         getexam();
+        getsections();
+        
       });
       $('#section').on('change', function (e) {
           //getSubjects();
           //getsections();
           getexam();
       });
-          getSubjects();
-          getsections();
+      $('#subject').on('change', function (e) {
+          //getSubjects();
+          //getsections();
           getexam();
+      });
+          getSubjects();
+           getexam();
+          getsections();
+         
 
         $('#session').on('change',function() {
-          getsections();
           getexam();
+          getsections();
+          
         });
          //getexam();
     });
     var getSubjects = function () {
+
       var val = $('#class').val();
 
        // alert(val);
