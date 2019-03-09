@@ -64,7 +64,7 @@ class StudentController extends Controller
             return $q->where('Student.section', $section);
           });
           $students->when(request('session', false), function ($q, $session) { 
-            return $q->where('Student.session', $session);
+            return $q->where('Student.session', get_current_session()->id);
           });
           $students->when(request('group', false), function ($q, $group) { 
             return $q->where('Student.group', $group);
@@ -103,7 +103,8 @@ class StudentController extends Controller
 	 */
 	public function student_classwise($class_level,$section,$shift,$session)
 	{
-		  $students = DB::table('Student')
+		  $session =get_current_session()->id;
+          $students = DB::table('Student')
 		  ->join('Class', 'Student.class', '=', 'Class.code')
 		  ->select('Student.id','Student.session', 'Student.regiNo', 'Student.rollNo','Student.b_form as Bform', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
 		  'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion')
@@ -195,7 +196,7 @@ class StudentController extends Controller
             $student->rollNo= Input::get('rollNo');
             $student->gender= Input::get('gender');
 			$student->religion= Input::get('religion');
-			$student->session= trim(Input::get('session'));
+			$student->session= get_current_session()->id;
 			$student->class= Input::get('class');
 			$student->section= Input::get('section');
 			$student->group= Input::get('group');
