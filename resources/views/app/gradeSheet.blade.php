@@ -281,7 +281,7 @@ function getsections()
       dataType: 'json',
       success: function(data) {
         $('#section').empty();
-      // $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $('#section').append($('<option>').text("--Select Section--").attr('value',""));
         $.each(data, function(i, section) {
           //console.log(student);
          
