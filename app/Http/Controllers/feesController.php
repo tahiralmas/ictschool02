@@ -808,7 +808,8 @@ class feesController extends BaseController {
 		$action = Input::get('action');
 		if($action!=''):
 			$now   = Carbon::now();
-		$year  =  $now->year;
+		//$year  =  $now->year;
+		$year  =  get_current_session()->id;
 		$month =  $now->month;
 	          // $all_section =	DB::table('section')->select( '*')->get();
 		$all_section =	DB::table('Class')->select( '*')->get();
