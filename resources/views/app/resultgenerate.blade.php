@@ -73,8 +73,11 @@
                                                     'I'=>'I',
                                                     'J'=>'J'
                                             ];?>
-                                           {{ Form::select('section',$data,$formdata->section,['class'=>'form-control','id'=>'section','required'=>'true'])}}
-
+                                           <?php /* {{ Form::select('section',$data,$formdata->section,['class'=>'form-control','id'=>'section','required'=>'true'])}}
+                                           */?>
+                                           <select class="form-control" id="section" required name="section">
+                                             
+                                           </select>
 
                                         </div>
                                     </div>
@@ -208,7 +211,7 @@ function getsections()
       dataType: 'json',
       success: function(data) {
         $('#section').empty();
-      // $('#section').append($('<option>').text("--Select Section--").attr('value',""));
+        $('#section').append($('<option>').text("--Select Section--").attr('value',""));
         $.each(data, function(i, section) {
           //console.log(student);
          
