@@ -963,7 +963,7 @@ class ictcoreController {
 	    if($method == 'campaign_create' && $type =='sms'){
 	    	//echo "<=sms_msg=>".$sms_msg;
 	    	 date_default_timezone_set('Asia/Karachi');
-	    	 $mask = "SidraSchool"
+	    	 $mask = "SidraSchool";
 	    	 $ictcore_integration = Ictcore_integration::select("*")->where('type','sms')->where('method','telenor')->first();
 	    		if(!empty($ictcore_integration)){
 	    			
