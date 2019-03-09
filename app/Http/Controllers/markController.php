@@ -887,7 +887,7 @@ class markController extends BaseController {
 	      		$msg1 = str_replace("[student_name]",$student->firstName.''.$student->lastName,$message);
 	      		$msg2 = str_replace("[marks]",$obtain,$msg1);
 	      		$msg3 = str_replace("[outoff]",$total,$msg2);
-	      		$msg4 = str_replace("[subject]",$subject->name,$msg3);
+	      		$msg4 = str_replace("[subjects]",$subject->name,$msg3);
 	      		$message = str_replace("[exam]",$exam_name,$msg4);
 	      	}
 
