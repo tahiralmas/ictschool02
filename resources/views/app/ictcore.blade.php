@@ -82,6 +82,19 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row" id ="tele" style="display:none">
+                            <div class="col-md-12">
+                            <div class="col-md-10" >
+                                        <div class="form-group">
+                                            <label for="type">MASK</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                                <input type="text" class="form-control"  name="ictcore_url" placeholder="Enter Mask" value="{{$ictcore_integration->ictcore_url}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            </div>
                             <button class="btn btn-primary pull-right" type="submit"><i class="glyphicon glyphicon-check"></i> Save</button>
                             <br>
                             <br>
@@ -105,12 +118,17 @@
 
  var checkBox = document.getElementById("myCheck");
     // document.getElementById("myForm").reset();
+    $("#tele").hide();
     if (checkBox.checked == true){
+
       //alert('hello');
+       $("#tele").hide();
         $("#ictcore").show();
+       
     }else{
       //alert('hello343');
       $("#ictcore").hide();
+      $("#tele").show();
     }
   $(".chb").change(function()
   {
@@ -118,11 +136,13 @@
 var checkBox = document.getElementById("myCheck");
     if (checkBox.checked == true){
       //alert('hello');
+       $("#tele").hide();
         $("#ictcore").show();
         var method = 'ictcore';
     }else{
       //alert('hello343');
       $("#ictcore").hide();
+      $("#tele").show();
       var method = 'telenor'
     }
         //$(".chb").prop('checked',false);
