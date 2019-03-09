@@ -848,8 +848,14 @@ class ictcoreController {
         if($mask!=null)
 	    {
 	    	if($type=='sms'){
-
-				$urlWithSessionKey = $urlWithSessionKey . "&mask=" . urlencode($mask);
+	    		$ictcore_integration = Ictcore_integration::select("*")->where('type','sms')->where('method','telenor')->first();
+	    		if(!empty($ictcore_integration)){
+	    			
+	    			if($mask!='' && $mask!=NULL){
+	    			  $mask = $ictcore_integration->ictcore_url;
+	    			}
+	    		}
+				$urlWithSessionKey   = $urlWithSessionKey . "&mask=" . urlencode($mask);
 	        }
 	    }
 	    //return $urlWithSessionKey;
@@ -957,7 +963,15 @@ class ictcoreController {
 	    if($method == 'campaign_create' && $type =='sms'){
 	    	//echo "<=sms_msg=>".$sms_msg;
 	    	 date_default_timezone_set('Asia/Karachi');
-	    	$planetbeyondApi="https://telenorcsms.com.pk:27677/corporate_sms2/api/campaign.jsp?session_id=#session_id#&name=fee_defulter_".time()."&group_ids=".$group_id."&text=".urlencode($sms_msg)."&time=".urlencode(date("Y-m-d H:i:s", strtotime("+1 hours")))."&mask=".urlencode("SidraSchool");
+	    	 $mask = "SidraSchool"
+	    	 $ictcore_integration = Ictcore_integration::select("*")->where('type','sms')->where('method','telenor')->first();
+	    		if(!empty($ictcore_integration)){
+	    			
+	    			if($mask!='' && $mask!=NULL){
+	    			  $mask = $ictcore_integration->ictcore_url;
+	    			}
+	    		}
+	    	$planetbeyondApi="https://telenorcsms.com.pk:27677/corporate_sms2/api/campaign.jsp?session_id=#session_id#&name=fee_defulter_".time()."&group_ids=".$group_id."&text=".urlencode($sms_msg)."&time=".urlencode(date("Y-m-d H:i:s", strtotime("+1 hours")))."&mask=".urlencode($mask);
 
 	    }
 	    if($method == 'campaign_create' && $type =='voice'){
