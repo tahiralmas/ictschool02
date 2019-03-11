@@ -636,7 +636,7 @@ if(!empty($_GET)){
                   fee=0;
                 }
                 var total = data[0].fee - fee;
-                alert(fee);
+                //alert(fee);
                 $('#total_fee').val(data[0].fee);
                 $('#feeAmount').val(total);
                 //$('#paidamount').val(total);
