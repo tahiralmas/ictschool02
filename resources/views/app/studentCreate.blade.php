@@ -1,6 +1,9 @@
 @extends('layouts.master')
 @section('style')
 <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
+<style>
+b {color:red}
+</style>
 @stop
 @section('content')
 @if (Session::get('success'))
@@ -28,6 +31,21 @@
           </ul>
         </div>
         @endif
+        @if(family_check()=='on')
+        <div class="btn-group ">
+          
+                <form class="navbar-search" name="navbar_search" action="{{url('/student/list')}}" id="navbar_search" method="post">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="search" value="yes">
+
+                    <input placeholder="Search Family by Phone Number" class="search-query form-control col-md-10" name="student_name" id="family_name" 
+                    type="text" autocomplete="off">
+                    <div id="familyListd">
+                    </div>
+                </form>
+           
+        </div>
+        @endif
         <form role="form" action="{{url('/student/create')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <div class="row">
@@ -40,7 +58,7 @@
             <div class="col-md-12">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="control-label" for="class">Class</label>
+                  <label class="control-label" for="class">Class <b>*</b></label>
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
@@ -69,14 +87,11 @@
                       <option value="H">H</option>
                       <option value="I">I</option>
                       <option value="J">J</option>
-
                     </select>
-
-
                   </div>
                 </div>*/?>
                 <div class="form-group">
-                  <label class="control-label" for="student">Section</label>
+                  <label class="control-label" for="student">Section <b>*</b></label>
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-book blue"></i></span>
@@ -88,11 +103,6 @@
                     </select>
                   </div>
                 </div>
-
-
-
-
-
               </div>
               {{--<div class="col-md-4">
                 <div class="form-group ">
@@ -107,6 +117,7 @@
             </div>
           </div>
             <div class="row">
+            <div class="col-md-12">
               <div class="col-md-4">
                 <div class="form-group ">
                   <label for="session">Monthly Fee Discount</label>
@@ -116,9 +127,7 @@
                   </div>
                 </div>
               </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12">
+          
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="regiNo">Registration No</label>
@@ -136,6 +145,8 @@
                     <input type="text" id="rollNo" class="form-control" required name="rollNo" value="{{old('rollNo')}}" placeholder="Class roll no">
                   </div>
                 </div>
+              </div>
+              </div>
               </div>
               <div class="col-md-4">
                 <div class="form-group">
@@ -157,8 +168,7 @@
                 </div>
               </div>
 
-            </div>
-          </div>
+            
          <!-- <div class="row">
             <div class="col-md-12">
               <div class="col-md-4">
@@ -190,7 +200,7 @@
             <div class="col-md-12">
               <div class="col-md-4">
                 <div class="form-group">
-                  <label for="fname">First Name</label>
+                  <label for="fname">First Name <b>*</b></label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <input type="text" class="form-control" required name="fname" value="{{old('fname')}}" placeholder="First Name">
@@ -212,7 +222,7 @@
                   <label for="lname">Last Name</label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                    <input type="text" class="form-control" required name="lname" value="{{old('lname')}}" placeholder="Last Name">
+                    <input type="text" class="form-control"  name="lname" value="{{old('lname')}}" placeholder="Last Name">
                   </div>
                 </div>
               </div>
@@ -255,25 +265,21 @@
               <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label" for="bloodgroup">Bloodgroup</label>
-
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select name="bloodgroup" class="form-control"  >
-                      <option value="A+" @if(old('bloodgroup')=="A+") selected @endif>A+</option>
-                      <option value="A-" @if(old('bloodgroup')=="A-") selected @endif>A-</option>
-                      <option value="B+" @if(old('bloodgroup')=="B+") selected @endif>B+</option>
-                      <option value="B-" @if(old('bloodgroup')=="B-") selected @endif>B-</option>
+                      <option value="A+"  @if(old('bloodgroup')=="A+") selected @endif>A+</option>
+                      <option value="A-"  @if(old('bloodgroup')=="A-") selected @endif>A-</option>
+                      <option value="B+"  @if(old('bloodgroup')=="B+") selected @endif>B+</option>
+                      <option value="B-"  @if(old('bloodgroup')=="B-") selected @endif>B-</option>
                       <option value="AB+" @if(old('bloodgroup')=="AB+") selected @endif>AB+</option>
                       <option value="AB-" @if(old('bloodgroup')=="AB-") selected @endif>AB-</option>
-                      <option value="O+" @if(old('bloodgroup')=="O+") selected @endif>O+</option>
-                      <option value="O-" @if(old('bloodgroup')=="O-") selected @endif>O-</option>
+                      <option value="O+"  @if(old('bloodgroup')=="O+") selected @endif>O+</option>
+                      <option value="O-"  @if(old('bloodgroup')=="O-") selected @endif>O-</option>
                     </select>
-
-                  </select>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
         <div class="row">
@@ -287,20 +293,15 @@
                 </div>
               </div>
             </div>
-
             <div class="col-md-4">
               <div class="form-group ">
-                <label for="dob">Date Of Birth</label>
+                <label for="dob">Date Of Birth <b>*</b></label>
                 <div class="input-group">
-
                   <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
                   <input type="text"   class="form-control datepicker" name="dob" value="{{old('dob')}}" required  data-date-format="dd/mm/yyyy">
                 </div>
-
-
               </div>
             </div>
-
             <div class="col-md-4">
               <div class="form-group ">
                 <label for="photo">Photo</label>
@@ -312,8 +313,6 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-
-
             <div class="col-md-4">
               <div class="form-group">
                 <label for="extraActivity">Extra Curicular Activity </label>
@@ -332,7 +331,6 @@
                 </div>
               </div>
             </div>
-
             <div class="col-md-4">
               <div class="form-group">
                 <label for="remarks"> B-form/Cnic </label>
@@ -344,9 +342,6 @@
             </div>
           </div>
         </div>
-
-
-
         <div class="row">
           <div class="col-md-12">
             <h3 class="text-info"> Guardian's Detail</h3>
@@ -355,30 +350,32 @@
         </div>
         <div class="row">
           <div class="col-md-12">
+          
             <div class="col-md-4">
               <div class="form-group">
-                <label for="fatherName">Father's Name </label>
+                <label for="fatherName">Father's Name <b>*</b></label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control" required value="{{old('fatherName')}}"  name="fatherName" placeholder="Name">
+                  <input type="text" class="form-control" required value="{{old('fatherName')}}"  name="fatherName" placeholder="Name" id="f_name">
                 </div>
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <label for="fatherCellNo">Father's Mobile No </label>
+                <label for="fatherCellNo">Father's Mobile No <b>*</b></label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  required name="fatherCellNo" value="{{old('fatherCellNo')}}"  placeholder="+8801xxxxxxxxx">
+                  <input type="text" class="form-control"  required name="fatherCellNo" value="{{old('fatherCellNo')}}" id="f_phone" autocomplete="off"  placeholder="+8801xxxxxxxxx">
                 </div>
               </div>
             </div>
+            
             <div class="col-md-4">
               <div class="form-group">
-                <label for="motherName">Mother's Name </label>
+                <label for="presentAddress">Family Id</label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"   name="motherName" value="{{old('motherName')}}" placeholder="Name">
+                  <input type="text" class="form-control"  name="family_id" id="family_id" readonly>
                 </div>
               </div>
             </div>
@@ -386,13 +383,21 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="motherName">Mother's Name </label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <input type="text" class="form-control"   name="motherName" value="{{old('motherName')}}" placeholder="Name" id="m_name">
+                </div>
+              </div>
+            </div>
             <div class="col-md-4">
               <div class="form-group">
                 <label for="motherCellNo">Mother's Mobile No </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  name="motherCellNo" value="{{old('motherCellNo')}}" placeholder="+8801xxxxxxxxx">
+                  <input type="text" class="form-control"  name="motherCellNo" value="{{old('motherCellNo')}}" placeholder="+8801xxxxxxxxx" id="m_phone">
                 </div>
               </div>
             </div>
@@ -401,7 +406,7 @@
                 <label for="localGuardian">Local Guardian Name </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  name="localGuardian" value="{{old('localGuardian')}}" placeholder="Name">
+                  <input type="text" class="form-control"  name="localGuardian" value="{{old('localGuardian')}}" placeholder="Name" id="g_name">
                 </div>
               </div>
             </div>
@@ -410,11 +415,23 @@
                 <label for="localGuardianCell">local Guardian Mobile No </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  name="localGuardianCell" value="{{old('localGuardianCell')}}" placeholder="+8801xxxxxxxxx">
+                  <input type="text" class="form-control"  name="localGuardianCell" value="{{old('localGuardianCell')}}" placeholder="+8801xxxxxxxxx" id="g_phone">
                 </div>
               </div>
             </div>
+
+            <div class="col-md-8">
+              <div class="form-group">
+                <label for="presentAddress">About Family Behavior </label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <textarea type="text" class="form-control"  name="familyc" placeholder="">{{old('presentAddress')}}</textarea>
+                </div>
+              </div>
+            </div>
+
           </div>
+          <input type="hidden" name="check" id="check">
         </div>
         <div class="row">
           <div class="col-md-12">
@@ -426,7 +443,7 @@
           <div class="col-md-12">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="presentAddress">Present Address</label>
+                <label for="presentAddress">Present Address <b>*</b></label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
                   <textarea type="text" class="form-control" required name="presentAddress" placeholder="Address">{{old('presentAddress')}}</textarea>
@@ -452,12 +469,6 @@
           <br>
         </div>
       </form>
-
-
-
-
-
-
     </div>
   </div>
 </div>
@@ -508,9 +519,9 @@
       },
       dataType: 'json',
       success: function(data) {
-        $('#section').empty();
+       $('#section').empty();
        $('#section').append($('<option>').text("--Select Section--").attr('value',""));
-        $.each(data, function(i, section) {
+       $.each(data, function(i, section) {
           //console.log(student);
             var opt="<option value='"+section.id+"'>"+section.name + " </option>"
 
@@ -551,6 +562,73 @@ getsections();
     getStdRegiRollNo();
   });
 
+
+});
+
+$(document).ready(function(){
+
+ $('#family_name').keyup(function(){ 
+        var query = $('#family_name').val();
+        if(query != '')
+        {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+          url:"{{ url('family/search') }}",
+          method:"POST",
+          data:{query:query, _token:_token},
+          success:function(data){
+           $('#familyListd').fadeIn();  
+           $('#familyListd').html(data);
+          }
+         });
+        }
+    });
+
+     
+     
+    $('#familyListd').on('click', 'li', function() { 
+       
+         $('#family_name').val($(this).text());
+         var father_name       = $(this).attr('data-father');
+         var phone             = $(this).attr('data-phone');
+         var mother_name       = $(this).attr('data-mother_name');
+         var mother_phone      = $(this).attr('data-mother_phone');
+         var localGuardian     = $(this).attr('data-localGuardian');
+         var localGuardianCell = $(this).attr('data-localGuardianCell');
+         var family_id = $(this).attr('data-familyid');
+         var check = $(this).attr('data-check');
+         $('#f_name').val(father_name);
+         $('#f_phone').val(phone);
+         $('#m_name').val(mother_name);
+         $('#m_phone').val(mother_phone);
+         $('#g_name').val(localGuardian);
+         $('#g_phone').val(localGuardianCell);
+         $('#check').val(check);
+         $('#family_id').val(family_id);
+         //alert($(this).attr('data-father'));  
+          $('#familyListd').fadeOut(); 
+         //$( "#navbar_search" ).submit(); 
+    });
+
+
+      $('#f_phone').keyup(function(){ 
+        var query = $('#f_phone').val();
+        if(query != '')
+        {
+         var _token = $('input[name="_token"]').val();
+         $.ajax({
+          url:"{{ url('get/family_id') }}",
+          method:"POST",
+          data:{query:query, _token:_token},
+          success:function(data){
+            //alert(JSON.stringify(data));
+           //$('#familyListd').fadeIn();  
+             $('#family_id').val(data);
+         //  $('#familyListd').html(data);
+          }
+         });
+        }
+    });
 
 });
 

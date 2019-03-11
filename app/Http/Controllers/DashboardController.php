@@ -27,7 +27,7 @@ class DashboardController extends BaseController {
 	{
 		
         $now             =  Carbon::now();
-		//$year            =  $now->year;
+		$year1            =  $now->year;
 		$year            =  get_current_session()->id;
         $month           =  $now->month;
 		$error           = \Session::get('error');
@@ -118,10 +118,10 @@ class DashboardController extends BaseController {
 		        $resultArray[$section->code.'_'.$section->name."_".'paid'] =  0;
 			  if(count($student_all) >0){
 			foreach($student_all as $stdfees){
-				$student =	DB::table('billHistory')->leftJoin('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
+				$student =	DB::table('billHistory')->Join('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
 				->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo')
 				// ->whereYear('stdBill.payDate', '=', 2017)
-				->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', $year)->where('billHistory.month','=',$month)->where('billHistory.month','<>','-1')
+				->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', $year1)->where('billHistory.month','=',$month)->where('billHistory.month','<>','-1')
 				//->orderby('stdBill.payDate')
 				->get();
 				if(count($student)>0 ){

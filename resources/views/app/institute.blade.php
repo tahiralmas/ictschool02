@@ -128,21 +128,21 @@
 
                           @if(Auth::user()->login=='ictkashif')
                             <div class="row">
-                                    <div class="col-md-12">
+                                <div class="col-md-12">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="type">Grade System</label>
                                                <input data-no-uniform="true" name="grade_system"  @if($gradsystem=='' || $gradsystem=='auto') checked @endif type="checkbox" class="iphone-toggle">
                                         </div>
                                     </div>
-
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="type">Family</label>
-                                                <input   id="toggle-one" @if($family=='on') checked @endif name="family" type="checkbox">                                        </div>
-                                    </div>
+                                                <input   id="toggle-one" @if($family=='on') checked @endif name="family" type="checkbox">                                        
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
                             @endif
                             <button class="btn btn-primary pull-right" type="submit"><i class="glyphicon glyphicon-check"></i> Save</button>
                             <br>

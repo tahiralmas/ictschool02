@@ -98,10 +98,16 @@ Route::get('/student/delete/{id}','studentController@delete');
 Route::get('/student/create-file','studentController@index_file');
 Route::post('/student/create-file','studentController@create_file');
 Route::get('/student/csvexample','studentController@csvexample');
+Route::get('/family/list','studentController@family_list');
+Route::get('/family/edit/{f_id}','studentController@family_edit');
+Route::post('/family/update','studentController@family_update');
+Route::get('/family/students/{f_id}','studentController@family_student_list');
 });
 Route::get('/student/getList/{class}/{section}/{shift}/{session}','studentController@getForMarks');
 Route::get('/student/getsList/{class}/{section}/{shift}/{session}','studentController@getForMarksjoin');
 Route::post('/student/search','studentController@search');
+Route::post('/family/search','studentController@family');
+Route::post('/get/family_id','studentController@get_family_id');
 Route::post('/sms/send','studentController@send_sms');
 
 Route::get('/fee/getdiscountjson/{student_registration}','studentController@getdiscount');

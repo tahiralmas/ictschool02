@@ -88,7 +88,7 @@
               </div> */ ?>
                          <input type="hidden" value="Morning" name="shift">
 
- <div class="col-md-4">
+ {{--<div class="col-md-4">
                 <div class="form-group ">
                   <label for="session">session</label>
                   <div class="input-group">
@@ -97,7 +97,8 @@
                     <input  value="{{date('Y')}}" type="text" id="session" required="true" class="form-control datepicker2" name="session"   data-date-format="yyyy" value="{{$student->session}}">
                   </div>
                 </div>
-              </div>
+              </div>--}}
+            <input  value="{{get_current_session()->id}}" type="hidden" id="session" required="true" class="form-control datepicker2" name="session"   data-date-format="yyyy" >
 
             </div>
           </div>
@@ -449,7 +450,7 @@
                   dataType: 'json',
                   success: function(data) {
                     $('#section').empty();
-                   //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
+                   $('#section').append($('<option>').text("--Select Section--").attr('value',""));
                     $.each(data, function(i, section) {
                       //console.log(student);
                      

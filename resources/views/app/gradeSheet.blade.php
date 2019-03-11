@@ -286,7 +286,7 @@ function getsections()
           //console.log(student);
          
           
-            var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+        var opt="<option value='"+section.id+"'>"+section.name + " </option>"
 
         
           //console.log(opt);

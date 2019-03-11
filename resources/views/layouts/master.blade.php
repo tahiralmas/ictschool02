@@ -41,7 +41,7 @@ window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.ke
     <link href='{{ URL::asset('/bower_components/chosen/chosen.min.css') }}' rel='stylesheet'>
     <link href='{{ URL::asset('/bower_components/colorbox/example3/colorbox.css') }}' rel='stylesheet'>
 
-    <link href='  {{ URL::asset('/bower_components/datatables/media/css/jquery.dataTables.css') }}' rel='stylesheet'>
+    <link href='{{ URL::asset('/bower_components/datatables/media/css/jquery.dataTables.css') }}' rel='stylesheet'>
 
     <link href='{{ URL::asset('/bower_components/responsive-tables/responsive-tables.css') }}' rel='stylesheet'>
 
@@ -61,7 +61,7 @@ window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.ke
     <link href='//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css' rel='stylesheet'>
     <link href='https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css' rel='stylesheet'>
     <link href="{{ URL::asset('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
-  <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap2-toggle.min.css" rel="stylesheet">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap2-toggle.min.css" rel="stylesheet">
 
 
     @yield("style")
@@ -457,6 +457,9 @@ user-select: none !important;
                                 <li><a href="{{url('/student/create-file')}}">Add from file</a></li>
                                 <li><a href="{{url('/student/create')}}">Add New</a></li>
                                 <li><a href="{{url('/student/list')}}">Student List</a></li>
+                                @if(family_check()=='on')
+                                <li><a href="{{url('/family/list')}}">Family List</a></li>
+                                @endif
 
                             </ul>
                         </li>
@@ -594,26 +597,25 @@ user-select: none !important;
                         @if (Session::get('userRole')=="Admin")
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-cog"></i><span> Settings</span></a>
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="{{url('/academicYear')}}">Academic Year</a></li>
-                                <li><a href="{{url('/gpa')}}">GPA Ruels</a></li>
-
-                                <li><a href="{{url('/users')}}">Users</a></li>
-                                <li><a href="{{url('/holidays')}}">Holidays</a></li>
-                                <li><a href="{{url('/class-off')}}">Class Off Days</a></li>
-                                <li><a href="{{url('/institute')}}">Institute</a></li>
-                                <li><a href="{{url('/ictcore?type=sms')}}">Sms Integration</a></li>
-                                <li><a href="{{url('/ictcore?type=voice')}}">Voice Integration</a></li>
-                                <li><a href="{{url('/notification_type')}}">Notification Types</a></li>
-                                <li><a href="{{url('/ictcore/attendance')}}">Notifications</a></li>
-                                <!--<li><a href="{{url('/ictcore/fees')}}">Fees Message</a></li>
-                                -->
-                               <!-- <li><a href="{{url('/template/create')}}">Add Message</a></li>
-                                <li><a href="{{url('/template/list')}}">Recording List</a></li>
-                              
-                                <li><a href="{{url('/schedule')}}">Fee Notification Reminder</a></li>
-                             -->
-                            </ul>
+                              <ul class="nav nav-pills nav-stacked">
+                                  <li><a href="{{url('/academicYear')}}">Academic Year</a></li>
+                                  <li><a href="{{url('/gpa')}}">GPA Ruels</a></li>
+                                  <li><a href="{{url('/users')}}">Users</a></li>
+                                  <li><a href="{{url('/holidays')}}">Holidays</a></li>
+                                  <li><a href="{{url('/class-off')}}">Class Off Days</a></li>
+                                  <li><a href="{{url('/institute')}}">Institute</a></li>
+                                  <li><a href="{{url('/ictcore?type=sms')}}">Sms Integration</a></li>
+                                  <li><a href="{{url('/ictcore?type=voice')}}">Voice Integration</a></li>
+                                  <li><a href="{{url('/notification_type')}}">Notification Types</a></li>
+                                  <li><a href="{{url('/ictcore/attendance')}}">Notifications</a></li>
+                                  <!--<li><a href="{{url('/ictcore/fees')}}">Fees Message</a></li>
+                                  -->
+                                 <!-- <li><a href="{{url('/template/create')}}">Add Message</a></li>
+                                  <li><a href="{{url('/template/list')}}">Recording List</a></li>
+                                
+                                  <li><a href="{{url('/schedule')}}">Fee Notification Reminder</a></li>
+                               -->
+                              </ul>
                         </li>
 
                       <?php /*  

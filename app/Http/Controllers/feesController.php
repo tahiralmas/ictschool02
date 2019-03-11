@@ -365,7 +365,7 @@ class feesController extends BaseController {
 								$feehistory->lateFee = $feeLateAmounts[$i];
 								$feehistory->total   = $feeTotalAmounts[$i];
 								$feehistory->month   = $feeMonths[$i];
-								//$feehistory->save();
+								$feehistory->save();
 								$j++;
 							}
 
@@ -380,7 +380,7 @@ class feesController extends BaseController {
 							$feeCol->dueAmount     = Input::get('dueamount');
 							$feeCol->payDate       = Carbon::now()->format('Y-m-d');
 						//echo "<pre>";print_r(Carbon::now()->format('Y-m-d'));exit;
-							//$feeCol->save();
+							$feeCol->save();
 							\Session::put('not_save', $j);
 						}else{
 							\Session::put('not_save', 0);

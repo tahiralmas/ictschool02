@@ -38,7 +38,7 @@ class studentController extends BaseController {
 	{
 		$classes = ClassModel::select('name','code')->get();
 		
-		$section= SectionModel::select('id','name')->where('class_code','=','cl1')->get();
+		$section = SectionModel::select('id','name')->where('class_code','=','cl1')->get();
 		//$sections = SectionModel::select('name')->get();
 
 
@@ -73,6 +73,47 @@ class studentController extends BaseController {
 		      $output .= '</ul>';
 		      echo $output;
 		
+	}
+
+	public function family(Request $request)
+	{
+
+		
+			$query = Input::get('query');
+			$output="";
+			$data=DB::table('Student')->where('fatherCellNo','LIKE','%'.$query."%")
+			->limit(20)
+			->get();
+			//return Response($output);
+			 $output = '<ul class="dropdown-menu" id="searchlist" style="display:block; position:relative">';
+		      foreach($data as $row)
+		      {
+		      	//$section = DB::table('section')->where('id',$row->section)->first();
+		       $output .= '<li data-check="'.$row->fatherCellNo.'"  data-familyid="'.$row->family_id.'" data-father="'.$row->fatherName.'" data-phone="'.$row->fatherCellNo.'" data-mother_name="'.$row->motherName.'" data-mother_phone="'.$row->motherCellNo.'" data-localGuardian="'.$row->localGuardian.'" data-localGuardianCell="'.$row->localGuardianCell.'"><a href="javascript:void(0)">'.$row->fatherName.' ('.$row->fatherCellNo.')'.' ('.$row->motherName.')'.' ('.$row->motherCellNo.')'.'</a></li>';
+		      }
+		      $output .= '</ul>';
+		      echo $output;
+		
+	}
+	public function get_family_id()
+	{
+		// return '98';
+		$query = Input::get('query');
+		if(strlen($query)>=11){
+		$data=DB::table('Student')->where('fatherCellNo','LIKE','%'.$query.'%')
+		 ->first();
+		 if(!empty($data)){
+		 	$unique_code = $data->family_id;
+		 	if($unique_code=='' || $unique_code==NULL){
+		 		//$unique_code =	str_random(6);
+		 		$unique_code =	hexdec(substr(uniqid(rand(), true), 5, 5));
+		 	}
+		 }else{
+		 	$unique_code =	 hexdec(substr(uniqid(rand(), true), 5, 5));
+		 }
+		 echo $unique_code;
+		}
+		//echo strlen($query);
 	}
 	public  function getRegi($class,$session,$section)
 	{
@@ -235,6 +276,9 @@ class studentController extends BaseController {
 		if(Input::get('localGuardianCell') ==''){
 			$student->localGuardianCell="";
 		}
+
+		$student->family_id=Input::get('family_id');
+		$student->about_family=Input::get('familyc');
 
 		$student->presentAddress= Input::get('presentAddress');
 		$student->parmanentAddress= Input::get('parmanentAddress');
@@ -423,6 +467,38 @@ if(Input::get('search')==''){
 
 }
 
+public function family_list()
+{
+	$students = DB::table('Student')
+					->join('Class', 'Student.class', '=', 'Class.code')
+					->join('section', 'Student.section', '=', 'section.id')
+					->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.family_id',
+					'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.about_family','section.name')
+					->where('Student.isActive', '=', 'Yes')
+					->groupBy('fatherCellNo')
+					->get();
+		return View("app.familyList", compact('students'));
+
+}
+public function family_student_list($family_id)
+{
+	$students = DB::table('Student')
+					->join('Class', 'Student.class', '=', 'Class.code')
+					->join('section', 'Student.section', '=', 'section.id')
+					->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+		'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion','section.name')
+					->where('Student.isActive', '=', 'Yes')
+					->where('Student.family_id', '=', $family_id)
+					->orwhere('Student.fatherCellNo', '=', $family_id)
+					
+					->get();
+		return View("app.familystudentList", compact('students'));
+
+}
+
+
+
+
 public function view($id)
 {
 	$student = DB::table('Student')
@@ -467,6 +543,7 @@ public function edit($id)
 	//return View::Make("app.studentEdit",compact('student','classes'));
 	return View("app.studentEdit",compact('student','classes','sections'));
 }
+
 
 
 /**
@@ -636,6 +713,49 @@ public function update()
 		return Redirect::to('/student/list')->with("success","Student Updated Succesfully.");
 	}
 
+
+}
+
+
+/**
+* Show the form for editing the specified resource.
+*
+* @param  int  $id
+* @return Response
+*/
+public function family_edit($family_id)
+{
+	$classes = ClassModel::pluck('name','code');
+	$student= Student::where('family_id', '=', $family_id)
+						->orwhere('fatherCellNo', '=', $family_id)->first();
+	$sections = SectionModel::select('id','name')->where('class_code','=',$student->class)->get();
+	//$sections = $sections->toArray();
+      // $sections = SectionModel::pluck('id', 'name')->where('class_code','=',$student->class);
+	//echo "<pre>";print_r($sections);
+	//dd($student);
+	//$sections = SectionModel::select('name')->get();
+	//return View::Make("app.studentEdit",compact('student','classes'));
+	return View("app.familyEdit",compact('student','classes','sections','family_id'));
+}
+
+public function family_update()
+{
+	$rules=[
+		'familb' => 'required',
+	];
+	$validator = \Validator::make(Input::all(), $rules);
+	if ($validator->fails())
+	{
+		return Redirect::to('family/edit/'.Input::get('family_id'))->withErrors($validator);
+	}
+	else {
+		DB::table('Student')
+            		->where('family_id', '=', Input::get('family_id'))
+					->orwhere('fatherCellNo', '=', Input::get('family_id'))
+            		->update(['about_family' => Input::get('familb')]);
+
+			return Redirect::to('/family/list')->with("success","Family Updated Succesfully.");	
+	}
 
 }
 
