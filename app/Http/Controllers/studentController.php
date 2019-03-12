@@ -486,7 +486,7 @@ public function family_student_list($family_id)
 					->join('Class', 'Student.class', '=', 'Class.code')
 					->join('section', 'Student.section', '=', 'section.id')
 					->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion','section.name')
+		'Class.Name as class','Class.code as class_code', 'Student.presentAddress','Student.section', 'Student.gender', 'Student.religion','section.name')
 					->where('Student.isActive', '=', 'Yes')
 					->where('Student.family_id', '=', $family_id)
 					->orwhere('Student.fatherCellNo', '=', $family_id)

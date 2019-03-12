@@ -42,6 +42,9 @@
                         {{--<input value="{{date('Y')}}" type="text" id="session" required="true" class="form-control datepicker2" name="session" value="{{$formdata->session}}"  data-date-format="yyyy">
                         --}}
                         <input type="hidden" id="session"  class="form-control " name="session" value="{{get_current_session()->id}}"   data-date-format="yyyy">
+                        <input type="hidden" id="class_f"  class="form-control " name="class_f" value="{{$formdata->class}}"   data-date-format="yyyy">
+                        <input type="hidden" id="section_f"  class="form-control " name="section_f" value="{{$formdata->section}}"   data-date-format="yyyy">
+                        <input type="hidden" id="regiNo_f"  class="form-control " name="regiNo_f" value="{{$regiNo}}"   data-date-format="yyyy">
 
                         <div class="row">
                             <div class="col-md-12">
@@ -52,7 +55,13 @@
 
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
-                                            {{ Form::select('class',$classes,$formdata->class,['class'=>'form-control','id'=>'class','required'=>'true'])}}
+                                          {{ Form::select('class',$classes,$formdata->class,['class'=>'form-control','id'=>'class','required'=>'true'])}}
+                                           {{--<select class="form-control" name="class" required id="class">
+                                             @foreach($classes as $key=>$class)
+                                             <option vlaue="{{$key}}" @if($formdata->class==$key) selected @endif>{{$class}} </option>
+                                           
+                                            @endforeach
+                                           </select>--}}
                                         </div>
                                     </div>
                                 </div>
@@ -110,8 +119,6 @@
                                                     'Final Exam'=>'Final Exam'
                                             ];?>
                                             {{ Form::select('exam',$data,$formdata->exam,['class'=>'form-control','id'=>'exam','required'=>'true'])}}
-
-
                                         </div>
                                         <div class="input-group" id="compined">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
@@ -280,13 +287,14 @@ function getsections()
       },
       dataType: 'json',
       success: function(data) {
+        //alert("{{$formdata->section}}");
         $('#section').empty();
         $('#section').append($('<option>').text("--Select Section--").attr('value',""));
         $.each(data, function(i, section) {
-          //console.log(student);
-         
-          
-        var opt="<option value='"+section.id+"'>"+section.name + " </option>"
+          //console.log(section.id);
+         if(section.id=={{$formdata->section}}){ var selected='selected' }else{ var selected=''; }
+         // console.log(selected);
+        var opt="<option value='"+section.id+"' " +selected+ " >"+section.name + " </option>"
 
         
           //console.log(opt);

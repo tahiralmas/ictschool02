@@ -77,6 +77,17 @@ Route::get('/subject/list','subjectController@show');
 Route::get('/subject/edit/{id}','subjectController@edit');
 Route::post('/subject/update','subjectController@update');
 Route::get('/subject/delete/{id}','subjectController@delete');
+/**
+* Question routes
+**/
+Route::get('/question/create','QuestionController@create');
+Route::post('/question/create','QuestionController@store');
+Route::get('/paper/generate','QuestionController@generate');
+Route::post('/paper/generate','QuestionController@post_generate');
+Route::get('/question/edit/{id}','QuestionController@edit');
+Route::post('/question/update','QuestionController@update');
+Route::get('/question/delete/{id}','QuestionController@delete');
+Route::get('/chapter/getList/{class}','QuestionController@chapters');
 });
 Route::get('/subject/getmarks/{subject}/{cls}','subjectController@getmarks');
 Route::get('/subject/getList/{cls}','subjectController@getsubjects');

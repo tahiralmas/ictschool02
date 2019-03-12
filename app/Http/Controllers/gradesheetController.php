@@ -35,13 +35,14 @@ class gradesheetController extends BaseController {
 	{
 		$formdata = new formfoo;
 		$formdata->class="";
-		$formdata->section="";
+		$formdata->section="00";
 		$formdata->shift="";
 		$formdata->exam="";
 		$formdata->session="";
 		$formdata->type="";
 		$students=array();
 		$classes = ClassModel::pluck('name','code');
+        // echo "<pre>";print_r($classes);exit;
          if(Storage::disk('local')->exists('/public/grad_system.txt')){
 			          $contant = Storage::get('/public/grad_system.txt');
 			          $data = explode('<br>',$contant );
@@ -52,7 +53,13 @@ class gradesheetController extends BaseController {
 				      $gradsystem ='';
 					}
 		//return View::Make('app.gradeSheet',compact('classes','formdata','students'));
-		return View('app.gradeSheet',compact('classes','formdata','students','gradsystem'));
+		if(Input::get('class')!='' && Input::get('section')!=''){
+		$formdata->class   = Input::get('class');
+		$formdata->section = Input::get('section');
+		}
+		$regiNo  = Input::get('regiNo');
+
+		return View('app.gradeSheet',compact('classes','formdata','students','gradsystem','regiNo'));
 	}
 
 
@@ -79,7 +86,9 @@ class gradesheetController extends BaseController {
 			$formdata->section=Input::get('section');
 			$formdata->exam=Input::get('exam');
 			$formdata->session=Input::get('session');
-
+			if(Input::get('regiNo_f')!='' && Input::get('section_f')!='' && Input::get('class_f')!=''){
+				return Redirect::to('/gradesheet?class='.Input::get('class_f').'&section='.Input::get('section_f').'&regiNo='.Input::get('regiNo_f'))->withErrors($validator);
+			}
 			return Redirect::to('/gradesheet')->withErrors($validator);
 		}
 		else {
@@ -124,8 +133,12 @@ class gradesheetController extends BaseController {
 				//->where('Marks.class', '=', Input::get('class'))
 				->where('Student.section', '=', Input::get('section'))
 				->where('Student.session', '=', trim(Input::get('session')))
-				->where('Marks.exam', '=', Input::get('exam'))
-				->get();
+				->where('Marks.exam', '=', Input::get('exam'));
+				if(Input::get('regiNo_f')!='' && Input::get('section_f')!='' && Input::get('class_f')!=''){
+					$students =$students->where('Student.regiNo',Input::get('regiNo_f')); 
+				}
+
+				$students =$students->get();
 
 				$formdata = new formfoo;
 				$formdata->class = Input::get('class');
@@ -153,11 +166,14 @@ class gradesheetController extends BaseController {
 					
                   // exit;
 				
-
-				return View('app.gradeSheet', compact('classes', 'formdata', 'students','gradsystem','type','exams_ids'));
+					$regiNo = Input::get('regiNo_f');
+				return View('app.gradeSheet', compact('classes', 'formdata', 'students','gradsystem','type','exams_ids','regiNo'));
 			}
 			else
 			{
+				if(Input::get('regiNo_f')!='' && Input::get('section_f')!='' && Input::get('class_f')!=''){
+					return Redirect::to('/gradesheet?class='.Input::get('class_f').'&section='.Input::get('section_f').'&regiNo='.Input::get('regiNo_f'))->withInput()->with("noresult", "Results Not Published Yet!");
+				}
 				return Redirect::to('/gradesheet')->withInput()->with("noresult", "Results Not Published Yet!");
 			}
 

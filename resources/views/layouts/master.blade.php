@@ -451,6 +451,14 @@ user-select: none !important;
                                 <li><a href="{{url('/subject/list')}}">Subject List</a></li>
                             </ul>
                         </li>
+
+                        <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-hdd"></i><span> Paper Management</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="{{url('/question/create')}}">Add New</a></li>
+                                <li><a href="{{url('/paper/generate')}}"> Generate Paper</a></li>
+                            </ul>
+                        </li>
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-user"></i><span> Student</span></a>
                             <ul class="nav nav-pills nav-stacked">

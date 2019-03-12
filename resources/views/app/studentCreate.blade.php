@@ -475,7 +475,7 @@ b {color:red}
 </div>
 @stop
 @section('script')
-<script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
+<script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
 <script type="text/javascript">
 //alert({{get_current_session()->id}});
  var getStdRegiRollNo = function(){
