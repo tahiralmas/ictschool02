@@ -35,7 +35,8 @@
 <div class="row">
   <div class="col-md-12 col-sm-12 col-xs-12">
     <!-- /top tiles -->
-   @if(Auth::user()->group=='Director')  
+   @if(Auth::user()->group=='Director') 
+
 @if($cbranches>0)
 @foreach($branches as $branch)
 
@@ -123,7 +124,7 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
                   <div class="form-group">
-                      <a href="{{$branch->branch_url}}/login/{{$get_data->admin_id}}" class="btn btn-primary btn-block btn-sm ml-1" >More Detail</a>
+                      <a href="{{$branch->branch_url}}/login/{{$get_data->admin_id}}/{{Auth::user()->id}}" class="btn btn-primary btn-block btn-sm ml-1" >More Detail</a>
                   </div>
 
                 </div>

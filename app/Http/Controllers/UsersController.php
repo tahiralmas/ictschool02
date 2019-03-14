@@ -72,13 +72,13 @@ class UsersController extends BaseController {
     \Auth::logout();
     return redirect('/')->with('message', 'Your are now logged out!');
   } 
-  public function dologin($id) {
+  public function dologin($id,$usr_id) {
     $user = User::find($id);
      request()->session()->forget('isAdmin');
      request()->session()->forget('adminID');
      request()->session()->forget('surl');
     request()->session()->put('isAdmin', 1);
-    request()->session()->put('adminID', Auth::id());
+    request()->session()->put('adminID', $usr_id);
     request()->session()->put('surl', request()->root());
     echo request()->root();
     echo "<pre>rr".request()->session()->get('adminID')."tt";print_r($user);
