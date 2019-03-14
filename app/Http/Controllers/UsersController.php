@@ -58,8 +58,8 @@ class UsersController extends BaseController {
   public function getLogout() {
     /*request()->session()->flush();
     \Auth::logout();*/
-    if($request->session()->pull('isAdmin', 0)){
-      $id = $request->session()->pull('adminID', 0);
+    if(request()->session()->pull('isAdmin', 0)){
+      $id = request()->session()->pull('adminID', 0);
       if(Auth::loginUsingId($id)) {
         return redirect('/dashboard');
       }
@@ -69,8 +69,8 @@ class UsersController extends BaseController {
   } 
   public function dologin($id) {
     $user = User::find($id);
-    $request->session()->put('isAdmin', 1);
-    $request->session()->put('adminID', Auth::id());
+    request()->session()->put('isAdmin', 1);
+    request()->session()->put('adminID', Auth::id());
 
     if (Auth::loginUsingId($id)) {
         return redirect('/dashboard');
