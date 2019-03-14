@@ -17,6 +17,9 @@
 .green{
   color: #1ABB9C;
 }
+.homepage-box {
+    height: auto !important;
+}
 
 </style>
 @stop
@@ -37,11 +40,11 @@
 @foreach($branches as $branch)
 
 <?php 
-branchesapi($branch->username,$branch->password,$branch->branch_url,'login');
-$get_students = branchesapi($branch->username,$branch->password,$branch->branch_url,'students/count');
-$get_classes = branchesapi($branch->username,$branch->password,$branch->branch_url,'classes/count');
+$get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,'login');
+//$get_students = branchesapi($branch->username,$branch->password,$branch->branch_url,'students/count');
+//$get_classes = branchesapi($branch->username,$branch->password,$branch->branch_url,'classes/count');
 
-
+//echo "<pre>";print_r($get_data->current);exit;
  ?>
 <div class="box col-md-4">
         <div class="box-inner homepage-box">
@@ -62,8 +65,11 @@ $get_classes = branchesapi($branch->username,$branch->password,$branch->branch_u
                   <i class="glyphicon glyphicon-user blue"></i>
 
                   <div>Total Student</div>
-                  <div>@if(!is_object($get_students) && $get_students==404) 0 @else {{$get_students->overall}} @endif</div>
-                  <span class="notification"></span>
+                  {{--<div>Current Session: @if(is_object($get_data)){{$get_data->current}} @endif </div>
+                  <div>OverAll:  @if(is_object($get_data)) {{$get_data->overall}} @endif</div>
+                 --}}
+                 <div>@if(is_object($get_data)) {{$get_data->overall}} @endif</div>
+                  {{--<span class="notification"></span>--}}
                   </a>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6">
@@ -71,8 +77,8 @@ $get_classes = branchesapi($branch->username,$branch->password,$branch->branch_u
                   <i class="glyphicon glyphicon-user blue"></i>
 
                   <div>Total Classes</div>
-                  <div>{{$get_classes}}</div>
-                  <span class="notification">6</span>
+                  <div>@if(is_object($get_data)) {{$get_data->classes}} @endif</div>
+                  
                   </a>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6">
@@ -80,8 +86,8 @@ $get_classes = branchesapi($branch->username,$branch->password,$branch->branch_u
                   <i class="glyphicon glyphicon-user blue"></i>
 
                   <div>Total Teachers</div>
-                  <div>507</div>
-                  <span class="notification">6</span>
+                  <div>@if(is_object($get_data)) {{$get_data->teachers}} @endif</div>
+                 
                   </a>
                 </div>
                 <br/>
@@ -90,9 +96,9 @@ $get_classes = branchesapi($branch->username,$branch->password,$branch->branch_u
                   <i class="glyphicon glyphicon-user blue"></i>
 
                   <div>Today Attendance</div>
-                  <div>Present: </div>
-                  <div>Absent: </div>
-                  <span class="notification">6</span>
+                  <div>Present: @if(is_object($get_data)) {{$get_data->present}} @endif</div>
+                  <div>Absent: @if(is_object($get_data)) {{$get_data->absent}} @endif</div>
+                 
                   </a>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6">
@@ -100,8 +106,8 @@ $get_classes = branchesapi($branch->username,$branch->password,$branch->branch_u
                   <i class="glyphicon glyphicon-user blue"></i>
 
                   <div>Total Unpaid</div>
-                  <div>507</div>
-                  <span class="notification">6</span>
+                  <div>@if(is_object($get_data)) {{$get_data->fess[0]->ourallunpaid}} @endif</div>
+                  
                   </a>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6">
@@ -109,15 +115,30 @@ $get_classes = branchesapi($branch->username,$branch->password,$branch->branch_u
                   <i class="glyphicon glyphicon-user blue"></i>
 
                   <div>Total Paid</div>
-                  <div>507</div>
-                  <span class="notification">6</span>
+                  <div>@if(is_object($get_data)) {{$get_data->fess[0]->ourallpaid}} @endif</div>
+                  
                   </a>
+                  
                 </div>
+
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  <div class="form-group">
+            <button type="button" class="btn btn-primary btn-block btn-sm ml-1" >More Detail</button>
+          </div>
+
+                </div>
+
             </div>
+
         </div>
+         
     </div>
     @endforeach
     @endif
+    </div>
+
+    </div>
+    </div>
 @endif
 
 
@@ -288,8 +309,9 @@ $get_classes = branchesapi($branch->username,$branch->password,$branch->branch_u
                 @endforeach
               </table>
       </div> */ ?>
+      </div>
       @endif
-    </div>
+ 
 
 
 

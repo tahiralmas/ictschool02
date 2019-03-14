@@ -46,7 +46,9 @@ class BranchController extends Controller
        $tstudent['classes']      = ClassModel::count();
        $tstudent['present']      = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Present')->count();
        $tstudent['absent']       = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Absent')->count();
-       $tstudent['late']         = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Late')->count();;
+       $tstudent['late']         = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Late')->count();
+       $admin_info               = DB::table('users')->where('group','admin')->orderBy('id','Asc')->first();
+       $tstudent['admin_id']     = $admin_info->id;
         
         
           return response()->json($tstudent,200);

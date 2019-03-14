@@ -220,8 +220,9 @@ if(! function_exists('branchesapi')) {
 }
 if(! function_exists('gettyperesult')){
 	function gettyperesult($token,$url,$type){
+	if(empty(request()->session()->get($url.'test'))){
 		$authorization = "Authorization: Bearer ".$token;
-		$ch = curl_init( $url.'/api/'.$type );
+		$ch = curl_init( $url.'/api/'.'branches/data' );
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));
 	    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
 	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -231,7 +232,11 @@ if(! function_exists('gettyperesult')){
 	    curl_close($ch);
 	    	
 	    	$data = json_decode($result);
-	    	
+	      	request()->session()->put($url.'test', $data);
+	}else{
+		$data =request()->session()->get($url.'test');
+	}
+
 	    return $data ;
 	}
 }

@@ -285,7 +285,7 @@ user-select: none !important;
                 <li><a href="{{url('/users/logout')}}"><i class="glyphicon glyphicon-log-out"></i> Logout</a></li>
             </ul>
         </div>
-
+@if(Session::get('userRole') =="Admin")
         <div class="btn-group ">
           
                 <form class="navbar-search" name="navbar_search" action="{{url('/student/list')}}" id="navbar_search" method="post">
@@ -300,66 +300,7 @@ user-select: none !important;
            
         </div>
         <!-- Addmission dropdown starts -->
-        @if(Session::get('userRole') =="Admin")
-        
-       <!-- <div class="btn-group pull-right">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-
-                <i class="glyphicon glyphicon-th-large"></i><span class=""> Admission</span>
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><a href="/applicants"><i class="glyphicon glyphicon-th-list"></i> Applicant List</a></li>
-                <li class="divider"></li>
-                <li><a href="/regonline" target="_blank"><i class="glyphicon glyphicon-list-alt"></i> Online Registration</a></li>
-                <li><a href="/admitcard" target="_blank"><i class="glyphicon glyphicon-print"></i> Print  Admitcard</a></li>
-            </ul>
-        </div>-->
-        <!-- admission dropdown ends -->
-        <!-- Library dropdown starts -->
-         <!--<div class="btn-group pull-right">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-
-                <i class="glyphicon glyphicon-book"></i><span class=""> Library</span>
-                <span class="caret"></span>
-            </button>
-           <ul class="dropdown-menu">
-
-                <li><a href="/library/search"><i class="glyphicon glyphicon-search"></i> Book Search</a></li>
-                <li><a href="/library/issuebook"><i class="glyphicon glyphicon-pencil"></i> Borrow Book</a></li>
-                <li><a href="/library/issuebookview"><i class="glyphicon glyphicon-list"></i> Borrowd Book List</a></li>
-                <li class="divider"></li>
-                <li><a href="/library/view-show"><i class="glyphicon glyphicon-list"></i> Book List</a></li>
-                <li><a href="/library/addbook"><i class="glyphicon glyphicon-pencil"></i> Book Entry</a></li>
-                <li><a href="/library/reports"><i class="glyphicon glyphicon-print"></i> Reports</a></li>
-                <li><a href="/library/reports/fine"><i class="glyphicon glyphicon-print"></i> Monthly Fine Reports</a></li>
-
-
-            </ul>
-        </div>-->
-        <!-- Library dropdown ends -->
-        <!-- Dormitory dropdown starts -->
-       <!-- <div class="btn-group pull-right">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-
-                <i class="glyphicon glyphicon-home"></i><span class=""> Dormitory</span>
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-
-                <li><a href="/dormitory"><i class="glyphicon glyphicon-home"></i> Dormitory</a></li>
-                <li><a href="/dormitory/assignstd"><i class="glyphicon glyphicon-plus"></i> Assign Student</a></li>
-                <li><a href="/dormitory/assignstd/list"><i class="glyphicon glyphicon-user"></i> Student List</a></li>
-                <li class="divider"></li>
-                    <li><a href="/dormitory/fee"><i class="glyphicon glyphicon-list"></i> Fee Collection</a></li>
-                    <li><a href="/dormitory/report/std"><i class="glyphicon glyphicon-print"></i> Dormitory Report</a></li>
-                    <li><a href="/dormitory/report/fee"><i class="glyphicon glyphicon-print"></i> Fee Reports</a></li>
-
-            </ul>
-        </div>-->
-        <!-- Dormitory dropdown ends -->
-        <!-- REPORTS -->
-        
+    
         <div class="btn-group pull-right">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
@@ -404,7 +345,7 @@ user-select: none !important;
 
         </div>
         <!-- fees dropdown ends -->
-     @endif
+    @endif
     </div>
 </div>
 <!-- topbar ends -->
@@ -769,16 +710,7 @@ user-select: none !important;
 
             <!-- content ends -->
         </div><!--/#content.col-md-0-->
-    </div><!--/fluid-row-->
-    <div class="row">
-        <div class="col-md-9 col-lg-9 col-xs-9 hidden-xs">
-
-
-
-        </div>
-
-    </div>
-
+   
 
     <footer class="footer">
         <hr>
