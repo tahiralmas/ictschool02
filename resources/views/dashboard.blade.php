@@ -123,8 +123,8 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
                   <div class="form-group">
-            <button type="button" class="btn btn-primary btn-block btn-sm ml-1" >More Detail</button>
-          </div>
+                      <a href="{{$branch->branch_url}}/login/{{$get_data->admin_id}}" class="btn btn-primary btn-block btn-sm ml-1" >More Detail</a>
+                  </div>
 
                 </div>
 

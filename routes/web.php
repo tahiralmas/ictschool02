@@ -23,6 +23,10 @@ return 'other';
 }
    // return $data;
 });
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/login/{user_id}','UsersController@dologin');
+});
 Route::get('/branches','instituteController@branches');
 Route::post('/branch','instituteController@createbranch');
 Route::get('/attendance/today_delete','attendanceController@today_delete');
