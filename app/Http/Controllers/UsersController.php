@@ -74,6 +74,9 @@ class UsersController extends BaseController {
   } 
   public function dologin($id) {
     $user = User::find($id);
+     request()->session()->forget('isAdmin');
+     request()->session()->forget('adminID');
+     request()->session()->forget('surl');
     request()->session()->put('isAdmin', 1);
     request()->session()->put('adminID', Auth::id());
     request()->session()->put('surl', request()->root());
