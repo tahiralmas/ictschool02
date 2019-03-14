@@ -1,4 +1,4 @@
-/.env
+.env
 /storage/*.key
 /img/*
 /public/images/*
