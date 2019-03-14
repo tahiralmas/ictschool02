@@ -38,6 +38,9 @@
 
 <?php 
 branchesapi($branch->username,$branch->password,$branch->branch_url,'login');
+$get_students = branchesapi($branch->username,$branch->password,$branch->branch_url,'students/count');
+$get_classes = branchesapi($branch->username,$branch->password,$branch->branch_url,'classes/count');
+
 
  ?>
 <div class="box col-md-4">
@@ -59,8 +62,8 @@ branchesapi($branch->username,$branch->password,$branch->branch_url,'login');
                   <i class="glyphicon glyphicon-user blue"></i>
 
                   <div>Total Student</div>
-                  <div>507</div>
-                  <span class="notification">6</span>
+                  <div>@if(!is_object($get_students) && $get_students==404) 0 @else {{$get_students->overall}} @endif</div>
+                  <span class="notification"></span>
                   </a>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6">
@@ -68,7 +71,7 @@ branchesapi($branch->username,$branch->password,$branch->branch_url,'login');
                   <i class="glyphicon glyphicon-user blue"></i>
 
                   <div>Total Classes</div>
-                  <div>507</div>
+                  <div>{{$get_classes}}</div>
                   <span class="notification">6</span>
                   </a>
                 </div>

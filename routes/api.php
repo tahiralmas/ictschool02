@@ -46,6 +46,7 @@ Route::post('users', 'Api\UserController@create_user');
   Route::get('students/{student_id}/attendances_today','Api\AttendanceController@get_attendance_student_today');
 
    //student
+   Route::get('branches/data','Api\BranchController@branches_data');
    Route::get('students','Api\StudentController@all_students');
    Route::get('students/count','Api\StudentController@count_students');
    Route::get('students/fess','Api\StudentController@count_student_fee');
