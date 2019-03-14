@@ -64,9 +64,10 @@ class UsersController extends BaseController {
       $url = request()->session()->pull('surl','');
       //$id = request()->session()->pull('adminID', 0);
       if(Auth::loginUsingId($id)) {
-        request()->session()->flush();
+        //request()->session()->flush();
         return redirect($url.'/dashboard');
       }
+      return redirect($url.'/dashboard');
     }
     request()->session()->flush();
     \Auth::logout();
