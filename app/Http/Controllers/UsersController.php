@@ -83,7 +83,10 @@ class UsersController extends BaseController {
     echo request()->root();
     echo "<pre>rr".request()->session()->get('adminID')."tt";print_r($user);
     if (Auth::loginUsingId($id)) {
-
+         $name=Auth::user()->firstname.' '.Auth::user()->lastname;
+          $login=Auth::user()->group;
+        \Session::put('name', $name);
+        \Session::put('userRole', $login);
         echo "adeel";
         //return redirect('/dashboard');
     }
