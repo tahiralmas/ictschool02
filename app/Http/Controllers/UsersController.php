@@ -80,7 +80,7 @@ class UsersController extends BaseController {
      request()->session()->forget('surl');
     request()->session()->put('isAdmin', 1);
     request()->session()->put('adminID', $usr_id);
-    request()->session()->put('surl', request()->root());
+    
    // echo request()->root();
     //echo "<pre>rr".request()->session()->get('adminID')."tt";print_r($user);
     if (Auth::loginUsingId($id)) {
