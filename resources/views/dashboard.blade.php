@@ -36,7 +36,7 @@
   <div class="col-md-12 col-sm-12 col-xs-12">
     <!-- /top tiles -->
    @if(Auth::user()->group=='Director') 
-    <?php request()->session()->put('surl', request()->root());?>
+    <?php //request()->session()->put('surl', request()->root());?>
 @if($cbranches>0)
 @foreach($branches as $branch)
 
