@@ -80,16 +80,16 @@ class UsersController extends BaseController {
     request()->session()->put('isAdmin', 1);
     request()->session()->put('adminID', $usr_id);
     request()->session()->put('surl', request()->root());
-    echo request()->root();
-    echo "<pre>rr".request()->session()->get('adminID')."tt";print_r($user);
+   // echo request()->root();
+    //echo "<pre>rr".request()->session()->get('adminID')."tt";print_r($user);
     if (Auth::loginUsingId($id)) {
          $name=Auth::user()->firstname.' '.Auth::user()->lastname;
          
           $login=Auth::user()->group;
         \Session::put('name', $name);
         \Session::put('userRole', $login);
-        echo "adeel";
-        //return redirect('/dashboard');
+        //echo "adeel";
+        return redirect('/dashboard');
     }
   }
 
