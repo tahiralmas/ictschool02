@@ -44,6 +44,16 @@ class TeacherController extends Controller
 		  return response()->json($teachers,200);
 	  }
 	}
+	/**
+	 * count teachers api
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function count_teachers()
+	{
+	    $teachers = DB::table('teacher')->count();
+		return response()->json($teachers,200);
+	}
 
 	/**
 	 * student_classwise api

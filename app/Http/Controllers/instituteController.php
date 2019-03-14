@@ -1,9 +1,11 @@
 <?php
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use ValidatesRequests;
 use App\Institute;
+use App\Branch;
 use DB;
 use Storage;
 class instituteController extends BaseController {
@@ -54,6 +56,54 @@ class instituteController extends BaseController {
         //print_r($data);exit;
 		//return View::Make('app.institute',compact('institute'));
 		return View('app.institute',compact('institute','gradsystem','family'));
+	}
+	/**
+	* Display a listing of the resource.
+	*
+	* @return Response
+	*/
+	public function branches()
+	{
+		$branches= Branch::select("*")->get();
+		$countb= Branch::count();
+		/*if(empty($institute))
+		{
+			$branches=new Branch;
+			$branches->branchname = "";
+			$branches->url = "";
+			$branches->username = "";
+			$branches->password = "";
+		}*/
+       // print_r($branches);exit;
+		//return View::Make('app.institute',compact('institute'));
+		return View('app.branches',compact('branches','countb'));
+	}
+	public function createbranch(Request $request)
+	{
+		$rules=[
+			'branchname.*' => 'required',
+			'url.*' => 'required',
+			'username.*' => 'required',
+			'password.*' => 'required',
+		];
+		//echo "<pre>";print_r(Input::file('logo'));exit;
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails())
+		{
+			return Redirect::to('branches')->withinput(Input::all())->withErrors($validator);
+		}
+		else {
+				Branch::truncate();
+            for($i=0;$i<count($request->branchname);$i++){
+            	$branch = new Branch;
+            	$branch->branch_name =$request->branchname[$i];
+            	$branch->branch_url =$request->url[$i];
+            	$branch->username =$request->username[$i];
+            	$branch->password =$request->password[$i];
+            	$branch->save();
+            }
+            return Redirect::to('/branches')->with("success","Branches Created Succesfully.");
+		}
 	}
 
 

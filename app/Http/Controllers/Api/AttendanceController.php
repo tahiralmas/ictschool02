@@ -51,6 +51,20 @@ class AttendanceController extends Controller
 					$attendance=array();
 					return response()->json(['sections' => $section,'classes'=>$classes2]);
 			}
+
+			/**
+			 * attendance_create api
+			 *
+			 * @return \Illuminate\Http\Response
+			 */
+			public function count_attendances()
+			{
+					//echo Carbon::now()->format('Y-m-d');
+ 		            $totalabsent        = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Absent')->count();
+ 		            $totallate          = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Late')->count();
+ 		            $totalpresent       = Attendance::where('date',Carbon::now()->format('Y-m-d'))->where('status','Present')->count();
+					return response()->json(['absent' => $totalabsent ,'late'=>$totallate,'present'=>$totalpresent]);
+			}
 			
 			public function getallattendance()
 			{

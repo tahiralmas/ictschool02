@@ -176,3 +176,60 @@ if(! function_exists('family_check')) {
 		return $famly;
 	}
 }
+if(! function_exists('branchesapi')) {
+	function branchesapi($username,$password,$url,$type)
+	{
+			//return "as";
+	   /* curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));
+	    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	    curl_setopt($ch, CURLOPT_POSTFIELDS,$post);
+	    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	    $result = curl_exec($ch);
+	    curl_close($ch);
+	    return json_decode($result);*/
+	    if(request()->session()->get($url)==''){
+	    $ch = curl_init( $url.'/api/authenticate' );
+		# Setup request to send json via POST.
+		$data = array("username" =>$username,"password" =>$password );
+		$payload = json_encode(  $data  );
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, $payload );
+		curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+		# Return response instead of printing.
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		# Send request.
+		$result = curl_exec($ch);
+		curl_close($ch);
+		# Print response.
+		//$dataa = json_decode($result);
+		$dataa = json_decode($result);
+		if(!empty($dataa->success)){
+			request()->session()->put($url, $dataa->success->token);
+			$count = gettyperesult(request()->session()->get($url),$url,$type);
+		}else{
+			return 404;
+		}
+	}else{
+		$count = gettyperesult(request()->session()->get($url),$url,$type);
+	}
+       //return request()->session()->get($url);
+		//echo "<pre>".print_r($dataa ,true)"</pre>";
+			return $count ;
+			//if ($server_output == "success") { ... } else { ... }
+	}
+}
+if(! function_exists('gettyperesult')){
+	function gettyperesult($token,$url,$type){
+		$authorization = "Authorization: Bearer ".$token;
+		$ch = curl_init( $url.'/api/'.$type );
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));
+	    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	    //curl_setopt($ch, CURLOPT_POSTFIELDS,$post);
+	    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+	    $result = curl_exec($ch);
+	    curl_close($ch);
+
+	    return json_decode($result);
+	}
+}

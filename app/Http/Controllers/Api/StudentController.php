@@ -94,8 +94,21 @@ class StudentController extends Controller
 		  }
 	}
 
-
-       
+    /**
+    * Count student
+    **/
+    public function count_students()
+    {
+       $tstudent['overall']  =  Student::where('isActive','Yes')->count();
+       $tstudent['current']  =  Student::where('isActive','Yes')->where('session',get_current_session()->id)->count();
+        if($tstudent['overall']==0)
+        {
+            return response()->json(['code'=>401,'error'=>'No Students Found!'], 401);
+        }
+        else {
+            return response()->json($tstudent,200);
+        }
+    }
 	/**
 	 * student_classwise api
 	 *
@@ -374,6 +387,85 @@ class StudentController extends Controller
             }
         }
 	}   */
+
+    /**
+    * Count paid or un paid student
+    **/
+
+    public function count_student_fee()
+    {
+        $now             =  Carbon::now();
+        $year            =  get_current_session()->id;
+        $year1            =  $now->year;
+         $month           =  $now->month;
+        $all_section =  DB::table('Class')->select( '*')->get();
+        //$student_all =    DB::table('Student')->select( '*')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
+        $ourallpaid =0;
+        $ourallunpaid=0;
+        if(count($all_section)>0){
+            $i=0;
+            
+            
+          
+            foreach($all_section as $section){
+                 $paid =0;
+                 $unpaid=0;
+                 $total_s=0;
+             $student_all = DB::table('Student')->select( '*')->where('class','=',$section->code)/*->where('section','=',$section->id)/**/->where('session','=',$year)
+              //->where('Student.session','=',$year)
+             ->where('Student.isActive','=','Yes')
+             ->get();
+               $resultArray[$section->code.'_'.$section->name."_".'total']=0;
+                $resultArray[$section->code.'_'.$section->name."_".'unpaid']=0;
+                $resultArray[$section->code.'_'.$section->name."_".'paid'] =  0;
+                if(count($student_all) >0){
+                    foreach($student_all as $stdfees){
+                        $student =  DB::table('billHistory')->Join('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
+                        ->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo')
+                        // ->whereYear('stdBill.payDate', '=', 2017)
+                        ->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', $year1)->where('billHistory.month','=',$month)->where('billHistory.month','<>','-1')
+                        //->orderby('stdBill.payDate')
+                        ->get();
+                        if(count($student)>0 ){
+                            foreach($student as $rey){
+                                //$status[] = "paid".'_'.$stdfees->regiNo."_";
+                                //$resultArray[$i] = get_object_vars($stdfees);
+                                //array_push($resultArray[$i],'Paid',$rey->payDate,$rey->billNo,$rey->fee);
+                                $resultArray[$section->code.'_'.$section->name."_".'paid'] =  ++$paid;
+                                //$yes ='yes';
+                               $ourallpaid = ++$ourallpaid;
+                            }
+                        }else{
+                            //$status[$i] = "unpaid".'_'.$stdfees->regiNo."_";
+                            //$resultArray[] = get_object_vars($stdfees);
+                            //array_push($resultArray[$i],'unPaid');
+                            
+                            //$resultArray[$section->class_code.'_'.$section->name."_".'paid'] =  0;
+                            $resultArray[$section->code.'_'.$section->name."_".'unpaid']=++$unpaid;
+                            $ourallunpaid =++$ourallunpaid;
+                        }
+                        $resultArray[$section->code.'_'.$section->name."_".'total']=++$total_s;
+                    }
+                }else{
+                  $resultArray[$section->code.'_'.$section->name."_".'total']=0;
+                  $resultArray[$section->code.'_'.$section->name."_".'unpaid']=0;
+                  $resultArray[$section->code.'_'.$section->name."_".'paid'] =  0;
+
+                }
+            //$resultArray[] = get_object_vars($section);
+            //array_push($resultArray[$i],$total,$paid,$unpaid);
+            $scetionarray[] = array('section'=>$section->name,'class'=>$section->code);
+            $resultArray1[] = array('total'=> $resultArray[$section->code.'_'.$section->name."_".'total'],'unpaid'=>$resultArray[$section->code.'_'.$section->name."_".'unpaid'],'paid'=>$resultArray[$section->code.'_'.$section->name."_".'paid']);
+
+            }
+            
+        }
+        else{
+            $resultArray = array();
+        }
+
+        return response()->json(['ourallunpaid'=>$ourallunpaid,'ourallpaid'=>$ourallpaid],200);
+    }
 }
 
 

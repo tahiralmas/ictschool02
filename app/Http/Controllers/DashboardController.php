@@ -8,6 +8,7 @@ use App\Accounting;
 use App\Marks;
 use App\AddBook;
 use App\Teacher;
+use App\Branch;
 use Carbon\Carbon;
 use DB;
 
@@ -47,15 +48,15 @@ class DashboardController extends BaseController {
  		$totalExam = Marks::groupBy('exam')->groupBy('subject')->get();
 		$book = AddBook::count();
  		$total = [
- 			'class' =>$tclass,
- 			'student' =>$tstudent,
- 			'subject' =>$tsubject,
- 			'attendance' =>count($totalAttendance),
- 			'exam' =>count($totalExam),
-			'book' => $book,
+ 			'class'       =>$tclass,
+ 			'student'     =>$tstudent,
+ 			'subject'     =>$tsubject,
+ 			'attendance'  =>count($totalAttendance),
+ 			'exam'        =>count($totalExam),
+			'book'        => $book,
 			'totalabsent' => $totalabsent,
-			'teacher' => $teacher,
-			'totallate'=>$totallate
+			'teacher'     => $teacher,
+			'totallate'   =>$totallate
  		];
  	     // 	//graph data
  	  //dd($total);
@@ -163,7 +164,7 @@ class DashboardController extends BaseController {
 		}
 
           foreach($all_section as $teacher ){
-          $sections[] = $teacher->id;
+          $sections[]     = $teacher->id;
           $count_student1 = array();
           $count_student1 =  DB::table('Student')->select(DB::raw('COUNT(*) as total_student'))->where('class',$teacher->code)->first();
           // $count_student =  $count_student1->total_attendance;
@@ -248,7 +249,9 @@ else{
 //echo "<pre>a";print_r($calender_event);
 
  //exit;
-		return View('dashboard',compact('error','success','total','incomes','expences','balance','scetionarray','resultArray1','year','month_n','attendances_b','month','class','present','absent','ourallunpaid','ourallpaid','json_event_data'));
+			$branches= Branch::select("*")->get();
+			$cbranches= Branch::count();
+		return View('dashboard',compact('error','success','total','incomes','expences','balance','scetionarray','resultArray1','year','month_n','attendances_b','month','class','present','absent','ourallunpaid','ourallpaid','json_event_data','branches','cbranches'));
 	}
 	private function datahelper($data)
  	{

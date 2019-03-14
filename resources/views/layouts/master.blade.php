@@ -359,6 +359,7 @@ user-select: none !important;
         </div>-->
         <!-- Dormitory dropdown ends -->
         <!-- REPORTS -->
+        
         <div class="btn-group pull-right">
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 
@@ -421,6 +422,22 @@ user-select: none !important;
                         <li class="nav-header">Main</li>
                         <li><a class="ajax-link" href="{{url('/dashboard')}}"><i class="glyphicon glyphicon-th-large"></i><span> Dashboard</span></a>
                         </li>
+                        @if (Session::get('userRole') =="Director")
+                        <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-cog"></i><span> Settings</span></a>
+                              <ul class="nav nav-pills nav-stacked">
+                                  <li><a href="{{url('/branches')}}">Branches</a></li>
+                                  <!--<li><a href="{{url('/ictcore/fees')}}">Fees Message</a></li>
+                                  -->
+                                 <!-- <li><a href="{{url('/template/create')}}">Add Message</a></li>
+                                  <li><a href="{{url('/template/list')}}">Recording List</a></li>
+                                
+                                  <li><a href="{{url('/schedule')}}">Fee Notification Reminder</a></li>
+                               -->
+                              </ul>
+                        </li>
+                        @endif
+                        @if (Session::get('userRole') !="Director")
                         @if (Session::get('userRole') =="Admin")
                         <?php /* <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-folder-open"></i><span> Levels</span></a>
@@ -456,6 +473,7 @@ user-select: none !important;
                             <a href="#"><i class="glyphicon glyphicon-hdd"></i><span> Paper Management</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="{{url('/question/create')}}">Add New</a></li>
+                                <li><a href="{{url('/question/list')}}">List</a></li>
                                 <li><a href="{{url('/paper/generate')}}"> Generate Paper</a></li>
                             </ul>
                         </li>
@@ -703,6 +721,7 @@ user-select: none !important;
             </ul>
             </li>
             <?php */ ?>
+            @endif
 </li>
 
 

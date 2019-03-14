@@ -71,7 +71,7 @@
                                             <label for="type">Web Stie</label>
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                                <input type="text"  class="form-control" required name="web" placeholder="www.shanixlab.com" value="{{$institute->web}}">
+                                                <input type="text"  class="form-control" required name="web" placeholder="www.ictinnovations.com" value="{{$institute->web}}">
 
                                             </div>
                                         </div>

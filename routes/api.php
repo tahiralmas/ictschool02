@@ -27,6 +27,7 @@ Route::post('users', 'Api\UserController@create_user');
 	
 // Attendance api routes
   Route::get('attendances','Api\AttendanceController@getallattendance');
+  Route::get('attendances/today','Api\AttendanceController@count_attendances');
 	Route::get('attendances/{class_level}/{section}/{shift}/{session}/{date}','Api\AttendanceController@attendance_view');
 	Route::post('attendances','Api\AttendanceController@attendance_create');
 	Route::get('attendances/{attendance_id}','Api\AttendanceController@get_attendance');
@@ -46,14 +47,18 @@ Route::post('users', 'Api\UserController@create_user');
 
    //student
    Route::get('students','Api\StudentController@all_students');
+   Route::get('students/count','Api\StudentController@count_students');
+   Route::get('students/fess','Api\StudentController@count_student_fee');
    Route::get('students/{class_code}/{section}/{shift}/{session}','Api\StudentController@student_classwise');
    Route::get('students/{student_id}','Api\StudentController@getstudent');
    Route::put('students/{student_id}','Api\StudentController@update_student');
    Route::get('students/{student_id}/subjects','Api\StudentController@getstudentsubjects');
    Route::post('students/{student_id}/notifications','Api\StudentController@studentnotification');
-
+   //teachers counts
+    Route::get('teachers/count','Api\TeacherController@count_teachers');
    // classes
     Route::get('classes','Api\ClassController@classes');
+    Route::get('classes/count','Api\ClassController@classes_count');
     Route::get('classes/{class_id}','Api\ClassController@getclass');
     Route::get('classes/{class_id}/sections','Api\ClassController@getclass_section');
     Route::put('classes/{class_id}','Api\ClassController@update_class');

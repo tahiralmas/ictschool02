@@ -28,7 +28,7 @@
   <div class="box col-md-12">
     <div class="box-inner">
       <div data-original-title="" class="box-header well">
-        <h2><i class="glyphicon glyphicon-book"></i>Generate Papers</h2>
+        <h2><i class="glyphicon glyphicon-book"></i> Questions List</h2>
 
       </div>
       <div class="box-content">
@@ -43,7 +43,7 @@
         </div>
         @endif
 
-        <form role="form" action="{{url('/paper/generate')}}" method="post" target="_blank" enctype="multipart/form-data">
+        <form role="form" action="{{url('/question/list')}}" method="post"  enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
           <div class="row">
             <div class="col-md-12">
@@ -145,67 +145,63 @@
                         </select>
                     </div>
                   </div>
-
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="control-label" for="exam">Number of Mcqs</label>
-
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                      
-                      <input type="number" name="mcqs" class="form-control">
-
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="control-label" for="exam">Number of Short Questions</label>
-
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                      
-                      <input type="number" name="short" class="form-control">
-
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="control-label" for="exam">Number of long Questions</label>
-
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                      
-                      <input type="number" name="long" class="form-control">
-
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label class="control-label" for="exam">Number of Prints</label>
-
-                    <div class="input-group">
-                      <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                      
-                      <input type="number" name="print" class="form-control" required>
-
-                    </div>
-                  </div>
-                </div>
-
               </div>
             </div>
             <div class="row">
               <div class="col-md-12">
-                <button class="btn btn-primary pull-right"  type="submit"><i class="glyphicon glyphicon-th"></i>Generate Paper</button>
+                <button class="btn btn-primary pull-right"  type="submit"><i class="glyphicon glyphicon-th"></i>Get List</button>
 
               </div>
             </div>
           </form>
-          
+          @if($questions )
+          <div class="row">
+            <div class="col-md-12" style="clear: both;margin-top: 18px;" >
+              <table id="studentList" class="table table-striped table-bordered" >
+                <thead>
+                <tr>
+                  <th>Class</th>
+                  <th>Subject</th>
+                  <th>Question</th>
+                  <th>Chapter</th>
+                  <th>Type</th>
+                  <th>Level</th>
+                  <th>Number</th>
+                  <th>Session</th>
+
+                  <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach($questions as $question)
+                  <tr>
+                    <td>{{$question->class_code}}</td>
+                    <td>{{$question->name}}</td>
+                    <td>{{$question->question_name}}</td>
+                    <td>{{$question->chapter}}</td>
+                    <td>@if($question->question_type==1) Long @elseif($question->question_type==2) MCQ @else Short @endif</td>
+                    <td>{{$question->level}}</td>
+                    <td>{{$question->points}}</td>
+                    <td>{{$question->session}}</td>
+
+                    <td>
+                    <?php 
+
+                    
+                    ?>
+                    <a title='View' class='btn btn-success' href='{{url("/question/edit/$question->id")}}'> <i class="glyphicon glyphicon-pencil icon-white"></i></a>&nbsp&nbsp
+                   <a title='Delete' class='btn btn-danger' href='{{url("/question/delete/$question->id")}}' onclick="return confirm('Are you sure you want to delete ?');"> <i class="glyphicon glyphicon-trash icon-white"></i></a>
+                    {{--&nbsp&nbsp <a title='View' class='btn btn-success' href=''> <i class="glyphicon glyphicon-phone"></i></a>--}}
+                    <?php /*&nbsp&nbsp <a title='View' class='btn btn-success' href='{{url("/fee/collections?class_id=$student->class_code&section=$student->section_id&session=$student->session&type=Monthly&month=$month&fee_name=$fee_name")}}'> <i class="glyphicon glyphicon-phone"></i></a>
+                    */ ?>
+                    </td>
+                  </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
+          @endif
           </div>
         </div>
       </div>
@@ -215,7 +211,17 @@
     <script src="/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript">
      $( document ).ready(function() {
-      
+      $('#studentList').DataTable( {
+        //pagingType: "simple",
+        //"pageLength": 5,
+      //  "pagingType": "full_numbers",
+        dom: 'Bfrtip',
+        buttons: [
+            'print'
+        ],
+         "sPaginationType": "bootstrap",
+       
+    });
  
       $(".datepicker2").datepicker( {
         format: " yyyy", // Notice the Extra space at the beginning

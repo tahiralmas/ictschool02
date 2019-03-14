@@ -40,13 +40,29 @@ class ClassController extends Controller
      */
     public function classes()
     {
-	  $classes = DB::table('Class')->select('id','code','name','description')->get();
-	  if(count($classes)<1)
+      $classes = DB::table('Class')->select('id','code','name','description')->get();
+      if(count($classes)<1)
+      {
+         return response()->json(['error'=>'No Class Found!'], 404);
+      }
+      else {
+          return response()->json($classes,200);
+      }
+    }
+    /**
+     * student_classwise api
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function classes_count()
+    {
+	  $tclass          =  ClassModel::count();
+	  if(count($tclass)==0)
 	  {
 	     return response()->json(['error'=>'No Class Found!'], 404);
 	  }
 	  else {
-		  return response()->json($classes,200);
+		  return response()->json($tclass,200);
 	  }
     }
 

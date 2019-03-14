@@ -23,6 +23,8 @@ return 'other';
 }
    // return $data;
 });
+Route::get('/branches','instituteController@branches');
+Route::post('/branch','instituteController@createbranch');
 Route::get('/attendance/today_delete','attendanceController@today_delete');
 Route::get('/','HomeController@index')->name("login");
 Route::get('/dashboard/','DashboardController@index');
@@ -84,6 +86,9 @@ Route::get('/question/create','QuestionController@create');
 Route::post('/question/create','QuestionController@store');
 Route::get('/paper/generate','QuestionController@generate');
 Route::post('/paper/generate','QuestionController@post_generate');
+Route::get('/question/list','QuestionController@list');
+Route::post('/question/list','QuestionController@getlist');
+
 Route::get('/question/edit/{id}','QuestionController@edit');
 Route::post('/question/update','QuestionController@update');
 Route::get('/question/delete/{id}','QuestionController@delete');

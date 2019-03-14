@@ -32,6 +32,105 @@
 <div class="row">
   <div class="col-md-12 col-sm-12 col-xs-12">
     <!-- /top tiles -->
+   @if(Auth::user()->group=='Director')  
+@if($cbranches>0)
+@foreach($branches as $branch)
+
+<?php 
+branchesapi($branch->username,$branch->password,$branch->branch_url,'login');
+
+ ?>
+<div class="box col-md-4">
+        <div class="box-inner homepage-box">
+            <div class="box-header well" data-original-title="">
+                <h2><i class="glyphicon glyphicon-list-alt"></i> {{ucwords($branch->branch_name)}}</h2>
+
+                <div class="box-icon">
+                    <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                            class="glyphicon glyphicon-chevron-up"></i></a>
+                    <a href="#" class="btn btn-close btn-round btn-default"><i
+                            class="glyphicon glyphicon-remove"></i></a>
+                </div>
+            </div>
+            <div class="box-content row">
+                <!-- Begin MailChimp Signup Form -->
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                  <a data-toggle="tooltip" title="6 new members." class="well top-block" href="#">
+                  <i class="glyphicon glyphicon-user blue"></i>
+
+                  <div>Total Student</div>
+                  <div>507</div>
+                  <span class="notification">6</span>
+                  </a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                  <a data-toggle="tooltip" title="6 new members." class="well top-block" href="#">
+                  <i class="glyphicon glyphicon-user blue"></i>
+
+                  <div>Total Classes</div>
+                  <div>507</div>
+                  <span class="notification">6</span>
+                  </a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                  <a data-toggle="tooltip" title="6 new members." class="well top-block" href="#">
+                  <i class="glyphicon glyphicon-user blue"></i>
+
+                  <div>Total Teachers</div>
+                  <div>507</div>
+                  <span class="notification">6</span>
+                  </a>
+                </div>
+                <br/>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                  <a data-toggle="tooltip" title="6 new members." class="well top-block" href="#">
+                  <i class="glyphicon glyphicon-user blue"></i>
+
+                  <div>Today Attendance</div>
+                  <div>Present: </div>
+                  <div>Absent: </div>
+                  <span class="notification">6</span>
+                  </a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                  <a data-toggle="tooltip" title="6 new members." class="well top-block" href="#">
+                  <i class="glyphicon glyphicon-user blue"></i>
+
+                  <div>Total Unpaid</div>
+                  <div>507</div>
+                  <span class="notification">6</span>
+                  </a>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6">
+                  <a data-toggle="tooltip" title="6 new members." class="well top-block" href="#">
+                  <i class="glyphicon glyphicon-user blue"></i>
+
+                  <div>Total Paid</div>
+                  <div>507</div>
+                  <span class="notification">6</span>
+                  </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
+    @endif
+@endif
+
+
+
+
+
+
+
+
+
+
+
+
+ @if(Auth::user()->group!='Director')
+
+
     <div class="row tile_count text-center">
       <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
          <a href="{{url('/class/list')}}">
@@ -186,6 +285,7 @@
                 @endforeach
               </table>
       </div> */ ?>
+      @endif
     </div>
 
 
