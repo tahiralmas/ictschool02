@@ -65,6 +65,11 @@ class UsersController extends BaseController {
       //$id = request()->session()->pull('adminID', 0);
       if(Auth::loginUsingId($id)) {
         //request()->session()->flush();
+        $name=Auth::user()->firstname.' '.Auth::user()->lastname;
+         
+          $login=Auth::user()->group;
+        \Session::put('name', $name);
+        \Session::put('userRole', $login);
         return redirect('/dashboard');
       }
       return redirect('/dashboard');
