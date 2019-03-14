@@ -230,13 +230,12 @@ if(! function_exists('gettyperesult')){
 	    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 	    $result = curl_exec($ch);
 	    curl_close($ch);
-	    	
-	    	$data = json_decode($result);
-	      	request()->session()->put($url.'test', $data);
+	    $data   = json_decode($result);
+	    request()->session()->put($url.'test', $data);
 	}else{
-		$data =request()->session()->get($url.'test');
+		$data   = request()->session()->get($url.'test');
 	}
 
-	    return $data ;
+	  return $data ;
 	}
 }

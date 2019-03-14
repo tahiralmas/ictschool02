@@ -58,12 +58,17 @@ class UsersController extends BaseController {
   public function getLogout() {
     /*request()->session()->flush();
     \Auth::logout();*/
+
     if(request()->session()->pull('isAdmin', 0)){
       $id = request()->session()->pull('adminID', 0);
+      $url = request()->session()->pull('surl','');
+      //$id = request()->session()->pull('adminID', 0);
       if(Auth::loginUsingId($id)) {
-        return redirect('/dashboard');
+        request()->session()->flush();
+        return redirect($url.'/dashboard');
       }
     }
+    request()->session()->flush();
     \Auth::logout();
     return redirect('/')->with('message', 'Your are now logged out!');
   } 
@@ -71,9 +76,12 @@ class UsersController extends BaseController {
     $user = User::find($id);
     request()->session()->put('isAdmin', 1);
     request()->session()->put('adminID', Auth::id());
-
+    request()->session()->put('surl', request()->root());
+    echo request()->root();
     if (Auth::loginUsingId($id)) {
-        return redirect('/dashboard');
+      
+        echo "adeel";
+        //return redirect('/dashboard');
     }
   }
 
