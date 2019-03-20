@@ -17,10 +17,10 @@ use Hash;
 use App\Ictcore_integration;
 use App\Http\Controllers\ictcoreController;
 use Carbon\Carbon;
-class foobar{
+class foobar1{
 
 }
-Class formfoo{
+Class formfoo3{
 
 }
 class teacherController extends BaseController {
@@ -285,7 +285,7 @@ class teacherController extends BaseController {
 			}
 			else {
 				$classes = ClassModel::pluck('name','code');
-				$formdata = new formfoo;
+				$formdata = new formfoo3;
 				$formdata->class=Input::get('class');
 				$formdata->section=Input::get('section');
 				$formdata->shift=Input::get('shift');
@@ -909,8 +909,8 @@ class teacherController extends BaseController {
 		}
 		else{
 				$teacher_id = Input::get('id');
-				$sections = Input::get('section');
-				$count = 0;
+				$sections   = Input::get('section');
+				$count      = 0;
 				foreach($sections as $section){
 					$getolddiary  = Diary::where('section',$section)
 									->where('subject',Input::get('subject'))

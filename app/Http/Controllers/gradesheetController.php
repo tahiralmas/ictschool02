@@ -13,7 +13,7 @@ use App\Ictcore_integration;
 use Storage;
 use DB;
 use App\Http\Controllers\ictcoreController;
-Class formfoo{
+Class formfoo5{
 
 }
 Class Meritdata{
@@ -33,7 +33,7 @@ class gradesheetController extends BaseController {
 	*/
 	public function index()
 	{
-		$formdata = new formfoo;
+		$formdata = new formfoo5;
 		$formdata->class="";
 		$formdata->section="00";
 		$formdata->shift="";
@@ -81,7 +81,7 @@ class gradesheetController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-			$formdata = new formfoo;
+			$formdata = new formfoo5;
 			$formdata->class=Input::get('class');
 			$formdata->section=Input::get('section');
 			$formdata->exam=Input::get('exam');
@@ -96,6 +96,7 @@ class gradesheetController extends BaseController {
           //exit;
 			if(Input::get('send_sms')=='yes'){
 				$send = $this->send_sms(Input::get('class'),Input::get('section'),Input::get('exam'),Input::get('session'));
+			   // echo "<pre>";print_r($send);
 			    //exit;
 			}
 			if(is_array(Input::get('exam'))){
@@ -140,7 +141,7 @@ class gradesheetController extends BaseController {
 
 				$students =$students->get();
 
-				$formdata = new formfoo;
+				$formdata = new formfoo5;
 				$formdata->class = Input::get('class');
 				$formdata->section = Input::get('section');
 				$formdata->session = Input::get('session');
@@ -207,7 +208,7 @@ public function send_sms($class,$section,$exam,$session)
 				    foreach($students as $student){
 				    	//echo $student->regiNo;
 				      	$marks = DB::table('Marks')
-				      			->join('Subject', 'Marks.subject', '=', 'Subject.code')
+				      			->join('Subject', 'Marks.subject', '=', 'Subject.id')
 				      			->select('Marks.section','Marks.exam','Marks.regiNo','Marks.shift', 'Marks.class', 'Marks.section','Marks.obtain_marks','Marks.total_marks','Subject.name as subject_name')
 				      			//->where('Marks.class',   '=', $class)
 								->where('Subject.class', '=', $class)
@@ -268,13 +269,13 @@ public function send_sms($class,$section,$exam,$session)
 			for($i=0;$i<count($data);$i++){
 				
 				 //$message1 .= str_replace("[sub]",$data[$i]['subject'],$message);
-				 $message1 .= ' subject '.$data[$i]['subject'].' obtatain marks:'.$data[$i]['obtain'].' out of:' .$data[$i]['total'] .'<br>';
+				 $message1 .= ' subject '.$data[$i]['subject'].' obtatain marks:'.$data[$i]['obtain'].' out of:' .$data[$i]['total'] ."\n";
 				 //$message2 .= str_replace("[obt]",$data[$i]['obtain'],$message1);
 				 //$message3 .= str_replace("[total]",$data[$i]['total'],$message2);
 				 //$subject2 .= str_replace("[number]",$dta['obtain'],$subject1);
 				 //$subject3 .= str_replace("[total]",$dta['total'],$subject2);
 			}
-			$body = $message.'<br>'. $message1  ;
+			$body = $message."\n". $message1  ;
 			//return  $body  ;
 			//exit;
 			$ict     = new ictcoreController();
@@ -323,7 +324,13 @@ public function send_sms($class,$section,$exam,$session)
 			}else{
 				$msg = "please submit your child  fee for this month";
 			}*/
-			$snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
+			if($ictcore_integration->method!='ictcore'){
+				$snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
+			}else{
+
+			    $send_msg_ictcore = sendmesssageictcore($name,'',$to,$msg,'result');
+
+			}
 			//$campaign      = $ict->telenor_apis('campaign_create',$group_id,'',$msg,'','sms');
 			//$send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
 			//session()->forget('upaid');
@@ -757,7 +764,7 @@ public function send_sms($class,$section,$exam,$session)
 				      $gradsystem ='';
 					}
 
-		 $formdata = new formfoo;
+		 $formdata = new formfoo5;
 		$formdata->class="";
 		$formdata->section="";
 		$formdata->shift="";
@@ -1009,7 +1016,7 @@ public function send_sms($class,$section,$exam,$session)
 
 	public function search()
 	{
-		$formdata = new formfoo;
+		$formdata = new formfoo5;
 		$formdata->exam="";
 		$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
 		//return View::Make('app.resultsearch',compact('formdata','classes'));
@@ -1034,7 +1041,7 @@ public function send_sms($class,$section,$exam,$session)
 	}
 	public function searchpub()
 	{
-		$formdata = new formfoo;
+		$formdata = new formfoo5;
 		$formdata->exam="";
 		$classes = ClassModel::select('code','name')->orderby('code','asc')->get();
 		//return View::Make('app.resultsearchpublic',compact('formdata','classes'));

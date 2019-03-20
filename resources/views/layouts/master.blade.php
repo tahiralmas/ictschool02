@@ -1,7 +1,14 @@
 <?php 
 use App\Http\Controllers\instituteController;
+use App\Http\Controllers\permissionController;
 $get_grad = new instituteController;
 $system_grade = $get_grad->index1();
+$get_permission = new permissionController;
+$permissions  = $get_permission->get_permission_by_role();
+$permision =array();
+foreach($permissions as $permission){
+$permision[] = $permission->permission_name;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -387,28 +394,47 @@ user-select: none !important;
                                 <li><a href="/level/list">Levels List</a></li>
                             </ul>
                         </li> */ ?>
+                         @if(in_array('class_add',$permision) || in_array('class_update',$permision) || in_array('class_delete',$permision) || in_array('class_view',$permision))
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-home"></i><span> Class</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="{{url('/class/create')}}">Add New</a></li>
-                                <li><a href="{{url('/class/list')}}">Class List</a></li>
+                                @if(in_array('class_add',$permision))
+                                    <li><a href="{{url('/class/create')}}">Add New</a></li>
+                                @endif
+                                @if( in_array('class_update',$permision) || in_array('class_delete',$permision) || in_array('class_view',$permision))
+                                    <li><a href="{{url('/class/list')}}">Class List</a></li>
+                                @endif
                             </ul>
                         </li>
-                        
+                        @endif
+                        @if(in_array('section_add',$permision) || in_array('section_update',$permision) || in_array('section_delete',$permision) || in_array('section_time_table',$permision) || in_array('section_view',$permision))
                           <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-folder-open"></i><span> Section</span></a>
                             <ul class="nav nav-pills nav-stacked">
+                                @if(in_array('section_add',$permision))
                                 <li><a href="{{url('/section/create')}}">Add New</a></li>
+                                @endif
+                                 @if(in_array('section_view',$permision))
                                 <li><a href="{{url('/section/list')}}">Section List</a></li>
+                                @endif
                             </ul>
                         </li>
+                        @endif
+                        @if(in_array('subject_view',$permision) || in_array('subject_add',$permision) || in_array('subject_update',$permision) || in_array('subject_delete',$permision))
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-book"></i><span> Subject</span></a>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="{{url('/subject/create')}}">Add New</a></li>
-                                <li><a href="{{url('/subject/list')}}">Subject List</a></li>
+                               @if(in_array('subject_add',$permision))
+                                    <li><a href="{{url('/subject/create')}}">Add New</a></li>
+                                @endif  
+                                @if(in_array('subject_view',$permision)) 
+                                    <li><a href="{{url('/subject/list')}}">Subject List</a></li>
+                                @endif
                             </ul>
                         </li>
+                        @endif
+
+
 
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-hdd"></i><span> Paper Management</span></a>
@@ -418,20 +444,29 @@ user-select: none !important;
                                 <li><a href="{{url('/paper/generate')}}"> Generate Paper</a></li>
                             </ul>
                         </li>
+
+                         @if(in_array('student_view',$permision) || in_array('student_add',$permision) || in_array('student_delete',$permision) || in_array('student_student_bulk_add',$permision))
                         <li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-user"></i><span> Student</span></a>
                             <ul class="nav nav-pills nav-stacked">
+                                @if(in_array('student_student_bulk_add',$permision))
                                 <li><a href="{{url('/student/create-file')}}">Add from file</a></li>
+                                @endif
+                                @if(in_array('student_add',$permision))
                                 <li><a href="{{url('/student/create')}}">Add New</a></li>
+                                @endif
+                                @if(in_array('student_view',$permision))
                                 <li><a href="{{url('/student/list')}}">Student List</a></li>
+                                @endif
                                 @if(family_check()=='on')
                                 <li><a href="{{url('/family/list')}}">Family List</a></li>
                                 @endif
-
                             </ul>
                         </li>
                         @endif
-                         <li class="accordion">
+                        
+                        @endif
+                        {{--<li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-text-width"></i><span> Teacher</span></a>
                             <ul class="nav nav-pills nav-stacked">
                             @if (Session::get('userRole') =="Admin")
@@ -444,8 +479,28 @@ user-select: none !important;
                                 @endif
 
                             </ul>
+                        </li>--}}
+                          @if(in_array('teacher_view',$permision) || in_array('teacher_add',$permision) || in_array('teacher_delete',$permision) || in_array('add_teacher_bulk_add',$permision))
+                         <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-text-width"></i><span> Teacher</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                              @if(in_array('add_teacher_bulk_add',$permision))
+                                <li><a href="{{url('/teacher/create-file')}}">Add from file</a></li>
+                              @endif
+                              @if(in_array('teacher_add',$permision))
+                                <li><a href="{{url('/teacher/create')}}">Add New</a></li>
+                              @endif
+                               @if(in_array('teacher_view',$permision))
+                                <li><a href="{{url('/teacher/list')}}">Teacher List</a></li>
+                             @endif
+                            @if(in_array('teacher_timetable_add',$permision))
+                                <li><a href="{{url('/teacher/create-timetable')}}">Timetable Management</a></li>
+                            @endif
+
+                            </ul>
                         </li>
-                        <li class="accordion">
+                        @endif
+                        {{--<li class="accordion">
                            <a href="#"><i class="glyphicon glyphicon-pencil"></i><span> Attendance</span></a>
                            <ul class="nav nav-pills nav-stacked">
                            @if (Session::get('userRole') =="Admin")
@@ -457,7 +512,27 @@ user-select: none !important;
                                 <li><a href="{{url('/attendance/monthly-report')}}"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report</a></li>
                                 <!--<li><a href="/teacher-attendance/monthly-report-2"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report Two</a></li>-->
                            </ul>
+                       </li>--}}
+
+                       @if(in_array('add_student_attendance',$permision) || in_array('view_student_attendance',$permision) || in_array('view_student_monthly_reports',$permision))
+                        <li class="accordion">
+                           <a href="#"><i class="glyphicon glyphicon-pencil"></i><span> Attendance</span></a>
+                           <ul class="nav nav-pills nav-stacked">
+                        
+                              <!-- <li><a href="/attendance/create-file">Add from file</a></li>-->
+                            @if(in_array('add_student_attendance',$permision))
+                               <li><a href="{{url('/attendance/create')}}">Add</a></li>
+                            @endif 
+                            @if(in_array('view_student_attendance',$permision))
+                               <li><a href="{{url('/attendance/list')}}">View</a></li>
+                            @endif
+                            @if(in_array('view_student_monthly_reports',$permision))
+                                <li><a href="{{url('/attendance/monthly-report')}}"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report</a></li>
+                            @endif
+                                <!--<li><a href="/teacher-attendance/monthly-report-2"><i class="glyphicon glyphicon-print"></i> Monthly Attendance Report Two</a></li>-->
+                           </ul>
                        </li>
+                       @endif
 
                       {{--<li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-bullhorn"></i><span> Papers</span></a>
@@ -466,15 +541,29 @@ user-select: none !important;
                                 <li><a href="{{url('/paper/list')}}">Paper List</a></li>
                             </ul>
                         </li>--}}
-                    <li class="accordion">
+                    {{--<li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-fire"></i><span> Exams</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="{{url('/exam/create')}}">Add New</a></li>
                                 <li><a href="{{url('/exam/list')}}">Exam List</a></li>
                             </ul>
-                        </li>
+                        </li>--}}
+
+                         @if(in_array('exam_view',$permision) || in_array('exam_add',$permision))
+                          <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-fire"></i><span> Exams</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                @if(in_array('exam_add',$permision))
+                                <li><a href="{{url('/exam/create')}}">Add New</a></li>
+                                @endif
+                                @if(in_array('exam_view',$permision))
+                                <li><a href="{{url('/exam/list')}}">Exam List</a></li>
+                                @endif
+                            </ul>
+                          </li>
+                        @endif
                    
-                        <li class="accordion">
+                        {{--<li class="accordion">
                             <a href="#"><i class="glyphicon glyphicon-list-alt"></i><span> Mark Manage</span></a>
                             <ul class="nav nav-pills nav-stacked">
                              @if($system_grade=='' || $system_grade=='auto')
@@ -487,9 +576,33 @@ user-select: none !important;
                                 <li><a href="{{url('/template/creates')}}">Template</a></li>
                             @endif
                             </ul>
-                        </li>
-                        @if (Session::get('userRole') =="Admin")
+                        </li>--}}
+
+                        @if(in_array('add_marks',$permision) || in_array('view_marks',$permision))
                         <li class="accordion">
+                            <a href="#"><i class="glyphicon glyphicon-list-alt"></i><span> Mark Manage</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                @if($system_grade=='' || $system_grade=='auto')
+                                    @if(in_array('add_marks',$permision))
+                                    <li><a href="{{url('/mark/create')}}">Add New</a></li>
+                                    @endif
+                                    @if(in_array('view_marks',$permision))
+                                    <li><a href="{{url('/mark/list')}}">Marks List</a></li>
+                                    @endif
+                                @else
+                                    @if(in_array('add_marks',$permision))
+                                    <li><a href="{{url('/mark/m_create')}}">Add New</a></li>
+                                    @endif
+                                    @if(in_array('view_marks',$permision))
+                                    <li><a href="{{url('/mark/m_list')}}">Marks List</a></li>
+                                    @endif
+                                @endif
+                                <li><a href="{{url('/template/creates')}}">Template</a></li>
+                            </ul>
+                        </li>
+                       @endif
+                        @if (Session::get('userRole') =="Admin")
+                        {{--<li class="accordion">
                             <a href="#"><i class="glyphicon  glyphicon glyphicon-list"></i><span> Result</span></a>
                             <ul class="nav nav-pills nav-stacked">
                                 <li><a href="{{url('/result/generate')}}">Generate</a></li>
@@ -497,11 +610,27 @@ user-select: none !important;
                                 <li><a href="{{url('/results')}}">Search Public</a></li>
 
                             </ul>
+                        </li>--}}
+                        @if(in_array('generate_result',$permision) || in_array('search_result',$permision))
+                        <li class="accordion">
+                            <a href="#"><i class="glyphicon  glyphicon glyphicon-list"></i><span> Result</span></a>
+                            <ul class="nav nav-pills nav-stacked">
+                                @if(in_array('generate_result',$permision))
+                                <li><a href="{{url('/result/generate')}}">Generate</a></li>
+                                @endif
+                                @if(in_array('search_result',$permision))
+                                <li><a href="{{url('/result/search')}}">Search</a></li>
+                                <li><a href="{{url('/results')}}">Search Public</a></li>
+                                @endif
+                            </ul>
                         </li>
+                        @endif
+                         @if(in_array('promote_student',$permision) )
                         <li class="">
                             <a href="{{url('/promotion')}}"><i class="glyphicon glyphicon-arrow-up"></i><span> Promotion</span></a>
 
                         </li>
+                        @endif
                         
                         
                       {{--<li class="accordion">
@@ -516,10 +645,11 @@ user-select: none !important;
                             <a href="{{url('/template/create')}}"><i class="glyphicon glyphicon-folder-open"></i><span> Fee Collection Message</span></a>
                         </li>--}}
 
-
+                        @if(in_array('send_notification',$permision) )
                         <li class="">
                             <a href="{{url('/message')}}"><i class="glyphicon glyphicon-envelope"></i><span> Voice / SMS</span></a>
                         </li>
+                        @endif
                        <!-- <li class="accordion">
                             <a href="#"><i class="glyphicon  glyphicon glyphicon-list-alt"></i><span> Accounting</span></a>
                             <ul class="nav nav-pills nav-stacked">
@@ -575,6 +705,7 @@ user-select: none !important;
                                   <li><a href="{{url('/ictcore?type=voice')}}">Voice Integration</a></li>
                                   <li><a href="{{url('/notification_type')}}">Notification Types</a></li>
                                   <li><a href="{{url('/ictcore/attendance')}}">Notifications</a></li>
+                                  <li><a href="{{url('/permission')}}">Permission</a></li>
                                   <!--<li><a href="{{url('/ictcore/fees')}}">Fees Message</a></li>
                                   -->
                                  <!-- <li><a href="{{url('/template/create')}}">Add Message</a></li>
@@ -777,7 +908,7 @@ $(document).ready(function(){
           data:{query:query, _token:_token},
           success:function(data){
            $('#studentListd').fadeIn();  
-                    $('#studentListd').html(data);
+           $('#studentListd').html(data);
           }
          });
         }
@@ -786,7 +917,9 @@ $(document).ready(function(){
      
      
     $('#studentListd').on('click', 'li', function() { 
-         $('#student_name').val($(this).text());  
+        // $('#student_name').val($(this).text());  
+         var sd_id = $(this).attr('data-sid'); 
+         $('#student_name').val(sd_id);
          $('#studentListd').fadeOut(); 
          $( "#navbar_search" ).submit(); 
     });

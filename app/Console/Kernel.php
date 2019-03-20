@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
     '\App\Console\Commands\feeNotification',
     '\App\Console\Commands\attendanceNotification',
     '\App\Console\Commands\DiaryJob',
+    '\App\Console\Commands\Invoicegenrated',
     ];
 
     /**
@@ -57,6 +58,8 @@ class Kernel extends ConsoleKernel
                 $diary_time = $data_diary[0]; 
                 $schedule->command('DiaryJob:notification')->dailyAt($diary_time)->timezone('Asia/Karachi');
             }
+
+            $schedule->command('Invoice:genrate')->monthlyOn(1, '00:00')->timezone('Asia/Karachi');
     }
 
     /**

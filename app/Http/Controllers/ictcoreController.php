@@ -71,7 +71,7 @@ class ictcoreController {
 			}else{
 				$url =Input::get('ictcore_url');
 			}
-			
+			//echo $url;exit;
 			DB::table("ictcore_integration")->where('type',Input::get('type'))->delete();
 			$ictcore_integration=new Ictcore_integration;
 			$ictcore_integration->ictcore_url =$url;
@@ -109,10 +109,10 @@ class ictcoreController {
 	{
 		//echo  "<pre>";print_r(Input::all());
 		//exit;
-     $ictcore_late =	DB::table('ictcore_attendance')->select('*')->where('late_file',Input::get('message_late'))->first();
+     $ictcore_late   =	DB::table('ictcore_attendance')->select('*')->where('late_file',Input::get('message_late'))->first();
      $ictcore_absent =	DB::table('ictcore_attendance')->select('*')->where('recording',Input::get('message_absent'))->first();
 				   //echo "<pre>";print_r($ictcore_attendance );exit;
-	 $ictcore_fess =	DB::table('ictcore_fees')->select('*')->where('recording',Input::get('fee_message'))->first();
+	 $ictcore_fess   =	DB::table('ictcore_fees')->select('*')->where('recording',Input::get('fee_message'))->first();
 		if(!empty($ictcore_late) ){
 			$late = 'message_late' .'=>'. 'required';
 		}else{
@@ -154,19 +154,19 @@ class ictcoreController {
 				   //echo "<pre>";print_r($ictcore_attendance );exit;
 				$ictcore_fess =	DB::table('ictcore_fees')->select('*')->first();
 				 $name_absent = Input::get('title_abent');
-				 $name_late = Input::get('title_late');
-				 $name_fee = Input::get('fee_title');
+				 $name_late   = Input::get('title_late');
+				 $name_fee    = Input::get('fee_title');
                  
 
                  $recording_id_absent = '';
-                 $program_id_absent = '';
-	             $recording_id_late = '';
-	             $program_id_late   = '';
-	             $upload_audio_ab   = '';
-	             $upload_audio_lt   = '';
-	             $upload_audio_fe   = '';
-	             $recording_id_fee   = '';
-	             $program_id_fee   = '';
+                 $program_id_absent   = '';
+	             $recording_id_late   = '';
+	             $program_id_late     = '';
+	             $upload_audio_ab     = '';
+	             $upload_audio_lt     = '';
+	             $upload_audio_fe     = '';
+	             $recording_id_fee    = '';
+	             $program_id_fee      = '';
 
                //if($ictcore_integration->method=="telenor" && $attendance_noti->type=='voice'){
                   
@@ -401,10 +401,10 @@ class ictcoreController {
                         /////////////END//////////////
                         }
                    }else{
-                    	 $upload_audio_fe = $ictcore_fess->telenor_file_id;
-                    	 $fileName_fee   = $ictcore_fess->recording;
+                    	 $upload_audio_fe     = $ictcore_fess->telenor_file_id;
+                    	 $fileName_fee        = $ictcore_fess->recording;
                           $recording_id_fee   = $ictcore_fess->ictcore_recording_id;
-	                       $program_id_fee   = $ictcore_fess->ictcore_program_id;
+	                       $program_id_fee    = $ictcore_fess->ictcore_program_id;
 
                     }
                 }else{

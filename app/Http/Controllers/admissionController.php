@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\ClassModel;
 use DB;
-Class formfoo{
+Class formfoo6{
 
 
 }
@@ -195,7 +195,7 @@ private function getSeatNo($class)
 public function applicants()
 {
 	$classes = ClassModel::pluck('name','code');
-	$formdata = new formfoo;
+	$formdata = new formfoo6;
 	$formdata->class = "";
 	$formdata->session = "";
 	$students=array();
@@ -224,7 +224,7 @@ public function postapplicants()
 
 
 		$classes = ClassModel::pluck('name','code');
-		$formdata = new formfoo;
+		$formdata = new formfoo6;
 		$formdata->class=Input::get('class');
 		$formdata->session=Input::get('session');
 		//return View::Make('app.applicantList',compact('classes','formdata','students'));

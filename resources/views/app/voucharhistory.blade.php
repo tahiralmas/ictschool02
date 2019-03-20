@@ -49,7 +49,8 @@
                   <th>Bill No</th>
                   <th>Payable Amount</th>
                   <th>Paid Amount</th>
-                  <th>Due Amount</th>
+                  {{--<th>Due Amount</th>--}}
+                  <th>Status</th>
                   <th>Pay Date</th>
                   <th>Action</th>
                 </tr>
@@ -58,14 +59,18 @@
                 @foreach($fees as $fee)
                 <tr>
                   <td><a class="btnbill" href="#">{{$fee->billNo}}</a></td>
-                  <td>{{$fee->payableAmount}}</td>
+                  <td>{{$fee->total_fee}}</td>
                   <td>{{$fee->paidAmount}}</td>
-                  <td>{{$fee->dueAmount}}</td>
+                  {{--<td>{{$fee->dueAmount}}</td>--}}
+                  {{--<td>{{$fee->dueAmount}}</td>--}}
+                  <td>@if($fee->paidAmount=='0.00')<button  class="btn btn-danger" >UnPaid</button>@else <button  class="btn btn-success" >Paid</button>@endif</td>
                   <td>{{$fee->date}}</td>
 
                   <td>
-                    <a title='Paid' class='btn btn-success' href='{{url("/fees/paid")}}/{{$fee->billNo}}'> Paid</a>
+                    @if($fee->paidAmount=='0.00')<a title='Paid' class='btn btn-success' onclick="return confirm('Are you sure you want to paid?');" href='{{url("/fees/paid")}}/{{$fee->billNo}}'> Paid</a>@else
+                    <a title='Paid' class='btn btn-danger' onclick="return confirm('Are you sure you want to unpaid?');" href='{{url("/fees/paid")}}/{{$fee->billNo}}?s=unpaid'> UnPaid</a>@endif
                   </td>
+                </tr>
                   @endforeach
                 </tbody>
               </table>
@@ -80,9 +85,9 @@
 
                   <tr>
                     <td></td>
-                    <td>Total Payable: <strong><i class="blue">{{$totals->payTotal}}</i></strong> rs.</td>
+                    <td>Total Payable: <strong><i class="blue">{{$totals->payTotal - $totals->paiTotal}}</i></strong> rs.</td>
                     <td>Total Paid: <strong><i class="blue">{{$totals->paiTotal}}</i></strong> rs.</td>
-                    <td>Total Due: <strong><i class="blue">{{$fee->dueAmount}}</i></strong> rs.</td>
+                    <td>Total Due: <strong><i class="blue">{{$totals->dueamount}}</i></strong> rs.</td>
                     <td></td>
 
                   {{--<td>
@@ -95,9 +100,6 @@
 
             </div>
             @endif
-
-
-
           </div>
         </div>
       </div>

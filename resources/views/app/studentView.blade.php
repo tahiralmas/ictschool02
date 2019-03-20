@@ -365,6 +365,20 @@
                 <a href='{{url("/fee/detail?class=$student->class_code&section=$student->section&regiNo=$student->regiNo")}}'><h4>Fees Detail</h4></a>
               </div>
             </div>
+            {{--@if(accounting_check()!='' && accounting_check()=='yes' )
+              --}}
+              <div class="row">
+                <div class="col-md-12">
+                  <a href='{{url("/fee/vouchar?class=$student->class_code&section=$student->section&regiNo=$student->regiNo")}}'><h4>Create Fee Vouchar</h4></a>
+                  <a href='{{url("/fee/get_vouchar?class=$student->class_code&section=$student->section&session=$student->session&type=Monthly&month=$month&fee_name=$fee_name&regiNo=$student->regiNo")}}'><h4>Get Vouchar</h4></a>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <a href='{{url("/fee/vouchar/history?class=$student->class_code&section=$student->section&regiNo=$student->regiNo")}}'><h4>Fee Vouchar History</h4></a>
+                </div>
+              </div>
+            {{--@endif--}}
             <div class="row">
               <div class="col-md-12">
                 <a href='{{url("attendance/monthly-report?_token=csrf_token()&search=yes&student_name=&print_view=1&class=$student->class_code&section=$student->section&shift=Morning&session=$student->session&yearMonth=$year-$month&type=count&regiNo=$student->regiNo")}}'><h4>Attendance Detail</h4></a>
@@ -429,7 +443,7 @@
       var text_max = 160;
       $('#typing').html(text_max + ' characters remaining');
       $('#message').keyup(function() {
-          var text_length = $('#message').val().length;
+          var text_length    = $('#message').val().length;
           var text_remaining = text_max - text_length;
           if(text_remaining>0){
             $('#typing').removeClass();

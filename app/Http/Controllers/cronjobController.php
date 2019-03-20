@@ -58,7 +58,9 @@ class cronjobController extends BaseController {
 		           // return Redirect::to('/fees/classreport')->withErrors("Please Add ictcore integration in Setting Menu");
                     exit();
 		     	}
-		     }$contacts =array();
+		     }
+		     $contacts =array();
+		     $i=0;
 				foreach($student_all as $stdfees)
 				{
 
@@ -97,6 +99,11 @@ class cronjobController extends BaseController {
 					   $group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
 					 }
 					}
+
+					if($i==5){
+						break;
+					}
+					$i++;
 				}
 
 				if($ictcore_integration->method=="telenor" && !empty($contacts)){
@@ -109,7 +116,7 @@ class cronjobController extends BaseController {
 			    exit;*/
 			    //echo "<pre>rrtrt";print_r($group_contact_id);exit;
 			}
-			}
+		}
 			else{
 			//$resultArray = array();
 				exit();
@@ -131,13 +138,44 @@ class cronjobController extends BaseController {
 
 			    }else{
 			    if(!empty($ictcore_fees) && $ictcore_fees->ictcore_program_id!=''){
+		                
+		                if($attendance_noti->type=='sms'){
+		                	////////Send sms campaign using ictcore///////////////
+
+		                	$fee_msg = DB::table('ictcore_fees');
+			                   if($fee_msg->count()>0 && $fee_msg->first()->description!=''){
+			                   	$msg = $fee_msg->first()->description;
+			                   }else{
+			                   	$msg= "please submit your child  fee for this month";
+			                   }
+									
+									$data = array(
+													'name' => 'fee_noti',
+													'data' => $msg,
+													'type' => 'utf-8',
+													'description' =>'',
+											);
+									$text_id  =  $ict->ictcore_api('messages/texts','POST',$data );
+									$data     = array(
+													'name' =>'fee_noti',
+													'text_id' =>$text_id,
+												);
+									$program_id  =  $ict->ictcore_api('programs/sendsms','POST',$data );
+
+
+		                	$program_id =$program_id ;
+		                }else{
+		                	$program_id = $ictcore_fees->ictcore_program_id;
+		                }
+
 	                $data = array(
-						'program_id' => $ictcore_fees->ictcore_program_id,
-						'group_id' => $group_id,
-						'delay' => '',
+						'program_id' => $program_id,
+						'group_id'   => $group_id,
+						'delay'      => '',
 						'try_allowed' => '',
 						'account_id' => 1,
 					);
+					//echo ""
 					$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
 					//$campaign_id = $ict->ictcore_api('campaigns/$campaign_id/start','PUT',$data=array() );
 			}

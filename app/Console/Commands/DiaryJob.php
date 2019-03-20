@@ -51,7 +51,7 @@ class DiaryJob extends Command
     public function handle()
     {
         if(Storage::disk('local')->exists('/public/cronsettingdiary.txt')){
-            $section_ids = DB::table('diaries')->where('diary_date',Carbon::today()->toDateString())->pluck('section');
+            $section_ids    = DB::table('diaries')->where('diary_date',Carbon::today()->toDateString())->pluck('section');
             $get_students   = Student::where('session',get_current_session()->id)
                                     ->where('isActive','Yes')
                                     ->whereIn('section',$section_ids)
@@ -62,11 +62,10 @@ class DiaryJob extends Command
                             //$this->info($student->fatherCellNo.'diary'.$diary->diary);
                             //break;
                             $name = $student->firstName.$student->lastName;
-                           $check[$student->firstName.$student->lastName]=$this->send_sms($student->class,$student->section,$student->fatherCellNo,$name);
-                          break;
+                            $check[$student->firstName.$student->lastName]=$this->send_sms($student->class,$student->section,$student->fatherCellNo,$name);
+                            break;
                         }
                         echo "<pre>";print_r($check);
-
                     }
 
 
@@ -121,7 +120,11 @@ class DiaryJob extends Command
                 }
                 
                 $msg = $body ;
-                $snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
+                if($ictcore_integration->method!='ictcore'){
+                    $snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
+                }else{
+                   $send_msg_ictcore = sendmesssageictcore('','',$to,$msg,'dairy'); 
+                }
                 return 200;
 
                 //

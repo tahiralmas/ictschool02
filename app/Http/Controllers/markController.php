@@ -15,7 +15,7 @@ use App\Message;
 use Storage;
 use DB;
 use App\Http\Controllers\ictcoreController;
-Class formfoo{
+Class foobar4{
 
 }
 class markController extends BaseController {
@@ -336,7 +336,7 @@ class markController extends BaseController {
 	public function show()
 	{
 
-		$formdata = new formfoo;
+		$formdata = new foobar4;
 		$formdata->class="";
 		$formdata->section="";
 		$formdata->shift="";
@@ -355,7 +355,7 @@ class markController extends BaseController {
 	public function m_show()
 	{
 
-		$formdata = new formfoo;
+		$formdata = new foobar4;
 		$formdata->class="";
 		$formdata->section="";
 		$formdata->shift="";
@@ -404,7 +404,7 @@ class markController extends BaseController {
 			->where('Marks.exam','=',Input::get('exam'))
 			->get();
 
-			$formdata = new formfoo;
+			$formdata = new foobar4;
 			$formdata->class=Input::get('class');
 			$formdata->section=Input::get('section');
 			$formdata->shift=Input::get('shift');
@@ -458,7 +458,7 @@ class markController extends BaseController {
 			->where('Marks.exam','=',Input::get('exam'))
 			->get();
 
-			$formdata          = new formfoo;
+			$formdata          = new foobar4;
 			$formdata->class   = Input::get('class');
 			$formdata->section = Input::get('section');
 			$formdata->shift   = Input::get('shift');
@@ -918,7 +918,13 @@ class markController extends BaseController {
 		}
 		
 		$msg = $body ;
+		if($ictcore_integration->method!='ictcore'){
 		$snd_msg  = $ict->verification_number_telenor_sms($to,$msg,'SidraSchool',$ictcore_integration->ictcore_user,$ictcore_integration->ictcore_password,'sms');
+		
+		}else{
+			$send_msg_ictcore = sendmesssageictcore($student->firstName,$student->lastName,$to,$msg,'marks');
+		}
+
 		return 200;
 	}
 

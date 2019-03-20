@@ -65,9 +65,8 @@ class UsersController extends BaseController {
       //$id = request()->session()->pull('adminID', 0);
       if(Auth::loginUsingId($id)) {
         //request()->session()->flush();
-        $name=Auth::user()->firstname.' '.Auth::user()->lastname;
-         
-          $login=Auth::user()->group;
+        $name  = Auth::user()->firstname.' '.Auth::user()->lastname;
+        $login = Auth::user()->group;
         \Session::put('name', $name);
         \Session::put('userRole', $login);
         return redirect('/dashboard');
@@ -80,18 +79,18 @@ class UsersController extends BaseController {
   } 
   public function dologin($id,$usr_id) {
     $user = User::find($id);
-     request()->session()->forget('isAdmin');
-     request()->session()->forget('adminID');
-     request()->session()->forget('surl');
+    request()->session()->forget('isAdmin');
+    request()->session()->forget('adminID');
+    request()->session()->forget('surl');
     request()->session()->put('isAdmin', 1);
     request()->session()->put('adminID', $usr_id);
     
    // echo request()->root();
     //echo "<pre>rr".request()->session()->get('adminID')."tt";print_r($user);
     if (Auth::loginUsingId($id)) {
-         $name=Auth::user()->firstname.' '.Auth::user()->lastname;
-         
-          $login=Auth::user()->group;
+        
+        $name  = Auth::user()->firstname.' '.Auth::user()->lastname;
+        $login = Auth::user()->group;
         \Session::put('name', $name);
         \Session::put('userRole', $login);
         //echo "adeel";

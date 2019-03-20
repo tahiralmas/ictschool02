@@ -139,12 +139,12 @@ class StudentController extends Controller
     {
          //$student = Student::find($student_id);
     	  $student = DB::table('Student')
-    	 ->join('Class', 'Student.class', '=', 'Class.code')
-		  ->select('Student.id', 'Student.regiNo', 'Student.rollNo','Student.b_form as Bform', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		  'Class.Name as class','Student.section','Student.session' ,'Student.group','Student.session','Student.presentAddress','Student.dob','Student.gender', 'Student.religion')
-		    ->where('Student.isActive','Yes')
-            ->where('Student.id',$student_id)
-            ->first();
+                	 ->join('Class', 'Student.class', '=', 'Class.code')
+            		 ->select('Student.id', 'Student.regiNo', 'Student.rollNo','Student.b_form as Bform', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+            		  'Class.Name as class','Student.section','Student.session' ,'Student.group','Student.session','Student.presentAddress','Student.dob','Student.gender', 'Student.religion')
+            		  ->where('Student.isActive','Yes')
+                      ->where('Student.id',$student_id)
+                      ->first();
 
         if(!empty($student)){
            return response()->json($student,200);
@@ -177,22 +177,22 @@ class StudentController extends Controller
 	{
 		//return response()->json(['student'=>$student_id]);
 		$rules=[
-		'firstname' => 'required',
-		'lastname' => 'required',
-         'dob'   => 'required',
-         'regiNo'  => 'required',
-         'rollNo' => 'required',
-        'gender' => 'required',
-         'religion' => 'required',
-		'gender' => 'required',
-		'session' => 'required',
-		'class' => 'required',
-		'section' => 'required',
-		'presentaddress' => 'required',
-		'fathercellno'  =>'required',
-		'fathername'  =>'required',
-        'mothername' => 'required',
-        'mothercellno' => 'required',
+    		'firstname' => 'required',
+    		'lastname' => 'required',
+            'dob'   => 'required',
+            'regiNo'  => 'required',
+            'rollNo' => 'required',
+            'gender' => 'required',
+            'religion' => 'required',
+    		'gender' => 'required',
+    		'session' => 'required',
+    		'class' => 'required',
+    		'section' => 'required',
+    		'presentaddress' => 'required',
+    		'fathercellno'  =>'required',
+    		'fathername'  =>'required',
+            'mothername' => 'required',
+            'mothercellno' => 'required',
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())

@@ -3,6 +3,7 @@ use App\ClassModel;
 use App\Subject;
 use App\AcadamicYear;
 use App\Student;
+use App\Http\Controllers\ictcoreController;
 //use Storage;
 class emtysession{
 
@@ -239,3 +240,50 @@ if(! function_exists('gettyperesult')){
 	  return $data ;
 	}
 }
+
+if(! function_exists('sendmesssageictcore')){
+
+	function sendmesssageictcore($first_name,$last_name,$to,$message,$m_name)
+	{
+		//exit;
+		$ict  = new ictcoreController();
+		$data = array(
+					'first_name' =>$first_name,
+					'last_name'  =>$last_name,
+					'phone'      =>$to,
+					'email'      =>''
+				);
+		$contact_id = $ict->ictcore_api('contacts','POST',$data );
+		
+		$data = array(
+						'name' => $m_name,
+						'data' => $message,
+						'type' => 'utf-8',
+						'description' =>'',
+				);
+		$text_id  =  $ict->ictcore_api('messages/texts','POST',$data );
+		$data     = array(
+						'name' =>$m_name,
+						'text_id' =>$text_id,
+					);
+		$program_id  =  $ict->ictcore_api('programs/sendsms','POST',$data );
+
+		$data = array(
+						'title' => 'Attendance',
+						//$program_id,
+						'program_id' =>$program_id,
+						'account_id'     => 1,
+						'contact_id'     => $contact_id,
+						'origin'     => 1,
+						'direction'     => 'outbound',
+					);
+		$transmission_id   = $ict->ictcore_api('transmissions','POST',$data );
+		$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
+	  	if(!is_array($transmission_send) || !is_object($transmission_send)){
+	  		$transmission_send = 'sended';
+	  	}
+	  	return $transmission_send;
+	}
+
+}
+

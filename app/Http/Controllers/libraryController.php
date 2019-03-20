@@ -15,7 +15,7 @@ use App\Institute;
 use App\FeeHistory;
 use App\Issuebook;
 use DB;
-class formfoo{
+class formfoo7{
 }
 
 class libraryController extends BaseController {
@@ -94,7 +94,7 @@ class libraryController extends BaseController {
 		//$classes = array('All'=>'All')+ClassModel::pluck('name','code');
 		$classes = ClassModel::pluck('name','code');
 		$classes = $classes->toArray('All' , 'All') ;
-		$formdata = new formfoo;
+		$formdata = new formfoo7;
 		$formdata->class = "";
 		$books=array();
 		//return View::Make('app.booklist',compact('classes','formdata','books'));
@@ -124,7 +124,7 @@ class libraryController extends BaseController {
 		$classes = ClassModel::pluck('name','code');
 		$classes = $classes->toArray('All' , 'All') ;
 		//$classes = array('All' => 'All')+ClassModel::pluck('name','code');
-		$formdata = new formfoo;
+		$formdata = new formfoo7;
 		$formdata->class = Input::get('classcode');
 		//return View::Make('app.booklist',compact('classes','formdata','books'));
 		return View('app.booklist',compact('classes','formdata','books'));

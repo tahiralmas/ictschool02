@@ -44,7 +44,6 @@
 $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,'login');
 //$get_students = branchesapi($branch->username,$branch->password,$branch->branch_url,'students/count');
 //$get_classes = branchesapi($branch->username,$branch->password,$branch->branch_url,'classes/count');
-
 //echo "<pre>";print_r($get_data->current);exit;
  ?>
 <div class="box col-md-4">
@@ -114,21 +113,16 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
                 <div class="col-md-6 col-sm-6 col-xs-6">
                   <a data-toggle="tooltip" title="6 new members." class="well top-block" href="#">
                   <i class="glyphicon glyphicon-user blue"></i>
-
                   <div>Total Paid</div>
                   <div>@if(is_object($get_data)) {{$get_data->fess[0]->ourallpaid}} @endif</div>
-                  
                   </a>
-                  
                 </div>
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
                   <div class="form-group">
                       <a href="{{$branch->branch_url}}/login/{{$get_data->admin_id}}/{{Auth::user()->id}}" class="btn btn-primary btn-block btn-sm ml-1" target="_blank">More Detail</a>
                   </div>
-
                 </div>
-
             </div>
 
         </div>

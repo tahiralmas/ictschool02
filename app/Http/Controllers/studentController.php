@@ -17,7 +17,7 @@ use Carbon\Carbon;
 class foobar{
 
 }
-Class formfoo{
+Class formfoo2{
 
 }
 class studentController extends BaseController {
@@ -67,7 +67,7 @@ class studentController extends BaseController {
 		      {
 		      	$section = DB::table('section')->where('id',$row->section)->first();
 		       $output .= '
-		       <li><a href="#">'.$row->firstName.''.$row->lastName.' (class = '.$row->class.')'.'(sectoion = '.$section->name.')'.'(regiNo = '.$row->regiNo.')'.'(session = '.$row->session.')'.'</a></li>
+		       <li data-sid="'.$row->id.'"><a href="#">'.$row->firstName.''.$row->lastName.' (class = '.$row->class.')'.'(sectoion = '.$section->name.')'.'(regiNo = '.$row->regiNo.')'.'(session = '.$row->session.')'.'</a></li>
 		       ';
 		      }
 		      $output .= '</ul>';
@@ -378,7 +378,7 @@ public function show()
 {
 	$students=array();
 	$classes = ClassModel::pluck('name','code');
-	$formdata = new formfoo;
+	$formdata = new formfoo2;
 	$formdata->class="";
 	$formdata->section="";
 	$formdata->shift="";
@@ -410,7 +410,7 @@ if(Input::get('search')==''){
 
 		if(Input::get('search')=='yes'){
          //echo Input::get('student_name');
-            $exp       = explode('(',Input::get('student_name'));
+            /*$exp       = explode('(',Input::get('student_name'));
          	$class     = explode(')',$exp[1]);
          	$section   = explode(')',$exp[2]);
          	$regiNo    = explode(')',$exp[3]);
@@ -418,16 +418,20 @@ if(Input::get('search')==''){
          	$class1    = explode('=',$class[0]);
          	$section1  = explode('=',$section[0]);
          	$regiNo1   = explode('=',$regiNo[0]);
-         	$session1  = explode('=',$session[0]);
-	         $students = DB::table('Student')
+         	$session1  = explode('=',$session[0]);*/
+
+	        $students = DB::table('Student')
 			->join('Class', 'Student.class', '=', 'Class.code')
 			->join('section', 'Student.section', '=', 'section.id')
 			->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
 			'Class.Name as class','Class.code as class_code', 'Student.presentAddress', 'Student.gender', 'Student.session','section.name','section.id as section_id')
 			->where('Student.isActive', '=', 'Yes')
-			->where('session',trim($session1[1]))
-			->where('regiNo',trim($regiNo1[1]))
+			->where('Student.id',trim(Input::get('student_name')))
+			//->where('session',trim($session1[1]))
+			//->where('regiNo',trim($regiNo1[1]))
 			->first();
+			//echo "<pre>ffdf";print_r($students);
+			//exit;
          	return Redirect::to('student/view/'.$students->id);
 		}else{
 		$class_code	=Input::get('class');
@@ -453,7 +457,7 @@ if(Input::get('search')==''){
 		}
 		else {
 			$classes = ClassModel::pluck('name','code');
-			$formdata = new formfoo;
+			$formdata = new formfoo2;
 			$formdata->class=Input::get('class');
 			$formdata->section=Input::get('section');
 			$formdata->shift=Input::get('shift');
@@ -490,8 +494,8 @@ public function family_student_list($family_id)
 					->where('Student.isActive', '=', 'Yes')
 					->where('Student.family_id', '=', $family_id)
 					->orwhere('Student.fatherCellNo', '=', $family_id)
-					
 					->get();
+		echo "<pre>";print_r($students);exit;
 		return View("app.familystudentList", compact('students'));
 
 }
@@ -520,7 +524,15 @@ public function view($id)
 	$now   = Carbon::now();
              $year  =  $now->year;
             $month =  $now->month;
-            $fee_name =  $fees->id;
+            if(!empty($fees)){
+            	$fee_name =  $fees->id;
+        	}else{
+        		$fee_name ='';
+        	}
+    /*$fee = DB::table('feesSetup')
+		       ->where('class',Input::get('class'))
+		       ->where('type','Monthly')
+		       ->first();*/
 	return View("app.studentView",compact('student','attendances','year','month','fee_name'));
 }
 /**

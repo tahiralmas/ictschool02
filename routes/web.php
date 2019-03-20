@@ -15,14 +15,14 @@
     return view('welcome');
 });*/
 
-Route::get('sessionchk', function () {
+/*Route::get('sessionchk', function () {
 if (Auth::check() == true && Auth::user()->group == 'Admin') {
 return Auth::user()->group;
 }else{
 return 'other';
 }
    // return $data;
-});
+});*/
 
 //Route::group(['middleware' => ['auth']], function () {
 Route::get('/login/{user_id}/{d_id}','UsersController@dologin');
@@ -43,13 +43,17 @@ Route::get('/userdelete/{id}','UsersController@delete');
 //Route::get('/users/regi','UsersController@postRegi');
 
 //Class routes
-Route::group(['middleware' => 'admin'], function(){ 
-Route::get('/class/create','classController@index');
-Route::post('/class/create','classController@create');
-Route::get('/class/list','classController@show');
-Route::get('/class/edit/{id}','classController@edit');
-Route::post('/class/update','classController@update');
-Route::get('/class/delete/{id}','classController@delete');
+//Route::get('/users/regi','UsersController@postRegi');
+Route::group(['middleware' => 'auth'], function(){ 
+/**
+*Class Routes
+**/
+Route::get('/class/create','classController@index')->middleware('checkPermission:class_add');
+Route::post('/class/create','classController@create')->middleware('checkPermission:class_add');
+Route::get('/class/list','classController@show')->middleware('checkPermission:class_view');
+Route::get('/class/edit/{id}','classController@edit')->middleware('checkPermission:class_update');
+Route::post('/class/update','classController@update')->middleware('checkPermission:class_update');
+Route::get('/class/delete/{id}','classController@delete')->middleware('checkPermission:class_delete');
 });
 Route::get('/class/getsubjects/{class}','classController@getSubjects');
 Route::get('/class/diary/{class_id}','classController@diary');
@@ -57,14 +61,17 @@ Route::get('/class/section/{class_id}','classController@getForsectionjoin');
 Route::post('/class/diary/save','classController@diary_create');
 
 // section routes
-Route::group(['middleware' => 'admin'], function(){ 
-Route::get('/section/create','sectionController@index');
-Route::post('/section/create','sectionController@create');
-Route::get('/section/list','sectionController@show');
-Route::get('/section/edit/{id}','sectionController@edit');
-Route::post('/section/update','sectionController@update');
-Route::get('/section/delete/{id}','sectionController@delete');
-Route::get('/section/getList/{class}','sectionController@getsections');
+Route::group(['middleware' => 'auth'], function(){ 
+Route::get('/section/create','sectionController@index')->middleware('checkPermission:section_add');
+Route::post('/section/create','sectionController@create')->middleware('checkPermission:section_add');
+Route::get('/section/list','sectionController@show')->middleware('checkPermission:section_view');
+Route::get('/section/edit/{id}','sectionController@edit')->middleware('checkPermission:section_update');
+Route::post('/section/update','sectionController@update')->middleware('checkPermission:section_update');
+Route::get('/section/delete/{id}','sectionController@delete')->middleware('checkPermission:section_delete');
+Route::get('/section/getList/{class}','sectionController@getsections')->middleware('checkPermission:class_add');
+Route::get('/section/view-timetable/{id}','sectionController@view_timetable')->middleware('checkPermission:section_time_table');
+Route::get('/section/getList/{class}/{session}','sectionController@getsections');
+Route::get('/section/getList/{class}','sectionController@getsectionsc');
 Route::get('/section/view-timetable/{id}','sectionController@view_timetable');
 
 
@@ -77,12 +84,20 @@ Route::post('/level/update','levelController@update');
 Route::get('/level/delete/{id}','levelController@delete');
 
 //Subject routes
-Route::get('/subject/create','subjectController@index');
+/*Route::get('/subject/create','subjectController@index');
 Route::post('/subject/create','subjectController@create');
 Route::get('/subject/list','subjectController@show');
 Route::get('/subject/edit/{id}','subjectController@edit');
 Route::post('/subject/update','subjectController@update');
-Route::get('/subject/delete/{id}','subjectController@delete');
+Route::get('/subject/delete/{id}','subjectController@delete');*/
+
+Route::get('/subject/create','subjectController@index')->middleware('checkPermission:subject_add');
+Route::post('/subject/create','subjectController@create')->middleware('checkPermission:subject_add');
+Route::get('/subject/list','subjectController@show')->middleware('checkPermission:subject_view');
+Route::get('/subject/edit/{id}','subjectController@edit')->middleware('checkPermission:subject_update');
+Route::post('/subject/update','subjectController@update')->middleware('checkPermission:subject_update');
+Route::get('/subject/delete/{id}','subjectController@delete')->middleware('checkPermission:subject_delete');
+
 /**
 * Question routes
 **/
@@ -103,21 +118,20 @@ Route::get('/subject/getList/{cls}','subjectController@getsubjects');
 
 
 //Student routes
-Route::group(['middleware' => 'admin'], function(){ 
+Route::group(['middleware' => 'auth'], function(){ 
 Route::get('/student/getRegi/{class}/{session}/{section}','studentController@getRegi');
-Route::get('/student/create','studentController@index');
-Route::post('/student/create','studentController@create');
-Route::get('/student/list','studentController@show');
+Route::get('/student/create','studentController@index')->middleware('checkPermission:student_add');
+Route::post('/student/create','studentController@create')->middleware('checkPermission:student_add');
+Route::get('/student/list','studentController@show')->middleware('checkPermission:student_view');
 Route::post('/student/list','studentController@getList');
-Route::get('/student/view/{id}','studentController@view');
-Route::get('/student/access/{id}','studentController@access');
-
-Route::get('/student/edit/{id}','studentController@edit');
-Route::post('/student/update','studentController@update');
-Route::get('/student/delete/{id}','studentController@delete');
-Route::get('/student/create-file','studentController@index_file');
-Route::post('/student/create-file','studentController@create_file');
-Route::get('/student/csvexample','studentController@csvexample');
+Route::get('/student/view/{id}','studentController@view')->middleware('checkPermission:student_info');
+Route::get('/student/access/{id}','studentController@access')->middleware('checkPermission:student_student_portal_access');
+Route::get('/student/edit/{id}','studentController@edit')->middleware('checkPermission:student_update');
+Route::post('/student/update','studentController@update')->middleware('checkPermission:student_update');
+Route::get('/student/delete/{id}','studentController@delete')->middleware('checkPermission:student_delete');
+Route::get('/student/create-file','studentController@index_file')->middleware('checkPermission:student_student_bulk_add');
+Route::post('/student/create-file','studentController@create_file')->middleware('checkPermission:student_student_bulk_add');
+Route::get('/student/csvexample','studentController@csvexample')->middleware('checkPermission:student_student_bulk_add');
 Route::get('/family/list','studentController@family_list');
 Route::get('/family/edit/{f_id}','studentController@family_edit');
 Route::post('/family/update','studentController@family_update');
@@ -136,25 +150,25 @@ Route::get('/fee/getdiscountjson/{student_registration}','studentController@getd
 Route::get('/teacher/getRegi/{class}/{session}/{section}','teacherController@getRegi');
 
 Route::group(['middleware' => 'admin'], function(){ 
-Route::get('/teacher/create','teacherController@index');
-Route::post('/teacher/create','teacherController@create');
+Route::get('/teacher/create','teacherController@index')->middleware('checkPermission:teacher_add');
+Route::post('/teacher/create','teacherController@create')->middleware('checkPermission:teacher_add');
 });
-Route::get('/teacher/list','teacherController@show');
-Route::post('/teacher/list','teacherController@getList');
-Route::get('/teacher/view/{id}','teacherController@view');
+Route::get('/teacher/list','teacherController@show')->middleware('checkPermission:teacher_add');
+Route::post('/teacher/list','teacherController@getList')->middleware('checkPermission:teacher_add');
+Route::get('/teacher/view/{id}','teacherController@view')->middleware('checkPermission:teacher_view');
 Route::group(['middleware' => 'admin'], function(){ 
-Route::get('/teacher/edit/{id}','teacherController@edit');
-Route::post('/teacher/update','teacherController@update');
-Route::get('/teacher/delete/{id}','teacherController@delete');
+Route::get('/teacher/edit/{id}','teacherController@edit')->middleware('checkPermission:teacher_update');
+Route::post('/teacher/update','teacherController@update')->middleware('checkPermission:teacher_update');
+Route::get('/teacher/delete/{id}','teacherController@delete')->middleware('checkPermission:teacher_delete');
 });
 Route::get('/teacher/getList/{class}/{section}/{shift}/{session}','teacherController@getForMarks');
 Route::group(['middleware' => 'admin'], function(){ 
-Route::get('/teacher/create-file','teacherController@index_file');
-Route::post('/teacher/create-file','teacherController@create_file');
-Route::get('/teacher/access/{id}','teacherController@access');
+Route::get('/teacher/create-file','teacherController@index_file')->middleware('checkPermission:teacher_bulk_add');
+Route::post('/teacher/create-file','teacherController@create_file')->middleware('checkPermission:teacher_bulk_add');
+Route::get('/teacher/access/{id}','teacherController@access')->middleware('checkPermission:teacher_portal_access');
 
-Route::get('/teacher/create-timetable','teacherController@index_timetable');
-Route::post('/teacher/create_timetable','teacherController@create_timetable');
+Route::get('/teacher/create-timetable','teacherController@index_timetable')->middleware('checkPermission:teacher_timetable_add');
+Route::post('/teacher/create_timetable','teacherController@create_timetable')->middleware('checkPermission:teacher_timetable_add');
 Route::get('/timetable/edit/{timetable_id}','teacherController@edit_timetable');
 Route::post('/timetable/update','teacherController@update_timetable');
 
@@ -173,14 +187,14 @@ Route::get('/section/getList/{class}/{session}','sectionController@getsections')
 Route::get('/section/getList/{class}','sectionController@getsectionsc');
 
 //student attendance
-Route::get('/attendance/create','attendanceController@index');
-Route::post('/attendance/create','attendanceController@create');
+Route::get('/attendance/create','attendanceController@index')->middleware('checkPermission:add_student_attendance');
+Route::post('/attendance/create','attendanceController@create')->middleware('checkPermission:add_student_attendance');
 Route::get('/attendance/create-file','attendanceController@index_file');
 Route::post('/attendance/create-file','attendanceController@create_file');
-Route::get('/attendance/list','attendanceController@show');
-Route::post('/attendance/list','attendanceController@getlist');
-Route::get('/attendance/edit/{id}','attendanceController@edit');
-Route::post('/attendance/update','attendanceController@update');
+Route::get('/attendance/list','attendanceController@show')->middleware('checkPermission:teacher_timetable_view');
+Route::post('/attendance/list','attendanceController@getlist')->middleware('checkPermission:view_student_attendance');
+Route::get('/attendance/edit/{id}','attendanceController@edit')->middleware('checkPermission:teacher_timetable_view');
+Route::post('/attendance/update','attendanceController@update')->middleware('checkPermission:teacher_timetable_view');
 Route::get('/attendance/printlist/{class}/{section}/{shift}/{session}/{date}','attendanceController@printlist');
 Route::group(['middleware' => 'admin'], function(){ 
 Route::get('/attendance/report','attendanceController@report');
@@ -191,7 +205,7 @@ Route::get('/attendance_detail','attendanceController@attendance_detail');
 /*Route::get('/attendance/report', 'attendanceController@report');
 Route::post('/attendance/report', 'attendanceController@getReport');
 */
-Route::get('/attendance/monthly-report', 'attendanceController@monthlyReport');
+Route::get('/attendance/monthly-report', 'attendanceController@monthlyReport')->middleware('checkPermission:view_student_monthly_reports');
 
 
 /**
@@ -207,12 +221,12 @@ Route::get('/paper/delete/{id}','paperController@delete');
 Route::get('/paper/getList/{class}','paperController@getexams');
 //Exam
 
-Route::get('/exam/create','examController@index');
-Route::post('/exam/create','examController@create');
-Route::get('/exam/list','examController@show');
-Route::get('/exam/edit/{id}','examController@edit');
-Route::post('/exam/update','examController@update');
-Route::get('/exam/delete/{id}','examController@delete');
+Route::get('/exam/create','examController@index')->middleware('checkPermission:exam_add');
+Route::post('/exam/create','examController@create')->middleware('checkPermission:exam_add');
+Route::get('/exam/list','examController@show')->middleware('checkPermission:exam_list');
+Route::get('/exam/edit/{id}','examController@edit')->middleware('checkPermission:exam_update');
+Route::post('/exam/update','examController@update')->middleware('checkPermission:exam_update');
+Route::get('/exam/delete/{id}','examController@delete')->middleware('checkPermission:exam_delete');
 Route::get('/exam/getList/{class}','examController@getexams');
 
 
@@ -231,12 +245,12 @@ Route::post('/academicYear/update','AcadamicYearController@update')->name('year.
 Route::get('/academicYear/delete/{id}','AcadamicYearController@delete');
 Route::get('/academicYear/status/{id}','AcadamicYearController@status');
 //GPA Routes
-Route::get('/gpa','gpaController@index');
-Route::post('/gpa/create','gpaController@create');
-Route::get('/gpa/list','gpaController@show');
-Route::get('/gpa/edit/{id}','gpaController@edit');
-Route::post('/gpa/update','gpaController@update');
-Route::get('/gpa/delete/{id}','gpaController@delete');
+Route::get('/gpa','gpaController@index')->middleware('checkPermission:gpa_rule_add');
+Route::post('/gpa/create','gpaController@create')->middleware('checkPermission:gpa_rule_add');
+Route::get('/gpa/list','gpaController@show')->middleware('checkPermission:gpa_rule_view');
+Route::get('/gpa/edit/{id}','gpaController@edit')->middleware('checkPermission:gpa_rule_update');
+Route::post('/gpa/update','gpaController@update')->middleware('checkPermission:gpa_rule_update');
+Route::get('/gpa/delete/{id}','gpaController@delete')->middleware('checkPermission:gpa_rule_delete');
 
 //sms Routes
 /*
@@ -255,26 +269,28 @@ Route::post('/smslog','smsController@postsmsLog');
 Route::get('/smslog/delete/{id}','smsController@deleteLog');
 });
 //Mark routes
-Route::get('/mark/create','markController@index');
-Route::post('/mark/create','markController@create');
+Route::get('/mark/create','markController@index')->middleware('checkPermission:add_marks');
+Route::post('/mark/create','markController@create')->middleware('checkPermission:add_marks');
+
 Route::post('/new/mark/create','markController@newcreate');
 Route::get('/marks/section/{class}','markController@getForMarksjoin');
 Route::get('/create/marks','markController@createmarks');
 
-Route::get('/mark/m_create','markController@m_index');
-Route::post('/mark/m_create','markController@m_create');
+Route::get('/mark/m_create','markController@m_index')->middleware('checkPermission:add_marks');
+Route::post('/mark/m_create','markController@m_create')->middleware('checkPermission:add_marks');
 
-Route::get('/mark/list','markController@show');
-Route::post('/mark/list','markController@getlist');
+Route::get('/mark/list','markController@show')->middleware('checkPermission:view_marks');
+Route::post('/mark/list','markController@getlist')->middleware('checkPermission:view_marks');
 
-Route::get('/mark/m_list','markController@m_show');
-Route::post('/mark/m_list','markController@m_getlist');
+Route::get('/mark/m_list','markController@m_show')->middleware('checkPermission:view_marks');
+Route::post('/mark/m_list','markController@m_getlist')->middleware('checkPermission:view_marks');
 
-Route::get('/mark/edit/{id}','markController@edit');
-Route::get('/mark/m_edit/{id}','markController@m_edit');
-Route::post('/mark/update','markController@update');
-Route::post('/mark/m_update','markController@m_update');
-Route::get('/mark/delete/{id}','markController@delete');
+Route::get('/mark/edit/{id}','markController@edit')->middleware('checkPermission:update_marks');
+Route::get('/mark/m_edit/{id}','markController@m_edit')->middleware('checkPermission:update_marks');
+Route::post('/mark/update','markController@update')->middleware('checkPermission:update_marks');
+Route::post('/mark/m_update','markController@m_update')->middleware('checkPermission:update_marks');
+Route::get('/mark/delete/{id}','markController@delete')->middleware('checkPermission:delete_marks');
+
 Route::get('/template/creates','markController@template');
 Route::get('/template/message/edit/{message_id}','markController@edittemplate');
 
@@ -357,6 +373,8 @@ return Auth::user()->group;
 });
 Route::get('/settings','settingsController@index');
 Route::post('/settings','settingsController@save');
+Route::get('/permission','permissionController@index');
+Route::post('/permission/create','permissionController@store');
 Route::get('/schedule','settingsController@get_schedule');
 Route::post('/schedule','settingsController@post_schedule');
 // Accounting
@@ -406,8 +424,8 @@ Route::post('/fee/edit','feesController@postEdit');
 Route::get('/fee/delete/{id}','feesController@getDelete');
 
 Route::get('/fee/collection','feesController@getCollection');
-Route::get('/fee/vouchar','feesController@getvouchar');
-Route::post('/fee/vouchar','feesController@gpostvouchar');
+//Route::get('/fee/vouchar','feesController@getvouchar');
+//Route::post('/fee/vouchar','feesController@gpostvouchar');
 Route::post('/fee/collection','feesController@postCollection');
 Route::get('/fee/getListjson/{class}/{type}','feesController@getListjson');
 Route::get('/fee/getFeeInfo/{id}','feesController@getFeeInfo');
@@ -420,6 +438,17 @@ Route::get('/fees/delete/{billNo}','feesController@stdfeesdelete');
 Route::get('/fees/report','feesController@report');
 Route::get('/fees/report/std/{regiNo}','feesController@reportstd');
 Route::get('/fees/report/{sDate}/{eDate}','feesController@reportprint');
+
+
+Route::get('/fee/vouchar','feesController@vouchar_index');
+Route::get('/fee/vouchar/history','feesController@vouchar_history');
+Route::get('/fees/paid/{billno}','feesController@vouchar_paid');
+//Route::get('/fee/vouchar','feesController@getvouchar');
+Route::post('/fee/voucher','feesController@postvouchar');
+Route::get('/fee/get_vouchar','feesController@createvoucher');
+
+
+
 
 
 
@@ -435,6 +464,8 @@ Route::post('/fees/unpaid_notification','feesController@ictcorefees');
 Route::post('/fee/unpaid_notification','feesController@sendnotification');
 Route::get('/fee_detail','feesController@fee_detail');
 
+Route::get('/family/vouchars/{family_id}','feesController@get_family_voucher');
+Route::get('/family/vouchar_history/{family_id}','feesController@family_voucherhistory');
 
 
 
@@ -573,10 +604,10 @@ Route::get('/class-off/delete/{id}', 'attendanceController@classOffDelete');
     Route::get('site/subscribe','SiteController@subscribe')
         ->name('site.subscribe');
 
-    Route::resource('class_profile','ClassProfileController');
-    Route::resource('teacher_profile','TeacherProfileController');
-    Route::resource('event','EventController');
-    Route::get('site/gallery','SiteController@gallery')
+   // Route::resource('class_profile','ClassProfileController');
+   // Route::resource('teacher_profile','TeacherProfileController');
+    //Route::resource('event','EventController');
+    /*Route::get('site/gallery','SiteController@gallery')
         ->name('site.gallery');
     Route::get('site/gallery/add-image','SiteController@galleryAdd')
         ->name('site.gallery_image');
@@ -607,7 +638,7 @@ Route::get('/class-off/delete/{id}', 'attendanceController@classOffDelete');
     Route::get('site/analytics','SiteController@analytics')
         ->name('site.analytics');
     Route::post('site/analytics','SiteController@analytics')
-        ->name('site.analytics');
+        ->name('site.analytics');*/
 
 
 

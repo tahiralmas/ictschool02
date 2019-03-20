@@ -89,7 +89,7 @@
                                             <label for="type">MASK</label>
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                                <input type="text" class="form-control"  name="ictcore_url" placeholder="Enter Mask" value="{{$ictcore_integration->ictcore_url}}">
+                                                <input type="text" class="form-control"  name="ictcore_urlm" placeholder="Enter Mask" value="{{$ictcore_integration->ictcore_url}}">
                                             </div>
                                         </div>
                                     </div>

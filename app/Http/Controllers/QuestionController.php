@@ -8,7 +8,7 @@ use App\Question;
 use App\QuestionTemp;
 use App\Subject;
 use Carbon\Carbon;
-Class formfoo{
+Class formfoo1{
 
 }
 class QuestionController extends Controller
@@ -100,7 +100,7 @@ class QuestionController extends Controller
 
     public function generate()
     {
-    	$formdata = new formfoo;
+    	$formdata = new formfoo1;
 		$formdata->class="";
 		$formdata->section="00";
 		$formdata->shift="";
@@ -210,7 +210,7 @@ class QuestionController extends Controller
 
     public function list()
     {
-    	$formdata = new formfoo;
+    	$formdata = new formfoo1;
 		$formdata->class="";
 		$formdata->section="00";
 		$formdata->shift="";
@@ -223,7 +223,7 @@ class QuestionController extends Controller
     }
     public function getlist(Request $request)
     {
-    	$formdata = new formfoo;
+    	$formdata = new formfoo1;
 		$formdata->class="";
 		$formdata->section="00";
 		$formdata->shift="";
@@ -249,7 +249,7 @@ class QuestionController extends Controller
 
     public function edit($id)
     {
-    	$formdata = new formfoo;
+    	$formdata = new formfoo1;
 		$formdata->class="";
 		$formdata->section="00";
 		$formdata->shift="";

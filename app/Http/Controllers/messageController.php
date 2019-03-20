@@ -174,7 +174,7 @@ class messageController extends BaseController {
 							$data = array(
 								'name' => Input::get('mess_name'),
 								'data' => Input::get('message'),
-								'type' => 'plain',
+								'type' => 'utf-8',
 								'description' =>'',
 							);
 							if($ictcore_integration->method == 'telenor'){
@@ -186,7 +186,7 @@ class messageController extends BaseController {
 								'name' => Input::get('mess_name'),
 								'text_id' =>$text_id,
 							);
-							echo $program_id  =  $ict->ictcore_api('programs/sendsms','POST',$data );
+							 $program_id  =  $ict->ictcore_api('programs/sendsms','POST',$data );
 						}
 						}
 						if($ictcore_integration->method == 'telenor'){
@@ -248,7 +248,7 @@ class messageController extends BaseController {
 
 											$data = array(
 											'title' => 'Attendance',
-											$program_id,
+											'program_id' =>$program_id,
 											'account_id'     => 1,
 											'contact_id'     => $contact_id,
 											'origin'     => 1,
@@ -347,17 +347,19 @@ class messageController extends BaseController {
 											$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
 										}else{
 											$contact_id = $ict->ictcore_api('contacts','POST',$data );
+											
 											//$program_id = 'program_id =>'.$get_msg->ictcore_program_id;
 
 											$data = array(
 											'title' => 'Attendance',
-											$program_id,
+											//$program_id,
+											'program_id' =>$program_id,
 											'account_id'     => 1,
 											'contact_id'     => $contact_id,
 											'origin'     => 1,
 											'direction'     => 'outbound',
 											);
-											$transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+											$transmission_id   = $ict->ictcore_api('transmissions','POST',$data );
 											$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
 											if(!empty($transmission_send->error)){
 											$status =$transmission_send->error->message;
@@ -386,8 +388,8 @@ class messageController extends BaseController {
 							'try_allowed' => '',
 							'account_id' => 1,
 							);
-							$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
-	                       $campaign_start = $ict->ictcore_api('campaigns/'.$campaign_id.'/start','PUT',$data=array() );
+							$campaign_id    = $ict->ictcore_api('campaigns','POST',$data );
+	                        $campaign_start = $ict->ictcore_api('campaigns/'.$campaign_id.'/start','PUT',$data=array() );
 
 							}
 					    } 
