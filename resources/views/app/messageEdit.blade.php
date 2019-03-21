@@ -29,6 +29,9 @@
                             <input type="text" class="form-control" required name="title" value="{{$message->name}}" placeholder="Class Name">
                         </div>
                     </div>
+                    @else
+                    <input type="hidden" class="form-control"  name="title" value="{{$message->name}}" placeholder="Class Name">
+
                     @endif
 
                     <div class="form-group">
