@@ -27,15 +27,15 @@ class DashboardController extends BaseController {
 	public function index()
 	{
 		
-        $now             =  Carbon::now();
+        $now              =  Carbon::now();
 		$year1            =  $now->year;
-		$year            =  get_current_session()->id;
-        $month           =  $now->month;
-		$error           = \Session::get('error');
-		$success         = \Session::get('success');
-		$tclass          =  ClassModel::count();
-		$tsubject        =  Subject::count();
-		$tstudent        =  Student::where('isActive','Yes')->where('session',$year)->count();
+		$year             =  get_current_session()->id;
+        $month            =  $now->month;
+		$error            = \Session::get('error');
+		$success          = \Session::get('success');
+		$tclass           =  ClassModel::count();
+		$tsubject         =  Subject::count();
+		$tstudent         =  Student::where('isActive','Yes')->where('session',$year)->count();
 
 		//echo get_current_session()->id. $tstudent;exit;
 		$teacher         =  Teacher::count();
@@ -46,7 +46,7 @@ class DashboardController extends BaseController {
 
  		//echo "<pre>";print_r($totalabsent );exit;
  		$totalExam = Marks::groupBy('exam')->groupBy('subject')->get();
-		$book = AddBook::count();
+		$book      = AddBook::count();
  		$total = [
  			'class'       =>$tclass,
  			'student'     =>$tstudent,
@@ -73,9 +73,9 @@ class DashboardController extends BaseController {
  		->sum('amount');
  		$expenceTotal = Accounting::where('type','Expence')
  		->sum('amount');
- 		$incomes=$this->datahelper($monthlyIncome);
- 		$expences=$this->datahelper($monthlyExpences);
- 		$balance = $incomeTotal - $expenceTotal;
+ 		$incomes  = $this->datahelper($monthlyIncome);
+ 		$expences = $this->datahelper($monthlyExpences);
+ 		$balance  = $incomeTotal - $expenceTotal;
 		//return View::Make('dashboard',compact('error','success','total','incomes','expences','balance'));
 		
         //paid or unpaid fee list

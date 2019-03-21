@@ -66,8 +66,8 @@
                   <td>{{$fee->date}}</td>
 
                   <td>
-                   @if($fee->status=='Unpaid')<a title='Paid' class='btn btn-success' onclick="return confirm('Are you sure you want to paid?');" href='{{url("/fees/paid")}}/{{$fee->billNo}}'> Paid</a>@else
-                    <a title='Paid' class='btn btn-danger' onclick="return confirm('Are you sure you want to unpaid?');" href='{{url("/fees/paid")}}/{{$fee->billNo}}?s=unpaid'> UnPaid</a>
+                   @if($fee->status=='Unpaid')<a title='Paid' class='btn btn-success' onclick="return confirm('Are you sure you want to paid?');" href='#{{url("/family/paid")}}/{{$fee->billNo}}'> Paid</a>@else
+                    <a title='Paid' class='btn btn-danger' onclick="return confirm('Are you sure you want to unpaid?');" href='#{{url("/family/paid")}}/{{$fee->billNo}}?s=unpaid'> UnPaid</a>
                     @endif
                   
                   </td>

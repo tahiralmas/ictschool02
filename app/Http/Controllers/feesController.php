@@ -618,7 +618,8 @@ class feesController extends BaseController {
 
                              
 	}
-	public function get_family_voucher($family_id){
+	public function get_family_voucher($family_id)
+	{
 		    //$bill = \Session::get('billid');
 		  	$now             =  Carbon::now();
 			$year            =  $now->year;
@@ -642,8 +643,8 @@ class feesController extends BaseController {
 				}
 
 
- echo "<pre>";print_r($regiNo);
-		$vouchar_details = DB::table('stdBill')
+ 							//echo "<pre>";print_r($regiNo);
+							$vouchar_details = DB::table('stdBill')
 				               ->join('Student','stdBill.regiNo','=','Student.regiNo')
 		                       //->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
 		                       ->join('billHistory','stdBill.billNo','=','billHistory.billNo')
@@ -653,7 +654,7 @@ class feesController extends BaseController {
                                ->where('billHistory.month', '=', $month)
                                ->whereIn('Student.regiNo',$regiNo )
                                ->get();
-                               echo "<pre>";print_r($vouchar_details->toArray());
+                              // echo "<pre>";print_r($vouchar_details->toArray());
                                //exit;
                                $bills = array();
                             foreach($vouchar_details as $vouchar_detail){
@@ -666,8 +667,8 @@ class feesController extends BaseController {
 											 ->whereIn('regiNo',$regiNo)
 											 ->first();
 
-echo "<pre>";print_r($totals->toArray());
-                               exit;
+								//echo "<pre>";print_r($totals->toArray());
+                               //exit;
 								$check_vouchar  = FamilyVouchar::whereMonth('date',$month)->where('family_id',$family_id)->count();
 									//$checkbil = explode(',',$check_vouchar->bills);
 								if($check_vouchar==0 && count($vouchar_details->toArray())>0){
@@ -703,7 +704,7 @@ echo "<pre>";print_r($totals->toArray());
 		      $late_fee    = '';
 		//return View::Make('app.feeCollection',compact('classes'));
 		$institute = DB::table('institute')->first();
-	//	$fees= FeeSetup::select('id','title')->where('id','=',Input::get('fee_name'))->get();
+		//	$fees= FeeSetup::select('id','title')->where('id','=',Input::get('fee_name'))->get();
 
 		  
 			/*$totals          = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
@@ -714,7 +715,7 @@ echo "<pre>";print_r($totals->toArray());
 		//echo "<pre>tyty";print_r($vouchar_details->toArray());
 							//echo "<pre>tyty";print_r($totals);
                               //exit;
-  //echo "<pre>";print_r($totals);exit;
+  		//echo "<pre>";print_r($totals);exit;
 		return View('app.vouchar.fee_vouchar_family',compact('classes','institute','due_date','month','late_fee','discount','total_fee','student','fees','vouchar_details','totals','fees','family_id'));
             //http://localhost/apschool/fee/get_vouchar?class=cl1&section=7&session=2018&type=Monthly&month=10&fee_name=2&regiNo=180101                   
 
@@ -787,7 +788,7 @@ echo "<pre>";print_r($totals->toArray());
 											//->where('class',Input::get('class'))
 											->whereIn('regiNo',$regiNo)
 											->first();
-echo "<pre>";print_r($totals );exit;
+//echo "<pre>";print_r($totals );exit;
 		return View('app.fvoucharhistory',compact('classes','student','fees','totals','family_vouchers'));
 		
 	}

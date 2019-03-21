@@ -140,11 +140,12 @@ class Invoicegenrated extends Command
                              $chk = DB::table('stdBill')
                                 ->join('billHistory','stdBill.billNo','=','billHistory.billNo')
                                 ->where('stdBill.regiNo',$regiNo)
+                                ->where('billHistory.title','monthly')
                                 ->where('billHistory.month', $feeMonths );
 
 
 
-                            if(  $chk->count()>0 || $chk->count()==0  ){
+                            if($chk->count()==0){
                                  
                                  $chk_rows = DB::table('stdBill')
                                              ->where('stdBill.regiNo',$regiNo);
@@ -153,7 +154,7 @@ class Invoicegenrated extends Command
                                  if($chk_rows->count()==0){
                                     echo 'ss'.$chk_rows->count();
                                     // exit;
-                                    $due1 = $totalfee;
+                                    $due1  = $totalfee;
                                  }else{
                                      $due1 = $due->payTotal + $totalfee;
                                  }

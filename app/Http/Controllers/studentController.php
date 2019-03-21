@@ -495,7 +495,7 @@ public function family_student_list($family_id)
 					->where('Student.family_id', '=', $family_id)
 					->orwhere('Student.fatherCellNo', '=', $family_id)
 					->get();
-		echo "<pre>";print_r($students);exit;
+		//echo "<pre>";print_r($students);exit;
 		return View("app.familystudentList", compact('students'));
 
 }
