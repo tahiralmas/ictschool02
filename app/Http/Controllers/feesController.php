@@ -19,6 +19,7 @@ use DB;
 use App\Ictcore_fees;
 use App\Ictcore_integration;
 use App\Http\Controllers\ictcoreController;
+use App\Console\Commands\Invoicegenrated;
 use Carbon\Carbon;
 class studentfdata{
 
@@ -630,7 +631,7 @@ class feesController extends BaseController {
 			$students = DB::table('Student')
 					->join('Class', 'Student.class', '=', 'Class.code')
 					->join('section', 'Student.section', '=', 'section.id')
-					->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+					->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell','Student.discount_id','Student.class as class_code',
 		'Class.Name as class','Class.code as class_code', 'Student.presentAddress','Student.section', 'Student.gender', 'Student.religion','section.name')
 					->where('Student.isActive', '=', 'Yes')
 					->where('Student.family_id', '=', $family_id)
@@ -652,23 +653,46 @@ class feesController extends BaseController {
                                ->select('billHistory.*','stdBill.dueAmount','stdBill.payableAmount','stdBill.paidAmount','stdBill.class','stdBill.total_fee','stdBill.regiNo','voucherhistories.due_date','Student.discount_id', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.section')
                                //->where('billHistory.billNo',$bill )
                                ->where('billHistory.month', '=', $month)
-                               ->whereIn('Student.regiNo',$regiNo )
-                               ->get();
+                               ->whereIn('Student.regiNo',$regiNo );
+                              // ->get();
+                    if($vouchar_details->count()>0){
+                    	$vouchar_details = $vouchar_details->get();
                               // echo "<pre>";print_r($vouchar_details->toArray());
                                //exit;
                                $bills = array();
                             foreach($vouchar_details as $vouchar_detail){
 								 $bills[] = $vouchar_detail->billNo; 	
 							}
-							  $bils     = implode(',',$bills);
-                              $totals   = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(total_fee),0) as Totalpay,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(total_fee),0)- IFNULL(sum(paidAmount),0)) as dueAmount,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+							
+                              
+					}else{
+						//$invoicegenrated = new Invoicegenrated;
+						 $bills = array();
+						foreach($students as $std){
+							$vouchar_generates = $this->createvouchour($std->regiNo,$std->class_code,$std->discount_id);
+							if($vouchar_generates!=''){
+								$bills[] =$vouchar_generates;
+							}
+						}
+
+						$vouchar_details = DB::table('stdBill')
+				               ->join('Student','stdBill.regiNo','=','Student.regiNo')
+		                       //->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
+		                       ->join('billHistory','stdBill.billNo','=','billHistory.billNo')
+		                       ->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
+                               ->select('billHistory.*','stdBill.dueAmount','stdBill.payableAmount','stdBill.paidAmount','stdBill.class','stdBill.total_fee','stdBill.regiNo','voucherhistories.due_date','Student.discount_id', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.section')
+                               //->where('billHistory.billNo',$bill )
+                               ->where('billHistory.month', '=', $month)
+                               ->whereIn('Student.regiNo',$regiNo )
+                               ->get();
+					}
+					//print_r($bills);exit;
+					  $bils     = implode(',',$bills);
+					$totals   = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(total_fee),0) as Totalpay,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(total_fee),0)- IFNULL(sum(paidAmount),0)) as dueAmount,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
 											//->where('class',Input::get('class'))
 											 ->whereMonth('created_at', '=', $month)
 											 ->whereIn('regiNo',$regiNo)
 											 ->first();
-
-								//echo "<pre>";print_r($totals->toArray());
-                               //exit;
 								$check_vouchar  = FamilyVouchar::whereMonth('date',$month)->where('family_id',$family_id)->count();
 									//$checkbil = explode(',',$check_vouchar->bills);
 								if($check_vouchar==0 && count($vouchar_details->toArray())>0){
@@ -721,6 +745,140 @@ class feesController extends BaseController {
 
                              
 	}
+
+	public function createvouchour($regiNo,$class,$discount)
+    {
+        
+//return '32323';
+		try {
+			$fee_setup       = FeeSetup::select('fee','Latefee')
+			->where('class','=',$class)
+			->where('type','=','Monthly');
+			//->get();
+                //
+			if($fee_setup->count()>0){
+				
+				$fee_setup     =   $fee_setup->first();
+				$now             =  Carbon::now();
+				$year1           =  $now->year;
+				$month           =  $now->month;
+				$date            =  $now->addDays(5);
+				//$due_date        =  $now->addDays(10);
+				if($discount==NULL || $discount==''){
+					$discount = 0;
+				}else{
+					$discount = $discount;
+				}
+				
+				$totalfee        = $fee_setup->fee - $discount;
+				$feeTitles       = 'monthly';
+				$feeAmounts      = $totalfee;
+				$feeLateAmounts  = 0;
+				$feeTotalAmounts = $totalfee;
+				$feeMonths       = $month ;
+				$month           = $month ; 
+				//$counter         = count($feeTitles);
+
+				//if($counter>0)
+				//{
+				$rows = FeeCol::count();
+				if($rows < 9)
+				{
+					$billId = 'B00'.($rows+1);
+				}
+				else if($rows < 100)
+				{
+					$billId = 'B0'.($rows+1);
+				}
+				else {
+
+					$billId = 'B'.($rows+1);
+				}
+
+
+				$exception = DB::transaction(function() use ($billId,$feeTitles,$feeAmounts,$feeLateAmounts,$feeTotalAmounts,$feeMonths,$date,$regiNo,$class,$totalfee)
+				{
+					
+
+					$j=0;
+					$chk = DB::table('stdBill')
+					->join('billHistory','stdBill.billNo','=','billHistory.billNo')
+					->where('stdBill.regiNo',$regiNo)
+					->where('stdBill.paidAmount',0)
+					->get();
+
+					$due = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+								->where('class',$class)
+								->where('regiNo',$regiNo)
+								->first();
+
+					// echo  $due->paiTotal;
+					$chk = DB::table('stdBill')
+							->join('billHistory','stdBill.billNo','=','billHistory.billNo')
+							->where('stdBill.regiNo',$regiNo)
+							->where('billHistory.title','monthly')
+							->where('billHistory.month', $feeMonths );
+
+
+					
+					if($chk->count()==0 || $chk->count()==''){
+						
+						$chk_rows = DB::table('stdBill')
+										->where('stdBill.regiNo',$regiNo);
+						//echo '<pre>'.print_r($due->payTotal,true);
+						// exit;
+						if($chk_rows->count()==0){
+							//echo 'ss'.$chk_rows->count();
+							// exit;
+							$due1  = $totalfee;
+						}else{
+							$due1 = $due->payTotal + $totalfee;
+						}
+						//exit;
+						//return $chk->count();
+						$feehistory          = new FeeHistory();
+						$feehistory->billNo  = $billId;
+						$feehistory->title   = $feeTitles;
+						$feehistory->fee     = $feeAmounts;
+						$feehistory->lateFee = $feeLateAmounts;
+						$feehistory->total   = $feeTotalAmounts;
+						$feehistory->month   = $feeMonths;
+						$feehistory->save();
+
+						$voucharhistory           = new Voucherhistory();
+						$voucharhistory->bill_id  = $billId;
+						$voucharhistory->type     = $feeTitles;
+						$voucharhistory->ref_id   = '';
+						$voucharhistory->amount   = $feeAmounts;
+						$voucharhistory->due_date = $date->format('Y-m-d');
+						$voucharhistory->rgiNo    = $regiNo;
+						$voucharhistory->status   = 'unpaid';
+						$voucharhistory->date     =   Carbon::now();
+						$voucharhistory->save();
+						$feeCol                = new FeeCol();
+						$feeCol->billNo        = $billId;
+						$feeCol->class         = $class;
+						$feeCol->regiNo        = $regiNo;
+						$feeCol->payableAmount = $totalfee;
+						$feeCol->total_fee     = $totalfee;
+						$feeCol->paidAmount    = 0;
+						$feeCol->dueAmount     = $due1  ;
+						$feeCol->payDate       = $date->format('Y-m-d');
+						//echo "<pre>";print_r(Carbon::now()->format('Y-m-d'));
+						$feeCol->save();
+					}
+					return $feeCol->billNo;
+				});
+				return $exception;
+			}
+		}
+		catch(\Exception $e)
+		{
+		//  print_r($e);
+			return $e->getMessage();
+		//return Redirect::to('/fee/collection?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&type='.Input::get('type').'&month='.Input::get('gridMonth')[0].'&fee_name='.Input::get('fee'))->withErrors( $e->getMessage())->withInput();
+		}
+    }
 	public function vouchar_history()
 	{
 		$classes          = ClassModel::pluck('name','code');
@@ -1421,7 +1579,7 @@ class feesController extends BaseController {
 		$action = Input::get('action');
 		if($action!=''):
 			$now   = Carbon::now();
-		//$year  =  $now->year;
+		$year1  =  $now->year;
 		$year  =  get_current_session()->id;
 		$month =  $now->month;
 	          // $all_section =	DB::table('section')->select( '*')->get();
@@ -1440,7 +1598,8 @@ class feesController extends BaseController {
 
 				$student_all =	DB::table('Student')
 				->join('section','Student.section','=','section.id')
-				->select( 'Student.*','section.name as section_name')->where('class','=',$section->code)/*->where('section','=',$section->id)/**/->where('session','=',$year)
+				->select( 'Student.*','section.name as section_name')->where('class','=',$section->code)/*->where('section','=',$section->id)/**/
+				->where('session','=',$year)
 	              //->where('Student.session','=',$year)
 				->where('Student.isActive','=','Yes')
 				->get();
@@ -1453,7 +1612,7 @@ class feesController extends BaseController {
 						$student =	DB::table('billHistory')->leftJoin('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
 						->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo')
 					// ->whereYear('stdBill.payDate', '=', 2017)
-						->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', $year)->where('billHistory.month','=',$month)->where('billHistory.month','<>','-1')
+						->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', $year1)->where('billHistory.month','=',$month)->where('billHistory.month','<>','-1')
 					//->orderby('stdBill.payDate')
 						->get();
 						if(count($student)>0 ){
