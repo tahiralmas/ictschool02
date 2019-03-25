@@ -44,8 +44,10 @@
 $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,'login');
 //$get_students = branchesapi($branch->username,$branch->password,$branch->branch_url,'students/count');
 //$get_classes = branchesapi($branch->username,$branch->password,$branch->branch_url,'classes/count');
-//echo "<pre>";print_r($get_data->current);exit;
+
+//echo "<pre>";print_r($get_data);exit;
  ?>
+ @if(is_object($get_data) && $get_data!='404')
 <div class="box col-md-4">
         <div class="box-inner homepage-box">
             <div class="box-header well" data-original-title="">
@@ -128,6 +130,7 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
         </div>
          
     </div>
+    @endif
     @endforeach
     @endif
     </div>
