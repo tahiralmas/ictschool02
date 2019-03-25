@@ -130,6 +130,28 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
         </div>
          
     </div>
+    @else
+    <div class="box col-md-4">
+        <div class="box-inner homepage-box">
+            <div class="box-header well" data-original-title="">
+                <h2><i class="glyphicon glyphicon-list-alt"></i> {{ucwords($branch->branch_name)}}</h2>
+
+                <div class="box-icon">
+                    <a href="#" class="btn btn-minimize btn-round btn-default"><i
+                            class="glyphicon glyphicon-chevron-up"></i></a>
+                    <a href="#" class="btn btn-close btn-round btn-default"><i
+                            class="glyphicon glyphicon-remove"></i></a>
+                </div>
+            </div>
+             <div class="box-content row">
+                <!-- Begin MailChimp Signup Form -->
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                  
+                  <h1>Some thing Wrong please contact ictvision</h1>
+                  </div>
+                  </div>
+            </div>
+            </div>
     @endif
     @endforeach
     @endif
