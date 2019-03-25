@@ -1,6 +1,8 @@
 .env
+/.env
 storage/*.key
 img/*
+/img/*
 public/images/*
 docss.zip
 docs/uml.zip
