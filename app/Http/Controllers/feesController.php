@@ -649,7 +649,7 @@ class feesController extends BaseController {
 
 
  				echo "<pre>";print_r($regiNo);
-							$vouchar_details = DB::table('stdBill')
+							$vouchar_details = DB::table('stdBill1')
 				               ->join('Student','stdBill.regiNo','=','Student.regiNo')
 		                       //->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
 		                       ->join('billHistory','stdBill.billNo','=','billHistory.billNo')
@@ -657,7 +657,7 @@ class feesController extends BaseController {
                                ->select('billHistory.*','stdBill.dueAmount','stdBill.payableAmount','stdBill.paidAmount','stdBill.class','stdBill.total_fee','stdBill.regiNo','voucherhistories.due_date','Student.discount_id', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.section')
                                //->where('billHistory.billNo',$bill )
                                ->where('billHistory.month', '=', $month)
-                               ->whereIn('Student.regiNo',$regiNo );
+                               ->whereIn('stdBill.regiNo',$regiNo );
                               // ->get();
                     if($vouchar_details->count()>0){
                     	$vouchar_details = $vouchar_details->get();
@@ -687,7 +687,7 @@ class feesController extends BaseController {
                                ->select('billHistory.*','stdBill.dueAmount','stdBill.payableAmount','stdBill.paidAmount','stdBill.class','stdBill.total_fee','stdBill.regiNo','voucherhistories.due_date','Student.discount_id', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.section')
                                //->where('billHistory.billNo',$bill )
                                ->where('billHistory.month', '=', $month)
-                               ->whereIn('Student.regiNo',$regiNo )
+                               ->whereIn('stdBill.regiNo',$regiNo )
                                ->get();
 					}
 					//print_r($bills);exit;
