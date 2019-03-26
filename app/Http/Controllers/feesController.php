@@ -649,11 +649,12 @@ class feesController extends BaseController {
 
 
  				echo "<pre>";print_r($regiNo);
-							$vouchar_details = DB::table('stdBill1')
+							$vouchar_details = DB::table('stdBill')
 				               ->join('Student','stdBill.regiNo','=','Student.regiNo')
 		                       //->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
-		                       ->join('billHistory','stdBill.billNo','=','billHistory.billNo')
 		                       ->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
+		                       ->join('billHistory','stdBill.billNo','=','billHistory.billNo')
+		                      
                                ->select('billHistory.*','stdBill.dueAmount','stdBill.payableAmount','stdBill.paidAmount','stdBill.class','stdBill.total_fee','stdBill.regiNo','voucherhistories.due_date','Student.discount_id', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.section')
                                //->where('billHistory.billNo',$bill )
                                ->where('billHistory.month', '=', $month)
