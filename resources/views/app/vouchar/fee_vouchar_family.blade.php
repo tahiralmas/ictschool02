@@ -16,10 +16,27 @@
       border-left: 2px dotted #444;
   
 }
+.background{
+    position:absolute;
+    z-index:0;
+    background:white;
+    display:block;
+    min-height:50%; 
+    min-width:50%;
+    color:yellow;
+}
+.bg-text
+{
+    color:lightgrey;
+    font-size:120px;
+    transform:rotate(300deg);
+    -webkit-transform:rotate(300deg);
+}
 </style>
 </head>
 
 <body>
+
   <div class="main-vouchar">
   
   @for($i=0;$i<3;$i++)
@@ -88,7 +105,9 @@
           <td>{{$due_date}}</td>
         </tr>
       </table> */ ?>
-
+{{--<div class="background">
+  <p class="bg-text">Vouchar Paid</p>
+  </div>--}}
       <table border="1">
         <tr>
           <th>Student Info</th>
@@ -117,9 +136,10 @@
         
         <td></td>
      
-        <td colspan="3">{{$totals->payTotal}}</td>
+        <td colspan="3">@if($vouchar_detail->paidAmount=='0.00'){{$totals->payTotal}} @else 0.00 @endif</td>
         </tr>
       </table>
+
       <div class="sig-n-stamp">
         <p>Paid Date : _________________________________ </p>
         <p>Bank Stamp & Sig : __________________________ </p>

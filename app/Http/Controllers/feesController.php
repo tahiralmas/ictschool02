@@ -147,8 +147,8 @@ class feesController extends BaseController {
 		}
 		else {
 
-			$fees = FeeSetup::select("*")->where('class',Input::get('class'))->get();
-			$classes = ClassModel::pluck('name','code');
+			$fees     = FeeSetup::select("*")->where('class',Input::get('class'))->get();
+			$classes  = ClassModel::pluck('name','code');
 			$formdata = new formfoo0;
 			$formdata->class=Input::get('class');
 
@@ -1504,9 +1504,10 @@ class feesController extends BaseController {
 			$i=0;
 			foreach($student_all as $stdfees){
 
-				$student =	DB::table('billHistory')->leftJoin('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
-				->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo')
+				$student =	DB::table('billHistory')->Join('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
+				->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo','stdBill.paidAmount')
 					// ->whereYear('stdBill.payDate', '=', 2017)
+				->where('stdBill.paidAmount','<>','0.00')
 				->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', Input::get('year'))->where('billHistory.month','=',Input::get('month'))->where('billHistory.month','<>','-1')
 					//->orderby('stdBill.payDate')
 				->get();
@@ -1590,9 +1591,10 @@ class feesController extends BaseController {
 			}
 			foreach($student_all as $stdfees){
 
-				$student =	DB::table('billHistory')->leftJoin('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
-				->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo')
+				$student =	DB::table('billHistory')->Join('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
+				->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo','stdBill.paidAmount')
 						// ->whereYear('stdBill.payDate', '=', 2017)
+				->where('stdBill.paidAmount','<>','0.00')
 				->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', Input::get('year'))->where('billHistory.month','=',Input::get('month'))->where('billHistory.month','<>','-1')
 						//->orderby('stdBill.payDate')
 				->get();
@@ -1670,9 +1672,10 @@ class feesController extends BaseController {
 
 				if(count($student_all) >0){
 					foreach($student_all as $stdfees){
-						$student =	DB::table('billHistory')->leftJoin('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
-						->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo')
+						$student =	DB::table('billHistory')->Join('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
+						->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo','stdBill.paidAmount')
 							// ->whereYear('stdBill.payDate', '=', 2017)
+						->where('stdBill.paidAmount','<>','0.00')
 						->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', $year1)->where('billHistory.month','=',$month)->where('billHistory.month','<>','-1')
 							//->orderby('stdBill.payDate')
 						->get();
