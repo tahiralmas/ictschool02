@@ -45,7 +45,7 @@
                 @foreach($fee_data as $fee)
                 <tr>
                   <td>{{$fee['month']}}</td>
-                  <td @if($fee['status']=='unpaid') style="color:red" @endif>{{$fee['status']}}</td>
+                  <td >@if($fee['status']=='unpaid')  <span class="role unpaid">{{$fee['status']}}</span>@endif</td>
                   <td>{{$fee['fee']}}</td>
                   <td>{{$fee['lateFee']}}</td>
                   <td>{{$fee['total']}}</td>

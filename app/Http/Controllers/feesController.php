@@ -622,6 +622,7 @@ class feesController extends BaseController {
 	public function get_family_voucher($family_id)
 	{
 		    //$bill = \Session::get('billid');
+		echo 'familyid'.$family_id;
 		  	$now             =  Carbon::now();
 			$year            =  $now->year;
 			$month           =  $now->month;
@@ -638,7 +639,7 @@ class feesController extends BaseController {
 					//->orwhere('Student.fatherCellNo', '=', $family_id)
 					->where(function($q) use( $family_id) {
 				        $q->where('Student.family_id', '=', $family_id)
-				        ->orWhere('Student.family_id', '=', $family_id);
+				        ->orWhere('Student.fatherCellNo', '=', $family_id);
 				      })
 					->get();
 					$regiNo = array();
@@ -1512,7 +1513,10 @@ class feesController extends BaseController {
 				->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo','stdBill.paidAmount')
 					// ->whereYear('stdBill.payDate', '=', 2017)
 				->where('stdBill.paidAmount','<>','0.00')
-				->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', Input::get('year'))->where('billHistory.month','=',Input::get('month'))->where('billHistory.month','<>','-1')
+				->where('stdBill.regiNo','=',$stdfees->regiNo)
+				->whereYear('stdBill.payDate', '=', Input::get('year'))
+				->where('billHistory.month','=',Input::get('month'))
+				->where('billHistory.month','<>','-1')
 					//->orderby('stdBill.payDate')
 				->get();
 
@@ -1546,9 +1550,9 @@ class feesController extends BaseController {
 		$section = Input::get('section');
 		$session = Input::get('session');
 		$year    = Input::get('year');
-	       // echo "<pre>";print_r($resultArray);
+	       //echo "<pre>".Input::get('month');print_r($resultArray);
 	        // exit;
-		return View('app.feestdreportclass',compact('resultArray','class','month','section','classes','session','year'));
+	    return View('app.feestdreportclass',compact('resultArray','class','month','section','classes','session','year'));
 	}
 
 	public function ictcorefees(){
@@ -1599,7 +1603,10 @@ class feesController extends BaseController {
 				->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo','stdBill.paidAmount')
 						// ->whereYear('stdBill.payDate', '=', 2017)
 				->where('stdBill.paidAmount','<>','0.00')
-				->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', Input::get('year'))->where('billHistory.month','=',Input::get('month'))->where('billHistory.month','<>','-1')
+				->where('stdBill.regiNo','=',$stdfees->regiNo)
+				->whereYear('stdBill.payDate', '=', Input::get('year'))
+				->where('billHistory.month','=',Input::get('month'))
+				->where('billHistory.month','<>','-1')
 						//->orderby('stdBill.payDate')
 				->get();
 

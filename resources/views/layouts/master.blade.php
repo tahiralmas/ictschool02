@@ -250,6 +250,24 @@ border-radius: 4px !important;
 -ms-user-select: none !important;
 user-select: none !important;
 }
+
+.role {
+    display: inline-block;
+    line-height: 30px;
+    font-size: 14px;
+    color: #fff;
+    padding: 0 15px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    text-transform: capitalize;
+}
+.role.paid {
+    background: green;
+}
+.role.unpaid {
+    background: #fa4251;
+}
   </style>
     <!-- jQuery -->
     <!--<script src="{{ URL::asset('/bower_components/jquery/jquery.min.js') }}"></script>

@@ -102,10 +102,12 @@
                                             <td>{{$atd->fatherCellNo}} </td>
                                             <td>
                                               @if($status=="Paid")
-                                              <span class="text-success">{{$status}}</span>
+                                              {{--<span class="text-success">{{$status}}</span>--}}
+                                              <span class="role paid">{{$status}}</span>
                                               @else
 
-                                              <span class="text-danger">{{$status}}</span>
+                                              {{--<span class="text-danger">{{$status}}</span>--}}
+                                              <span class="role unpaid">{{$status}}</span>
 
                                               @endif
                                             </td>

@@ -256,7 +256,7 @@ else{
  //exit;
 			$branches= Branch::select("*")->get();
 			$cbranches= Branch::count();
-		return View('dashboard',compact('error','success','total','incomes','expences','balance','scetionarray','resultArray1','year','month_n','attendances_b','month','class','present','absent','ourallunpaid','ourallpaid','json_event_data','branches','cbranches'));
+		return View('dashboard',compact('error','success','total','incomes','expences','balance','scetionarray','resultArray1','year','month_n','attendances_b','month','class','present','absent','ourallunpaid','ourallpaid','json_event_data','branches','cbranches','year1'));
 	}
 	private function datahelper($data)
  	{

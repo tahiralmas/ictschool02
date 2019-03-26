@@ -416,7 +416,7 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
                   <td>{{$resultArray1[$i]['paid']}}</td>
                   <td>{{$resultArray1[$i]['unpaid']}}</td>
                   <td>{{$resultArray1[$i]['total']}}</td>
-                  <td><a href="{{url('/fees/classreport?class_id='.$section['class'].'&month='.$month.'&year='.$year.'&direct=yes')}}">veiw detail</a></td>
+                  <td><a href="{{url('/fees/classreport?class_id='.$section['class'].'&month='.$month.'&year='.$year1.'&direct=yes')}}">veiw detail</a></td>
                  
                 </tbody>
                 <?php $i++; ?>

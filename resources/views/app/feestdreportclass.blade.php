@@ -244,7 +244,7 @@ if(!empty($_GET) && $_GET['direct']=='yes'){
                   <td>{{$fee['firstName']}} {{$fee['lastName']}}</td>
                   <td>{{$fee['regiNo']}}</td>
                   <td>{{$fee['rollNo']}}</td>
-                  <td>@if($fee[0]=='Paid')<b style="color:green">{{$fee[0]}}</b> @else <b style="color:red">{{$fee[0]}}</b>@endif</td>
+                  <td>@if($fee[0]=='Paid') <span class="role paid">{{$fee[0]}}</span> @else <span class="role unpaid">{{$fee[0]}}</span>@endif</td>
                   <td>@if($fee[0]=='Paid'){{$fee[1]}} @else  @endif</td>
                  <?php /*  <td>
                    <a title='Delete' class='btn btn-danger' href='{{url("/fees/delete")}}/{{$fee->billNo}}'> <i class="glyphicon glyphicon-trash icon-red"></i></a>
