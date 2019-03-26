@@ -704,6 +704,7 @@ class feesController extends BaseController {
 									$family_vouchar->status     = 'Unpaid';
 									$family_vouchar->amount     = $totals->payTotal;
 									$family_vouchar->dueamount  = $totals->dueamount;
+									$family_vouchar->month  = $month;
 									$family_vouchar->save() ;
 								}
 							
@@ -981,6 +982,66 @@ class feesController extends BaseController {
 		}
 		$paid->save();
 		echo "<pre>";print_r($totals);
+	      return Redirect::back()->with('success','voucher paid');
+
+		exit;
+
+	}
+
+	public function family_vouchar_paid($id)
+	{
+		$bills = explode(',', Input::get('bills'));
+		$fees = FeeCol::select('*')
+		->whereIn('billNo',$bills)
+		//->where('regiNo',Input::get('regiNo'))
+		->get();
+		$regiNos = array();
+		//echo "<pre>";print_r($fees);exit;
+		foreach($fees as $totals){
+
+				$paid       = FeeCol::find($totals->id);
+				$regiNos[]  = $paid->regiNo;
+				$vouchers   = Voucherhistory::where('bill_id',$totals->billNo)->first();
+				
+				if(Input::get('s')!='unpaid'){
+					$paid->paidAmount = $totals->total_fee;
+					//$paid->dueAmount  = $totals->total_fee;
+					$vouchers->status = 'paid'; 
+				}else{
+					$paid->paidAmount = '0.00';
+					$vouchers->status = 'unpaid'; 
+				}
+				$paid->save();
+				$vouchers->save();
+			
+			$totals1 = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+			//->where('billNo',$billNo)
+			->where('regiNo',$paid->regiNo)
+			->first();
+			if(Input::get('s')!='unpaid'){
+				$paid->dueAmount  =  $totals1->payTotal - $totals->total_fee;
+			}else{
+
+				$paid->dueAmount  = $totals1->payTotal ;
+
+			}
+			$paid->save();
+		}
+		$chechdueoveral  = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+			->whereIn('billNo',$bills)
+			//->whereIn('regiNo',$regiNos)
+			->first();
+			//echo "<pre>";print_r($chechdueoveral );
+		$family_vouchers  = FamilyVouchar::find($id);
+		if(Input::get('s')!='unpaid'){
+		$family_vouchers->status = 'paid';
+		}else{
+			$family_vouchers->status = 'Unpaid';
+		}
+		$family_vouchers->dueamount = $chechdueoveral->dueamount;
+		$family_vouchers->amount = $chechdueoveral->payTotal;
+		$family_vouchers->save();
+		//echo "<pre>";print_r($totals);
 	      return Redirect::back()->with('success','voucher paid');
 
 		exit;
@@ -1548,7 +1609,7 @@ class feesController extends BaseController {
 
 					$contact_id = $ict->ictcore_api('contacts','POST',$data );
 
-					$group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+					$group      = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
 
 							//$resultArray[] = get_object_vars($stdfees);
 				}
@@ -1580,8 +1641,8 @@ class feesController extends BaseController {
 		if($action!=''):
 			$now   = Carbon::now();
 		$year1  =  $now->year;
-		$year  =  get_current_session()->id;
-		$month =  $now->month;
+		$year   =  get_current_session()->id;
+		$month  =  $now->month;
 	          // $all_section =	DB::table('section')->select( '*')->get();
 		$all_section =	DB::table('Class')->select( '*')->get();
 			//$student_all =	DB::table('Student')->select( '*')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
@@ -1611,9 +1672,9 @@ class feesController extends BaseController {
 					foreach($student_all as $stdfees){
 						$student =	DB::table('billHistory')->leftJoin('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
 						->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo')
-					// ->whereYear('stdBill.payDate', '=', 2017)
+							// ->whereYear('stdBill.payDate', '=', 2017)
 						->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', $year1)->where('billHistory.month','=',$month)->where('billHistory.month','<>','-1')
-					//->orderby('stdBill.payDate')
+							//->orderby('stdBill.payDate')
 						->get();
 						if(count($student)>0 ){
 							foreach($student as $rey){
@@ -1625,15 +1686,15 @@ class feesController extends BaseController {
 							}
 						}else{
 
-							$unpaidArray[$section->code.'_'.$section->name."_".'unpaid_'.$stdfees->regiNo]=$stdfees;
-					//$ourallunpaid =++$ourallunpaid;
+							$unpaidArray[$section->code.'_'.$section->name."_".'unpaid_'.$stdfees->regiNo]  =  $stdfees;
+							//$ourallunpaid =++$ourallunpaid;
 						}
-					//$resultArray[$section->code.'_'.$section->name."_".'total']=++$total_s;
+							//$resultArray[$section->code.'_'.$section->name."_".'total']=++$total_s;
 					}
 				}else{
-	          //$resultArray[$section->code.'_'.$section->name."_".'total']=0;
-	          //$resultArray[$section->code.'_'.$section->name."_".'unpaid']=array();
-			 // $unpaidArray[$section->code.'_'.$section->name."_".'paid'] =  array();
+	          		//$resultArray[$section->code.'_'.$section->name."_".'total']=0;
+	          		//$resultArray[$section->code.'_'.$section->name."_".'unpaid']=array();
+			 		// $unpaidArray[$section->code.'_'.$section->name."_".'paid'] =  array();
 
 				}
 				//$resultArray[] = get_object_vars($section);
@@ -1816,8 +1877,17 @@ class feesController extends BaseController {
 			}else{
 				return Redirect::to('fee_detail?action=unpaid')->withErrors("Sms credential not found");
 			}
-				$group_id = $ict->telenor_apis('group','','','','','');
-				$contacts = array();
+			if($ictcore_integration->method=='telenor'){
+			$group_id  = $ict->telenor_apis('group','','','','','');
+			}else{
+				$data = array(
+				'name'        => 'Fee Notification',
+				'description' => 'fee notification',
+				);
+
+			 $group_id= $ict->ictcore_api('groups','POST',$data );
+			}
+				$contacts  = array();
 				$contacts1 = array();
 				$i=0;
 			foreach($student_all as $stdfees)
@@ -1825,11 +1895,25 @@ class feesController extends BaseController {
 				if (preg_match("~^0\d+$~", $stdfees->fatherCellNo)) {
 					$to = preg_replace('/0/', '92', $stdfees->fatherCellNo, 1);
 				}else {
-					$to =$stdfees->fatherCellNo;  
+					$to = $stdfees->fatherCellNo;  
 				}
 				$contacts1[] = $to;
 				if(strlen(trim($to))==12){
 					$contacts[] = $to;
+					if($ictcore_integration->method!='telenor'){
+						$data = array(
+							//'registrationNumber' =>$stdfees->regiNo,
+							'first_name'         => $stdfees->firstName,
+							'last_name'          =>  $stdfees->lastName,
+							'phone'              =>  $to,
+							'email'              => '',
+						);
+
+
+						$contact_id = $ict->ictcore_api('contacts','POST',$data );
+						$group = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
+					}
+
 					$i++;
 				}
 				
@@ -1837,8 +1921,10 @@ class feesController extends BaseController {
 					break;
 				}*/
 			}
+			if($ictcore_integration->method=='telenor'){
 				$comseprated= implode(',',$contacts);
 				$group_contact_id = $ict->telenor_apis('add_contact',$group_id,$comseprated,'','','');
+			}
 		}else{
 			return Redirect::to('fee_detail?action=unpaid')->withErrors("Student not found");
 		}
@@ -1848,8 +1934,39 @@ class feesController extends BaseController {
 			}else{
 				$msg = "please submit your child  fee for this month";
 			}
-			$campaign = $ict->telenor_apis('campaign_create',$group_id,'',$msg,$fee_msg->first()->telenor_file_id,'sms');
-			$send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
+			if($ictcore_integration->method=='telenor'){
+				$campaign = $ict->telenor_apis('campaign_create',$group_id,'',$msg,$fee_msg->first()->telenor_file_id,'sms');
+				$send_campaign = $ict->telenor_apis('send_msg','','','','',$campaign);
+			}else{
+
+				$data = array(
+					'name' => 'fee_noti',
+					'data' => $msg,
+					'type' => 'utf-8',
+					'description' =>'',
+				);
+				$text_id  =  $ict->ictcore_api('messages/texts','POST',$data );
+				$data     = array(
+					'name' =>'fee_noti',
+					'text_id' =>$text_id,
+				);
+				$program_id  =  $ict->ictcore_api('programs/sendsms','POST',$data );
+
+
+				$program_id =$program_id ;
+
+				 $data = array(
+						'program_id' => $program_id,
+						'group_id'   => $group_id,
+						'delay'      => '',
+						'try_allowed' => '',
+						'account_id' => 1,
+					);
+					//echo ""
+					$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
+					//$campaign_id = $ict->ictcore_api('campaigns/$campaign_id/start'
+
+			}
 			session()->forget('upaid');
 			return Redirect::to('fee_detail?action=unpaid')->with('success',"Notification sended");
     }

@@ -47,7 +47,7 @@
               <thead>
                 <tr>
                   <th>Payable Amount</th>
-                  <th>Paid Amount</th>
+                  {{--<th>Paid Amount</th>--}}
                   {{--<th>Due Amount</th>--}}
                   <th>Status</th>
                   <th>Pay Date</th>
@@ -59,17 +59,25 @@
                 <tr>
                   
                   <td>{{$fee->amount}}</td>
-                  <td></td>
+                  {{--<td></td>--}}
                   {{--<td>{{$fee->dueAmount}}</td>--}}
                   {{--<td>{{$fee->dueAmount}}</td>--}}
                    <td>@if($fee->status=='Unpaid')<button  class="btn btn-danger" >UnPaid</button>@else <button  class="btn btn-success" >Paid</button>@endif</td>
                   <td>{{$fee->date}}</td>
 
                   <td>
-                   @if($fee->status=='Unpaid')<a title='Paid' class='btn btn-success' onclick="return confirm('Are you sure you want to paid?');" href='#{{url("/family/paid")}}/{{$fee->billNo}}'> Paid</a>@else
-                    <a title='Paid' class='btn btn-danger' onclick="return confirm('Are you sure you want to unpaid?');" href='#{{url("/family/paid")}}/{{$fee->billNo}}?s=unpaid'> UnPaid</a>
+                   @if($fee->status=='Unpaid')
+                    <a title='Paid' onclick="submitfrom('paid')" class='btn btn-success' onclick="return confirm('Are you sure you want to paid?');" onclick="document.getElementById('fee_paid').submit();"> Paid</a>
+                    <form  id="fee_paid" action='{{url("/family/paid")}}/{{$fee->id}}' method="post">
+                    @else
+                    <a title='unPaid'  class='btn btn-danger' onclick="submitfrom('unpaid')" onclick="return confirm('Are you sure you want to unpaid?');" > UnPaid</a>
+                    <form id="fee_unpaid" action='{{url("/family/paid")}}/{{$fee->id}}?s=unpaid' method="post">
+
                     @endif
-                  
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="bills" value="{{$fee->bills}}">
+
+                    </form>
                   </td>
                   @endforeach
                 </tbody>
@@ -90,7 +98,7 @@
                     <td>Total Due: <strong><i class="blue">{{$totals->dueamount}}</i></strong> rs.</td>
                     <td></td>
 
-                  {{--<td>
+                    {{--<td>
                       <a title='Print' id="btnPrint" class='btn btn-info' target='_blank' href='{{url("/fees/report/std")}}/{{$student->regiNo}}'> <i class="glyphicon glyphicon-print icon-red"></i> Print</a>
                     </td>--}}
                   </tr>
@@ -147,6 +155,27 @@
           @section('script')
           <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
           <script type="text/javascript">
+          function submitfrom(type){
+            if(type=='unpaid'){
+
+              var x = confirm("Are you sure you want to Unpaid this vouchar?");
+                if (x)
+                   document.getElementById('fee_unpaid').submit();
+                else
+                  return false;
+              }
+           /// document.getElementById('fee_unpaid').submit();
+            else{
+              var x = confirm("Are you sure you want to Paid this vouchar?");
+                  if (x)
+                      document.getElementById('fee_paid').submit();
+                  else
+                    return false;
+                }
+                          
+            }
+            
+          
           var stdRegiNo="{{$student->regiNo}}";
           $( document ).ready(function() {
 

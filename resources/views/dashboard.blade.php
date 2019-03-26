@@ -2,7 +2,7 @@
 @section("style")
 <link href="{{ URL::asset('/css/custom.min.css')}}" rel='stylesheet'>
 <link href="{{ URL::asset('/font-awesome/css/font-awesome.min.css')}}" rel='stylesheet'>
-
+<link href="{{ URL::asset('/css/theme1.css')}}" rel="stylesheet" media="all">
 <style>
 .fc-today{
   background-color: #2AA2E6;
@@ -131,6 +131,12 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
          
     </div>
     @else
+
+
+
+
+
+
     <div class="box col-md-4">
         <div class="box-inner homepage-box">
             <div class="box-header well" data-original-title="">
@@ -174,8 +180,133 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
 
  @if(Auth::user()->group!='Director')
 
+<div class="row m-t-25">
+                            <div class="col-sm-6 col-lg-4">
+                                <a href="{{url('/class/list')}}">
+                                <div class="overview-item overview-item--c5">
+                                    <div class="overview__inner">
+                                        <div class="overview-box clearfix">
+                                            <div class="icon">
+                                                <i class="zmdi zmdi-account-o"></i>
+                                            </div>
+                                            <div class="text">
+                                                <h2>{{$total['class']}}</h2>
+                                                <span>Classes</span>
+                                            </div>
+                                        </div>
+                                        <div class="overview-chart">
+                                            <canvas id="widgetChart1"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-lg-4">
+                                <a href="{{url('/student/list')}}">
+                                <div class="overview-item overview-item--c2">
+                                    <div class="overview__inner">
+                                        <div class="overview-box clearfix">
+                                            <div class="icon">
+                                                <i class="zmdi zmdi-shopping-cart"></i>
+                                            </div>
+                                            <div class="text">
+                                                <h2>{{$total['student']}}</h2>
+                                                <span>Students</span>
+                                            </div>
+                                        </div>
+                                        <div class="overview-chart">
+                                            <canvas id="widgetChart2"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-lg-4">
+                               <a href="{{url('/attendance_detail?action=absent')}}">
+                                <div class="overview-item overview-item--c3">
+                                    <div class="overview__inner">
+                                        <div class="overview-box clearfix">
+                                            <div class="icon">
+                                                <i class="zmdi zmdi-calendar-note"></i>
+                                            </div>
+                                            <div class="text">
+                                                <h2>{{$total['totalabsent']}}</h2>
+                                                <span>Absent Students</span>
+                                            </div>
+                                        </div>
+                                        <div class="overview-chart">
+                                            <canvas id="widgetChart3"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-lg-4">
+                                <a href="{{url('/attendance_detail?action=late')}}">
+                                <div class="overview-item overview-item--c4">
+                                    <div class="overview__inner">
+                                        <div class="overview-box clearfix">
+                                            <div class="icon">
+                                                <i class="zmdi zmdi-money"></i>
+                                            </div>
+                                            <div class="text">
+                                                <h2>{{$total['totallate']}}</h2>
+                                                <span>Late Students</span>
+                                            </div>
+                                        </div>
+                                        <div class="overview-chart">
+                                            <canvas id="widgetChart4"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+                             @if(Auth::user()->group=='Admin')
+                             <div class="col-sm-6 col-lg-4">
+                                <a href="{{url('/fee_detail?action=paid')}}">
+                                <div class="overview-item overview-item--c1">
+                                    <div class="overview__inner">
+                                        <div class="overview-box clearfix">
+                                            <div class="icon">
+                                                <i class="zmdi zmdi-account-o"></i>
+                                            </div>
+                                            <div class="text">
+                                                <h2>{{$ourallpaid}}</h2>
+                                                <span>Fee Paid</span>
+                                            </div>
+                                        </div>
+                                        <div class="overview-chart">
+                                            <canvas id="widgetChart50"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
 
-    <div class="row tile_count text-center">
+                             <div class="col-sm-6 col-lg-4">
+                               <a href="{{url('/fee_detail?action=unpaid')}}">
+                                <div class="overview-item overview-item--c2">
+                                    <div class="overview__inner">
+                                        <div class="overview-box clearfix">
+                                            <div class="icon">
+                                                <i class="zmdi zmdi-account-o"></i>
+                                            </div>
+                                            <div class="text">
+                                                <h2>{{$ourallunpaid}}</h2>
+                                                <span>Fee Unpaid</span>
+                                            </div>
+                                        </div>
+                                        <div class="overview-chart">
+                                            <canvas id="widgetChart60"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+                            @endif
+                        </div>
+
+    {{--<div class="row tile_count text-center">
       <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
          <a href="{{url('/class/list')}}">
         <span class="count_top"><i class="fa fa-2x fa-home green"></i>Class</span>
@@ -223,7 +354,7 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
       @endif
 
       
-    </div>
+    </div>--}}
 
   
       
@@ -357,7 +488,7 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
 @stop
 @section("script")
 <script src="{{url('/js/Chart.min.js')}}"></script>
-
+ <script src="{{url('js/main.js')}}"></script>
 <script script type="text/javascript">
  
   $(document).ready(function () {

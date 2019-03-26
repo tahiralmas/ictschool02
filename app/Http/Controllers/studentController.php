@@ -53,12 +53,22 @@ class studentController extends BaseController {
 		
 			$query = Input::get('query');
 			$output="";
-			$data=DB::table('Student')->where('isActive', '=', 'Yes')->where('firstName','LIKE','%'.$query."%")->orwhere('lastName','LIKE','%'.$query."%")->orwhere('fatherName','LIKE','%'.$query."%")->orwhere('b_form','LIKE','%'.$query."%")
-			->orwhere('session','LIKE','%'.$query."%")->orwhere('class','LIKE','%'.$query."%")->orwhere('dob','LIKE','%'.$query."%")
-			->orwhere('parmanentAddress','LIKE','%'.$query."%")->orwhere('discount_id','LIKE','%'.$query."%")
-			->orwhere('regiNo','LIKE','%'.$query."%")
-			->orderBy('session', 'desc')
-			->orderBy('class', 'asc')
+			$data=DB::table('Student')
+			->join('Class','Student.class','=','Class.code')
+			->select('Student.*','Class.name as class')
+			->where('Student.isActive', '=', 'Yes')
+			->where('Student.firstName','LIKE','%'.$query."%")
+			->orwhere('Student.lastName','LIKE','%'.$query."%")
+			->orwhere('Student.fatherName','LIKE','%'.$query."%")
+			->orwhere('Student.b_form','LIKE','%'.$query."%")
+			->orwhere('Student.session','LIKE','%'.$query."%")
+			->orwhere('Student.class','LIKE','%'.$query."%")
+			->orwhere('Student.dob','LIKE','%'.$query."%")
+			->orwhere('Student.parmanentAddress','LIKE','%'.$query."%")
+			->orwhere('Student.discount_id','LIKE','%'.$query."%")
+			->orwhere('Student.regiNo','LIKE','%'.$query."%")
+			->orderBy('Student.session', 'desc')
+			->orderBy('Student.class', 'asc')
 			->limit(20)
 			->get();
 			//return Response($output);

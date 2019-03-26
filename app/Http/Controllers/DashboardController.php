@@ -122,7 +122,11 @@ class DashboardController extends BaseController {
 				$student =	DB::table('billHistory')->Join('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
 				->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo')
 				// ->whereYear('stdBill.payDate', '=', 2017)
-				->where('stdBill.regiNo','=',$stdfees->regiNo)->whereYear('stdBill.payDate', '=', $year1)->where('billHistory.month','=',$month)->where('billHistory.month','<>','-1')
+				->where('stdBill.regiNo','=',$stdfees->regiNo)
+				->where('stdBill.regiNo','=',$stdfees->regiNo)
+				->whereYear('stdBill.payDate', '=', $year1)
+				->where('billHistory.month','=',$month)
+				->where('billHistory.month','<>','-1')
 				//->orderby('stdBill.payDate')
 				->get();
 				if(count($student)>0 ){

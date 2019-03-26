@@ -1,6 +1,7 @@
 .env
 /.env
 storage/*.key
+/storage/logs/*
 img/*
 /img/*
 public/images/*

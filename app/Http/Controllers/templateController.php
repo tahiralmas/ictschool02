@@ -239,7 +239,7 @@ class templateController extends BaseController {
 		if ($validator->fails())
 		{
 			if(Input::get('title')=='mark_notification'){
-					//return Redirect::to('/template/creates')->withErrors($errorMessages);
+					return Redirect::to('/template/creates')->withErrors($errorMessages);
 					return Redirect::to('/message/edit/'.$ictcore_message->id)->with("success", "Message Created Succesfully.");
 
 				}
