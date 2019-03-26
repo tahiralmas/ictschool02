@@ -648,7 +648,7 @@ class feesController extends BaseController {
 				}
 
 
- 				echo "<pre>";print_r($regiNo);
+ 				//echo "<pre>";print_r($regiNo);
 							$vouchar_details = DB::table('stdBill')
 				               ->join('Student','stdBill.regiNo','=','Student.regiNo')
 		                       //->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
@@ -732,7 +732,7 @@ class feesController extends BaseController {
 		     // $total_fee  = $discount +$fee->fee;
 		      $fees        = '';
 		      $late_fee    = '';
-		      echo "<pre>";print_r($vouchar_details);exit;
+		     // echo "<pre>";print_r($vouchar_details);exit;
 		//return View::Make('app.feeCollection',compact('classes'));
 		$institute = DB::table('institute')->first();
 		//	$fees= FeeSetup::select('id','title')->where('id','=',Input::get('fee_name'))->get();
