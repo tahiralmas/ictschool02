@@ -927,8 +927,11 @@ $(document).ready(function(){
           success:function(data){
            $('#studentListd').fadeIn();  
            $('#studentListd').html(data);
+
           }
          });
+        }else{
+            $('#studentListd').fadeOut();
         }
     });
 
