@@ -53,6 +53,7 @@ class ictcoreController {
 			'ictcore_url' => 'required',
 			'ictcore_user' => 'required',
 			'ictcore_password' => 'required',
+			'ictcore_account_id' => 'required|numeric',
 			];
 
 	    }
@@ -77,6 +78,7 @@ class ictcoreController {
 			$ictcore_integration->ictcore_url =$url;
 			$ictcore_integration->ictcore_user = Input::get('ictcore_user');
 			$ictcore_integration->ictcore_password = Input::get('ictcore_password');
+			$ictcore_integration->ictcore_account_id = Input::get('ictcore_account_id');
 			$ictcore_integration->method = $method;
 			$ictcore_integration->type = Input::get('type');
 			$ictcore_integration->save();
@@ -660,7 +662,50 @@ class ictcoreController {
 	}
 	function ictcore_api($method,$req, $arguments = array()) {
 
+		//echo "<pre>";print_r();
+
 		$ictcore_integration =	DB::table('ictcore_integration')->select('*')->where('method','ictcore')->first();
+		if($method=="transmissions"){
+			$data1 = $arguments;
+
+			$title = $data1['title'];
+			$program_id = $data1['program_id'];
+			$contact_id = $data1['contact_id'];
+			$origin = $data1['origin'];
+			$direction = $data1['direction'];
+
+			$data2 = array(
+						'title' => $title,
+						//$program_id,
+						'program_id' =>$program_id,
+						'account_id' =>$ictcore_integration->ictcore_account_id,
+						'contact_id' => $contact_id,
+						'origin'     =>$origin,
+						'direction'  => $direction,
+					);
+			$arguments = array_replace($data1,$data2);
+
+		}
+
+		if($method=="campaigns"){
+
+			$data1 = $arguments;
+			$program_id = $data1['program_id'];
+			$group_id = $data1['group_id'];
+			$delay = $data1['delay'];
+			$try_allowed = $data1['try_allowed'];
+
+			$data2 = array(
+							'program_id' => $program_id,
+							'group_id' => $group_id,
+							'delay' => $delay,
+							'try_allowed' => $try_allowed,
+							'account_id' => $ictcore_integration->ictcore_account_id,
+							);
+
+			$arguments = array_replace($data1,$data2);
+		}
+
 		$api_username = $ictcore_integration->ictcore_user;    // <=== Username at ICTCore
 		$api_password = $ictcore_integration->ictcore_password;  // <=== Password at ICTCore
 		$service_url  =  $ictcore_integration->ictcore_url;  //'http://172.17.0.2/ictcore/api'; // <=== URL for ICTCore REST APIs
@@ -810,7 +855,7 @@ class ictcoreController {
 	    
 	    $planetbeyondApiUrl="https://telenorcsms.com.pk:27677/corporate_sms2/api/auth.jsp?msisdn=#username#&password=#password#";
 		if($type == 'sms'){
-		$planetbeyondApiSendSmsUrl="https://telenorcsms.com.pk:27677/corporate_sms2/api/sendsms.jsp?session_id=#session_id#&to=#to_number_csv#&text=#message_text#"; 
+			$planetbeyondApiSendSmsUrl="https://telenorcsms.com.pk:27677/corporate_sms2/api/sendsms.jsp?session_id=#session_id#&to=#to_number_csv#&text=#message_text#"; 
 	    }elseif($type == 'voice'){
 	    	$attandace_message = DB::table("ictcore_attendance")->first();
 	    	$planetbeyondApiSendSmsUrl="https://telenorcsms.com.pk:27677/corporate_sms2/api/makecall.jsp?session_id=#session_id#&to=#to_number_csv#&file_id=#message_text#&max_retries=1";

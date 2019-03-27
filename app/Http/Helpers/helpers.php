@@ -272,7 +272,7 @@ if(! function_exists('sendmesssageictcore')){
 						'title' => 'Attendance',
 						//$program_id,
 						'program_id' =>$program_id,
-						'account_id'     => 1,
+						'account_id'     => 15,
 						'contact_id'     => $contact_id,
 						'origin'     => 1,
 						'direction'     => 'outbound',

@@ -60,7 +60,7 @@ class studentController extends BaseController {
 			//->where('Student.firstName','LIKE','%'.$query."%")
 			//->orwhere('Student.lastName','LIKE','%'.$query."%")
 			//->orWhere(CONCAT('Student.firstName', " ", 'Student.lastName'), 'LIKE', '%'.$query.'%')
-		     ->WhereRaw("concat(Student.firstName, ' ', Student.lastName) like '%$query%' ")
+		    ->WhereRaw("concat(Student.firstName, ' ', Student.lastName) like '%$query%' ")
 			->orwhere('Student.fatherName','LIKE','%'.$query."%")
 			->orwhere('Student.b_form','LIKE','%'.$query."%")
 			->orwhere('Student.session','LIKE','%'.$query."%")

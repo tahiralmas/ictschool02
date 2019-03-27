@@ -308,6 +308,8 @@ class messageController extends BaseController {
 											'direction'     => 'outbound',
 											);
 											$transmission_id = $ict->ictcore_api('transmissions','POST',$data );
+											
+//echo "<pre>";print_r($transmission_id);exit;
 											$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
 											if(!empty($transmission_send->error)){
 											$status =$transmission_send->error->message;
@@ -359,7 +361,10 @@ class messageController extends BaseController {
 											'origin'     => 1,
 											'direction'     => 'outbound',
 											);
+
 											$transmission_id   = $ict->ictcore_api('transmissions','POST',$data );
+											//echo "<pre>";print_r($transmission_id);
+											///exit;
 											$transmission_send = $ict->ictcore_api('transmissions/'.$transmission_id.'/send','POST',$data=array() );
 											if(!empty($transmission_send->error)){
 											$status =$transmission_send->error->message;

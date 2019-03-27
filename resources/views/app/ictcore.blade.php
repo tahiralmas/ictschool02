@@ -80,8 +80,24 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    
                                 </div>
                             </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="type">Account ID</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                                    <input type="text"  class="form-control" required name="ictcore_account_id" placeholder="Ictcore Account id" value="{{$ictcore_integration->ictcore_account_id}}">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             <div class="row" id ="tele" style="display:none">
                             <div class="col-md-12">
                             <div class="col-md-10" >
