@@ -189,19 +189,19 @@ class studentController extends BaseController {
 		//'religion' => 'required',
 		//'bloodgroup' => 'required',
 		//'nationality' => 'required',
-		'dob' => 'required',
+		//'dob' => 'required',
 		'session' => 'required',
 		'class' => 'required',
 		'section' => 'required',
 		'rollNo' => 'required',
 		'shift' => 'required',
 		'photo' => 'mimes:jpeg,jpg,png',
-		'b_form' => 'required',
+		//'b_form' => 'required',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
 		//'motherName' => 'required',
 		//'motherCellNo' => 'required',
-		'presentAddress' => 'required',
+		//'presentAddress' => 'required',
 		//'parmanentAddress' => 'required'
 	];
 	$validator = \Validator::make(Input::all(), $rules);
@@ -246,6 +246,9 @@ class studentController extends BaseController {
 
 		}
 		$student->dob         = Input::get('dob');
+		if(Input::get('dob')==''){
+			$student->dob         = '';
+		}
 		$student->session     = get_current_session()->id;
 		//$student->session= trim(Input::get('session'));
 		$student->class       = Input::get('class');
@@ -268,6 +271,9 @@ class studentController extends BaseController {
 			$student->remarks = "";
 		}
 		$student->b_form= Input::get('b_form');
+		if(Input::get('b_form')==''){
+			$student->b_form         = '';
+		}
 		$student->fatherName= Input::get('fatherName');
 		$student->fatherCellNo= Input::get('fatherCellNo');
 		
@@ -293,6 +299,9 @@ class studentController extends BaseController {
 		$student->about_family=Input::get('familyc');
 
 		$student->presentAddress= Input::get('presentAddress');
+		if(Input::get('presentAddress')==''){
+			$student->presentAddress         = '';
+		}
 		$student->parmanentAddress= Input::get('parmanentAddress');
 		if(Input::get('parmanentAddress')==''){
 			$student->parmanentAddress='';
@@ -581,23 +590,23 @@ public function update()
 
 	$rules=[
 		'fname' => 'required',
-		'lname' => 'required',
+		//'lname' => 'required',
 		'gender' => 'required',
 		//'religion' => 'required',
 		//'bloodgroup' => 'required',
 		//'nationality' => 'required',
-		'dob' => 'required',
+		//'dob' => 'required',
 		'session' => 'required',
 		'class' => 'required',
 		'section' => 'required',
 		'rollNo' => 'required',
 		'shift' => 'required',
-		'b_form' => 'required',
+		//'b_form' => 'required',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
 		//'motherName' => 'required',
 		//'motherCellNo' => 'required',
-		'presentAddress' => 'required',
+		//'presentAddress' => 'required',
 		//'parmanentAddress' => 'required'
 	];
 	$validator = \Validator::make(Input::all(), $rules);
@@ -680,6 +689,9 @@ public function update()
 
 		}
 		$student->dob= Input::get('dob');
+		if(Input::get('dob')==''){
+			$student->dob='';
+		}
 		$student->session= trim(Input::get('session'));
 		$student->class= Input::get('class');
 		$student->section= Input::get('section');
@@ -701,6 +713,9 @@ public function update()
 			$student->remarks = "";
 		}
 		$student->b_form= Input::get('b_form');
+		if(Input::get('b_form')==''){
+			$student->b_form= "";
+		}
 		$student->fatherName= Input::get('fatherName');
 		$student->fatherCellNo= Input::get('fatherCellNo');
 		
@@ -723,6 +738,9 @@ public function update()
 		}
 
 		$student->presentAddress= Input::get('presentAddress');
+		if(Input::get('presentAddress')==''){
+			$student->presentAddress= "";
+		}
 		$student->parmanentAddress= Input::get('parmanentAddress');
 		if(Input::get('parmanentAddress')==''){
 			$student->parmanentAddress='';

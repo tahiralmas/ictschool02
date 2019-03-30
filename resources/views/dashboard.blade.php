@@ -183,7 +183,7 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
 <div class="row m-t-25">
                             <div class="col-sm-6 col-lg-4">
                                 <a href="{{url('/class/list')}}">
-                                <div class="overview-item overview-item--c5">
+                                <div class="overview-item overview-item--c3">
                                     <div class="overview__inner">
                                         <div class="overview-box clearfix">
                                             <div class="icon">
@@ -365,6 +365,7 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
    
      <div class="row">
             <div class="col-md-6">
+                <div class="au-card recent-report">
                 <div class="box box-primary">
                     <div class="box-body">
                         <!-- THE CALENDAR -->
@@ -372,8 +373,10 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
                     </div>
                     <!-- /.box-body -->
                 </div>
+                </div>
             </div>
             <div class="col-md-6">
+            <div class="au-card recent-report">
             @if(request()->getHttpHost()=='localhost' || request()->getHttpHost()=='school.ictcore.org')
             <a href='{{url("attendance/today_delete")}}' class="btn btn-danger">Clear today attendance</a>
             @endif
@@ -385,13 +388,15 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
                 </div>
                 <!-- /.box -->
             </div>
+            </div>
         </div>
        
        
  @if(Auth::user()->group=='Admin')
     <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
-         
+         <div class="au-card recent-report">
+         <div class="au-card recent-report">
         <h2>Fee Detail <small> {{$month_n}}</small></h2>
          <table id="feeList" class="table table-striped table-bordered table-hover">
               <thead>
@@ -422,6 +427,7 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
                 <?php $i++; ?>
                 @endforeach
               </table>
+      </div>
       </div>
       @endif
      <?php /* <div class="col-md-6 col-sm-6 col-xs-6">
@@ -488,7 +494,7 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
 @stop
 @section("script")
 <script src="{{url('/js/Chart.min.js')}}"></script>
- <script src="{{url('js/main.js')}}"></script>
+ 
 <script script type="text/javascript">
  
   $(document).ready(function () {

@@ -31,19 +31,19 @@
         </div>
         @endif
   <ul class="nav nav-pills">
-    <li class="active noround"><a data-toggle="pill" href="#home">Monday</a></li>
-    <li class="noround"><a data-toggle="pill" href="#menu1">Tuesday</a></li>
-    <li class="noround"><a data-toggle="pill" href="#menu2">Wednesday</a></li>
-    <li class="noround"><a data-toggle="pill" href="#menu3">Thursday</a></li>
-     <li class="noround"><a data-toggle="pill" href="#menu4">Friday</a></li>
-      <li class="noround"><a data-toggle="pill" href="#menu5">Sturday</a></li>
-       <li class="noround"><a data-toggle="pill" href="#menu6">Sunday</a></li>
+    <li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#home">Monday</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu1">Tuesday</a></li>
+    <li class="nav-item"><a  class="nav-link"data-toggle="pill" href="#menu2">Wednesday</a></li>
+    <li class="nav-item"><a  class="nav-link"data-toggle="pill" href="#menu3">Thursday</a></li>
+     <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu4">Friday</a></li>
+      <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu5">Sturday</a></li>
+       <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#menu6">Sunday</a></li>
   </ul>
 <br>
 <br>
 <br>
   <div class="tab-content">
-    <div id="home" class="tab-pane fade in active">
+    <div id="home" class="tab-pane active">
    
       <table class="table table-bordered table-striped table-hover">
         <thead>
@@ -85,7 +85,7 @@
         </tbody>
       </table>
     </div>
-    <div id="menu1" class="tab-pane fade">
+    <div id="menu1" class="tab-pane">
    
        <table class="table table-bordered table-striped table-hover">
         <thead>
@@ -127,7 +127,7 @@
         </tbody>
       </table>
     </div>
-    <div id="menu2" class="tab-pane fade">
+    <div id="menu2" class="tab-pane">
       
        <table class="table table-bordered table-striped table-hover">
         <thead>
@@ -169,7 +169,7 @@
         </tbody>
       </table>
     </div>
-    <div id="menu3" class="tab-pane fade">
+    <div id="menu3" class="tab-pane">
      
        <table class="table table-bordered table-striped table-hover">
         <thead>
@@ -211,7 +211,7 @@
         </tbody>
       </table>
     </div>
-    <div id="menu4" class="tab-pane fade">
+    <div id="menu4" class="tab-pane">
       
      <table class="table table-bordered table-striped table-hover">
         <thead>
@@ -253,7 +253,7 @@
         </tbody>
       </table>
     </div>
-       <div id="menu5" class="tab-pane fade">
+       <div id="menu5" class="tab-pane">
      
        <table class="table table-bordered table-striped table-hover">
         <thead>
@@ -295,8 +295,7 @@
         </tbody>
       </table>
     </div>
-       <div id="menu6" class="tab-pane fade">
-     
+       <div id="menu6" class="tab-pane">
        <table class="table table-bordered table-striped table-hover">
         <thead>
           <tr class="table-head">

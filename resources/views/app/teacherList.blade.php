@@ -161,7 +161,9 @@
     <script src="/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript">
     $( document ).ready(function() {
-        $('#studentList').dataTable();
+        $('#studentList').dataTable({
+          "sPaginationType": "bootstrap",
+        });
         $(".datepicker2").datepicker( {
             format: " yyyy", // Notice the Extra space at the beginning
             viewMode: "years",

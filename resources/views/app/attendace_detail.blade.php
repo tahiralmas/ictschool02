@@ -101,7 +101,9 @@
     <script src="{{ URL::asset('/js/bootstrap-datepicker.js')}}"></script>
      <script type="text/javascript">
         $( document ).ready(function() {
-
+             $('#attendanceList').dataTable({
+                "sPaginationType": "bootstrap",
+            });
                getsections();
               $('#class').on('change',function() {
                 getsections();
@@ -119,9 +121,7 @@
 
             });
 
-            $('#attendanceList').dataTable({
-                "sPaginationType": "bootstrap",
-            });
+           
 
             $( "#btnPrint" ).click(function() {
                 var aclass  =   $('#class').val();

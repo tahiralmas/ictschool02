@@ -217,13 +217,14 @@
 
             $('#attendanceList').dataTable({
 
-                 pagingType: "simple",
+                 //pagingType: "simple",
                 //"pageLength": 5,
               //  "pagingType": "full_numbers",
                 dom: 'Bfrtip',
                 buttons: [
                     'print'
-                ]
+                ],
+                 "sPaginationType": "bootstrap",
             });
 
             $( "#btnPrint" ).click(function() {

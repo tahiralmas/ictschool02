@@ -10,7 +10,6 @@ b {color:red}
 <div class="alert alert-success">
   <button data-dismiss="alert" class="close" type="button">×</button>
   <strong>Process Success.</strong> {{ Session::get('success')}}<br><a href="/student/list">View List</a><br>
-
 </div>
 @endif
 <div class="row">
@@ -55,7 +54,7 @@ b {color:red}
             </div>
           </div>
           <div class="row">
-            <div class="col-md-12">
+           
               <div class="col-md-6">
                 <div class="form-group">
                   <label class="control-label" for="class">Class <b>*</b></label>
@@ -115,7 +114,7 @@ b {color:red}
               </div>--}}
               <input type="hidden" id="session" value="{{get_current_session()->id}}" class="form-control datepicker2" name="session" required  data-date-format="yyyy">
             </div>
-          </div>
+          
             <div class="row">
             <div class="col-md-12">
               <div class="col-md-4">
