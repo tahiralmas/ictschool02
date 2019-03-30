@@ -407,12 +407,6 @@ table i{
                               <li><a href="{{url('/fees/setup')}}"><i class="glyphicon glyphicon-cog"></i> Fees Setup</a></li>
                             </ul>
                           </div>--}}
-
-
-
-                          
-
-
                            <div class="noti-wrap">
                            <div class="noti__item js-item-menu">
                                         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">

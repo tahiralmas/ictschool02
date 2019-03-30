@@ -2,20 +2,20 @@
 [Master Stylesheet]
 
 Project:  CoolAdmin
-Version:	1.0
-Last change:	08/10/2018 [Add Define a table of contents Link]
-Assigned to:	Hau Nguyen
-Primary use:	Open Source
+Version:    1.0
+Last change:    08/10/2018 [Add Define a table of contents Link]
+Assigned to:    Hau Nguyen
+Primary use:    Open Source
 -------------------------------------------------------------------*/
 /*------------------------------------------------------------------
 [LAYOUT]
 
 * body
     + Header / header
-	+ Page Content / .page-content .name-page
+    + Page Content / .page-content .name-page
         + Section Layouts / section .name-section
         ...
-	+ Footer / footer
+    + Footer / footer
 
 -------------------------------------------------------------------*/
 /*------------------------------------------------------------------
@@ -28,7 +28,7 @@ Primary use:	Open Source
 /*------------------------------------------------------------------
 [Typography]
 
-Notes:	decreasing heading by 0.4em with every subsequent heading level
+Notes:  decreasing heading by 0.4em with every subsequent heading level
 -------------------------------------------------------------------*/
 /*-----------------------------------------------------*/
 /*                   SETTINGS                          */
@@ -3165,40 +3165,6 @@ section {
     background-image: -ms-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
 }
 
-.overview-item--c5 {
-    background-image: -moz-linear-gradient(left, rgba(181,214,237,1) 0%, rgba(33,156,228,1) 51%, rgba(14,157,246,1) 91%, rgba(181,214,237,1) 100%);
-    background-image: -webkit-linear-gradient(left, rgba(181,214,237,1) 0%, rgba(33,156,228,1) 51%, rgba(14,157,246,1) 91%, rgba(181,214,237,1) 100%);
-    background-image: -ms-linear-gradient(left, rgba(181,214,237,1) 0%, rgba(33,156,228,1) 51%, rgba(14,157,246,1) 91%, rgba(181,214,237,1) 100%);
-}
-
-.overview-item--c6 {
-    background-image: -moz-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-    background-image: -webkit-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-    background-image: -ms-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-}
-.overview-item--c7 {
-    background-image: -moz-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-    background-image: -webkit-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-    background-image: -ms-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-}
-.overview-item--c8 {
-    background-image: -moz-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-    background-image: -webkit-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-    background-image: -ms-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-}
-
-.overview-item--c9 {
-    background-image: -moz-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-    background-image: -webkit-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-    background-image: -ms-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-}
-
-.overview-item--c10 {
-    background-image: -moz-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-    background-image: -webkit-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-    background-image: -ms-linear-gradient(90deg, #45b649 0%, #dce35b 100%);
-}
-
 .overview-box .icon {
     display: inline-block;
     vertical-align: top;
@@ -3225,24 +3191,22 @@ section {
         font-size: 46px;
     }
 }
-.text{
-    margin-left: 90px;
-}
+
 .overview-box .text {
     font-weight: 300;
     display: inline-block;
 }
 
 .overview-box .text h2 {
-    font-weight: 500;
+    font-weight: 300;
     color: #fff;
-    font-size: 40px;
+    font-size: 36px;
     line-height: 1;
     margin-bottom: 5px;
 }
 
 .overview-box .text span {
-    font-size: 25px;
+    font-size: 18px;
     color: rgba(255, 255, 255, 0.6);
 }
 
