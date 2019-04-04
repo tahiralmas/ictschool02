@@ -103,7 +103,9 @@
 
 <script type="text/javascript">
     $( document ).ready(function() {
-        $('#feeList').dataTable();
+        $('#feeList').dataTable({
+              "sPaginationType": "bootstrap",
+        });
 
     });
 </script>

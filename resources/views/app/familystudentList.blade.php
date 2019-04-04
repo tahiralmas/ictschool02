@@ -1,9 +1,12 @@
 @extends('layouts.master')
+
 @section('style')
     <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 
 @stop
+
 @section('content')
+
 @if (Session::get('success'))
 <div class="alert alert-success">
   <button data-dismiss="alert" class="close" type="button">×</button>
@@ -35,33 +38,33 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12" style="clear: both;margin-top: 18px;" >
+              <button type="button" class="btn btn-primary" style="margin-left: 350px;" data-toggle="modal" data-target="#exampleModal">
+                    Add Family Discount
+              </button>
               <table id="studentList" class="table table-striped table-bordered" >
                                                          <thead>
                                                              <tr>
-                                                                <th>Regi No</th>
                                                                  <th>Roll No</th>
                                                                  <th>Class</th>
                                                                  <th>section</th>
                                                                  <th>Name</th>
-                                                                 <th>Gender</th>
                                                                   <th>Father Name</th>
                                                                    <th>Guardian's Contact</th>
-                                                                 <th>Present Address</th>
+                                                                 <th>Discount</th>
                                                                   <th>Action</th>
                                                              </tr>
                                                          </thead>
                                                          <tbody>
                                                            @foreach($students as $student)
                                                              <tr>
-                                                                  <td>{{$student->regiNo}}</td>
+                                                                 
                                                                      <td>{{$student->rollNo}}</td>
                                                                      <td>{{$student->class}}</td>
                                                                      <td>{{$student->name}}</td>
                                                                <td>{{$student->firstName}} {{$student->middleName}} {{$student->lastName}}</td>
-                                                               <td>{{$student->gender}}</td>
                                                                   <td>{{$student->fatherName}}</td>
                                                                   <td>   {!! "<b> Father:</b> ". $student->fatherCellNo. " <br \><b >Mother: </b>". $student->motherCellNo. $student->localGuardianCell !!}</td>
-                                                                  <td>{{$student->presentAddress}}</td>
+                                                                  <td class="example">{{$student->discount_id}}</td>
                                                        <td>
                                                   <a title='View' class='btn btn-success' href='{{url("/student/view")}}/{{$student->id}}'> <i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp&nbsp<a title='Edit' class='btn btn-info' href='{{url("/student/edit")}}/{{$student->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
                                                     &nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/student/delete")}}/{{$student->id}}' onclick="return confirm('Are you sure you want to delete this Student?');"> <i class="glyphicon glyphicon-trash icon-white"></i></a>
@@ -70,6 +73,7 @@
                                                     <?php /*&nbsp&nbsp <a title='View' class='btn btn-success' href='{{url("/fee/collections?class_id=$student->class_code&section=$student->section_id&session=$student->session&type=Monthly&month=$month&fee_name=$fee_name")}}'> <i class="glyphicon glyphicon-phone"></i></a>
                                                                */ ?>
                                                                </td>
+                                                               </tr>
                                                            @endforeach
                                                            </tbody>
                                 </table>
@@ -82,11 +86,82 @@
     </div>
 </div>
 </div>
+
+
+
+
+
+
 @stop
+
+@section('model')
+<!-- Modal -->
+<div class="modal" style="display:none;" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Family Student Discount</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{{url('/family_discount/'.$family_id)}}" >
+           <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <table id="" class="table table-striped table-bordered" >
+              <thead>
+                <tr>
+                  <th>Roll No</th>
+                  <th>Class</th>
+                  <th>section</th>
+                  <th>Name</th>
+                  <th>Discount</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($students as $student)
+                <input type="hidden" name="student_id[]" value="{{$student->id}}">
+                  <tr>
+                    <td>{{$student->rollNo}}</td>
+                    <td>{{$student->class}}</td>
+                    <td>{{$student->name}}</td>
+                    <td>{{$student->firstName}} {{$student->middleName}} {{$student->lastName}}</td>
+                    <td class="example"><input style="width: 69px;" name="discount[]" type="text" value="{{$student->discount_id}}"></td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+           <input type="submit" class="btn btn-primary" value="Save changes" style="float: right;margin-top: 10px;">
+      </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+       
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+@stop
+
+
+
 @section('script')
 <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
 $( document ).ready(function() {
+
+
+$("#MyModal").modal();
+     $('#exampleModal').on('shown.bs.modal', function() {
+        $('#myInput').focus();
+     });
+
+
+
+
   //$('#studentList').dataTable();
     $('#studentList').DataTable( {
         //pagingType: "simple",

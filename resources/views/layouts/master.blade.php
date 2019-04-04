@@ -76,7 +76,9 @@ window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.ke
 
 
     <link rel="shortcut icon" href="{{ URL::asset('img/favicon.ico')}}">
-    <link href='//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css' rel='stylesheet'>
+    {{--<link href='//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css' rel='stylesheet'>--}}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+
         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap2-toggle.min.css" rel="stylesheet">
 
     @yield("style")
@@ -299,6 +301,10 @@ table i{
   display:none;
 }
 
+.box-content {
+    padding: 33px !important;
+}
+
   </style>
     <!-- jQuery -->
     <!--<script src="{{ URL::asset('/bower_components/jquery/jquery.min.js') }}"></script>
@@ -313,9 +319,6 @@ table i{
     <!-- The fav icon -->
     <link rel="shortcut icon" href="{{ URL::asset('img/favicon.ico')}}">
     <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet">
-}
-
-
 </head>
 
 <body class="animsition">
@@ -328,9 +331,8 @@ table i{
         @include('layouts.sidebarmenu') 
         <!-- MENU SIDEBAR-->
         </aside>
-
-
         <!-- PAGE CONTAINER-->
+
         <div class="page-container2">
             <!-- HEADER DESKTOP-->
             <header class="header-desktop2">
@@ -338,8 +340,13 @@ table i{
                     <div class="container-fluid">
                         <div class="header-wrap2">
                             <div class="logo d-block d-lg-none">
-                                <a  class="js-arrow" href="#">
+
+                                <a class="js-arrow" href="#">
+                                    @if(Session::get('inName')=='')
                                     <img src="images/icon/logo-white.png" alt="CoolAdmin" />
+                                    @else
+                                      <h2>{{Session::get('inName')}}</h2>
+                                    @endif
                                 </a>
                             </div>
                             <div class="header-button-item js-item-menu">
@@ -487,35 +494,8 @@ table i{
                                     </div>
                                 </div>
                               </div>
-
-
-
-
                             <div class="header-button2">
-                                <div class="header-button-item js-item-menu">
-                                    <i class="zmdi zmdi-search"></i>
-                                    <div class="search-dropdown js-dropdown btn-group">
-                                        {{--<form action="">
-                                            <input class="au-input au-input--full au-input--h65" type="text" placeholder="Search for datas &amp; reports..." />
-                                            <span class="search-dropdown__icon">
-                                                <i class="zmdi zmdi-search"></i>
-                                            </span>
-                                        </form>--}}
-
-                                        <form class="navbar-search" name="navbar_search" action="{{url('/student/list')}}" id="navbar_search" method="post">
-                                          <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                          <input type="hidden" name="search" value="yes">
-
-                                              <input placeholder="Search Student" class="au-input au-input--full au-input--h65 " name="student_name" id="student_name" 
-                                              type="text" autocomplete="off">
-                                              <span class="search-dropdown__icon">
-                                                <i class="zmdi zmdi-search"></i>
-                                            </span>
-                                              <div id="studentListd">
-                                              </div>
-                                        </form>
-                                    </div>
-                                </div>
+                                
                                 {{--<div class="header-button-item has-noti js-item-menu">
                                     <i class="zmdi zmdi-notifications"></i>
                                     <div class="notifi-dropdown js-dropdown">
@@ -560,15 +540,48 @@ table i{
                                 <div class="setting-menu js-right-sidebar d-none d-lg-block">
                                     <div class="account-dropdown__body">
                                         <div class="account-dropdown__item">
+                                           <span class="hidden-sm hidden-xs" style="text-align: center;margin-left: 35px;"> {{Session::get('name')}}</span>
+                                            
+                                        </div> 
+                                        <div class="account-dropdown__item">
                                             <a  class="" href="{{url('/settings')}}">
                                                 <i class="zmdi zmdi-account"></i>Profile
                                             </a>
                                         </div>
+                                        
                                         <div class="account-dropdown__item">
+                                                
+                                                 @if (Session::get('userRole')=="Admin")
+                                                    <li class="has-sub" style="list-style-type: none;">
+                                                      <a  class="js-arrow {{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission') ? 'open' : '' }}" href="#">
+                                                        <i class="glyphicon glyphicon-cog"></i>
+                                                         Settings
+                                                        {{--<span class="arrow {{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission') ? 'up' : '' }}">
+                                                          <i class="fas fa-angle-down"></i> 
+                                                        </span> --}}                           
+                                                      </a>
+                                                      <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission') ? 'block' : 'none' }} ;">
+                                                        <li class="{{ Request::is('academicYear') ? 'active' : '' }}"><a href="{{url('/academicYear')}}">Academic Year</a></li>
+                                                        <li class="{{ Request::is('gpa') ? 'active' : '' }}"><a href="{{url('/gpa')}}">GPA Ruels</a></li>
+                                                        <li class="{{ Request::is('users') ? 'active' : '' }}"><a href="{{url('/users')}}">Users</a></li>
+                                                        <li class="{{ Request::is('holidays') ? 'active' : '' }}"><a href="{{url('/holidays')}}">Holidays</a></li>
+                                                        <li class="{{ Request::is('class-off') ? 'active' : '' }}"><a href="{{url('/class-off')}}">Class Off Days</a></li>
+                                                        <li class="{{ Request::is('institute') ? 'active' : '' }}"><a href="{{url('/institute')}}">Institute</a></li>
+                                                        <li class="{{ Request::is('ictcore?type=sms') ? 'active' : '' }}"><a href="{{url('/ictcore?type=sms')}}">Sms Integration</a></li>
+                                                        <li class="{{ Request::is('ictcore?type=voice') ? 'active' : '' }}"><a href="{{url('/ictcore?type=voice')}}">Voice Integration</a></li>
+                                                        <li class="{{ Request::is('notification_type') ? 'active' : '' }}"><a href="{{url('/notification_type')}}">Notification Types</a></li>
+                                                        <li class="{{ Request::is('ictcore/attendance') ? 'active' : '' }}"><a href="{{url('/ictcore/attendance')}}">Notifications</a></li>
+                                                        <li class="{{ Request::is('permission') ? 'active' : '' }}"><a href="{{url('/permission')}}">Permission</a></li>
+                                                      </ul>
+                                                    </li>
+                                                    @endif
+                                                </div>
+                                                <div class="account-dropdown__item">
                                             <a  class="" href="{{url('/users/logout')}}">
-                                              <i class="zmdi zmdi-settings"></i>Logout
+                                              <i class="fas fa-power-off"></i>Logout
                                             </a>
                                         </div>
+
                                         {{--<div class="account-dropdown__item">
                                             <a  class="js-arrow" href="#">
                                                 <i class="zmdi zmdi-money-box"></i>Billing</a>
@@ -598,6 +611,7 @@ table i{
                     </div>
                 </div>
             </header>
+
             <!-- MObile menue -->
             <aside class="menu-sidebar2 js-right-sidebar d-block d-lg-none">
                
@@ -630,8 +644,6 @@ table i{
                             </p>
                           </div>
                         </noscript>
-
-                       
                           <!-- content starts -->
                           @if (isset($successmsg))
                             <div class="alert alert-success">
@@ -651,7 +663,9 @@ table i{
                           <div class="row">
                             <div class="col-md-12">
                                 <div class="copyright">
-                                    <p>Copyright © 2018 IctVision. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+                                   <p class="col-md-9 col-sm-9 col-xs-12 copyright"> <a href="#" target="_blank">{{Session::get('inName')}}</a> &copy;<?php echo date("Y");?></p>
+                                    <p class="col-md-3 col-sm-3 col-xs-12 powered-by">Developed by:
+                                    <a href="http://ictvision.net/">IctVision</a></p>
                                 </div>
                             </div>
                         </div>
@@ -661,6 +675,8 @@ table i{
    </div>
                         
 </div>
+
+@yield('model')
 <!-- Jquery JS-->
     <script src="{{ URL::asset('/assets/vendor/jquery-3.2.1.min.js')}}"></script>
     <!-- Bootstrap JS-->
@@ -670,15 +686,15 @@ table i{
     <script src="{{ URL::asset('/assets/vendor/bootstrap-4.1/bootstrap.min.js')}}"></script>
     
     <!-- library for cookie management -->
-<script src="{{ URL::asset('/js/jquery.cookie.js') }}"></script>
+    <script src="{{ URL::asset('/js/jquery.cookie.js') }}"></script>
 
-<script src="{{ URL::asset('/bower_components/chosen/chosen.jquery.min.js') }}"></script>
-<!-- plugin for gallery image view -->
-<!-- plugin for gallery image view -->
-<script src="{{ URL::asset('/bower_components/colorbox/jquery.colorbox-min.js') }}"></script>
-<!-- notification plugin -->
-<script src="{{ URL::asset('/js/jquery.noty.js') }}"></script>
-<!-- DAtatbale -->
+    <script src="{{ URL::asset('/bower_components/chosen/chosen.jquery.min.js') }}"></script>
+    <!-- plugin for gallery image view -->
+    <!-- plugin for gallery image view -->
+    <script src="{{ URL::asset('/bower_components/colorbox/jquery.colorbox-min.js') }}"></script>
+    <!-- notification plugin -->
+    <script src="{{ URL::asset('/js/jquery.noty.js') }}"></script>
+    <!-- DAtatbale -->
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
@@ -695,14 +711,13 @@ table i{
     <script src="{{ URL::asset('/assets/vendor/circle-progress/circle-progress.min.js')}}"></script>
     <script src="{{ URL::asset('/assets/vendor/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
     <script src="{{ URL::asset('/assets/vendor/chartjs/Chart.bundle.min.js')}}"></script>
-    <script src="{{ URL::asset('/assets/vendor/select2/select2.min.js')}}">
     </script>
     
     <!-- calender plugin -->
     <script src="{{ URL::asset('/bower_components/moment/min/moment.min.js') }}"></script>
     <script src='{{ URL::asset('/bower_components/fullcalendar/dist/fullcalendar.min.js') }}'></script>
     <!-- data table plugin -->
-<script src="{{ URL::asset('/js/jquery.iphone.toggle.js') }}"></script>
+    <script src="{{ URL::asset('/js/jquery.iphone.toggle.js') }}"></script>
     <!-- Main JS-->
     <script src="{{ URL::asset('/assets/js/main.js')}}"></script>
 
@@ -725,8 +740,8 @@ table i{
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.14/jquery.mask.min.js"></script>
 <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-
+{{--<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>--}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 <script>
 $(document).ready(function(){
 

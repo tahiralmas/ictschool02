@@ -89,7 +89,7 @@
 
           <div class="row">
             <div class="col-md-12">
-              <div class="col-md-4">
+              {{--<div class="col-md-4">
                 <div class="form-group ">
                   <label for="session">session</label>
                   <div class="input-group">
@@ -98,7 +98,9 @@
                     <input type="text" value="{{date('Y')}}" id="session" required="true" class="form-control datepicker2" name="session"   data-date-format="yyyy">
                   </div>
                 </div>
-              </div>
+              </div>--}}
+                      <input type="hidden" value="{{get_current_session()->id}}" id="session" required="true" class="form-control datepicker2" name="session"   data-date-format="yyyy">
+
 
 
               <div class="col-md-4">
@@ -366,7 +368,7 @@ function getsections()
       dataType: 'json',
       success: function(data) {
         $('#section').empty();
-       //$('#section').append($('<option>').text("--Select Section--").attr('value',""));
+         $('#section').append($('<option>').text("--Select Section--").attr('value',""));
         $.each(data, function(i, section) {
           //console.log(student);
          

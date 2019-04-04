@@ -219,7 +219,9 @@
         autoclose:true
 
       });
-      $('#markList').dataTable();
+      $('#markList').dataTable({
+          "sPaginationType": "bootstrap",
+      });
       $('#class').on('change', function (e) {
         getSubjects();
         getexam();

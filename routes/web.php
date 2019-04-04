@@ -33,6 +33,8 @@ Route::get('/attendance/today_delete','attendanceController@today_delete');
 Route::get('/','HomeController@index')->name("login");
 Route::get('/dashboard/','DashboardController@index');
 Route::post('/users/login','UsersController@postSignin');
+Route::get('/verify_code','UsersController@verify_code');
+Route::post('/verified','UsersController@verified');
 Route::get('/users/logout','UsersController@getLogout');
 Route::get('/users','UsersController@show');
 Route::post('/usercreate','UsersController@create');
@@ -136,6 +138,7 @@ Route::get('/family/list','studentController@family_list');
 Route::get('/family/edit/{f_id}','studentController@family_edit');
 Route::post('/family/update','studentController@family_update');
 Route::get('/family/students/{f_id}','studentController@family_student_list');
+Route::post('/family_discount/{f_id}','studentController@add_family_discount');
 });
 Route::get('/student/getList/{class}/{section}/{shift}/{session}','studentController@getForMarks');
 Route::get('/student/getsList/{class}/{section}/{shift}/{session}','studentController@getForMarksjoin');
@@ -162,7 +165,9 @@ Route::post('/teacher/update','teacherController@update')->middleware('checkPerm
 Route::get('/teacher/delete/{id}','teacherController@delete')->middleware('checkPermission:teacher_delete');
 });
 Route::get('/teacher/getList/{class}/{section}/{shift}/{session}','teacherController@getForMarks');
+
 Route::group(['middleware' => 'admin'], function(){ 
+
 Route::get('/teacher/create-file','teacherController@index_file')->middleware('checkPermission:teacher_bulk_add');
 Route::post('/teacher/create-file','teacherController@create_file')->middleware('checkPermission:teacher_bulk_add');
 Route::get('/teacher/access/{id}','teacherController@access')->middleware('checkPermission:teacher_portal_access');
@@ -223,7 +228,7 @@ Route::get('/paper/getList/{class}','paperController@getexams');
 
 Route::get('/exam/create','examController@index')->middleware('checkPermission:exam_add');
 Route::post('/exam/create','examController@create')->middleware('checkPermission:exam_add');
-Route::get('/exam/list','examController@show')->middleware('checkPermission:exam_list');
+Route::get('/exam/list','examController@show')->middleware('checkPermission:exam_view');
 Route::get('/exam/edit/{id}','examController@edit')->middleware('checkPermission:exam_update');
 Route::post('/exam/update','examController@update')->middleware('checkPermission:exam_update');
 Route::get('/exam/delete/{id}','examController@delete')->middleware('checkPermission:exam_delete');

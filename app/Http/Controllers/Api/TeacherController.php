@@ -192,6 +192,7 @@ class TeacherController extends Controller
 		if($teacher_id!='admin'){
 	    $teachers = $teachers->where('section.teacher_id',$teacher_id);		
 		}
+		$teachers =$teachers->orderBy('Class.code',DESC);
 		$teachers =$teachers->get();
 		$sections  = array();
 		$attendances_b  = array();

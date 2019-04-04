@@ -120,8 +120,8 @@ class attendanceController extends BaseController {
                       $classc = DB::table('Class')->select('*')->where('code','=',Input::get('class'))->first();
                       $class_id =  $classc->id;
 					foreach ($stpresent as $stp) {
-						 $atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$stp['regiNo'])->first();
-		                if(is_null($atten)){
+						 $atten = DB::table('Attendance')->where('section_id',Input::get('section'))->where('date','=',$presentDate)->where('regiNo','=',$stp['regiNo']);
+		                if($atten->count()==0){
 
 							$attenData= [
 							'date' => $presentDate,
@@ -132,11 +132,13 @@ class attendanceController extends BaseController {
 							'session'=>Input::get('session'),
 							'created_at' => Carbon::now()
 							];
-							Attendance::insert($attenData);
-
+							//Attendance::insert($attenData);
+							$attenDatap[] = $attenData;
 							$i++;
 						}
+						$atten =$atten->first();
 					}
+					echo "<pre>data";print_r($attenDatap);exit;
 					foreach ($absentStudents as $absst) {
 					   $atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$absst)->first();
 	                    if(is_null($atten)){
@@ -1074,7 +1076,7 @@ class attendanceController extends BaseController {
     {
         $class        = Input::get('class', null);
         $section      = Input::get('section', null);
-        $session      = trim(Input::get('session', date('Y')));
+         $session      = trim(Input::get('session', date('Y')));
         $shift        = Input::get('shift', null);
         $isPrint      = Input::get('print_view', null);
         $yearMonth    = Input::get('yearMonth', date('Y-m'));

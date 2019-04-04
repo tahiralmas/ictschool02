@@ -685,7 +685,7 @@ class markController extends BaseController {
 				$url = url('/').'/create/marks?sub_id='.getsubjecclass($class)['sub_name'][$i]['id'].'&class='.$class.'&section='.$section->id;
 				$link = "'".$url."','enter marks','width=1500','height=500'";
 				$subjecname .='&nbsp;  ';
-				$subjecname .='<a href="'.$url.'" onclick="window.open('."$link".'); 
+				$subjecname .='<a href="#'.$url.'" onclick="window.open('."$link".'); 
 	              return false;">'.getsubjecclass($class)['sub_name'][$i]['name'].'</a>';
 			}
 			$output .='<tr><td>'.$section->name.'</td><td>'.$subjecname.'</td></tr>'; 

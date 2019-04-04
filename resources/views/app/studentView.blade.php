@@ -388,7 +388,7 @@
             {{--@endif--}}
             <div class="row">
               <div class="col-md-12">
-                <a class="btn btn-warning btn-lg btn-block" href='{{url("attendance/monthly-report?_token=csrf_token()&search=yes&student_name=&print_view=1&class=$student->class_code&section=$student->section&shift=Morning&session=$student->session&yearMonth=$year-$month&type=count&regiNo=$student->regiNo")}}'><h4>Attendance Detail</h4></a>
+                <a class="btn btn-warning btn-lg btn-block" href='{{url("attendance/monthly-report?_token=csrf_token()&search=yes&student_name=&print_view=1&class=$student->class_code&section=$student->section&shift=Morning&session=$student->session_id&yearMonth=$year-$month&type=count&regiNo=$student->regiNo")}}'><h4>Attendance Detail</h4></a>
               </div>
             </div>
           </div>

@@ -50,7 +50,7 @@ class Invoicegenrated extends Command
             {
                   //echo '/n';
                  //echo $i++;
-               // $test[$user->id] = $user->id;
+                // $test[$user->id] = $user->id;
                echo  $this->createvouchour($user->regiNo,$user->class,$user->discount_id);
                //echo "/n";
             }
@@ -76,7 +76,8 @@ class Invoicegenrated extends Command
                                         //->get();
 
                     if($fee_setup->count()>0){
-                      $fee_setup     =   $fee_setup->first();
+
+                    $fee_setup       =   $fee_setup->first();
                     $now             =  Carbon::now();
                     $year1           =  $now->year;
                     $month           =  $now->month;
@@ -186,7 +187,7 @@ class Invoicegenrated extends Command
                                 $feeCol->class         = $class;
                                 $feeCol->regiNo        = $regiNo;
                                 $feeCol->payableAmount = $totalfee;
-                                $feeCol->total_fee     = $totalfee;
+                                $feeCol->total_fee     = $fee_setup->fee;
                                 $feeCol->paidAmount    = 0;
                                 $feeCol->dueAmount     = $due1  ;
                                 $feeCol->payDate       = $date->format('Y-m-d');
@@ -217,7 +218,7 @@ class Invoicegenrated extends Command
                 catch(\Exception $e)
                 {
                   //  print_r($e);
-                return $e->getMessage();
+                 return $e->getMessage();
                 //return Redirect::to('/fee/collection?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&type='.Input::get('type').'&month='.Input::get('gridMonth')[0].'&fee_name='.Input::get('fee'))->withErrors( $e->getMessage())->withInput();
                 }
     }

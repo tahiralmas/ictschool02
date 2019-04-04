@@ -74,7 +74,7 @@ class studentController extends BaseController {
 			->limit(20)
 			->get();
 			//return Response($output);
-			 $output = '<ul class="dropdown-menu" id="searchlist" style="display:block; position:relative">';
+			 $output = '<ul class="dropdown-menu" id="searchlist" style="display:block; position:relative;font-size: 2rem !important;">';
 		      foreach($data as $row)
 		      {
 		      	$section = DB::table('section')->where('id',$row->section)->first();
@@ -510,14 +510,39 @@ public function family_student_list($family_id)
 	$students = DB::table('Student')
 					->join('Class', 'Student.class', '=', 'Class.code')
 					->join('section', 'Student.section', '=', 'section.id')
-					->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+					->select('Student.id','Student.discount_id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
 		'Class.Name as class','Class.code as class_code', 'Student.presentAddress','Student.section', 'Student.gender', 'Student.religion','section.name')
 					->where('Student.isActive', '=', 'Yes')
 					->where('Student.family_id', '=', $family_id)
 					->orwhere('Student.fatherCellNo', '=', $family_id)
 					->get();
 		//echo "<pre>";print_r($students);exit;
-		return View("app.familystudentList", compact('students'));
+		return View("app.familystudentList", compact('students','family_id'));
+
+}
+
+public function add_family_discount($family_id){
+
+	$ids = Input::get('student_id');
+	$dis = Input::get('discount');
+	$i=0;
+	//echo "<pre>";print_r($ids);
+	//echo "<pre>";print_r($dis);
+	 foreach($ids  as $id){
+	 	//echo $dis[$i];
+	 	//echo "<br>";
+	 	//echo $id;
+	 	$student = Student::find($id);
+		$student->discount_id = $dis[$i];
+		$student->save();
+	 	$i++;
+
+	 }
+	 //exit;
+
+	 return Redirect::to('/family/students/'.$family_id)->with("success","Family Discount Added Succesfully.");
+
+
 
 }
 

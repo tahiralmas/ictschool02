@@ -16,8 +16,8 @@
             </div>
             <div class="box-content">
                 <ul class="nav nav-tabs" id="myTab">
-                    <li class="active"><a href="#email">Voice</a></li>
-                    <li><a href="#sms">SMS</a></li>
+                    <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#email">Voice</a></li>
+                    <li class="nav-item" ><a class="nav-link" data-toggle="tab" href="#sms">SMS</a></li>
                 </ul>
 
                 <div id="myTabContent" class="tab-content">
@@ -36,7 +36,7 @@
                                 <div class="form-group col-md-12 row">
                                     <label for="name"  class="col-sm-2 col-form-label">Role</label>
                                     <div class="input-group col-md-6">
-                                        <select name="role" id="role" class="form-control selectpicker" tabindex="-1">
+                                        <select name="role" id="role" class="form-control" >
                                              <option value="">Select Users Type</option>
                                              <option value="student">Student</option>
                                              <option value="teacher">Teacher</option>
@@ -47,7 +47,7 @@
                                     </div>
                                 </div>
                              <div id="studen" >
-                                <div class="form-group row" id="class" >
+                                <div class="form-group col-md-12 row" id="class" >
                                     <label for="name"  class="col-sm-2 col-form-label">Class</label>
                                     <div class="input-group col-md-6">
                                         <!--<select  name="class" id="class" class="form-control selectpicker" multiple="" data-hide-disabled="true"  data-actions-box="true" data-size="5" tabindex="-98">-->
@@ -61,7 +61,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row" id="class" >
+                                <div class="form-group col-md-12 row" id="class" >
                                     <label for="name"  class="col-sm-2 col-form-label">Section</label>
                                     <div class="input-group col-md-6">
                                         <!--<select  name="section[]" id="section" class="form-control selectpicker" multiple="" data-hide-disabled="true" data-actions-box="true" data-size="5" tabindex="-99">-->
@@ -72,7 +72,7 @@
                                 </div>
                             </div>
 
-                               <div class="form-group row" id="testing" >
+                               <div class="form-group col-md-12 row" id="testing" >
                                 <label for="name"  class="col-sm-2 col-form-label">Phone Numbers</label>
                                 <div class="input-group col-md-6">
                                     <input  name="phone_number" placeholder="example:923001234567"  class="form-control">
@@ -81,7 +81,7 @@
 
                             </div>
 
-                              <div class="form-group row" id="class" >
+                              <div class="form-group col-md-12 row" id="class" >
                                 <label for="name"  class="col-sm-2 col-form-label">Message Title</label>
                                 <div class="input-group col-md-6">
                                     <input  name="mess_name" required class="form-control">
@@ -92,27 +92,23 @@
 
                            
 
-                                <div class="form-group row">
+                                <div class="form-group col-md-12 row">
                                     <label for="name" class="col-sm-2 col-form-label">Message</label>
                                     <div class="input-group col-md-6">
 
-                                     <select  name="message" id="message" class="form-control selectpicker"  data-hide-disabled="true" data-actions-box="true" data-size="5" tabindex="-99">
+                                     <select  name="message" id="message" class="form-control"  data-hide-disabled="true" data-actions-box="true" data-size="5" tabindex="-99">
                                              
                                             <option value="">Select Message</option>
                                             <option value="other">New Upload</option>
                                     @foreach($messages as $message)
                                         <option value="{{$message->id}}">{{$message->name}}</option>
                                     @endforeach
-                                      
-
-
-                                            
                                     </select>                                   
                                  </div>
                                 </div>
 
                                 
-                               <div class="form-group row" id="upload" >
+                               <div class="form-group col-md-12 row" id="upload" >
                                 <label for="message_file"  class="col-sm-2 col-form-label">Uplad Voice Message <small>Only wav file suported</small></label>
                                 <div class="input-group col-md-6">
                                     <input type="file"  id="message_file" name="message_file"  class="form-control">
@@ -138,10 +134,6 @@
                                     </div>
                          </form>
                     </div>
-
-
-
-
                     <div class="tab-pane" id="sms">
                        <form role="form" action="{{url('/message')}}" method="post">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -157,7 +149,7 @@
                                 <div class="form-group col-md-12 row">
                                     <label for="name"  class="col-sm-2 col-form-label">Role</label>
                                     <div class="input-group col-md-6">
-                                        <select name="role" id="role1" class="form-control selectpicker" tabindex="-1">
+                                        <select name="role" id="role1" class="form-control" tabindex="-1">
                                             <option value="">Select Users Type</option>
                                             <option value="student">Student</option>
                                             <option value="teacher">Teacher</option>
@@ -167,18 +159,18 @@
                                     </div>
                                 </div>
                              <div id="studen1" >
-                                <div class="form-group row" id="class" >
+                                <div class="form-group col-md-12 row" id="class" >
                                     <label for="name"  class="col-sm-2 col-form-label">Class</label>
                                     <div class="input-group col-md-6">
                                         <select  name="class" id="class1" class="form-control" >
                                             <option value="">Select Classes</option>
-                                        @foreach($classes as $class)
+                                          @foreach($classes as $class)
                                             <option value="{{$class->code}}">{{$class->name }}</option>
-                                        @endforeach
+                                          @endforeach
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group row" id="class" >
+                                <div class="form-group col-md-12 row" id="class" >
                                     <label for="name"  class="col-sm-2 col-form-label">Section</label>
                                     <div class="input-group col-md-6">
                                         <select  name="section[]" id="section1" class="form-control selectpicker" multiple="" data-hide-disabled="true" data-actions-box="true" data-size="5" tabindex="-99">
@@ -188,7 +180,7 @@
                                 </div>
                             </div>
 
-                              <div class="form-group row" id="testing1" >
+                              <div class="form-group col-md-12 row" id="testing1" >
                                 <label for="name"  class="col-sm-2 col-form-label">Phone Numbers</label>
                                 <div class="input-group col-md-6">
                                     <input  name="phone_number" placeholder="example:923001234567"  class="form-control">
@@ -197,18 +189,16 @@
 
                             </div>
 
-                              <div class="form-group row" id="class" >
+                              <div class="form-group col-md-12 row" id="class" >
                                 <label for="name"  class="col-sm-2 col-form-label">Message Title</label>
                                 <div class="input-group col-md-6">
                                     <input  name="mess_name" required class="form-control">
-
                                 </div>
-
                             </div>
 
 
 
-                                <div class="form-group row">
+                                <div class="form-group col-md-12 row">
                                     <label for="name" class="col-sm-2 col-form-label">Message</label>
                                     <div class="input-group col-md-6">
 

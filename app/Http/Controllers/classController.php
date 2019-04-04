@@ -58,7 +58,7 @@ class classController extends BaseController {
 			$cexists=ClassModel::select('*')->where('code','=',$clcode)->get();
 			if(count($cexists)>0){
 
-				$errorMessages = new Illuminate\Support\MessageBag;
+				$errorMessages = new \Illuminate\Support\MessageBag;
 				$errorMessages->add('deplicate', 'Class all ready exists!!');
 				return Redirect::to('/class/create')->withErrors($errorMessages);
 			}

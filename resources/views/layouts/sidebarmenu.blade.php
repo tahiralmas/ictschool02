@@ -2,8 +2,13 @@
 --}}
 <div class="logo">
   <a  class="js-arrow" href="#">
-    <img src="{{ URL::asset('/assets/images/icon/logo-white.png')}}" alt="Cool Admin" />
-  </a>
+    
+    @if(Session::get('inName')=='')
+    <img src="images/icon/logo-white.png" alt="CoolAdmin" />
+    @else
+      <h2>{{Session::get('inName')}}</h2>
+    @endif
+    </a>
 </div>
 <div class="menu-sidebar2__content js-scrollbar1">
 {{--<div class="account2">
@@ -92,7 +97,7 @@
           </span>
         
         </a>
-        <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{ Request::is('question/*') ? 'block' : '' }}  {{ Request::is('paper/generate') ? 'block' : 'none' }};" href="#">
+        <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{ Request::is('question/*') ? 'block' : '' }}  {{ Request::is('paper/generate') ? 'block' : '' }};" href="#">
 
           <li class="{{ Request::is('question/create') ? 'active' : '' }}"><a href="{{url('/question/create')}}">Add New</a></li>
           <li class="{{ Request::is('question/list') ? 'active' : '' }}"><a href="{{url('/question/list')}}">List</a></li>
@@ -259,7 +264,7 @@
         @if (Session::get('userRole') =="Admin")
         @endif
       @if (Session::get('userRole')=="Admin")
-        <li class="has-sub">
+        {{--<li class="has-sub">
           <a  class="js-arrow {{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission') ? 'open' : '' }}" href="#">
             <i class="glyphicon glyphicon-cog"></i>
              Settings
@@ -280,7 +285,7 @@
             <li class="{{ Request::is('ictcore/attendance') ? 'active' : '' }}"><a href="{{url('/ictcore/attendance')}}">Notifications</a></li>
             <li class="{{ Request::is('permission') ? 'active' : '' }}"><a href="{{url('/permission')}}">Permission</a></li>
           </ul>
-        </li>
+        </li>--}}
         @endif
         </li>
       @endif

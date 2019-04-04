@@ -294,10 +294,10 @@ b {color:red}
             </div>
             <div class="col-md-4">
               <div class="form-group ">
-                <label for="dob">Date Of Birth <b>*</b></label>
+                <label for="dob">Date Of Birth </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                  <input type="text"   class="form-control datepicker" name="dob" value="{{old('dob')}}" required  data-date-format="dd/mm/yyyy">
+                  <input type="text"   class="form-control datepicker" name="dob" value="{{old('dob')}}"   data-date-format="dd/mm/yyyy">
                 </div>
               </div>
             </div>

@@ -12,6 +12,17 @@
 
         </div>
     @endif
+  
+    @php 
+   if(isset($class)){
+
+   }else{
+    $class ='';
+   }
+   
+
+    @endphp
+ 
 <div class="row">
   <div class="box col-md-12">
     <div class="box-inner">

@@ -47,7 +47,9 @@
   @section('script')
   <script type="text/javascript">
   $( document ).ready(function() {
-    $('#classList').dataTable();
+    $('#classList').dataTable({
+        "sPaginationType": "bootstrap",
+    });
   });
   </script>
   @stop

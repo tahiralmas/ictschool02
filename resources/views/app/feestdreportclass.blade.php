@@ -95,28 +95,31 @@ if(!empty($_GET) && $_GET['direct']=='yes'){
                 </div>
               </div>
 
-              <?php /*<div class="col-md-4">
-                <div class="form-group">
-                  <label class="control-label" for="shift">Shift</label>
+              <?php 
+              /*<div class="col-md-4">
+                  <div class="form-group">
+                    <label class="control-label" for="shift">Shift</label>
 
-                  <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                    <?php  $data=[
-                      'Day'=>'Day',
-                      'Morning'=>'Morning'
-                    ];?>
-                    {{ Form::select('shift',$data,$student->shift,['class'=>'form-control','id'=>'shift','required'=>'true'])}}
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                      <?php  $data=[
+                        'Day'=>'Day',
+                        'Morning'=>'Morning'
+                      ];?>
+                      {{ Form::select('shift',$data,$student->shift,['class'=>'form-control','id'=>'shift','required'=>'true'])}}
 
 
+                    </div>
                   </div>
                 </div>
+
+
               </div>
-
-
             </div>
-          </div>
-*/?>
+          */
 
+          ?>
+        <div class="col-md-4">
         <div class="form-group">
                   <label class="control-label" for="month">Month</label>
 
@@ -138,6 +141,7 @@ if(!empty($_GET) && $_GET['direct']=='yes'){
                     ];?>
                     {{ Form::select('month',$data,$month,['class'=>'form-control','id'=>'month','required'=>'true'])}}
                 </div>
+        </div>
         </div>
           <div class="row">
             <div class="col-md-12">

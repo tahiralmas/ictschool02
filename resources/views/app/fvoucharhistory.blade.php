@@ -114,8 +114,10 @@
           </div>
         </div>
       </div>
-      <!-- Modal Goes here -->
-      <div id="billDetails" class="modal fade">
+      
+          @stop
+          <!-- Modal Goes here -->
+      <div id="billDetails" class="modal">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -151,7 +153,6 @@
               </div>
             </div>
           </div>
-          @stop
           @section('script')
           <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
           <script type="text/javascript">

@@ -1,5 +1,11 @@
 @extends('layouts.master')
 @section('style')
+<style type="text/css">
+  .table-responsive input {
+    width:90px !important;
+  }
+
+</style>
 <link href="/css/bootstrap-datepicker.css" rel="stylesheet">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
 @stop
@@ -22,15 +28,17 @@
 @endif
 <?php 
 if(!empty($_GET)){
-  $class1      = $_GET['class_id'];
+
+   $class1      = $_GET['class_id'];
    $section    = $_GET['section'];
    $session    = $_GET['session'];
    $month      = $_GET['month'];
    $type       = $_GET['type'];
    $fee        = $_GET['fee_name'];
- 
+
 }else{
-   $class1   = '';
+
+  $class1   = '';
   $section = '';
   $session = '';
   $month   = $month;
@@ -74,7 +82,6 @@ if(!empty($_GET)){
               <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label" for="section">Section</label>
-
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select id="section" name="section"  class="form-control" >
@@ -84,8 +91,6 @@ if(!empty($_GET)){
                       @endforeach
                       @endif
                     </select>
-
-
                   </div>
                 </div>
               </div>
@@ -162,7 +167,6 @@ if(!empty($_GET)){
                       <option value="10" @if($month=='10') selected @endif>October</option>
                       <option value="11" @if($month=='11') selected @endif>November</option>
                       <option value="12" @if($month=='12') selected @endif>December</option>
-
                     </select>
 
                   </select>
@@ -196,7 +200,7 @@ if(!empty($_GET)){
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-book blue"></i></span>
-                    <select id="student" name="student" class="form-control selectpicker" required="true"  data-show-subtext="true" data-live-search="true">
+                    <select id="student" name="student" class="form-control " required="true" >
                      @if($student)
                      <!--<option value='-1'>---Select Student---</option>-->
                      <option value="{{$student->regiNo}}">{{$student->firstName}} {{$student->lastName}} [{{$student->rollNo}}]</option>
@@ -278,12 +282,10 @@ if(!empty($_GET)){
             </div>
           </div>
         </div>
-
-
         <hr class="hrclass">
         <div class="row">
-          <div class="col-md-12">
-            <div class="table-responsive">
+          <div class="col-md-11">
+            <div class="table-responsive" style="margin-left: 20px;">
               <table id="feeList" class="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>
@@ -293,7 +295,6 @@ if(!empty($_GET)){
                     <th>Fee</th>
                     <th>Late Fee</th>
                     <th>Total</th>
-
                   </tr>
                 </thead>
                 <tbody>
@@ -302,6 +303,8 @@ if(!empty($_GET)){
                 </div>
               </div>
             </div>
+            <br>
+            <br>
             <div class="row">
               <div class="col-md-12">
                 <div class="col-md-6">
@@ -468,7 +471,7 @@ if(!empty($_GET)){
             $('#student').append($('<option>').text(student.firstName+" "+student.middleName+" "+student.lastName+"["+student.rollNo+"]").attr('value', student.regiNo));
               
           });
-          $('#student').selectpicker('refresh');
+         // $('#student').selectpicker('refresh');
           //console.log(data);
 
         },
@@ -773,11 +776,11 @@ if(!empty($_GET)){
         cell2.appendChild(hdregi);*/
 
 
-        var cell3 = row.insertCell(2);
-        var month = document.createElement("input");
-        month.name="gridMonth[]";
-        month.readOnly="true";
-        month.value=$('#month option:selected').val();
+        var cell3      = row.insertCell(2);
+        var month      = document.createElement("input");
+        month.name     = "gridMonth[]";
+        month.readOnly = "true";
+        month.value    = $('#month option:selected').val();
         cell3.appendChild(month);
         /*   var hdroll = document.createElement("input");
         hdroll.name="rollNo[]";
@@ -855,7 +858,7 @@ if(!empty($_GET)){
       //get previous due
       $('#student').change(function() {
         var aclass = $('#class').val();
-        var stdId = $('#student').val();
+        var stdId  = $('#student').val();
 
         $.ajax({
           url: "{{url('/fee/getDue')}}"+'/'+aclass+'/'+stdId,

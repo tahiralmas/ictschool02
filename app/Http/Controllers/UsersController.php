@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use App\Institute;
 use App\User;
+use App\VerifyCode;
 use Hash;
 class UsersController extends BaseController {
   public function __construct() {
@@ -22,6 +23,19 @@ class UsersController extends BaseController {
   */
   public function postSignin() {
     if (\Auth::attempt(array('login'=>Input::get('login'), 'password'=>Input::get('password')))) {
+          
+          
+          $login   = Auth::user()->group;
+          /*if($login == "Admin"){
+              $user_id = Auth::user()->id;
+              $phone = Auth::user()->phone;
+            \Auth::logout();
+            $this->sendcode($user_id,$phone);
+            return Redirect::to('/verify_code');
+
+          }*/
+
+
       $name=Auth::user()->firstname.' '.Auth::user()->lastname;
       $login=Auth::user()->group;
       \Session::put('name', $name);
@@ -53,6 +67,84 @@ class UsersController extends BaseController {
 
     }
 
+  }
+
+  public function verify_code()
+  {
+    $error = \Session::get('error');
+    $institute=Institute::select('name')->first();
+    if(!$institute)
+    {
+      $institute=new Institute;
+      $institute->name="IctVission";
+    }
+    return View('app.users.verify',compact('error','institute'));
+
+  }
+
+  public function sendcode($user_id,$phone)
+  {
+
+     $verified_code = hexdec(substr(uniqid(rand(), true), 5, 5));
+                $verification_code = new VerifyCode;
+                $verification_code->user_id=$user_id;
+                $verification_code->code=$verified_code;
+                $verification_code->save();
+                
+               /* $ict         = new ictcoreController();
+                    $contact = array(
+                      'firstname' => 'admin',
+                      'lastname' =>'',
+                      'phone'     =>$phone,
+                      'email'     => '',
+                      );
+                $msg = "verification code is ". $verified_code;
+                 $ict_stting = DB::table('ict_settings')->first();
+                 if($ict_stting->type=='ictcore'){
+                $ict->verification_number($contact,$msg);*/
+                  $msg = "verification code is ". $verified_code;
+                  $send_msg_ictcore = sendmesssageictcore('admin','',$phone,$msg,'verified code');
+  }
+
+  public function verified()
+  {
+    $verification_code = VerifyCode::first();
+
+    if(!empty($verification_code) && $verification_code->code == Input::get('code')){
+
+      $user_id = $verification_code->user_id;
+        VerifyCode::truncate();
+      if(Auth::loginUsingId($user_id)){
+
+            $name = Auth::user()->firstname.' '.Auth::user()->lastname;
+            $login = Auth::user()->group;
+            \Session::put('name', $name);
+            \Session::put('userRole', $login);
+            $institute=Institute::select('name')->first();
+          if(!$institute)
+          {
+            if (Auth::user()->group != "Admin")
+            {
+              return Redirect::to('/verify_code')
+              ->withInput(Input::all())->with('error', 'Institute Information not setup yet!Please contact administrator.');
+            }
+            else {
+              $institute=new Institute;
+              $institute->name="IctVission";
+              \Session::put('inName', $institute->name);
+              return Redirect::to('/institute')->with('error','Please provide institute information!');
+
+            }
+          }
+          else {
+            \Session::put('inName', $institute->name);
+            return Redirect::to('/dashboard')->with('success','You are now logged in.');
+          }
+      }
+    }else{
+      return Redirect::to('/verify_code')
+              ->withInput(Input::all())->with('error', 'Code Not Match please enter Correct Code');
+    }
   }
 
   public function getLogout() {
