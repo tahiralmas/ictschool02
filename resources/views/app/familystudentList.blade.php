@@ -50,6 +50,7 @@
                                                                  <th>Name</th>
                                                                   <th>Father Name</th>
                                                                    <th>Guardian's Contact</th>
+                                                                   <th>Fees</th>
                                                                  <th>Discount</th>
                                                                   <th>Action</th>
                                                              </tr>
@@ -64,6 +65,7 @@
                                                                <td>{{$student->firstName}} {{$student->middleName}} {{$student->lastName}}</td>
                                                                   <td>{{$student->fatherName}}</td>
                                                                   <td>   {!! "<b> Father:</b> ". $student->fatherCellNo. " <br \><b >Mother: </b>". $student->motherCellNo. $student->localGuardianCell !!}</td>
+                                                                  <td >{{$student->fee}}</td>
                                                                   <td class="example">{{$student->discount_id}}</td>
                                                        <td>
                                                   <a title='View' class='btn btn-success' href='{{url("/student/view")}}/{{$student->id}}'> <i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp&nbsp<a title='Edit' class='btn btn-info' href='{{url("/student/edit")}}/{{$student->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
