@@ -2,7 +2,13 @@
 
 @section('style')
     <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
-
+<style type="text/css">
+  
+  .modal-dialog {
+    max-width: 915px !important;
+  
+}
+</style>
 @stop
 
 @section('content')
@@ -117,6 +123,7 @@
                   <th>Class</th>
                   <th>section</th>
                   <th>Name</th>
+                  <th>Fee</th>
                   <th>Discount</th>
                 </tr>
               </thead>
@@ -127,7 +134,8 @@
                     <td>{{$student->rollNo}}</td>
                     <td>{{$student->class}}</td>
                     <td>{{$student->name}}</td>
-                    <td>{{$student->firstName}} {{$student->middleName}} {{$student->lastName}}</td>
+                    <td>{{$student->firstName}} {{$student->lastName}}</td>
+                    <td >{{$student->fee}}</td>
                     <td class="example"><input style="width: 69px;" name="discount[]" type="text" value="{{$student->discount_id}}"></td>
                   </tr>
                 @endforeach
