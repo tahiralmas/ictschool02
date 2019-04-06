@@ -108,15 +108,15 @@ class TeacherController extends Controller
 	{
 		//return response()->json(['student'=>$student_id]);
 		$rules=[
-		'firstname' => 'required',
-		'lastname'  => 'required',
-		'gender'    => 'required',
-		'dob'       => 'required',
-		'email'     => 'required',
-		'phone'     => 'required',
+		'firstname'      => 'required',
+		'lastname'       => 'required',
+		'gender'         => 'required',
+		'dob'            => 'required',
+		'email'          => 'required',
+		'phone'          => 'required',
 		'presentaddress' => 'required',
-		'fathername'  =>'required',
-		'fathercellno'=> 'required'
+		'fathername'     =>'required',
+		'fathercellno'   => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
@@ -192,7 +192,7 @@ class TeacherController extends Controller
 		if($teacher_id!='admin'){
 	    $teachers = $teachers->where('section.teacher_id',$teacher_id);		
 		}
-		$teachers =$teachers->orderBy('Class.code',DESC);
+		$teachers =$teachers->orderBy('Class.code','DESC');
 		$teachers =$teachers->get();
 		$sections  = array();
 		$attendances_b  = array();
