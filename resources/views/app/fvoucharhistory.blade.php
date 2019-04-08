@@ -67,10 +67,10 @@
 
                   <td>
                    @if($fee->status=='Unpaid')
-                    <a title='Paid' onclick="submitfrom('paid')" class='btn btn-success' onclick="return confirm('Are you sure you want to paid?');" onclick="document.getElementById('fee_paid').submit();"> Paid</a>
+                    <a title='Paid' href="#" onclick="submitfrom('paid')" class='btn btn-success'> Paid</a>
                     <form  id="fee_paid" action='{{url("/family/paid")}}/{{$fee->id}}' method="post">
                     @else
-                    <a title='unPaid'  class='btn btn-danger' onclick="submitfrom('unpaid')" onclick="return confirm('Are you sure you want to unpaid?');" > UnPaid</a>
+                    <a title='unPaid'  href="#" class='btn btn-danger' onclick="submitfrom('unpaid')"  > UnPaid</a>
                     <form id="fee_unpaid" action='{{url("/family/paid")}}/{{$fee->id}}?s=unpaid' method="post">
 
                     @endif
@@ -108,16 +108,12 @@
 
             </div>
             @endif
-
-
-
           </div>
         </div>
       </div>
-      
-          @stop
-          <!-- Modal Goes here -->
-      <div id="billDetails" class="modal">
+      @stop
+    <!-- Modal Goes here -->
+     {{--<div id="billDetails" class="modal">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -152,7 +148,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>--}}
           @section('script')
           <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
           <script type="text/javascript">
@@ -160,18 +156,22 @@
             if(type=='unpaid'){
 
               var x = confirm("Are you sure you want to Unpaid this vouchar?");
-                if (x)
+                if (x){
                    document.getElementById('fee_unpaid').submit();
-                else
+                 return true
+               }
+                else{
                   return false;
+                }
               }
            /// document.getElementById('fee_unpaid').submit();
             else{
               var x = confirm("Are you sure you want to Paid this vouchar?");
-                  if (x)
+                  if (x){
                       document.getElementById('fee_paid').submit();
-                  else
+                  }else{
                     return false;
+                  }
                 }
                           
             }
