@@ -1010,7 +1010,7 @@ class feesController extends BaseController {
 				$vouchers   = Voucherhistory::where('bill_id',$totals->billNo)->first();
 				
 				if(Input::get('s')!='unpaid'){
-					$paid->paidAmount = $totals->total_fee;
+					$paid->paidAmount = $totals->payableAmount;
 					//$paid->dueAmount  = $totals->total_fee;
 					$vouchers->status = 'paid'; 
 				}else{
@@ -1026,6 +1026,7 @@ class feesController extends BaseController {
 			->first();
 			if(Input::get('s')!='unpaid'){
 				$paid->dueAmount  =  $totals1->payTotal - $totals->total_fee;
+				//$paid->dueAmount  = $dueamount;
 			}else{
 
 				$paid->dueAmount  = $totals1->payTotal ;
@@ -1045,10 +1046,11 @@ class feesController extends BaseController {
 			$family_vouchers->status = 'Unpaid';
 		}
 		$family_vouchers->dueamount = $chechdueoveral->dueamount;
-		$family_vouchers->amount = $chechdueoveral->payTotal;
+		$family_vouchers->amount    = $chechdueoveral->payTotal;
 		$family_vouchers->save();
-		//echo "<pre>";print_r($totals);
-	      return Redirect::back()->with('success','voucher paid');
+		//echo "<pre>".$id;print_r($totals);
+	      //exit;
+	      return Redirect::to('/family/vouchar_history/86325')->with('success','voucher paid');
 
 		exit;
 
@@ -1389,6 +1391,47 @@ class feesController extends BaseController {
 			//return View::Make('app.feeviewstd',compact('classes','student','fees','totals'));
 		return View('app.feeviewstd',compact('classes','student','fees','totals'));
 	}
+	public function stdfeeinvoices()
+	{
+		$classes = ClassModel::pluck('name','code');
+		$section = array('A'=>'A');
+		$student = new studentfdata;
+		$student->class="";
+		$student->section="";
+		$student->shift="";
+		$student->session="";
+		$student->regiNo="";
+		$fees=array();
+			//return View::Make('app.feeviewstd',compact('classes','student','fees'));
+		return View('app.invoice',compact('classes','student','fees','section'));
+	}
+	public function stdfeeinvoicespost()
+	{
+		$classes          = ClassModel::pluck('name','code');
+		$section          = DB::table('section')->where('class_code',Input::get('class'))->pluck('name','id');
+		$student          = new studentfdata;
+		$student->class   = Input::get('class');
+		$student->section = Input::get('section');
+		$student->shift   = Input::get('shift');
+		$student->session = Input::get('session');
+		$student->regiNo  = Input::get('student');
+		
+		$fees=DB::Table('stdBill')
+		->join('Student','stdBill.regiNo','=','Student.regiNo')
+		->join('billHistory','stdBill.billNo','=','billHistory.billNo')
+		->select(DB::RAW("stdBill.billNo,stdBill.payableAmount,stdBill.paidAmount,stdBill.dueAmount,DATE_FORMAT(stdBill.payDate,'%D %M,%Y') AS date"),'Student.firstName','Student.lastName','Student.class','Student.section','billHistory.month','billHistory.title','billHistory.fee','billHistory.lateFee')
+		->where('stdBill.class',Input::get('class'))
+		->where('Student.section',Input::get('section'))
+		->get();
+		
+		$totals = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+		->where('class',Input::get('class'))
+		//->where('regiNo',Input::get('student'))
+		->first();
+
+			//return View::Make('app.feeviewstd',compact('classes','student','fees','totals'));
+		return View('app.invoice',compact('classes','student','fees','totals','section'));
+	}
 	public function stdfeesdelete($billNo)
 	{
 		try {
@@ -1453,6 +1496,109 @@ class feesController extends BaseController {
 		->where('billNo',$billNo)
 		->get();
 		return $billDeatils;
+	}
+	public function invoiceDetails($billNo)
+	{
+		
+	  $fees = DB::Table('stdBill')
+		->join('Student','stdBill.regiNo','=','Student.regiNo')
+		->join('billHistory','stdBill.billNo','=','billHistory.billNo')
+		->select(DB::RAW("stdBill.billNo,stdBill.payableAmount,stdBill.paidAmount,stdBill.dueAmount,DATE_FORMAT(stdBill.payDate,'%D %M,%Y') AS date"),'Student.firstName','Student.lastName','Student.class','Student.section','billHistory.month','billHistory.title','billHistory.fee','billHistory.lateFee')
+		->where('stdBill.billNo',$billNo)
+		->get();
+
+		$html = '';
+		foreach($fees as $fee){
+			$html .='
+				 <div id="myModald'.$fee->billNo.'" class="modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                        <div class="modal-content"><div class="modal-header"><h4 class="modal-title">Collect Invoice</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button></div><div class="modal-body" >
+                          <form class="form-horizontal" method="post" action="'.url("/fees/invoice/collect/").'/'.$fee->billNo.'" name="CollectIncoiveForm" role="form"  >
+                               <input type="hidden" name="_token" value="'.csrf_token().'">
+                              <div class="form-group row" >
+                                  <label class="col-sm-3 text-right control-label col-form-label ">Invoice ID * </label>
+                                  <div class="col-sm-9  control-label col-form-label ">
+                                      '.$fee->billNo.'
+                                  </div>
+                              </div>
+                              <div class="form-group row">
+                                  <label class="col-sm-3 text-right control-label col-form-label ">Total</label>
+                                  <div class="col-sm-3  control-label col-form-label ">
+                                       '.$fee->payableAmount.' Rs
+                                  </div>
+                                  <label class="col-sm-3 text-right control-label col-form-label ">Pending Amount</label>
+                                  <div class="col-sm-3  control-label col-form-label ">
+                                      '.$fee->dueAmount.' Rs
+                                  </div>
+                              </div>
+                              <div class="form-group row has-error" >
+                                  <label class="col-sm-3 text-right control-label col-form-label">Collection Amount *</label>
+                                  <div class="col-sm-9">
+                                      <input name="collectionAmount"  required="" class="form-control  type="text">
+                                  </div>
+                              </div>
+                              
+                              
+                              <div class="form-group m-b-0">
+                                  <div class="offset-sm-3 col-sm-9">
+                                      <button type="submit" class="btn btn-info waves-effect waves-light " >Collect Invoice</button>
+                                  </div>
+                              </div>
+                          </form>
+                      </div>
+                      </div>
+                      </div>
+                      </div>
+			' ;
+		}
+
+		return $html;
+	}
+
+	public function invoiceCollect($billNo)
+	{
+		$paidamount = Input::get('collectionAmount').'.00';
+		$totals = FeeCol::select('*')
+		->where('billNo',$billNo)
+		//->where('regiNo',Input::get('regiNo'))
+		->first();
+		$paid = FeeCol::find($totals->id);
+		$vouchers = Voucherhistory::where('bill_id',$billNo)->first();
+		$totalpaid = $paid->paidAmount +$paidamount;
+		if(Input::get('s')!='unpaid'){
+			$paid->paidAmount = $totalpaid;
+			//$paid->dueAmount  = $totals->total_fee;
+			if($paidamount===$totalpaid ){
+				$status = 'paid';
+			}elseif($paidamount===0){
+
+			    $status = 'unpaid';
+			}else{
+				$status = 'partially paid';
+			}
+				$vouchers->status = $status; 
+		}else{
+
+			$paid->paidAmount = '0.00';
+			$vouchers->status = 'unpaid'; 
+		}
+		$paid->save();
+		$vouchers->save();
+		$totals1 = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+		->where('billNo',$billNo)
+		//->where('regiNo',$paid->regiNo)
+		->first();
+		if(Input::get('s')!='unpaid'){
+			$paid->dueAmount  =  $totals1->dueamount;
+		}else{
+
+			$paid->dueAmount  = $totals1->payTotal ;
+		}
+		$paid->save();
+		//echo "<pre>";print_r($totals);
+	    return Redirect::back()->with('success','Invoice paid');
+
+		exit;
 	}
 	private function  parseAppDate($datestr)
 	{
