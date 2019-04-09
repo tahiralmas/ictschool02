@@ -59,7 +59,7 @@ if(! function_exists('accounting_check')) {
 			//echo "<pre>";print_r($data);
 			$accounting = $ac_data[0]; 
 		}else{
-	      $accounting ='';
+	      $accounting ='no';
 		}
 		return $accounting;
 	}

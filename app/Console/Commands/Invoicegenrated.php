@@ -75,7 +75,8 @@ class Invoicegenrated extends Command
                                         ->where('type','=','Monthly');
                                         //->get();
 
-                    if($fee_setup->count()>0){
+            
+            if($fee_setup->count()>0){
 
                     $fee_setup       =   $fee_setup->first();
                     $now             =  Carbon::now();
@@ -100,7 +101,7 @@ class Invoicegenrated extends Command
 
                     //if($counter>0)
                     //{
-                            $rows = FeeCol::count();
+                      $rows = FeeCol::count();
                         if($rows < 9)
                         {
                             $billId = 'B00'.($rows+1);
@@ -114,7 +115,7 @@ class Invoicegenrated extends Command
                          $billId = 'B'.($rows+1);
                         }
 
-                        DB::transaction(function() use ($billId,$feeTitles,$feeAmounts,$feeLateAmounts,$feeTotalAmounts,$feeMonths,$date,$regiNo,$class,$totalfee)
+                        DB::transaction(function() use ($billId,$feeTitles,$feeAmounts,$feeLateAmounts,$feeTotalAmounts,$feeMonths,$date,$regiNo,$class,$totalfee,$fee_setup)
                         {
                             $j=0;
                            // for ($i=0;$i<$counter;$i++) {
@@ -178,7 +179,7 @@ class Invoicegenrated extends Command
                                 $voucharhistory->rgiNo    = $regiNo;
                                 $voucharhistory->status   = 'unpaid';
                                 $voucharhistory->date     =   Carbon::now();
-                               $voucharhistory->save();
+                                $voucharhistory->save();
                                 //$j++;
                                 //}
                                // if($j>0){

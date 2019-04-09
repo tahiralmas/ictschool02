@@ -8,7 +8,11 @@ use App\Subject;
 use App\Attendance;
 use App\Student;
 use App\Institute;
+use App\AccountingSetting;
 use DB;
+Class Damidata {
+
+}
 class accountingController extends BaseController {
 
 	public function __construct() {
@@ -24,6 +28,49 @@ class accountingController extends BaseController {
 	*
 	* @return Response
 	*/
+	public function index()
+	{ 
+		$accounting = AccountingSetting::first();
+		if(empty($accounting)){
+		$accounting = new Damidata();
+		$accounting->company_id = '';
+		$accounting->api_link = '';
+		$accounting->username = '';
+		$accounting->password = '';
+	    }
+		
+		return View('app.accounting',compact('accounting'));
+	}
+
+	public function store()
+	{
+		$rules=[
+			'company_id' => 'required',
+			'api_link'   => 'required',
+			'username'   => 'required',
+			'password'   => 'required',
+
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails())
+		{
+			return Redirect::to('/accounting')->withInput(Input::all())->withErrors($validator);
+		}
+		else{
+			    //AccountingSetting::delete();
+			  DB::table("accounting_settings")->delete();
+				
+				$accountingsetting = new AccountingSetting();
+				
+				$accountingsetting->company_id = Input::get('company_id');
+				$accountingsetting->api_link   = Input::get('api_link');
+				$accountingsetting->username   = Input::get('username');
+				$accountingsetting->password   = Input::get('password');
+				$accountingsetting->save();
+				
+				return Redirect::to('/accounting')->with("success","Accounting Setting Saved Succesfully.");
+		    }
+	}
 	public function sectors()
 	{
 		$sectors=AccountSector::all();

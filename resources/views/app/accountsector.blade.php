@@ -29,7 +29,7 @@
                         </div>
                     @endif
                     @if($sector)
-                        <form role="form" action="/accounting/sectorupdate" method="post" enctype="multipart/form-data">
+                        <form role="form" action="{{url('/accounting/sectorupdate')}}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="id" value="{{$sector->id}}">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="row">
@@ -51,19 +51,16 @@
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                                 {{ Form::select('type',['Income'=>'Income','Expence'=>'Expence'],$sector->type,['class'=>'form-control','required'=>'true'])}}
 
-
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
                             </div>
                             <button class="btn btn-primary pull-right" type="submit"><i class="glyphicon glyphicon-plus"></i>Update</button>
                             <br>
                         </form>
                     @else
-                        <form role="form" action="/accounting/sectorcreate" method="post" enctype="multipart/form-data">
+                        <form role="form" action="{{url('/accounting/sectorcreate')}}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                             <div class="row">
@@ -103,8 +100,6 @@
                     @endif
                     <br>
                 </div>
-
-
                 @if(count($sectors)>0)
                     <div class="row">
                         <div class="col-md-12">
@@ -135,12 +130,6 @@
                         </div>
                     </div>
                 @endif
-
-
-
-
-
-
             </div>
         </div>
     </div>

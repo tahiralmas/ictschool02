@@ -397,6 +397,7 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
       <div class="col-md-12 col-sm-12 col-xs-12">
          <div class="au-card recent-report">
          <div class="au-card recent-report">
+         <a href='{{url('/cron/run')}}' class="btn btn-danger">Generate Vouchars <small> {{$month_n}}</small></a>
         <h2>Fee Detail <small> {{$month_n}}</small></h2>
          <table id="feeList" class="table table-striped table-bordered table-hover">
               <thead>

@@ -77,8 +77,7 @@
           Subject
           <span class="arrow {{ Request::is('subject/*') ? 'up' : '' }}"><i class="fas fa-angle-down"></i> </span>
         </a>
-        <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{ Request::is('subject/*') ? 'block' : 'none' }} ;"
->
+        <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{ Request::is('subject/*') ? 'block' : 'none' }} ;">
           @if(in_array('subject_add',$permision))
             <li class="{{ Request::is('subject/create') ? 'active' : '' }}"><a href="{{url('/subject/create')}}">Add New</a></li>
           @endif  
@@ -264,15 +263,32 @@
         @if (Session::get('userRole') =="Admin")
         @endif
       @if (Session::get('userRole')=="Admin")
+
+       {{-- <li class="has-sub">
+          <a  class="js-arrow {{ Request::is('accounting/*') ? 'open' : '' }}" href="#">
+            <i class="glyphicon  glyphicon glyphicon-font"></i>
+            Accounting
+            <span class="arrow {{ Request::is('accounting/*') ? 'up' : '' }}">
+              <i class="fas fa-angle-down"></i> 
+            </span>
+          </a>
+          <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{ Request::is('accounting/*') ? 'block' : 'none' }} ;">
+            <li class="{{ Request::is('accounting/sectors') ? 'active' : '' }}"><a href="{{url('/accounting/sectors')}}">Sectors</a></li>
+            <li class="{{ Request::is('accounting/income') ? 'active' : '' }}"><a href="{{url('/accounting/income')}}">Add Income</a></li>
+            <li class="{{ Request::is('accounting/incomelist') ? 'active' : '' }}"><a href="{{url('/accounting/incomelist')}}">View Income</a></li>
+            <li class="{{ Request::is('accounting/expence') ? 'active' : '' }}"><a href="{{url('/accounting/expence')}}">Add Expence</a></li>
+            <li class="{{ Request::is('accounting/expencelist') ? 'active' : '' }}"><a href="{{url('/accounting/expencelist')}}">View Expence</a></li>
+          </ul>
+        </li>--}}
         {{--<li class="has-sub">
-          <a  class="js-arrow {{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission') ? 'open' : '' }}" href="#">
+          <a  class="js-arrow {{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission','accounting') ? 'open' : '' }}" href="#">
             <i class="glyphicon glyphicon-cog"></i>
-             Settings
-            <span class="arrow {{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission') ? 'up' : '' }}">
+             Settings {{accounting_check()}}
+            <span class="arrow {{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission','accounting') ? 'up' : '' }}">
               <i class="fas fa-angle-down"></i> 
             </span>                            
           </a>
-          <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission') ? 'block' : 'none' }} ;">
+          <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission','accounting') ? 'block' : 'none' }} ;">
             <li class="{{ Request::is('academicYear') ? 'active' : '' }}"><a href="{{url('/academicYear')}}">Academic Year</a></li>
             <li class="{{ Request::is('gpa') ? 'active' : '' }}"><a href="{{url('/gpa')}}">GPA Ruels</a></li>
             <li class="{{ Request::is('users') ? 'active' : '' }}"><a href="{{url('/users')}}">Users</a></li>
@@ -284,6 +300,9 @@
             <li class="{{ Request::is('notification_type') ? 'active' : '' }}"><a href="{{url('/notification_type')}}">Notification Types</a></li>
             <li class="{{ Request::is('ictcore/attendance') ? 'active' : '' }}"><a href="{{url('/ictcore/attendance')}}">Notifications</a></li>
             <li class="{{ Request::is('permission') ? 'active' : '' }}"><a href="{{url('/permission')}}">Permission</a></li>
+            @if(accounting_check()!='' && accounting_check()=='yes' )
+            <li class="{{ Request::is('accounting') ? 'active' : '' }}"><a href="{{url('/accounting')}}">Accounting Api</a></li>
+            @endif 
           </ul>
         </li>--}}
         @endif

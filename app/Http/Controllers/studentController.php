@@ -507,7 +507,7 @@ public function family_list()
 }
 public function family_student_list($family_id)
 {
-	$students = DB::table('Student')
+	/*$students = DB::table('Student')
 					->join('Class', 'Student.class', '=', 'Class.code')
 					->join('section', 'Student.section', '=', 'section.id')
 					->leftjoin('feesSetup','Student.class','=','feesSetup.class')
@@ -516,6 +516,26 @@ public function family_student_list($family_id)
 					->where('Student.isActive', '=', 'Yes')
 					->where('Student.family_id', '=', $family_id)
 					->orwhere('Student.fatherCellNo', '=', $family_id)
+					->get();*/
+
+		$students = DB::table('Student')
+					->join('Class', 'Student.class', '=', 'Class.code')
+					->join('section', 'Student.section', '=', 'section.id')
+					//->leftjoin('feesSetup','Student.class','=','feesSetup.class')
+					->leftJoin('feesSetup', function($join){
+					    $join->on('Student.class', '=', 'feesSetup.class');
+					    //$join->on('feesSetup.type','=',DB::raw("Monthly"));
+					     $join->where('feesSetup.type', '=', "Monthly");
+					})
+					->select('Student.id','Student.discount_id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+		'Class.Name as class','Class.code as class_code', 'Student.presentAddress','Student.section', 'Student.gender', 'Student.religion','section.name','feesSetup.fee')
+					->where('Student.isActive', '=', 'Yes')
+					//->where('Student.family_id', '=', $family_id)
+					//->orwhere('Student.fatherCellNo', '=', $family_id)
+					->where(function($q) use( $family_id) {
+				        $q->where('Student.family_id', '=', $family_id)
+				        ->orWhere('Student.fatherCellNo', '=', $family_id);
+				      })
 					->get();
 		//echo "<pre>";print_r($students);exit;
 		return View("app.familystudentList", compact('students','family_id'));

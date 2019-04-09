@@ -67,8 +67,8 @@
                   <td>{{$fee->date}}</td>
 
                   <td>
-                    @if($fee->paidAmount=='0.00')<a title='Paid' class='btn btn-success' onclick="return confirm('Are you sure you want to paid?');" href='{{url("/fees/paid")}}/{{$fee->billNo}}'> Paid</a>@else
-                    <a title='Paid' class='btn btn-danger' onclick="return confirm('Are you sure you want to unpaid?');" href='{{url("/fees/paid")}}/{{$fee->billNo}}?s=unpaid'> UnPaid</a>@endif
+                    @if($fee->paidAmount=='0.00')<a title='Paid' class='btn btn-success' href='{{url("/fees/paid")}}/{{$fee->billNo}}' onclick="return confirm('Are you sure you want to paid?');" > Paid</a>@else
+                    <a title='Paid' class='btn btn-danger' href='#' onclick="return confirm('Are you sure you want to unpaid?');" > UnPaid</a>@endif
                   </td>
                 </tr>
                   @endforeach
@@ -105,6 +105,7 @@
       </div>
      
           @stop
+          @section('model')
            <!-- Modal Goes here -->
       <div id="billDetails" class="modal">
         <div class="modal-dialog">
@@ -142,10 +143,24 @@
               </div>
             </div>
           </div>
+           @stop
           @section('script')
           <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
           <script type="text/javascript">
           var stdRegiNo="{{$student->regiNo}}";
+
+            function myFunction() {
+                if (confirm("Are you sure you want to unpaid?")) {
+                 consol.log('asas');
+                  //window.location.href = '{{url("/fees/paid")}}/{{$fee->billNo}}?s=unpaid';
+                window.location ("http://www.google.com/");
+                window.location.href('{{url("/fees/paid")}}/{{$fee->billNo}}?s=unpaid');
+                return true;
+                } else {
+                   consol.log('asas');
+                  return false;
+                }
+            }
           $( document ).ready(function() {
 
             getsections();

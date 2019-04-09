@@ -17,6 +17,7 @@ use App\Voucherhistory;
 use App\FamilyVouchar;
 use DB;
 use App\Ictcore_fees;
+use App\InvoiceHistory;
 use App\Ictcore_integration;
 use App\Http\Controllers\ictcoreController;
 use App\Console\Commands\Invoicegenrated;
@@ -658,6 +659,7 @@ class feesController extends BaseController {
                                ->select('billHistory.*','stdBill.dueAmount','stdBill.payableAmount','stdBill.paidAmount','stdBill.class','stdBill.total_fee','stdBill.regiNo','voucherhistories.due_date','Student.discount_id', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.section')
                                //->where('billHistory.billNo',$bill )
                                ->where('billHistory.month', '=', $month)
+                               ->where('billHistory.title', '=', 'monthly')
                                ->whereIn('stdBill.regiNo',$regiNo );
                               // ->get();
                     if($vouchar_details->count()>0){
@@ -668,6 +670,9 @@ class feesController extends BaseController {
                             foreach($vouchar_details as $vouchar_detail){
 								 $bills[] = $vouchar_detail->billNo; 	
 							}
+
+							//echo "<pre>";print_r($vouchar_details->toArray());exit;
+
 							
                               
 					}else{
@@ -675,11 +680,14 @@ class feesController extends BaseController {
 						 $bills = array();
 						foreach($students as $std){
 							$vouchar_generates = $this->createvouchour($std->regiNo,$std->class_code,$std->discount_id);
+							$bills[] =$std->regiNo;
+							$vouchar_generates='';
 							if($vouchar_generates!=''){
 								$bills[] =$vouchar_generates;
 							}
 						}
 
+						
 						$vouchar_details = DB::table('stdBill')
 				               ->join('Student','stdBill.regiNo','=','Student.regiNo')
 		                       //->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
@@ -693,7 +701,8 @@ class feesController extends BaseController {
 					}
 					//print_r($bills);exit;
 					  $bils     = implode(',',$bills);
-					$totals   = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(total_fee),0) as Totalpay,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(total_fee),0)- IFNULL(sum(paidAmount),0)) as dueAmount,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+
+					  $totals   = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(total_fee),0) as Totalpay,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(total_fee),0)- IFNULL(sum(paidAmount),0)) as dueAmount,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
 											//->where('class',Input::get('class'))
 											 ->whereMonth('created_at', '=', $month)
 											 ->whereIn('regiNo',$regiNo)
@@ -765,7 +774,7 @@ class feesController extends BaseController {
                 //
 			if($fee_setup->count()>0){
 				
-				$fee_setup     =   $fee_setup->first();
+				$fee_setup       =   $fee_setup->first();
 				$now             =  Carbon::now();
 				$year1           =  $now->year;
 				$month           =  $now->month;
@@ -1196,6 +1205,17 @@ class feesController extends BaseController {
 								$feehistory->month   = $feeMonths[$i];
 								$feehistory->save();
 								$j++;
+
+							    $voucharhistory           = new Voucherhistory();
+                                $voucharhistory->bill_id  = $billId;
+                                $voucharhistory->type     = $feeTitles[$i];
+                                $voucharhistory->ref_id   = '';
+                                $voucharhistory->amount   = $feeTotalAmounts[$i];
+                                $voucharhistory->due_date = Carbon::now()->addDays(5)->format('Y-m-d');
+                                $voucharhistory->rgiNo    = Input::get('student');
+                                $voucharhistory->status   = 'unpaid';
+                                $voucharhistory->date     =   Carbon::now();
+                                $voucharhistory->save();
 							}
 
 						}
@@ -1205,11 +1225,14 @@ class feesController extends BaseController {
 							$feeCol->class         = Input::get('class');
 							$feeCol->regiNo        = Input::get('student');
 							$feeCol->payableAmount = Input::get('ctotal');
-							$feeCol->paidAmount    = Input::get('paidamount');
+							//$feeCol->paidAmount    = Input::get('paidamount');
+							$feeCol->paidAmount    ='0.00';
 							$feeCol->dueAmount     = Input::get('dueamount');
-							$feeCol->payDate       = Carbon::now()->format('Y-m-d');
+							$feeCol->payDate       = Carbon::now()->addDays(5)->format('Y-m-d');
 						//echo "<pre>";print_r(Carbon::now()->format('Y-m-d'));exit;
 							$feeCol->save();
+
+
 							\Session::put('not_save', $j);
 						}else{
 							\Session::put('not_save', 0);
@@ -1497,6 +1520,13 @@ class feesController extends BaseController {
 		->get();
 		return $billDeatils;
 	}
+	public function invoicehist($billNo)
+	{
+		$billDeatils = InvoiceHistory::select("*")
+		->where('billNo',$billNo)
+		->get();
+		return $billDeatils;
+	}
 	public function invoiceDetails($billNo)
 	{
 		
@@ -1512,9 +1542,12 @@ class feesController extends BaseController {
 			$html .='
 				 <div id="myModald'.$fee->billNo.'" class="modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
-                        <div class="modal-content"><div class="modal-header"><h4 class="modal-title">Collect Invoice</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button></div><div class="modal-body" >
-                          <form class="form-horizontal" method="post" action="'.url("/fees/invoice/collect/").'/'.$fee->billNo.'" name="CollectIncoiveForm" role="form"  >
-                               <input type="hidden" name="_token" value="'.csrf_token().'">
+                        <div class="modal-content"><div class="modal-header"><h4 class="modal-title">Collect Invoice</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button></div><div class="modal-body" >';
+                         // <form class="form-horizontal" method="post" action="'.url("/fees/invoice/collect/").'/'.$fee->billNo.'" name="CollectIncoiveForm" role="form"  >
+                               $html .=
+                               '<input type="hidden" name="_token" value="'.csrf_token().'">
+                               <input type="hidden" name="billNo" id="billNo" value="'.$fee->billNo.'">
+                               <input type="hidden" name="payableAmount" id="payableAmount" value="'.$fee->payableAmount.'">
                               <div class="form-group row" >
                                   <label class="col-sm-3 text-right control-label col-form-label ">Invoice ID * </label>
                                   <div class="col-sm-9  control-label col-form-label ">
@@ -1534,18 +1567,18 @@ class feesController extends BaseController {
                               <div class="form-group row has-error" >
                                   <label class="col-sm-3 text-right control-label col-form-label">Collection Amount *</label>
                                   <div class="col-sm-9">
-                                      <input name="collectionAmount"  required="" class="form-control  type="text">
+                                      <input name="collectionAmount" id="collectionAmount" required="" class="form-control  type="text">
                                   </div>
                               </div>
                               
                               
                               <div class="form-group m-b-0">
                                   <div class="offset-sm-3 col-sm-9">
-                                      <button type="submit" class="btn btn-info waves-effect waves-light " >Collect Invoice</button>
+                                      <button type="button" onclick="feecollection();" class="btn btn-info waves-effect waves-light " >Collect Invoice</button>
                                   </div>
-                              </div>
-                          </form>
-                      </div>
+                              </div>';
+                          //</form>
+                     $html .=' </div>
                       </div>
                       </div>
                       </div>
@@ -1565,10 +1598,16 @@ class feesController extends BaseController {
 		$paid = FeeCol::find($totals->id);
 		$vouchers = Voucherhistory::where('bill_id',$billNo)->first();
 		$totalpaid = $paid->paidAmount +$paidamount;
+		if($totalpaid > Input::get('payableAmount') ){
+			return 419;
+		}
+		if($paidamount=='' || $paidamount=='0.00'){
+			return 404;
+		}
 		if(Input::get('s')!='unpaid'){
 			$paid->paidAmount = $totalpaid;
 			//$paid->dueAmount  = $totals->total_fee;
-			if($paidamount===$totalpaid ){
+			if($paidamount>=$totalpaid ){
 				$status = 'paid';
 			}elseif($paidamount===0){
 
@@ -1595,8 +1634,106 @@ class feesController extends BaseController {
 			$paid->dueAmount  = $totals1->payTotal ;
 		}
 		$paid->save();
+
+		$invoicehistory = new InvoiceHistory;
+
+			$invoicehistory->billNo = $billNo ;
+			$invoicehistory->amount = $paidamount ;
+			$invoicehistory->date   = Carbon::now() ;
+			$invoicehistory->status = $status ;
+			$invoicehistory->save();
+
+		$student = DB::table('Student')->where('regiNo',$paid->regiNo)->first();
+		$fees=DB::Table('stdBill')
+		->join('Student','stdBill.regiNo','=','Student.regiNo')
+		->join('billHistory','stdBill.billNo','=','billHistory.billNo')
+		->select(DB::RAW("stdBill.billNo,stdBill.payableAmount,stdBill.paidAmount,stdBill.dueAmount,DATE_FORMAT(stdBill.payDate,'%D %M,%Y') AS date"),'Student.firstName','Student.lastName','Student.class','Student.section','billHistory.month','billHistory.title','billHistory.fee','billHistory.lateFee')
+		->where('stdBill.class',$paid->class)
+		->where('Student.section',$student->section)
+		->get();
+
+		$html = '<table id="feeList1" class="table table-striped table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>Bill No</th>
+                  <th>Student</th>
+                  <th>Fee Type</th>
+                  <th>Payable Amount</th>
+                  <th>Paid Amount</th>
+                  <th>Due Amount</th>
+                  <th>Month</th>
+                  <th>Pay Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="ajax_data">';
+			foreach($fees as $fee){
+				$bilid = "'".$fee->billNo."'";
+                 $html .= ' <tr>
+                    <td><a class="btnbill" href="#" onclick="invoicepaidhistory('.$bilid.');">'.$fee->billNo.'</a></td>
+                    <td>'.$fee->firstName. $fee->lastName.'</td>
+                    <td>'.$fee->title.'</td>
+                    <td>'.$fee->payableAmount.'</td>
+                    <td>'.$fee->paidAmount.'</td>
+                    <td>'.$fee->dueAmount.'</td>
+                    <td>'. \DateTime::createFromFormat('!m', $fee->month)->format('F').' </td>
+                    <td>'.$fee->date.'</td>';
+                    
+                      if($fee->payableAmount===$fee->paidAmount || $fee->paidAmount>=$fee->payableAmount){
+                          $status = 'paid';
+                      }elseif($fee->paidAmount=='0.00' ||$fee->paidAmount==''){
+
+                            $status = 'unpaid';
+                      }else{
+                          $status = 'partially paid';
+                      }
+                      
+                     $html .= '<td>';
+                     if($status=='paid'){
+                     $html .= '<button  class="btn btn-success" >';
+                     $html .=  $status;
+                     $html .= '</button>';
+                     }elseif($status=='partially paid'){
+                     $html .= '<button  class="btn btn-warning" >';
+                     $html .=$status;
+                     $html .= '</button>';
+                     }else{
+                     $html .= '<button class="btn btn-danger" >';
+                     $html .= $status;
+                   	 $html .= '</button>';
+                     }
+                     $html .= '</td>
+                    <td>';
+
+                    		if( $fee->paidAmount<$fee->payableAmount){
+
+                    		 $fun    = "btninvoice";
+
+                    		} else{
+
+                    		  $fun = '';
+                    		}
+                    		if($fee->payableAmount===$fee->paidAmount || $fee->paidAmount>=$fee->payableAmount ){
+                    			$alrt = "alert('Invoice Fully Paid')";
+                    		}else{
+                    			$alrt = "";
+                    		}
+
+
+                      //<a title='Delete' class='btn btn-danger' href='{{url("/fees/delete")}}/{{$fee->billNo}}'> <i class="glyphicon glyphicon-trash icon-red"></i></a>--}}
+                    
+                              //<button value="{{$fee->billNo}}" title='Collect Invoice' class='btn btn-primary @if( $fee->paidAmount<$fee->payableAmount) btninvoice @endif' @if($fee->payableAmount===$fee->paidAmount || $fee->paidAmount>=$fee->payableAmount ) onclick = "alert('Invoice Fully Paid')" @endif> <i class="fas fa-dollar-sign icon-white"></i></button>
+                      $html .= '<button value="'.$fee->billNo.'" title="Collect Invoice" class="btn btn-primary  '. $fun.'" onclick="'.$alrt.'"> <i class="fas fa-dollar-sign icon-white"></i></button>
+                      <a title="Edit" class="btn btn-warning" href="'.url('/fees/invoice/update/'.$fee->billNo).'"> <i class="glyphicon glyphicon-pencil icon-white"></i></a>
+                    </td>
+                  </tr>';
+                }
+                $html .='</tbody>
+            </table>';
 		//echo "<pre>";print_r($totals);
-	    return Redirect::back()->with('success','Invoice paid');
+	    //return Redirect::back()->with('success','Invoice paid');
+	    return $html ;
 
 		exit;
 	}

@@ -69,7 +69,7 @@ class DashboardController extends BaseController {
  		->where('type','Expence')
  		->groupBy('month')
  		->get();
- 		$incomeTotal = Accounting::where('type','Income')
+ 		$incomeTotal  = Accounting::where('type','Income')
  		->sum('amount');
  		$expenceTotal = Accounting::where('type','Expence')
  		->sum('amount');
@@ -81,8 +81,8 @@ class DashboardController extends BaseController {
         //paid or unpaid fee list
 		
         $attendances_b = array();
-		$scetionarray = array();
-	    $resultArray1 = array();
+		$scetionarray  = array();
+	    $resultArray1  = array();
         $student_all12 =	DB::table('section')
              /*->where('session','=',$student->session)*/
              ->leftjoin('Student','section.id','=','Student.section')
@@ -146,7 +146,7 @@ class DashboardController extends BaseController {
 					
 					//$resultArray[$section->class_code.'_'.$section->name."_".'paid'] =  0;
 					$resultArray[$section->code.'_'.$section->name."_".'unpaid']=++$unpaid;
-				$ourallunpaid =++$ourallunpaid;
+					$ourallunpaid =++$ourallunpaid;
 				}
 				$resultArray[$section->code.'_'.$section->name."_".'total']=++$total_s;
 			}
@@ -194,15 +194,15 @@ class DashboardController extends BaseController {
            //	$attendances_b[] =;
            }
 
-          // $attendances_b['total_student'.'_'.$teacher->section] =$count_student1->total_student; 
-          // $attendances_b['76']=65;
-           //$merged = $attendances_b->merge($count_student);
-//echo "<pre>";print_r($attendances_b);exit;
-           //array_push($attendances_b,$count_student1);//($attendances_b,$count_student1);
-          // $resultArray[$i] = $attendances_b;
-              //$result[] = $attendances_b + $count_student1;
-			// array_push($attendances_b,'rer');
-    // $a = array_merge($attendances_b, $count_student1);
+          			// $attendances_b['total_student'.'_'.$teacher->section] =$count_student1->total_student; 
+          			// $attendances_b['76']=65;
+           			//$merged = $attendances_b->merge($count_student);
+					//echo "<pre>";print_r($attendances_b);exit;
+          			 //array_push($attendances_b,$count_student1);//($attendances_b,$count_student1);
+          			// $resultArray[$i] = $attendances_b;
+             	 //$result[] = $attendances_b + $count_student1;
+				// array_push($attendances_b,'rer');
+    			// $a = array_merge($attendances_b, $count_student1);
 
            $i++;
 		}

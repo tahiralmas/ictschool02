@@ -30,6 +30,8 @@ $permision[] = $permission->permission_name;
     <meta charset="utf-8">
     <title>@if(Session::get('inName')=='') Ict Innovations School @else {{Session::get('inName')}} @endif</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}" />
+
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -406,6 +408,7 @@ table i{
                             <ul class="dropdown-menu">
                               <li><a href="{{url('/template/create')}}"><i class="glyphicon glyphicon-folder-open"></i><span> Fee Collection Message</span></a></li>
                               <li><a href="{{url('/fees/view')}}"><i class="glyphicon glyphicon-search"></i> Student Fees</a></li>
+                              <li><a href="{{url('/fees/invoices')}}"><i class="glyphicon glyphicon-shopping-cart"></i> Invoices</a></li>
                               <!--<li><a href="/fee/vouchar"><i class="glyphicon glyphicon-pencil"></i> Create Vouchar</a></li>-->
                               <li><a href="{{url('/fee/collection')}}"><i class="glyphicon glyphicon-pencil"></i> Fees Collection</a></li>
 
@@ -432,6 +435,11 @@ table i{
                                         <a href="{{url('/fees/view')}}">
                                           <div class="notifi__item">
                                            <i class="glyphicon glyphicon-search"></i> &nbsp;&nbsp;&nbsp;&nbsp;Student Fees
+                                          </div>
+                                        </a>
+                                        <a href="{{url('/fees/invoices')}}">
+                                          <div class="notifi__item">
+                                           <i class="glyphicon glyphicon-shopping-cart"></i> &nbsp;&nbsp;&nbsp;&nbsp;Invoices
                                           </div>
                                         </a>
                                         <a href="{{url('/fee/collection')}}">
@@ -572,6 +580,9 @@ table i{
                                                         <li class="{{ Request::is('notification_type') ? 'active' : '' }}"><a href="{{url('/notification_type')}}">Notification Types</a></li>
                                                         <li class="{{ Request::is('ictcore/attendance') ? 'active' : '' }}"><a href="{{url('/ictcore/attendance')}}">Notifications</a></li>
                                                         <li class="{{ Request::is('permission') ? 'active' : '' }}"><a href="{{url('/permission')}}">Permission</a></li>
+                                                          @if(accounting_check()!='' && accounting_check()=='yes' )
+                                                            <li class="{{ Request::is('accounting') ? 'active' : '' }}"><a href="{{url('/accounting')}}">Accounting Api</a></li>
+                                                          @endif 
                                                       </ul>
                                                     </li>
                                                     @endif

@@ -25,6 +25,8 @@ return 'other';
 });*/
 
 //Route::group(['middleware' => ['auth']], function () {
+
+
 Route::get('/login/{user_id}/{d_id}','UsersController@dologin');
 //});
 Route::get('/branches','instituteController@branches');
@@ -269,6 +271,17 @@ Route::get('/sms/delete/{id}','smsController@delete');
 Route::get('/sms','smsController@getsmssend');
 Route::post('/sms/send','smsController@postsmssend');*/
 Route::group(['middleware' => 'admin'], function(){ 
+
+
+Route::get('/cron/run', function(){
+    \Log::info('Executed at'.date('Y-m-d H:i:s'));
+   \Artisan::call("Invoice:genrate");
+   return \Artisan::Output();
+  
+   //return json_encode(auth()->user()->adminDashboardCount());
+})->name('cron.run');
+
+
 Route::get('/smslog','smsController@getsmsLog');
 Route::post('/smslog','smsController@postsmsLog');
 Route::get('/smslog/delete/{id}','smsController@deleteLog');
@@ -386,6 +399,9 @@ Route::post('/schedule','settingsController@post_schedule');
 
 Route::group(['middleware' => 'admin'], function(){ 
 
+Route::get('/accounting','accountingController@index');
+Route::post('/accounting','accountingController@store');
+
 Route::get('/accounting/sectors','accountingController@sectors');
 Route::post('/accounting/sectorcreate','accountingController@sectorCreate');
 Route::get('/accounting/sectorlist','accountingController@sectorList');
@@ -438,6 +454,12 @@ Route::get('/fee/getDue/{class}/{stdId}','feesController@getDue');
 
 Route::get('/fees/view','feesController@stdfeeview');
 Route::post('/fees/view','feesController@stdfeeviewpost');
+
+
+Route::get('/fees/invoices','feesController@stdfeeinvoices');
+Route::post('/fees/invoices','feesController@stdfeeinvoicespost');
+
+
 Route::get('/fees/delete/{billNo}','feesController@stdfeesdelete');
 
 Route::get('/fees/report','feesController@report');
@@ -458,6 +480,9 @@ Route::get('/fee/get_vouchar','feesController@createvoucher');
 
 
 Route::get('/fees/details/{billNo}','feesController@billDetails');
+Route::get('/fees/history/{billNo}','feesController@invoicehist');
+Route::get('/fees/invoice/details/{billNo}','feesController@invoiceDetails');
+Route::post('/fees/invoice/collect/{billNo}','feesController@invoiceCollect');
 Route::get('/fees/classreport','feesController@classreportindex');
 //Route::post('/fees/classreport','feesController@classreport');
 Route::post('/fees/classreport','feesController@classview');

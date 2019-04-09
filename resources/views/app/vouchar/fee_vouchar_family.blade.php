@@ -121,7 +121,7 @@
           <td>{{$vouchar_detail->firstName . ' '.$vouchar_detail->lastName}} ({{$vouchar_detail->rollNo}}-{{$vouchar_detail->class}})</td>
           <td>{{$vouchar_detail->payableAmount}}</td>
          
-          <td> @if($vouchar_detail->paidAmount=='0.00'){{$vouchar_detail->payableAmount}}@else 0.00 @endif</td>
+          <td> @if($vouchar_detail->payableAmount >= $vouchar_detail->paidAmount){{$vouchar_detail->payableAmount - $vouchar_detail->paidAmount}}@else 0.00  @endif</td>
         </tr>
         @endforeach
         <tr>

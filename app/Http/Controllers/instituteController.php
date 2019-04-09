@@ -53,9 +53,19 @@ class instituteController extends BaseController {
 		}else{
 	      $family ='';
 		}
+
+		if(Storage::disk('local')->exists('/public/accounting.txt')){
+          $ac = Storage::get('/public/accounting.txt');
+          $ac_data = explode('<br>',$ac );
+
+			//echo "<pre>";print_r($data);
+			$accounting = $ac_data[0]; 
+		}else{
+	      $accounting ='';
+		}
         //print_r($data);exit;
 		//return View::Make('app.institute',compact('institute'));
-		return View('app.institute',compact('institute','gradsystem','family'));
+		return View('app.institute',compact('institute','gradsystem','family','accounting'));
 	}
 	/**
 	* Display a listing of the resource.
@@ -160,6 +170,14 @@ class instituteController extends BaseController {
               $fm = 'on';
             endif;
             Storage::put('/public/family.txt', $fm);
+
+             if(Input::get('accounting')=='' ):
+              $accounting = 'yes';
+            else:
+              $accounting = 'no';
+            endif;
+            
+            Storage::put('/public/accounting.txt', $accounting);
 			DB::table("institute")->delete();
 			$institue=new Institute;
 			$institue->name = Input::get('name');
