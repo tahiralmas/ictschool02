@@ -1059,7 +1059,7 @@ class feesController extends BaseController {
 		$family_vouchers->save();
 		//echo "<pre>".$id;print_r($totals);
 	      //exit;
-	      return Redirect::to('/family/vouchar_history/86325')->with('success','voucher paid');
+	      return Redirect::to('/family/vouchar_history/'.$family_vouchers->family_id)->with('success','voucher paid');
 
 		exit;
 
