@@ -9,14 +9,14 @@ use App\FeeCol;
 use App\FeeSetup;
 use App\FeeHistory;
 use App\Voucherhistory;
-class Invoicegenrated extends Command
+class Invoicemoreonemonth extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
-    */
-    protected $signature = 'Invoice:genrate';
+     */
+    protected $signature = 'Invoice:months {arg_name*}';
 
     /**
      * The console command description.
@@ -39,33 +39,47 @@ class Invoicegenrated extends Command
      * Execute the console command.
      *
      * @return mixed
-    */
+     */
     public function handle()
     {
-        
-        DB::table('Student')->where('isActive','Yes')->orderBy('id','Asc')->chunk(100, function($users)
-        {
-            $i=0;
-            foreach ($users as $user)
-            {
-                  //echo '/n';
-                 //echo $i++;
-                // $test[$user->id] = $user->id;
-               echo  $this->createvouchour($user->regiNo,$user->class,$user->discount_id);
-               //echo "/n";
-            }
-            //echo $i;
+       $months = $this->argument('arg_name');
 
-            //echo count($test);
-        });
+       echo "<pre>";print_r($months);
+
+        foreach($months['month'] as $month){
+            if($months['family_id']!=''){
+                $wheres = "->where('family_id',".$months['family_id'].")";
+            }else{
+                $wheres = '';
+            }
+          $get_students =  DB::table('Student')->where('isActive','Yes');
+           if($months['family_id']!=''){
+            $get_students = $get_students->where('family_id',$months['family_id']);
+           }
+           $get_students = $get_students->orderBy('id','Asc')->chunk(100, function($users) use($month)
+            {
+                $i=0;
+                foreach ($users as $user)
+                {
+                      //echo '/n';
+                     //echo $i++;
+                     $test[$user->id] = $user->id;
+                    $this->createvouchour($user->regiNo,$user->class,$user->discount_id,$month);
+                   //echo "/n";
+                }
+                //echo $i;
+
+                //echo count($test);
+            });
+        }
 
          $now             =  Carbon::now();
          $year1           =  $now->year;
          $month           =  $now->month;
-        
     }
 
-    public function createvouchour($regiNo,$class,$discount)
+
+    public function createvouchour($regiNo,$class,$discount,$month)
     {
         
 
@@ -81,9 +95,9 @@ class Invoicegenrated extends Command
                     $fee_setup       =   $fee_setup->first();
                     $now             =  Carbon::now();
                     $year1           =  $now->year;
-                    $month           =  $now->month;
+                    $month           =  $month;
                     $date            =  $now->addDays(5);
-                    $month           =  2;
+                    // $month           =  2;
                     //$due_date        =  $now->addDays(10);
                     if($discount==NULL || $discount==''){
                         $discount = 0;
@@ -154,11 +168,11 @@ class Invoicegenrated extends Command
                                              ->where('stdBill.regiNo',$regiNo);
                                 //echo '<pre>'.print_r($due->payTotal,true);
                                 // exit;
-                                 if($chk_rows->count()==0){
+                                if($chk_rows->count()==0){
                                     echo 'ss'.$chk_rows->count();
                                     // exit;
                                     $due1  = $totalfee;
-                                 }else{
+                                }else{
                                      $due1 = $due->payTotal + $totalfee;
                                  }
 
@@ -191,7 +205,8 @@ class Invoicegenrated extends Command
                                 $feeCol->payableAmount = $totalfee;
                                 $feeCol->total_fee     = $fee_setup->fee;
                                 $feeCol->paidAmount    = 0;
-                                $feeCol->dueAmount     = $due1  ;
+                                //$feeCol->dueAmount     = $due1  ;
+                                $feeCol->dueAmount     = $totalfee;  ;
                                 $feeCol->payDate       = $date->format('Y-m-d');
                                 //$feeCol->payDate       = Carbon::now()->format('Y-m-d');
                                 echo "<pre>";print_r(Carbon::now()->format('Y-m-d'));

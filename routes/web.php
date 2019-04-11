@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Input;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -280,6 +280,16 @@ Route::get('/cron/run', function(){
   
    //return json_encode(auth()->user()->adminDashboardCount());
 })->name('cron.run');
+
+Route::get('/cron/invoices/months', function(){
+	$months = Input::get('month');
+	$f_id = Input::get('family_id');
+    \Log::info('Executed at'.date('Y-m-d H:i:s'));
+   \Artisan::call("Invoice:months", ['arg_name' => ['month'=>$months, 'family_id'=>$f_id]]);
+   return \Artisan::Output();
+  
+   //return json_encode(auth()->user()->adminDashboardCount());
+})->name('cron.run1');
 
 
 Route::get('/smslog','smsController@getsmsLog');

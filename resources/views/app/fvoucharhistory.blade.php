@@ -50,6 +50,7 @@
                   {{--<th>Paid Amount</th>--}}
                   {{--<th>Due Amount</th>--}}
                   <th>Status</th>
+                  <th>Month</th>
                   <th>Pay Date</th>
                   <th>Action</th>
                 </tr>
@@ -63,15 +64,16 @@
                   {{--<td>{{$fee->dueAmount}}</td>--}}
                   {{--<td>{{$fee->dueAmount}}</td>--}}
                    <td>@if($fee->status=='Unpaid')<button  class="btn btn-danger" >UnPaid</button>@else <button  class="btn btn-success" >Paid</button>@endif</td>
+                  <td>{{ \DateTime::createFromFormat('!m', $fee->month)->format('F')}}</td>
                   <td>{{$fee->date}}</td>
 
                   <td>
                    @if($fee->status=='Unpaid')
-                    <a title='Paid' href="#" onclick="submitfrom('paid')" class='btn btn-success'> Paid</a>
-                    <form  id="fee_paid" action='{{url("/family/paid")}}/{{$fee->id}}' method="post">
+                    <a title='Paid' href="#" onclick="submitfrom('paid','{{$fee->id}}')" class='btn btn-success'> Paid</a>
+                    <form  id="fee_paid{{$fee->id}}" action='{{url("/family/paid")}}/{{$fee->id}}' method="post">
                     @else
-                    <a title='unPaid'  href="#" class='btn btn-danger' onclick="submitfrom('unpaid')"  > UnPaid</a>
-                    <form id="fee_unpaid" action='{{url("/family/paid")}}/{{$fee->id}}?s=unpaid' method="post">
+                    <a title='unPaid'  href="#" class='btn btn-danger' onclick="submitfrom('unpaid','{{$fee->id}}')"  > UnPaid</a>
+                    <form id="fee_unpaid{{$fee->id}}" action='{{url("/family/paid")}}/{{$fee->id}}?s=unpaid' method="post">
 
                     @endif
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -152,12 +154,12 @@
           @section('script')
           <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
           <script type="text/javascript">
-          function submitfrom(type){
+          function submitfrom(type,id){
             if(type=='unpaid'){
 
               var x = confirm("Are you sure you want to Unpaid this vouchar?");
                 if (x){
-                   document.getElementById('fee_unpaid').submit();
+                   document.getElementById('fee_unpaid'+id).submit();
                  return true
                }
                 else{
@@ -168,7 +170,7 @@
             else{
               var x = confirm("Are you sure you want to Paid this vouchar?");
                   if (x){
-                      document.getElementById('fee_paid').submit();
+                      document.getElementById('fee_paid'+id).submit();
                   }else{
                     return false;
                   }
@@ -184,7 +186,9 @@
             $('#class').on('change',function() {
               getsections();
             });
-            $('#feeList').dataTable();
+            $('#feeList').dataTable({
+               "sPaginationType": "bootstrap",
+            });
             //var session = $('#session').val().trim();
               //getstudents();
             $(".datepicker2").datepicker( {

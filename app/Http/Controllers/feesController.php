@@ -623,7 +623,7 @@ class feesController extends BaseController {
 	public function get_family_voucher($family_id)
 	{
 		    //$bill = \Session::get('billid');
-		echo 'familyid'.$family_id;
+		    //echo 'familyid'.$family_id;
 		  	$now             =  Carbon::now();
 			$year            =  $now->year;
 			$month           =  $now->month;
@@ -702,9 +702,10 @@ class feesController extends BaseController {
 					//print_r($bills);exit;
 					  $bils     = implode(',',$bills);
 
-					  $totals   = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(total_fee),0) as Totalpay,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(total_fee),0)- IFNULL(sum(paidAmount),0)) as dueAmount,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+					  $totals   = FeeCol::join('billHistory','stdBill.billNo','=','billHistory.billNo')->select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(total_fee),0) as Totalpay,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(total_fee),0)- IFNULL(sum(paidAmount),0)) as dueAmount,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
 											//->where('class',Input::get('class'))
-											 ->whereMonth('created_at', '=', $month)
+											 //->whereMonth('created_at', '=', $month)
+											 ->where('month', '=', $month)
 											 ->whereIn('regiNo',$regiNo)
 											 ->first();
 								$check_vouchar  = FamilyVouchar::whereMonth('date',$month)->where('family_id',$family_id)->count();
@@ -996,7 +997,7 @@ class feesController extends BaseController {
 
 		}
 		$paid->save();
-		echo "<pre>";print_r($totals);
+		//echo "<pre>";print_r($totals);
 	      return Redirect::back()->with('success','voucher paid');
 
 		exit;
@@ -1005,6 +1006,14 @@ class feesController extends BaseController {
 
 	public function family_vouchar_paid($id)
 	{
+		
+		//echo $id;
+
+
+			//echo "==".Input::get('bills')."wewe";
+
+		//exit;
+
 		$bills = explode(',', Input::get('bills'));
 		$fees = FeeCol::select('*')
 		->whereIn('billNo',$bills)
@@ -1030,7 +1039,7 @@ class feesController extends BaseController {
 				$vouchers->save();
 			
 			$totals1 = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
-			//->where('billNo',$billNo)
+			->where('billNo',$totals->billNo)
 			->where('regiNo',$paid->regiNo)
 			->first();
 			if(Input::get('s')!='unpaid'){

@@ -232,14 +232,14 @@ class studentController extends BaseController {
 			$student->middleName = "";
 		}
 		$student->lastName = Input::get('lname');
-		$student->gender= Input::get('gender');
+		$student->gender = Input::get('gender');
 		
-		$student->religion= Input::get('religion');
+		$student->religion = Input::get('religion');
 
 		if(Input::get('religion') ==''){
 			$student->religion = "";
 		}
-		$student->bloodgroup= Input::get('bloodgroup');
+		$student->bloodgroup = Input::get('bloodgroup');
 
 		if(Input::get('bloodgroup')==''){
 		$student->bloodgroup="";
@@ -830,6 +830,7 @@ public function family_update()
 {
 	$rules=[
 		'familb' => 'required',
+		'adfamily_id' => 'required',
 	];
 	$validator = \Validator::make(Input::all(), $rules);
 	if ($validator->fails())
@@ -837,15 +838,52 @@ public function family_update()
 		return Redirect::to('family/edit/'.Input::get('family_id'))->withErrors($validator);
 	}
 	else {
+		$family_id  = trim(Input::get('family_id'));
+		$family_idn  = trim(Input::get('adfamily_id'));
+
+
+			$check_ids = DB::table('Student')
+            		->where('family_id', '<>', Input::get('family_id'))
+					->orwhere('fatherCellNo', '<>', Input::get('family_id'))
+				/*->where(function($q) use( $family_id) {
+			        $q->where('family_id', '<>', $family_id);
+			        ->orwhere('fatherCellNo', '<>', $family_id);
+			    })*/
+				->get();
+			    $get_family_ids = array();
+			foreach($check_ids as $f_id){
+
+				/*if( Input::get('adfamily_id') === $f_id->family_id && ($f_id->family_id==$family_id || $family_id===$f_id->fatherCellNo)){
+							echo "ewew";
+				}else{
+					echo "dsds";
+				}*/
+				if($f_id->family_id!='' && ($f_id->family_id!=$family_id )){
+					$get_family_ids[] = $f_id->family_id;
+				}
+			}
+            //echo "<pre>".$family_id;print_r($get_family_ids);exit;
+			if(in_array(Input::get('adfamily_id'), $get_family_ids)){
+
+					return Redirect::to('family/edit/'.Input::get('family_id'))->withErrors('Family Id Already Assign Other Family plase select different ID');
+			}
+
+
+
 		DB::table('Student')
-            		->where('family_id', '=', Input::get('family_id'))
-					->orwhere('fatherCellNo', '=', Input::get('family_id'))
-            		->update(['about_family' => Input::get('familb')]);
+            		//->where('family_id', '=', Input::get('family_id'))
+					//->orwhere('fatherCellNo', '=', Input::get('family_id'))
+					->where(function($q) use( $family_id) {
+				        $q->where('Student.family_id', '=', $family_id)
+				        ->orWhere('Student.fatherCellNo', '=', $family_id);
+				      })
+            		->update(['about_family' => Input::get('familb'),'family_id' => $family_idn]);
 
 			return Redirect::to('/family/list')->with("success","Family Updated Succesfully.");	
 	}
 
 }
+
 
 
 /**

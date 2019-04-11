@@ -4,6 +4,14 @@
 @stop
 @section('content')
 
+
+
+<?php 
+if($student->family_id==''){
+
+  //$student->family_id =   hexdec(substr(uniqid(rand(), true), 5, 5));
+}
+?>
 <div class="row">
 <div class="box col-md-12">
         <div class="box-inner">
@@ -29,20 +37,35 @@
                   <input type="hidden" name="oldphoto" value="{{ $student->photo }}">
                   <input type="hidden" name="family_id" value="{{ $family_id }}">
                 
-              <div class="row">
-                <div class="col-md-12">
-                          <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="presentAddress">About Family Behavior </label>
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
-                                <textarea type="text" class="form-control" required name="familb" placeholder="About Family Behavior ">{{$student->about_family}}</textarea>
+                    <div class="row">
+                      <div class="col-md-12">
+                                <div class="col-md-12">
+                              <div class="form-group">
+                                  <label for="presentAddress">Family Id </label>
+                                  <div class="input-group">
+                                      <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
+                                      <input type="text" class="form-control" required name="adfamily_id" placeholder="" value="{{$student->family_id}}">
+                                  </div>
+                              </div>
+                              </div>
+                    </div>
+                  </div>
+
+
+                  <div class="row">
+                    <div class="col-md-12">
+                              <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="presentAddress">About Family Behavior </label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
+                                    <textarea type="text" class="form-control" required name="familb" placeholder="About Family Behavior ">{{$student->about_family}}</textarea>
+                                </div>
                             </div>
-                        </div>
-                        </div>
-                        
-              </div>
-            </div>
+                            </div>
+                            
+                  </div>
+                </div>
 
 
                     <div class="clearfix"></div>

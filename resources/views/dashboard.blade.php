@@ -3,6 +3,7 @@
 <link href="{{ URL::asset('/css/custom.min.css')}}" rel='stylesheet'>
 <link href="{{ URL::asset('/font-awesome/css/font-awesome.min.css')}}" rel='stylesheet'>
 <link href="{{ URL::asset('/css/theme1.css')}}" rel="stylesheet" media="all">
+<link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 <style>
 .fc-today{
   background-color: #2AA2E6;
@@ -179,6 +180,76 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
 
 
  @if(Auth::user()->group!='Director')
+
+<!----------------------- MOnth OR year wise filter --------------------- -->
+
+        <form role="form" id="defulter" name="defulter"  method="get" >
+
+          <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="control-label" for="month">Month</label>
+
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                      <?php  $data=[
+                      '1'=>'January',
+                      '2'=>'February',
+                      '3'=>'March',
+                      '4'=>'April',
+                      '5'=>'May',
+                      '6'=>'June',
+                      '7'=>'July',
+                      '8'=>'August',
+                      '9'=>'September',
+                      '10'=>'October',
+                      '11'=>'November',
+                      '12'=>'December'
+                      ];?>
+                      {{ Form::select('month',$data,$month,['class'=>'form-control','id'=>'month','required'=>'true'])}}
+                    </div>
+                  </div>
+                </div>
+              {{--<div class="col-md-4">
+                <div class="form-group ">
+                  <label for="session">session</label>
+                  <div class="input-group">
+
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                    <input  value="{{date('Y')}}" type="text" id="session" required="true" class="form-control datepicker2" name="session"   data-date-format="yyyy" value="{{$session}}">
+                  </div>
+                </div>
+              </div>--}}
+               <div class="col-md-4">
+                <div class="form-group ">
+                  <label for="session">Year</label>
+                  <div class="input-group">
+
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                    <input  type="text" value="" id="yeard" required="true" class="form-control datepicker2" name="year"   data-date-format="yyyy" >
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label class="control-label" for="">&nbsp;</label>
+
+                  <div class="input-group">
+                    <button class="btn btn-primary pull-right" id="btnsave" type="submit"><i class="glyphicon glyphicon-th"></i> Get List</button>
+
+                  </div>
+                </div>
+              </div>
+
+
+
+            </div>
+          </div>
+          </form>
+
+<!----------------------- End ------------------------------------------- -->
+
 
 <div class="row m-t-25">
                             <div class="col-sm-6 col-lg-4">
@@ -397,7 +468,9 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
       <div class="col-md-12 col-sm-12 col-xs-12">
          <div class="au-card recent-report">
          <div class="au-card recent-report">
-         <a href='{{url('/cron/run')}}' class="btn btn-danger">Generate Vouchars <small> {{$month_n}}</small></a>
+         <a href='{{url('/cron/run')}}' class="btn btn-danger">Generate Vouchars <small> Current Month</small></a>
+        
+         <a href='#' class="btn btn-primary" data-toggle="modal" data-target="#myModal">Generate Vouchars more than One Month <small> Current Month</small></a>
         <h2>Fee Detail <small> {{$month_n}}</small></h2>
          <table id="feeList" class="table table-striped table-bordered table-hover">
               <thead>
@@ -493,13 +566,113 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
 
     </div> */ ?>
 @stop
+@section("model")
+<!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Select Months</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form role="form" id="defulter" action="{{url('/cron/invoices/months')}}" name="defulter"  method="get" >
+
+          <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="control-label" for="month">Month</label>
+
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                      <?php  $data=[
+                      '1'=>'January',
+                      '2'=>'February',
+                      '3'=>'March',
+                      '4'=>'April',
+                      '5'=>'May',
+                      '6'=>'June',
+                      '7'=>'July',
+                      '8'=>'August',
+                      '9'=>'September',
+                      '10'=>'October',
+                      '11'=>'November',
+                      '12'=>'December'
+                      ];?>
+                      {{ Form::select('month[]',$data,$month,['class'=>'form-control','id'=>'month','required'=>'true','multiple'=>'true'])}}
+                    </div>
+                  </div>
+                </div>
+              {{--<div class="col-md-4">
+                <div class="form-group ">
+                  <label for="session">Family ID</label>
+                  <div class="input-group">
+
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                    <input  value="" type="text" id="session" required="true" class="form-control" name="family_id"    value="">
+                  </div>
+                </div>
+              </div>--}}
+               <div class="col-md-4">
+                <div class="form-group ">
+                  <label for="session">Family ID</label>
+                  <div class="input-group">
+
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                    <input  type="text" value="" id="family_id"  class="form-control" name="family_id"  >
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label class="control-label" for="">&nbsp;</label>
+
+                  <div class="input-group">
+                    <button class="btn btn-primary pull-right" id="btnsave" type="submit"><i class="glyphicon glyphicon-th"></i> Get List</button>
+
+                  </div>
+                </div>
+              </div>
+
+
+
+            </div>
+          </div>
+          </form>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+@stop
 @section("script")
 <script src="{{url('/js/Chart.min.js')}}"></script>
- 
+  <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script script type="text/javascript">
  
   $(document).ready(function () {
 
+        $(".datepicker2").datepicker( {
+              format: " yyyy", // Notice the Extra space at the beginning
+              viewMode: "years",
+              minViewMode: "years",
+              autoclose:true
+
+            }).on('changeDate', function (ev) {
+
+              //getstudents();
+
+            });
         $('#calendar').fullCalendar({
         header: {
             left: 'prev,next',

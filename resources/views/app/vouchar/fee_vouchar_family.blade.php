@@ -55,6 +55,8 @@
   <tr>
           <th>Family Id</th>
           <td>{{$family_id}}</td>
+          <th>Month</th>
+          <td>{{ \DateTime::createFromFormat('!m', $month)->format('F')}}</td>
         </tr>
  </table>
       <?php /* <table border="0" cellspacing="10" class="student-info">
@@ -136,7 +138,7 @@
         
         <td></td>
      
-        <td colspan="3">@if($vouchar_detail->paidAmount=='0.00'){{$totals->payTotal}} @else 0.00 @endif</td>
+        <td colspan="3">@if($totals->paiTotal<=$totals->payTotal){{$totals->payTotal - $totals->paiTotal}} @else 0.00 @endif</td>
         </tr>
       </table>
 

@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
     '\App\Console\Commands\attendanceNotification',
     '\App\Console\Commands\DiaryJob',
     '\App\Console\Commands\Invoicegenrated',
+    '\App\Console\Commands\Invoicemoreonemonth',
     ];
 
     /**

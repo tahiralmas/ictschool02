@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Input;
 use App\ClassModel;
 use App\Subject;
 use App\Student;
@@ -28,9 +29,19 @@ class DashboardController extends BaseController {
 	{
 		
         $now              =  Carbon::now();
-		$year1            =  $now->year;
-		$year             =  get_current_session()->id;
-        $month            =  $now->month;
+		if(Input::get('year')==""){
+
+			$year1            =  $now->year;
+		}else{
+			$year1            =  trim(urlencode(Input::get('year')));
+		}
+			$year             =  get_current_session()->id;
+        if(Input::get('month')==""){
+        	$month            =  $now->month;
+    	}else{
+    		$month            = trim(Input::get('month'));
+    	}
+    	//echo "mm - -".$month ."-- year -- ".$year1 ;
 		$error            = \Session::get('error');
 		$success          = \Session::get('success');
 		$tclass           =  ClassModel::count();
@@ -220,6 +231,10 @@ class DashboardController extends BaseController {
 		//echo "<pre>";print_r($total);
 		
      $month_n = $now->format('F');
+       if(Input::get('month')!=""){
+       	$month_n = \DateTime::createFromFormat('!m', Input::get('month'))->format('F');
+       }
+
          $class = array();
          $present = array();
          $absent = array();
