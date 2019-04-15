@@ -37,6 +37,7 @@ if($student->family_id==''){
                   <input type="hidden" name="oldphoto" value="{{ $student->photo }}">
                   <input type="hidden" name="family_id" value="{{ $family_id }}">
                 
+                    
                     <div class="row">
                       <div class="col-md-12">
                                 <div class="col-md-12">
@@ -45,6 +46,32 @@ if($student->family_id==''){
                                   <div class="input-group">
                                       <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
                                       <input type="text" class="form-control" required name="adfamily_id" placeholder="" value="{{$student->family_id}}">
+                                  </div>
+                              </div>
+                              </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12">
+                                <div class="col-md-12">
+                              <div class="form-group">
+                                  <label for="presentAddress">Father Name</label>
+                                  <div class="input-group">
+                                      <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
+                                      <input type="text" class="form-control" required name="f-name" placeholder="" value="{{$student->fatherName}}">
+                                  </div>
+                              </div>
+                              </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12">
+                                <div class="col-md-12">
+                              <div class="form-group">
+                                  <label for="presentAddress">Phone Number </label>
+                                  <div class="input-group">
+                                      <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
+                                      <input type="text" class="form-control" required name="cell_phone" placeholder="" value="{{$student->fatherCellNo}}">
                                   </div>
                               </div>
                               </div>
