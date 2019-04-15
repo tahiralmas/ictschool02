@@ -830,6 +830,8 @@ public function family_update()
 {
 	$rules=[
 		'familb' => 'required',
+		'f-name' => 'required',
+		'cell_phone' => 'required',
 		'adfamily_id' => 'required',
 	];
 	$validator = \Validator::make(Input::all(), $rules);
@@ -840,6 +842,8 @@ public function family_update()
 	else {
 		$family_id  = trim(Input::get('family_id'));
 		$family_idn  = trim(Input::get('adfamily_id'));
+		$fathername  = trim(Input::get('f-name'));
+		$cell_phone  = trim(Input::get('cell_phone'));
 
 
 			$check_ids = DB::table('Student')
@@ -877,7 +881,7 @@ public function family_update()
 				        $q->where('Student.family_id', '=', $family_id)
 				        ->orWhere('Student.fatherCellNo', '=', $family_id);
 				      })
-            		->update(['about_family' => Input::get('familb'),'family_id' => $family_idn]);
+            		->update(['about_family' => Input::get('familb'),'family_id' => $family_idn,'fatherName' =>$fathername,'fatherCellNo' =>$cell_phone ]);
 
 			return Redirect::to('/family/list')->with("success","Family Updated Succesfully.");	
 	}
