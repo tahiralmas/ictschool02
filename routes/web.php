@@ -141,11 +141,13 @@ Route::get('/family/edit/{f_id}','studentController@family_edit');
 Route::post('/family/update','studentController@family_update');
 Route::get('/family/students/{f_id}','studentController@family_student_list');
 Route::post('/family_discount/{f_id}','studentController@add_family_discount');
+Route::post('/student/add/{f_id}','studentController@add_family_student');
 });
 Route::get('/student/getList/{class}/{section}/{shift}/{session}','studentController@getForMarks');
 Route::get('/student/getsList/{class}/{section}/{shift}/{session}','studentController@getForMarksjoin');
 Route::post('/student/search','studentController@search');
 Route::post('/family/search','studentController@family');
+Route::post('/family/student/search','studentController@familystudent');
 Route::post('/get/family_id','studentController@get_family_id');
 Route::post('/sms/send','studentController@send_sms');
 
@@ -483,6 +485,8 @@ Route::get('/fees/paid/{billno}','feesController@vouchar_paid');
 //Route::get('/fee/vouchar','feesController@getvouchar');
 Route::post('/fee/voucher','feesController@postvouchar');
 Route::get('/fee/get_vouchar','feesController@createvoucher');
+Route::get('/fee/get_vouchar/{id}','feesController@getvoucher');
+Route::get('/f_vouchar/model/{f_id}','feesController@getfvoucher');
 
 
 
