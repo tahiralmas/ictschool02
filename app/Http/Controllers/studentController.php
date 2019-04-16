@@ -86,6 +86,45 @@ class studentController extends BaseController {
 		      echo $output;
 		
 	}
+	public function familystudent(Request $request)
+	{
+
+		
+			$query = Input::get('query');
+			$output="";
+			$data=DB::table('Student')
+			->join('Class','Student.class','=','Class.code')
+			->select('Student.*','Class.name as class')
+			->where('Student.isActive', '=', 'Yes')
+			//->where('Student.firstName','LIKE','%'.$query."%")
+			//->orwhere('Student.lastName','LIKE','%'.$query."%")
+			//->orWhere(CONCAT('Student.firstName', " ", 'Student.lastName'), 'LIKE', '%'.$query.'%')
+		    ->WhereRaw("concat(Student.firstName, ' ', Student.lastName) like '%$query%' ")
+			->orwhere('Student.fatherName','LIKE','%'.$query."%")
+			//->orwhere('Student.b_form','LIKE','%'.$query."%")
+			//->orwhere('Student.session','LIKE','%'.$query."%")
+			//->orwhere('Student.class','LIKE','%'.$query."%")
+			//->orwhere('Student.dob','LIKE','%'.$query."%")
+			//->orwhere('Student.parmanentAddress','LIKE','%'.$query."%")
+			//->orwhere('Student.discount_id','LIKE','%'.$query."%")
+			->orwhere('Student.regiNo','LIKE','%'.$query."%")
+			//->orderBy('Student.session', 'desc')
+			//->orderBy('Student.class', 'asc')
+			->limit(20)
+			->get();
+			//return Response($output);
+			 $output = '';
+		      foreach($data as $row)
+		      {
+		      	$section = DB::table('section')->where('id',$row->section)->first();
+		       	$output .= '
+		       		<tr data-sid="'.$row->id.'"><td><input name="regino[]" type="checkbox" value="'.$row->id.'"></td><td>'.$row->firstName.''.$row->lastName.' </td><td>'.$row->regiNo.'</td><td>'.$row->class.'</td><td>'.$section->name.'</td></tr>'
+		       ;
+		      }
+		     // $output .= '</ul>';
+		      echo $output;
+		
+	}
 
 	public function family(Request $request)
 	{
@@ -829,9 +868,9 @@ public function family_edit($family_id)
 public function family_update()
 {
 	$rules=[
-		'familb' => 'required',
-		'f-name' => 'required',
-		'cell_phone' => 'required',
+		'familb'      => 'required',
+		'f-name'      => 'required',
+		'cell_phone'  => 'required',
 		'adfamily_id' => 'required',
 	];
 	$validator = \Validator::make(Input::all(), $rules);
@@ -840,15 +879,15 @@ public function family_update()
 		return Redirect::to('family/edit/'.Input::get('family_id'))->withErrors($validator);
 	}
 	else {
-		$family_id  = trim(Input::get('family_id'));
+		$family_id   = trim(Input::get('family_id'));
 		$family_idn  = trim(Input::get('adfamily_id'));
 		$fathername  = trim(Input::get('f-name'));
 		$cell_phone  = trim(Input::get('cell_phone'));
 
 
 			$check_ids = DB::table('Student')
-            		->where('family_id', '<>', Input::get('family_id'))
-					->orwhere('fatherCellNo', '<>', Input::get('family_id'))
+            			->where('family_id', '<>', Input::get('family_id'))
+						->orwhere('fatherCellNo', '<>', Input::get('family_id'))
 				/*->where(function($q) use( $family_id) {
 			        $q->where('family_id', '<>', $family_id);
 			        ->orwhere('fatherCellNo', '<>', $family_id);
@@ -880,12 +919,39 @@ public function family_update()
 					->where(function($q) use( $family_id) {
 				        $q->where('Student.family_id', '=', $family_id)
 				        ->orWhere('Student.fatherCellNo', '=', $family_id);
-				      })
+				    })
             		->update(['about_family' => Input::get('familb'),'family_id' => $family_idn,'fatherName' =>$fathername,'fatherCellNo' =>$cell_phone ]);
 
 			return Redirect::to('/family/list')->with("success","Family Updated Succesfully.");	
 	}
 
+}
+
+public function add_family_student($f_id)
+{
+
+	//..echo $f_id;
+	//print_r(Input::get('regino'));
+
+	$fm = DB::table('Student')
+            		
+		->where(function($q) use( $f_id) {
+				$q->where('Student.family_id', '=', $f_id)
+				->orWhere('Student.fatherCellNo', '=', $f_id);
+		})
+		->first();
+
+		$family_id =$fm->family_id ;
+		$fatherName =$fm->fatherName ;
+		$fatherCellNo = $fm->fatherCellNo;
+
+		DB::table('Student')
+			  ->whereIn('id',Input::get('regino'))
+			  ->update(['family_id' => $family_id,'fatherName' =>$fatherName,'fatherCellNo' =>$fatherCellNo ]);
+
+			  return Redirect::to('/family/students/'.$f_id)->with("success","Family Updated Succesfully.");	
+		//echo "<pre>";print_r($fm);
+            		//->update(['about_family' => Input::get('familb'),'family_id' => $family_idn,'fatherName' =>$fathername,'fatherCellNo' =>$cell_phone ]);
 }
 
 
@@ -964,16 +1030,16 @@ $file = Input::file('fileUpload');
 											'class' => $raw['class'],
 											'section' => $raw['section'],
 											'session' =>    $raw['session'],
-											 'regiNo' => $raw['registration'],
-											  'rollNo' => $raw['nocardroll_no'],
-                                               'shift' => 'Morning',
-                                               'isActive'=>'Yes',
-											  'group' => $raw['group'],
+											'regiNo' => $raw['registration'],
+											'rollNo' => $raw['nocardroll_no'],
+                                            'shift' => 'Morning',
+                                            'isActive'=>'Yes',
+											'group' => $raw['group'],
 											'firstName' => $raw['first_name'],
 											'lastName' =>    $raw['last_name'],
 											 'Gender' => $raw['gender'],
-											  'fatherName' => $raw['father_name'],
-											  'fatherCellNo' => $raw['fathers_mobile_no']
+											 'fatherName' => $raw['father_name'],
+											 'fatherCellNo' => $raw['fathers_mobile_no']
 
 										];
 										$hasStudent = Student::where('rollNo','=',$raw['nocardroll_no'])->first();
@@ -1047,14 +1113,14 @@ public function access($id)
 				 $ict  = new ictcoreController();
 				 	$data = array(
 					'first_name' => $student->firstName,
-					'last_name' => $student->lastName,
-					'phone'     => $student->fatherCellNo,
-					'email'     => '',
+					'last_name'  => $student->lastName,
+					'phone'      => $student->fatherCellNo,
+					'email'      => '',
 					);
 					$contact_id = $ict->ictcore_api('contacts','POST',$data );
 
                    $message = 'School name'.'<br>'.'Login Name: '.  $student->firstName.$student->lastName.' Password: '.$student->regiNo;
-                    $data = array(
+                    $data   = array(
 					'name' => 'School Name',
 					'data' => $message,
 					'type'     => 'plain',
