@@ -44,7 +44,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12" style="clear: both;margin-top: 18px;" >
-              <button type="button" class="btn btn-primary" style="margin-left: 350px;" data-toggle="modal" data-target="#exampleModal">
+              <button type="button" class="btn btn-primary" style="margin-left: 80px;" data-toggle="modal" data-target="#searchsd">
+                    Search and Add Student this Family
+              </button>
+              <button type="button" class="btn btn-primary" style="margin-left: 290px;" data-toggle="modal" data-target="#exampleModal">
                     Add Family Discount
               </button>
               <table id="studentList" class="table table-striped table-bordered" >
@@ -155,6 +158,65 @@
   </div>
 </div>
 
+
+
+
+<!-- Modal -->
+<div class="modal" style="display:none;" id="searchsd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Student Search And Add </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-inline" method="post" action="{{url('/student/add/'.$family_id)}}">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+          <i class="fas fa-search" aria-hidden="true"></i>
+          <input class="form-control form-control-sm ml-3 w-50" type="text" placeholder="Search" id="qury" aria-label="Search">
+          <input class="ml-3 w-20 btn btn-primary" type="button" onclick="searchstudent()" value=" Get Student">
+         <br>
+         <br>
+         <br>
+         <br>
+          <table class="table table-striped" id="tbl" style="display:none">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>RegiNo</th>
+              <th>Class</th>
+              <th>Section</th>
+              
+            </tr>
+          </thead>
+            <tbody id="lists">
+              
+            </tbody>
+
+
+          </table>
+          <br>
+          <br>
+          <br>
+          <br>
+          <input class="ml-3 w-70 btn btn-primary" type="submit" style="display:none" id="btnshow" value="Add Student To Family">
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+       
+      </div>
+      
+    </div>
+  </div>
+</div>
+
 @stop
 
 
@@ -190,5 +252,31 @@ $("#MyModal").modal();
 
      
 });
+
+function searchstudent(){
+
+ // $('#myTable > tbody:last-child').append('<tr>...</tr><tr>...</tr>');
+    var query = $('#qury').val();
+   
+    if(query != '')
+    {
+     var _token = $('input[name="_token"]').val();
+     $.ajax({
+      url:"{{ url('/family/student/search') }}",
+      method:"POST",
+      data:{query:query, _token:_token},
+      success:function(data){
+        $("#tbl").show();
+        $("#btnshow").show();
+       //$('#studentListd').fadeIn();  
+       //$('#lists').html(data);
+       $('#lists').append(data);
+      }
+     });
+    }else{
+       //$('#studentListd').fadeOut(); 
+    }
+    
+}
 </script>
 @stop
