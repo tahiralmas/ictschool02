@@ -14,6 +14,7 @@ $permision[] = $permission->permission_name;
 <html lang="en">
 <head>
     <!--
+    TMgymNeJK1
         ===
         This comment should NOT be removed.
 
@@ -36,7 +37,7 @@ $permision[] = $permission->permission_name;
     <meta name="author" content="">
 
     <!-- The styles -->
-  
+  <head>
 <script type="text/javascript">
 window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.keyIdentifier=='Enter'||e.keyCode==13){if(e.target.nodeName=='INPUT'&&e.target.type=='text'){e.preventDefault();return false;}}},true);
 </script>
@@ -68,7 +69,7 @@ window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.ke
     <!-- Main CSS-->
     <link href="{{ URL::asset('/assets/css/theme.css')}}" rel="stylesheet" media="all">
 
-     <link href='{{ URL::asset('/bower_components/fullcalendar/dist/fullcalendar.css') }}' rel='stylesheet'>
+    <link href='{{ URL::asset('/bower_components/fullcalendar/dist/fullcalendar.css') }}' rel='stylesheet'>
     <link href='{{ URL::asset('/bower_components/fullcalendar/dist/fullcalendar.print.css') }}' rel='stylesheet' media='print'>
     <link href='{{ URL::asset('/bower_components/chosen/chosen.min.css') }}' rel='stylesheet'>
 
@@ -417,6 +418,25 @@ table i{
                               <li><a href="{{url('/fees/setup')}}"><i class="glyphicon glyphicon-cog"></i> Fees Setup</a></li>
                             </ul>
                           </div>--}}
+                           @if(family_check()=='on')
+                           <div class="noti-wrap">
+                           <div class="noti__item js-item-menu">
+                                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                          <i class="glyphicon glyphicon-user"></i>
+                                          <span class=""> Family Lists</span>
+                                         
+                                        </button>
+                                        <div class="mess-dropdown js-dropdown">
+                                            
+                                           <a href="{{url('/family/list')}}">
+                                        <div class="notifi__item">
+                                         <i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;&nbsp;&nbsp;Get List</a>
+                                        </div>
+                                        </a>
+                                        </div>
+                                        </div>
+                                        @endif
+
                            <div class="noti-wrap">
                            <div class="noti__item js-item-menu">
                                         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -625,7 +645,7 @@ table i{
 
             <!-- MObile menue -->
             <aside class="menu-sidebar2 js-right-sidebar d-block d-lg-none">
-               
+              
                 @include('layouts.sidebarmenu') 
             </aside>
             <!-- END Mobile menu-->
@@ -669,7 +689,19 @@ table i{
                             </div>
                           @endif
 
+                          
+                          @if(Voucharcheck()==0)
+                               <div class="alert alert-danger">
+                                  <button data-dismiss="alert" class="close" type="button">×</button>
+                                  <strong> Note!</strong> <strong>Please Create Vouchars this Months On dashboard</strong>
+                               </div>
+                          @endif
+                           
+                          
+
+
                           @yield('content')
+
                           <!-- content ends -->
                           <div class="row">
                             <div class="col-md-12">
