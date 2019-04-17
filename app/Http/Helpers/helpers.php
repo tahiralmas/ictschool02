@@ -4,6 +4,7 @@ use App\Subject;
 use App\AcadamicYear;
 use App\Student;
 use App\Http\Controllers\ictcoreController;
+use Carbon\Carbon;
 //use Storage;
 class emtysession{
 
@@ -285,5 +286,23 @@ if(! function_exists('sendmesssageictcore')){
 	  	return $transmission_send;
 	}
 
+}
+
+if (! function_exists('Voucharcheck')) {
+	function Voucharcheck(){
+
+		    $now            =  Carbon::now();
+			$year           =  $now->year;
+        	$month          =  $now->month;
+
+		$fees = DB::Table('stdBill')
+					->join('Student','stdBill.regiNo','=','Student.regiNo')
+					->join('billHistory','stdBill.billNo','=','billHistory.billNo')
+					->select(DB::RAW("stdBill.billNo,stdBill.payableAmount,stdBill.paidAmount,stdBill.dueAmount,DATE_FORMAT(stdBill.payDate,'%D %M,%Y') AS date"),'Student.firstName','Student.lastName','Student.class','Student.section','Student.regiNo','billHistory.month','billHistory.title','billHistory.fee','billHistory.lateFee')
+					->where('billHistory.month',$month)
+					->whereYear('stdBill.created_at',$year)
+					->count();
+		return $fees;
+	}
 }
 
