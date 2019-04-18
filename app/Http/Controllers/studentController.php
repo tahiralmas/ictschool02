@@ -245,8 +245,8 @@ class studentController extends BaseController {
 	];
 
 	   $messsages = array(
-		'lname.required'=>'The Lastname field is required',
-		'fname.required'=>'The Firstname field is required',
+		'lname.required'=>'The Last Name field is required',
+		'fname.required'=>'The First Name field is required',
 		
 	);
 
