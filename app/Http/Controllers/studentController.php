@@ -558,7 +558,9 @@ public function family_list()
 					->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.family_id',
 					'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.about_family','section.name')
 					->where('Student.isActive', '=', 'Yes')
-					->groupBy('fatherCellNo')
+					->groupBy('Student.fatherCellNo')
+					->groupBy('Student.family_id')
+					//->having('Student.family_id', '<', 3)
 					->get();
 		return View("app.familyList", compact('students'));
 
