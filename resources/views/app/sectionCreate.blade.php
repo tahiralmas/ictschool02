@@ -23,7 +23,7 @@
                         <label for="name">Section Name</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                            <input type="text" class="form-control" autofocus required name="name" placeholder="Section Name">
+                            <input type="text" class="form-control" autofocus required name="name" value="{{old('name')}}" placeholder="Section Name">
                         </div>
                     </div>
                     
@@ -37,7 +37,7 @@
                           <select class="form-control"  name="class" required >
                           <option value="">---Select Class---</option>
                            @foreach($class as $cls)
-                             <option value="{{$cls->code }}">{{ $cls->name}}</option>
+                             <option value="{{$cls->code }}" @if(old('class')==$cls->code) selected @endif>{{ $cls->name}}</option>
                              @endforeach
                           </select>
                       </div>
@@ -53,7 +53,7 @@
                           <select class="form-control"  name="teacher_id" required >
                           <option value="">---Select Class---</option>
                            @foreach($teachers as $teacher)
-                             <option value="{{$teacher->id }}">{{ $teacher->firstName}} {{$teacher->lastName}}</option>
+                             <option value="{{$teacher->id }}" @if(old('teacher_id')==$teacher->id) selected @endif>{{ $teacher->firstName}} {{$teacher->lastName}}</option>
                              @endforeach
                           </select>
                       </div>
@@ -64,7 +64,7 @@
                         <label for="name">Description</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                            <textarea type="text" class="form-control"  name="description" placeholder="Class Description"></textarea>
+                            <textarea type="text" class="form-control"  name="description" placeholder="Class Description">{{old('description')}}</textarea>
                         </div>
                     </div>
                     <div class="clearfix"></div>
