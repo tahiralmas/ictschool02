@@ -52,7 +52,7 @@ class sectionController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-			return Redirect::to('/section/create')->withErrors($validator);
+			return Redirect::to('/section/create')->withInput()->withErrors($validator);
 		}
 		else {
 			$sname = Input::get('name');
