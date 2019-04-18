@@ -27,7 +27,7 @@ class studentController extends BaseController {
 		$this->beforeFilter('auth');
 		$this->beforeFilter('userAccess',array('only'=> array('delete')));*/
 	       $this->middleware('auth');
-               $this->middleware('auth',array('only'=> array('delete')));
+           $this->middleware('auth',array('only'=> array('delete')));
 	}
 	/**
 	* Display a listing of the resource.
@@ -261,9 +261,13 @@ class studentController extends BaseController {
 		$student = new Student;
 		$student->regiNo = Input::get('regiNo');
 		$student->discount_id = Input::get('discount_id');
-		if(Input::get('discount_id') ==''){
-			$student->discount_id = NULL;
+		if(Input::get('discount_id')==''){
+			$student->discount_id = 0;
 		}
+		
+		/*if(Input::get('discount_id') ==''){
+			$student->discount_id = NULL;
+		}*/
 		$student->firstName = Input::get('fname');
 
 		$student->middleName = Input::get('mname');
@@ -593,7 +597,11 @@ public function add_family_discount($family_id){
 	 	//echo "<br>";
 	 	//echo $id;
 	 	$student = Student::find($id);
-		$student->discount_id = $dis[$i];
+	 	$student->discount_id = $dis[$i];
+	 	if($dis[$i]==''){
+	 		$student->discount_id = 0;
+	 	}
+		
 		$student->save();
 	 	$i++;
 
@@ -832,7 +840,7 @@ public function update()
 		}
         $student->discount_id = Input::get('discount_id');
 		if(Input::get('discount_id') ==''){
-			$student->discount_id = NULL;
+			$student->discount_id = 0;
 		}
 
 		$student->save();
