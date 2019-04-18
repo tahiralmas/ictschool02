@@ -267,7 +267,7 @@ class accountingController extends BaseController {
 		}
 		elseif(!is_numeric(Input::get('amount')))
 		{
-			$errorMessages = new Illuminate\Support\MessageBag;
+			$errorMessages = new \Illuminate\Support\MessageBag;
 			$errorMessages->add('Invalid', 'Amount must be a number.');
 			return Redirect::to('/accounting/incomeedit/'.Input::get('id'))->withErrors($errorMessages);
 		}
@@ -275,6 +275,9 @@ class accountingController extends BaseController {
 			$income = Accounting::find(Input::get('id'));
 			$income->amount=Input::get('amount');
 			$income->description=Input::get('description');
+			if(Input::get('description')){
+				$income->description='';
+			}
 			$income->date=$this->parseAppDate(Input::get('date'));
 			$income->save();
 
@@ -314,6 +317,7 @@ class accountingController extends BaseController {
 			$amount = Input::get('amount');
 			$date = Input::get('date');
 			$desc = Input::get('description');
+
 			$sectorIds= array_keys($sectors);
 			// $amountIds = array_keys($amount);
 			//$dateIds = array_keys($date);
@@ -322,11 +326,14 @@ class accountingController extends BaseController {
 			{
 				if($amount[$id] !=="" && $date[$id] !=="") {
 					if (is_numeric($amount[$id])) {
+						if($desc[$id]===''){
+							$desc[$id]='';
+						}
 						$data = array("name" => $sectors[$id], "amount" => $amount[$id], "date" => $date[$id],"description"=>$desc[$id]);
 						array_push($dataToSave, $data);
 					}else
 					{
-						$errorMessages = new Illuminate\Support\MessageBag;
+						$errorMessages = new \Illuminate\Support\MessageBag;
 						$errorMessages->add('Invalid', 'Amount must be a number.');
 						return Redirect::to('/accounting/expence')->withInput(Input::all())->withErrors($errorMessages);
 					}
@@ -342,6 +349,9 @@ class accountingController extends BaseController {
 				$income->type="Expence";
 				$income->amount = $singleData["amount"];
 				$income->description = $singleData["description"];
+				if($singleData["description"]==''){
+					$income->description = '';
+				}
 				$income->date = $this->parseAppDate($singleData["date"]);
 				$income->save();
 				$counter++;

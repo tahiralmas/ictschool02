@@ -278,8 +278,8 @@ Route::group(['middleware' => 'admin'], function(){
 Route::get('/cron/run', function(){
     \Log::info('Executed at'.date('Y-m-d H:i:s'));
    \Artisan::call("Invoice:genrate");
-   return \Artisan::Output();
-  
+   //return \Artisan::Output();
+  	return redirect('/dashboard')->with('success',"Invoice Created Successfully");
    //return json_encode(auth()->user()->adminDashboardCount());
 })->name('cron.run');
 
@@ -288,7 +288,9 @@ Route::get('/cron/invoices/months', function(){
 	$f_id = Input::get('family_id');
     \Log::info('Executed at'.date('Y-m-d H:i:s'));
    \Artisan::call("Invoice:months", ['arg_name' => ['month'=>$months, 'family_id'=>$f_id]]);
-   return \Artisan::Output();
+   //return \Artisan::Output();
+    return redirect('/dashboard')->with('success',"Invoice Created Successfully");
+
   
    //return json_encode(auth()->user()->adminDashboardCount());
 })->name('cron.run1');

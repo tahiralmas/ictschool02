@@ -44,19 +44,19 @@
     @if($i==0)
       <p class="for-use"> Bank Copy </p>
       @elseif($i==1)
-      <p class="for-use"> Student Copy </p>
+      <p class="for-use"> Office Copy  </p>
       @else
-      <p class="for-use"> Office Copy </p>
+      <p class="for-use"> Student Copy </p>
       @endif
       <img src="http://school.ictcore.org/markssheetcontent/school-title.png" />
       <h2> </h2>
       <h3> Vouchar Type (Fee Vouchar) </h3>
  <table border="0" cellspacing="10" class="student-info">
-  <tr>
+        <tr>
           <th>Family Id</th>
           <td>{{$family_id}}</td>
           <th>Month</th>
-          <td>{{ \DateTime::createFromFormat('!m', $month)->format('F')}}</td>
+            <td>{{$month}} {{-- {{ \DateTime::createFromFormat('!m', $month)->format('F')}}--}}</td>
         </tr>
  </table>
       <?php /* <table border="0" cellspacing="10" class="student-info">

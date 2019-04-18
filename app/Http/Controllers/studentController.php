@@ -133,6 +133,7 @@ class studentController extends BaseController {
 			$query = Input::get('query');
 			$output="";
 			$data=DB::table('Student')->where('fatherCellNo','LIKE','%'.$query."%")
+			->groupBy('fatherCellNo')
 			->limit(20)
 			->get();
 			//return Response($output);
@@ -140,7 +141,10 @@ class studentController extends BaseController {
 		      foreach($data as $row)
 		      {
 		      	//$section = DB::table('section')->where('id',$row->section)->first();
-		       $output .= '<li data-check="'.$row->fatherCellNo.'"  data-familyid="'.$row->family_id.'" data-father="'.$row->fatherName.'" data-phone="'.$row->fatherCellNo.'" data-mother_name="'.$row->motherName.'" data-mother_phone="'.$row->motherCellNo.'" data-localGuardian="'.$row->localGuardian.'" data-localGuardianCell="'.$row->localGuardianCell.'"><a href="javascript:void(0)">'.$row->fatherName.' ('.$row->fatherCellNo.')'.' ('.$row->motherName.')'.' ('.$row->motherCellNo.')'.'</a></li>';
+		       if($row->family_id==''){
+		       	$row->family_id = hexdec(substr(uniqid(rand(), true), 5, 5));
+		       }
+		       $output .= '<li data-check="'.$row->fatherCellNo.'"  data-familyid="'.$row->family_id.'" data-father="'.$row->fatherName.'" data-phone="'.$row->fatherCellNo.'" data-mother_name="'.$row->motherName.'" data-mother_phone="'.$row->motherCellNo.'" data-localGuardian="'.$row->localGuardian.'" data-localGuardianCell="'.$row->localGuardianCell.'"><a href="#">'.$row->fatherName.' ('.$row->fatherCellNo.')'.'</a></li>';
 		      }
 		      $output .= '</ul>';
 		      echo $output;

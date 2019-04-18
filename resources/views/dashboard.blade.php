@@ -32,6 +32,13 @@
 
 </div>
 @endif
+@if (Session::get('success'))
+<div class="alert alert-success">
+  <button data-dismiss="alert" class="close" type="button">×</button>
+  <strong>Process Success.</strong> {{ Session::get('success')}}<br>
+
+</div>
+@endif
 
 <div class="row">
   <div class="col-md-12 col-sm-12 col-xs-12">
@@ -374,6 +381,68 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
                                 </div>
                                 </a>
                             </div>
+                            <div class="col-sm-6 col-lg-4">
+                                <a href="{{url('/class/list')}}">
+                                <div class="overview-item overview-item--c3">
+                                    <div class="overview__inner">
+                                        <div class="overview-box clearfix">
+                                            <div class="icon">
+                                                <i class="zmdi zmdi-account-o"></i>
+                                            </div>
+                                            <div class="text">
+                                             {{--<h1>{{Voucharcheck()}}dsds</h1>--}}
+                                                <h2>{{$fee_check_status->payTotal - $fee_check_status->paiTotal}}</h2>
+                                                <span>Pending Amount <small>[{{$month_n}}]</small></span>
+                                            </div>
+                                        </div>
+                                        <div class="overview-chart">
+                                            <canvas id="widgetChart1"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-lg-4">
+                                <a href="{{url('/student/list')}}">
+                                <div class="overview-item overview-item--c2">
+                                    <div class="overview__inner">
+                                        <div class="overview-box clearfix">
+                                            <div class="icon">
+                                                <i class="zmdi zmdi-shopping-cart"></i>
+                                            </div>
+                                            <div class="text">
+                                                <h2>{{$fee_check_status->paiTotal}}</h2>
+                                                <span>Paid Amount <small>[{{$month_n}}]</small></span>
+                                            </div>
+                                        </div>
+                                        <div class="overview-chart">
+                                            <canvas id="widgetChart2"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-lg-4">
+                               <a href="{{url('/attendance_detail?action=absent')}}">
+                                <div class="overview-item overview-item--c3">
+                                    <div class="overview__inner">
+                                        <div class="overview-box clearfix">
+                                            <div class="icon">
+                                                <i class="zmdi zmdi-calendar-note"></i>
+                                            </div>
+                                            <div class="text">
+                                                <h2>{{$monthlyexp}}</h2>
+                                                <span>Total Expenses <small>[{{$month_n}}]</small></span>
+                                            </div>
+                                        </div>
+                                        <div class="overview-chart">
+                                            <canvas id="widgetChart3"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                </a>
+                            </div>
+
                             @endif
                         </div>
 
@@ -425,6 +494,10 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
       @endif
 
       
+
+
+
+
     </div>--}}
 
   
@@ -548,7 +621,8 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
 
     <!-- /top tiles -->
     <!-- Graph start -->
-    <?php /*<div class="row">
+    @if(Auth::user()->group=='Admin')
+   <div class="row">
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
@@ -559,12 +633,20 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
             <div class="clearfix"></div>
           </div>
           <div class="x_content"><iframe class="chartjs-hidden-iframe" style="width: 100%; display: block; border: 0px; height: 0px; margin: 0px; position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px;"></iframe>
-            <canvas height="136" id="lineChart" width="821" style="width: 821px; height: 136px;"></canvas>
+            <canvas height="136" id="lineCharttest" width="821" style="width: 821px; height: 136px;"></canvas>
           </div>
         </div>
       </div>
 
-    </div> */ ?>
+    </div>
+
+    <!-- <h2>
+<?php //echo join($incomes['key'], '","')?>
+<?php //echo join($incomes['value'], ',')?>
+
+<?php //echo join($expences['value'], ',')?>
+</h2> -->
+    @endif
 @stop
 @section("model")
 <!-- The Modal -->
@@ -628,12 +710,12 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
                   </div>
                 </div>
               </div>
-              <div class="col-md-2">
+              <div class="col-md-12">
                 <div class="form-group">
                   <label class="control-label" for="">&nbsp;</label>
 
                   <div class="input-group">
-                    <button class="btn btn-primary pull-right" id="btnsave" type="submit"><i class="glyphicon glyphicon-th"></i> Get List</button>
+                    <button class="btn btn-primary pull-right" id="btnsave" type="submit"><i class="glyphicon glyphicon-th"></i>Create Vouchers</button>
 
                   </div>
                 </div>
@@ -654,10 +736,11 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
     </div>
   </div>
 </div>
+
 @stop
 @section("script")
 <script src="{{url('/js/Chart.min.js')}}"></script>
-  <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
+<script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script script type="text/javascript">
  
   $(document).ready(function () {
@@ -765,8 +848,8 @@ Chart.defaults.global.legend = {
   enabled: false
 };
 // Line chart
-   var ctx = document.getElementById("lineChart");
-   var lineChart = new Chart(ctx, {
+   var ctx = document.getElementById("lineCharttesta");
+   var lineCharttest = new Chart(ctx, {
      type: 'line',
      data: {
        labels: ["<?php echo join($incomes['key'], '","')?>"],
@@ -795,5 +878,65 @@ Chart.defaults.global.legend = {
    });
 
 
+   var ctx = document.getElementById("lineCharttest");
+   
+      ctx.height = 150;
+      var lineCharttesta = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ["January", "February", "March", "April", "May", "June", "July"],
+          defaultFontFamily: "Poppins",
+          datasets: [
+            {
+              label: "My First dataset",
+              borderColor: "rgba(0,0,0,.09)",
+              borderWidth: "1",
+              backgroundColor: "rgba(0,0,0,.07)",
+              data: [22, 44, 67, 43, 76, 45, 12]
+            },
+            {
+              label: "My Second dataset",
+              borderColor: "rgba(0, 123, 255, 0.9)",
+              borderWidth: "1",
+              backgroundColor: "rgba(0, 123, 255, 0.5)",
+              pointHighlightStroke: "rgba(26,179,148,1)",
+              data: [16, 32, 18, 26, 42, 33, 44]
+            }
+          ]
+        },
+        options: {
+          legend: {
+            position: 'top',
+            labels: {
+              fontFamily: 'Poppins'
+            }
+
+          },
+          responsive: true,
+          tooltips: {
+            mode: 'index',
+            intersect: false
+          },
+          hover: {
+            mode: 'nearest',
+            intersect: true
+          },
+          scales: {
+            xAxes: [{
+              ticks: {
+                fontFamily: "Poppins"
+
+              }
+            }],
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                fontFamily: "Poppins"
+              }
+            }]
+          }
+
+        }
+      });
 </script>
 @stop

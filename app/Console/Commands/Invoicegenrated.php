@@ -83,7 +83,7 @@ class Invoicegenrated extends Command
                     $year1           =  $now->year;
                     $month           =  $now->month;
                     $date            =  $now->addDays(5);
-                    $month           =  2;
+                    //$month           =  2;
                     //$due_date        =  $now->addDays(10);
                     if($discount==NULL || $discount==''){
                         $discount = 0;
@@ -191,7 +191,8 @@ class Invoicegenrated extends Command
                                 $feeCol->payableAmount = $totalfee;
                                 $feeCol->total_fee     = $fee_setup->fee;
                                 $feeCol->paidAmount    = 0;
-                                $feeCol->dueAmount     = $due1  ;
+                                //$feeCol->dueAmount     = $due1  ;
+                                $feeCol->dueAmount     = $totalfee  ;
                                 $feeCol->payDate       = $date->format('Y-m-d');
                                 //$feeCol->payDate       = Carbon::now()->format('Y-m-d');
                                 echo "<pre>";print_r(Carbon::now()->format('Y-m-d'));

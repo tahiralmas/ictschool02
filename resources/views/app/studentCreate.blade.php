@@ -576,8 +576,10 @@ $(document).ready(function(){
           method:"POST",
           data:{query:query, _token:_token},
           success:function(data){
-           $('#familyListd').fadeIn();  
-           $('#familyListd').html(data);
+            //alert(32);
+            $('#familyListd').fadeIn();  
+            $('#familyListd').html(data);
+          
           }
          });
         }
@@ -588,14 +590,15 @@ $(document).ready(function(){
     $('#familyListd').on('click', 'li', function() { 
        
          $('#family_name').val($(this).text());
+         //alert($('#family_name').val($(this).text()));
          var father_name       = $(this).attr('data-father');
          var phone             = $(this).attr('data-phone');
          var mother_name       = $(this).attr('data-mother_name');
          var mother_phone      = $(this).attr('data-mother_phone');
          var localGuardian     = $(this).attr('data-localGuardian');
          var localGuardianCell = $(this).attr('data-localGuardianCell');
-         var family_id = $(this).attr('data-familyid');
-         var check = $(this).attr('data-check');
+         var family_id         = $(this).attr('data-familyid');
+         var check             = $(this).attr('data-check');
          $('#f_name').val(father_name);
          $('#f_phone').val(phone);
          $('#m_name').val(mother_name);

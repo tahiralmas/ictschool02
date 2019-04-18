@@ -22,8 +22,8 @@ class classController extends BaseController {
 		$this->beforeFilter('auth');
 		$this->beforeFilter('userAccess',array('only'=> array('delete')));*/
 		
-	       $this->middleware('auth');
-               $this->middleware('userAccess',array('only'=> array('delete')));
+	        $this->middleware('auth');
+            $this->middleware('userAccess',array('only'=> array('delete')));
 	}
 	/**
 	* Display a listing of the resource.
@@ -70,9 +70,7 @@ class classController extends BaseController {
 				$class->save();
 				return Redirect::to('/class/create')->with("success", "Class Created Succesfully.");
 			}
-
 		}
-
 	}
 
 
@@ -167,7 +165,7 @@ class classController extends BaseController {
 		$teacher_classes = DB::table('timetable')->where('class_id',$class)->get();
 		if($teacher_classes){
 
-			$sections  = array();
+			$sections    = array();
 			
 
 			foreach($teacher_classes as $teacher_timetable){
@@ -179,7 +177,7 @@ class classController extends BaseController {
 
 		$sections        = SectionModel::/*join('timetable','section.id','=','timetable.section_id')*/
 		select('section.id','section.name')->where('section.class_code','=',$class)->whereIn('id',$sections)->get();
-		$output ='';
+		$output  ='';
 		$output .='<input type="hidden" name="class" value="'.$class.'">';
 		foreach($sections as $section){
 			

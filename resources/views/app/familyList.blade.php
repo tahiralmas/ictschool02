@@ -85,9 +85,21 @@
 </div>
 </div>
 @stop
+@section('model')
+<div id="modelshow"></div>
+@stop
 @section('script')
 <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
+function checkm(type){
+  alert(type);
+  if(type=='multi'){
+
+    $("#multis").show();
+  }else{
+     $("#multis").hide();
+  }
+}
 function confirmed(family_id)
 {
   //alert(family_id);
@@ -95,7 +107,28 @@ function confirmed(family_id)
   var x = confirm('Are you sure you want to generate family vouchar?');
                 if (x){
                    //window.location.href('{{url("/family/vouchars")}}/'+family_id);
-                 window.location = "{{url('/family/vouchars')}}/"+family_id;
+                  //window.location = "{{url('/family/vouchars')}}/"+family_id;
+                  
+                  $.ajax({
+                      url: "{{url('/f_vouchar/model')}}"+'/'+family_id,
+                      data: {
+                        //format: 'json'
+                      },
+                      error: function(error) {
+                        alert("Please fill all inputs correctly!");
+                      },
+                      //dataType: 'json',
+                      success: function(data) {
+                        console.log(data);
+                       $('#modelshow').html(data);
+                        $("#myModal"+family_id).modal('show');
+
+                      },
+                      type: 'GET'
+                  });
+                  // $("#billDetails").modal('show');
+            
+
                  return true
                }
                 else{

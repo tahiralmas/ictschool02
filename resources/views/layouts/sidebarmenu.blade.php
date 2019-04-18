@@ -123,8 +123,8 @@
             <li class="{{ Request::is('student/list') ? 'active' : '' }}"><a href="{{url('/student/list')}}">Student List</a></li>
           @endif
           @if(family_check()=='on')
-            <li class="{{ Request::is('family/list') ? 'active' : '' }}"><a href="{{url('/family/list')}}">Family List</a></li>
-          @endif
+<!--             <li class="{{ Request::is('family/list') ? 'active' : '' }}"><a href="{{url('/family/list')}}">Family List</a></li>
+ -->          @endif
         </ul>
       </li>
     @endif
@@ -264,7 +264,7 @@
         @endif
       @if (Session::get('userRole')=="Admin")
 
-       {{-- <li class="has-sub">
+       <li class="has-sub">
           <a  class="js-arrow {{ Request::is('accounting/*') ? 'open' : '' }}" href="#">
             <i class="glyphicon  glyphicon glyphicon-font"></i>
             Accounting
@@ -279,7 +279,7 @@
             <li class="{{ Request::is('accounting/expence') ? 'active' : '' }}"><a href="{{url('/accounting/expence')}}">Add Expence</a></li>
             <li class="{{ Request::is('accounting/expencelist') ? 'active' : '' }}"><a href="{{url('/accounting/expencelist')}}">View Expence</a></li>
           </ul>
-        </li>--}}
+        </li>
         {{--<li class="has-sub">
           <a  class="js-arrow {{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission','accounting') ? 'open' : '' }}" href="#">
             <i class="glyphicon glyphicon-cog"></i>

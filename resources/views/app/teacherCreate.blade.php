@@ -1,6 +1,11 @@
 @extends('layouts.master')
 @section('style')
 <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
+<style type="text/css">
+  
+ b {color:red}
+</style>
+
 @stop
 @section('content')
 @if (Session::get('success'))
@@ -49,7 +54,7 @@
             <div class="col-md-12">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="fname">First Name</label>
+                  <label for="fname">First Name<b>*</b></label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <input type="text" class="form-control" required name="fname" placeholder="First Name">
@@ -58,7 +63,7 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="lname">Last Name</label>
+                  <label for="lname">Last Name<b>*</b></label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <input type="text" class="form-control" required name="lname" placeholder="Last Name">
@@ -72,7 +77,7 @@
             <div class="col-md-12">
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="control-label" for="gender">Gender</label>
+                  <label class="control-label" for="gender">Gender<b>*</b></label>
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
@@ -140,7 +145,7 @@
 
             <div class="col-md-4">
               <div class="form-group ">
-                <label for="dob">Date Of Birth</label>
+                <label for="dob">Date Of Birth<b>*</b></label>
                 <div class="input-group">
 
                   <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
@@ -166,7 +171,7 @@
 
             <div class="col-md-4">
               <div class="form-group">
-                <label for="extraActivity">Phone </label>
+                <label for="extraActivity">Phone<b>*</b> </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                   <input type="text" class="form-control" required  name="phne" placeholder="Enter Phone NO">
@@ -178,7 +183,7 @@
                 <label for="remarks">Email </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  name="emails" placeholder="Enter Email">
+                  <input type="email" class="form-control"  name="emails" placeholder="Enter Email">
                 </div>
               </div>
             </div>
@@ -197,7 +202,7 @@
           <div class="col-md-12">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="fatherName">Father's Name </label>
+                <label for="fatherName">Father's Name<b>*</b> </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                   <input type="text" class="form-control" required  name="fatherName" placeholder="Name">
@@ -206,7 +211,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="fatherCellNo">Father's Mobile No </label>
+                <label for="fatherCellNo">Father's Mobile No<b>*</b> </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                   <input type="text" class="form-control"  required name="fatherCellNo" placeholder="+8801xxxxxxxxx">
@@ -227,7 +232,7 @@
           <div class="col-md-12">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="presentAddress">Present Address</label>
+                <label for="presentAddress">Present Address<b>*</b></label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
                   <textarea type="text" class="form-control" required name="presentAddress" placeholder="Address"></textarea>

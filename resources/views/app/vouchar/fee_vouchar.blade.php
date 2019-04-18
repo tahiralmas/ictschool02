@@ -66,13 +66,16 @@
            $due_date   = $vouchar_detail->due_date; 
            ?>
           @if($vouchar_detail->title=='monthly')
-          <?php  $fe_title[]  = $vouchar_detail->month; ?>
+          <?php  
+            $fe_title[]  =  \DateTime::createFromFormat('!m', $vouchar_detail->month)->format('F'); 
+          ?>
           @else
            <?php  $other[]  = $vouchar_detail->title ;
                    $ofees[] =$vouchar_detail->fee;
            ?>
           @endif
           @endforeach
+    
           <?php  sort($fe_title); $implod=implode(',', $fe_title); ?>
 
           <td>{{$implod}}</td>

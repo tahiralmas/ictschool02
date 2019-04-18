@@ -10,14 +10,15 @@ use App\Marks;
 use App\AddBook;
 use App\Teacher;
 use App\Branch;
+use App\FeeCol;
 use Carbon\Carbon;
 use DB;
 
 class DashboardController extends BaseController {
 
 	public function __construct() {
-		/*$this->beforeFilter('csrf', array('on'=>'post'));
-		$this->beforeFilter('auth', array('only'=>array('index')));*/
+			/*$this->beforeFilter('csrf', array('on'=>'post'));
+			$this->beforeFilter('auth', array('only'=>array('index')));*/
 		 $this->middleware('auth', array('only'=>array('index')));
 	}
 	/**
@@ -28,8 +29,8 @@ class DashboardController extends BaseController {
 	public function index()
 	{
 		
-        $now              =  Carbon::now();
-		if(Input::get('year')==""){
+        $now                  =  Carbon::now();
+		if(Input::get('year') == ""){
 
 			$year1            =  $now->year;
 		}else{
@@ -58,7 +59,7 @@ class DashboardController extends BaseController {
  		//echo "<pre>";print_r($totalabsent );exit;
  		$totalExam = Marks::groupBy('exam')->groupBy('subject')->get();
 		$book      = AddBook::count();
- 		$total = [
+ 		$total     = [
  			'class'       =>$tclass,
  			'student'     =>$tstudent,
  			'subject'     =>$tsubject,
@@ -71,22 +72,94 @@ class DashboardController extends BaseController {
  		];
  	     // 	//graph data
  	  //dd($total);
- 		$monthlyIncome= Accounting::selectRaw('month(date) as month, sum(amount) as amount, year(date) as year')
- 		->where('type','Income')
- 		->groupBy('month')
- 		->get();
+ 		$monthlyIncome = Accounting::selectRaw('month(date) as month, sum(amount) as amount, year(date) as year')
+				 		->where('type','Income')
+				 		->groupBy('month')
+				 		->get();
+//,DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount')
+ 		$tutionfees = FeeCol::join('billHistory','stdBill.billNo','=','billHistory.billNo')->select(DB::RAW('billHistory.month, year(stdBill.created_at) as year,sum(stdBill.payableAmount) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+							//->where('class',Input::get('class'))
+							->groupBy('month')
+							//->where('regiNo',Input::get('student'))
+							->get();
+			$comabine_array = array();
+			$i=0;
+		foreach($tutionfees as $fees){
+
+		     //echo 'sas'.$fees->month.array_search($fees->month,$monthlyIncome[0]->toArray());
+
+		     //print_r($monthlyIncome->toArray());
+		    //echo $search_path = $this->searchForId($fees->month,$monthlyIncome->toArray(), array()); 
+			//if($fees->month == array_search($fees->month,$monthlyIncome->toArray()))
+			  $key = array_search($fees->month, array_column($monthlyIncome->toArray(),'month')); 
+			//echo "<br>d" .$key ."d<br>";
+			if($key !== false and $monthlyIncome[$key]->month ==$fees->month) {
+
+				//echo  ++$i;
+				$comabine_array[] = array('month'=>$monthlyIncome[$key]->month,'amount'=>$monthlyIncome[$key]->amount+$fees->paiTotal,'year'=>$monthlyIncome[$key]->year);
+				//array_merge($monthlyIncome[$key]->toArray(),$tutionfees->toArray()) ;//$monthlyIncome[$id]->month;
+
+			}else{
+				$comabine_array[] = array('month'=>$fees->month,'amount'=>$fees->paiTotal,'year'=>$fees->year);
+			}
+			/*//echo $fees->month;
+			if($id >= 0){
+				$fdd = true;
+			}else{
+				$fdd = false;
+			}
+			echo "<br>" .$fdd ."<br>";
+			if($fdd){
+				echo '232'. $i++;
+			if($monthlyIncome[$id]->month ==$fees->month){
+				echo 'sas';
+				$comabine_array[] =array_merge($monthlyIncome[$id]->toArray(),$tutionfees->toArray()) ;//$monthlyIncome[$id]->month;
+			}
+			}*/
+		}
+		//$explod = "asas,sassa,asaa,sasas,saasa,asassa,asas,asa";
+		//$explod = explode(',',$search_path );
+
+
+		//echo "<pre>xcx";print_r($comabine_array);
+		//echo "<pre>xcx";print_r($monthlyIncome);
+		//echo "<pre>";print_r($tutionfees->toArray() );
+		//exit;
               
- 		$monthlyExpences= Accounting::selectRaw('month(date) as month, sum(amount) as amount, year(date) as year')
- 		->where('type','Expence')
- 		->groupBy('month')
- 		->get();
+ 		$monthlyExpences = Accounting::selectRaw('month(date) as month, sum(amount) as amount, year(date) as year')
+								 		->where('type','Expence')
+								 		->groupBy('month')
+								 		->get();
+
+ 			//echo "<pre>";print_r($monthlyExpences->toArray() );exit;
  		$incomeTotal  = Accounting::where('type','Income')
  		->sum('amount');
  		$expenceTotal = Accounting::where('type','Expence')
  		->sum('amount');
- 		$incomes  = $this->datahelper($monthlyIncome);
+ 		$incomes  = $this->datahelper1($comabine_array);
  		$expences = $this->datahelper($monthlyExpences);
- 		$balance  = $incomeTotal - $expenceTotal;
+
+ 		//echo "<pre>";print_r($expences);exit;
+
+ 		$tutionfeesum = FeeCol::select(DB::RAW('sum(payableAmount) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+		->whereYear('created_at',$year1 )
+		//->where('regiNo',Input::get('student'))
+		->first();
+		$incomeTotals = $incomeTotal +$tutionfeesum->paiTotal;
+ 		//echo "<pre>";print_r($incomes);exit;
+ 		$balance    = $incomeTotals - $expenceTotal;
+
+ 		$monthlyexp = Accounting::where('type','Expence')
+ 					  ->whereMonth('date',$month)
+ 					  ->whereYear('date',$year1)
+ 					 ->sum('amount');
+ 	     //echo "<pre>";print_r($monthlyexp);exit;
+
+
+ 		$fee_check_status   = FeeCol::join('billHistory','stdBill.billNo','=','billHistory.billNo')->select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(total_fee),0) as Totalpay,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(total_fee),0)- IFNULL(sum(paidAmount),0)) as dueAmount,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+									  ->where('month', '=', $month)
+									  ->first();
+									//  echo "<pre>";print_r($fee_check_status);exit;
 		//return View::Make('dashboard',compact('error','success','total','incomes','expences','balance'));
 		
         //paid or unpaid fee list
@@ -110,17 +183,16 @@ class DashboardController extends BaseController {
 		//$all_section =	DB::table('section')->select( '*')->get();
 		$all_section =	DB::table('Class')->select( '*')->get();
 		//$student_all =	DB::table('Student')->select( '*')->where('class','=',Input::get('class'))->where('section','=',Input::get('section'))->where('session','=',$student->session)->get();
-        $ourallpaid =0;
-        $ourallunpaid=0;
+        $ourallpaid   = 0;
+        $ourallunpaid = 0;
 		if(count($all_section)>0){
 			$i=0;
 			
-            
-          
-			foreach($all_section as $section){
-				 $paid =0;
-                 $unpaid=0;
-                 $total_s=0;
+            foreach($all_section as $section){
+
+				 $paid    = 0;
+                 $unpaid  = 0;
+                 $total_s = 0;
              $student_all =	DB::table('Student')->select( '*')->where('class','=',$section->code)/*->where('section','=',$section->id)/**/->where('session','=',$year)
               //->where('Student.session','=',$year)
              ->where('Student.isActive','=','Yes')
@@ -131,16 +203,16 @@ class DashboardController extends BaseController {
 			  if(count($student_all) >0){
 			foreach($student_all as $stdfees){
 				$student =	DB::table('billHistory')->Join('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
-				->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo','stdBill.paidAmount')
-				// ->whereYear('stdBill.payDate', '=', 2017)
-				->where('stdBill.regiNo','=',$stdfees->regiNo)
-				->where('stdBill.paidAmount','<>','0.00')
-				->where('stdBill.regiNo','=',$stdfees->regiNo)
-				->whereYear('stdBill.payDate', '=', $year1)
-				->where('billHistory.month','=',$month)
-				->where('billHistory.month','<>','-1')
-				//->orderby('stdBill.payDate')
-				->get();
+							->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo','stdBill.paidAmount')
+							// ->whereYear('stdBill.payDate', '=', 2017)
+							->where('stdBill.regiNo','=',$stdfees->regiNo)
+							->where('stdBill.paidAmount','<>','0.00')
+							->where('stdBill.regiNo','=',$stdfees->regiNo)
+							->whereYear('stdBill.payDate', '=', $year1)
+							->where('billHistory.month','=',$month)
+							->where('billHistory.month','<>','-1')
+							//->orderby('stdBill.payDate')
+							->get();
 				if(count($student)>0 ){
 					foreach($student as $rey){
 						//$status[] = "paid".'_'.$stdfees->regiNo."_";
@@ -176,7 +248,7 @@ class DashboardController extends BaseController {
 			
 		}
 		else{
-		$resultArray = array();
+			$resultArray = array();
 		}
 
           foreach($all_section as $teacher ){
@@ -235,23 +307,23 @@ class DashboardController extends BaseController {
        	$month_n = \DateTime::createFromFormat('!m', Input::get('month'))->format('F');
        }
 
-         $class = array();
+         $class   = array();
          $present = array();
-         $absent = array();
+         $absent  = array();
 		 foreach($attendances_b as $attendance) :
-          $class[] = $attendance['class'];
+          $class[]   = $attendance['class'];
           $present[] = $attendance['present'];
-          $absent[] = $attendance['absent'];
+          $absent[]  = $attendance['absent'];
           
 		 endforeach;
 		/// echo "<pre>class";print_r($class);
 		//// echo "<pre>p";print_r($present);
 		// echo "<pre>a";print_r($absent);whereYear('created_at', '=', date('Y')
 		// exit;
-		 $holidays = DB::table('Holidays')/*->whereMonth('holiDate',$month)*/->get();
+		 $holidays  = DB::table('Holidays')/*->whereMonth('holiDate',$month)*/->get();
 		 $class_off = DB::table('ClassOffDay')/*->whereMonth('offDate',$month)*/->get();
 		
-foreach($holidays as $holiday){
+		foreach($holidays as $holiday){
           $calender_event[] = array('title'=>$holiday->description,'start'=>$holiday->holiDate);
 		}
 		foreach($class_off as $class_of){
@@ -271,7 +343,7 @@ else{
  //exit;
 			$branches= Branch::select("*")->get();
 			$cbranches= Branch::count();
-		return View('dashboard',compact('error','success','total','incomes','expences','balance','scetionarray','resultArray1','year','month_n','attendances_b','month','class','present','absent','ourallunpaid','ourallpaid','json_event_data','branches','cbranches','year1'));
+		return View('dashboard',compact('error','success','total','incomes','expences','balance','scetionarray','resultArray1','year','month_n','attendances_b','month','class','present','absent','ourallunpaid','ourallpaid','json_event_data','branches','cbranches','year1','fee_check_status','monthlyexp'));
 	}
 	private function datahelper($data)
  	{
@@ -285,4 +357,52 @@ else{
  		return ["key"=>$DataKey,"value"=>$DataVlaue];
 
  	}
+ 	private function datahelper1($data)
+ 	{
+ 		$DataKey = [];
+ 		$DataVlaue =[];
+ 		foreach ($data as $d) {
+ 			array_push($DataKey,date("F", mktime(0, 0, 0, $d['month'], 10)).','.$d['year']);
+ 			array_push($DataVlaue,$d['amount']);
+
+ 		}
+ 		return ["key"=>$DataKey,"value"=>$DataVlaue];
+
+ 	}
+
+
+ 	function searchForId($search_value, $array, $id_path) { 
+  
+    // Iterating over main array 
+    foreach ($array as $key1 => $val1) { 
+  
+        $temp_path = $id_path; 
+          
+        // Adding current key to search path 
+        array_push($temp_path, $key1); 
+  
+        // Check if this value is an array 
+        // with atleast one element 
+        if(is_array($val1) and count($val1)) { 
+  
+            // Iterating over the nested array 
+            foreach ($val1 as $key2 => $val2) { 
+  
+                if($val2 == $search_value) { 
+                          
+                    // Adding current key to search path 
+                    array_push($temp_path, $key2); 
+                          
+                    return join(",", $temp_path); 
+                } 
+            } 
+        } 
+          
+        elseif($val1 == $search_value) { 
+            return join(",", $temp_path); 
+        } 
+    } 
+      
+    return null; 
+} 
 }

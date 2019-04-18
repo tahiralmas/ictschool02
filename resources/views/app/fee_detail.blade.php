@@ -96,11 +96,12 @@
                                         <tr>
                                             <td>{{$atd->regiNo}}</td>
                                             <td>{{$atd->firstName}}  {{$atd->lastName}}</td>
-                                             <td>{{$atd->class}}</td>
+                                            <td>{{$atd->class}}</td>
                                             <td>{{$atd->section_name}}</td>
                                             <td>{{$atd->fatherName}} </td>
                                             <td>{{$atd->fatherCellNo}} </td>
                                             <td>
+                                            <?php /*
                                               @if($status=="Paid")
                                               {{--<span class="text-success">{{$status}}</span>--}}
                                               <span class="role paid">{{$status}}</span>
@@ -110,6 +111,25 @@
                                               <span class="role unpaid">{{$status}}</span>
 
                                               @endif
+                                              */ ?>
+
+                                                @if($statusn=="Paid" || $statusn=='paid')
+                                              <?php
+
+                                                  if($atd->payableAmount===$atd->paidAmount || $atd->paidAmount>=$atd->payableAmount){
+                                                      $status = 'paid';
+                                                  }elseif($atd->paidAmount=='0.00' ||$atd->paidAmount==''){
+
+                                                        $status = 'unpaid';
+                                                  }else{
+                                                      $status = 'partially paid';
+                                                  }
+                                                  ?>
+                                                  @if($status=='paid' || $status=='Paid')<button  class="btn btn-success" >{{$status}}</button>@elseif($status=='partially paid')<button  class="btn btn-warning" >{{$status}}</button>@else <button  class="btn btn-danger" >{{$status}}</button>@endif
+                                                @else
+                                                <span class="role unpaid">{{$statusn}}</span>
+
+                                                @endif
                                             </td>
                                            
 

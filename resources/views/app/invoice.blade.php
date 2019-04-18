@@ -20,7 +20,7 @@
   <strong>Whoops!</strong> There were some problems.<br><br>
   <ul>
     @foreach ($errors->all() as $error)
-    <li>{{ $error }}</li>
+      <li>{{ $error }}</li>
     @endforeach
   </ul>
 </div>
@@ -116,7 +116,6 @@
                {{--<div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label" for="student">Student</label>
-
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-book blue"></i></span>
                     <select id="student" name="student" class="form-control" required="true">
@@ -125,17 +124,9 @@
                   </div>
                 </div>
               </div>--}}
-              
-
-
-
             </div>
           </div>
           <hr class="hrclass">
-
-
-
-
         </form>
         @if($student->regiNo !="" && count($fees)<1)
         <div class="alert alert-danger">
@@ -187,6 +178,7 @@
                       {{--<a title='Delete' class='btn btn-danger' href='{{url("/fees/delete")}}/{{$fee->billNo}}'> <i class="glyphicon glyphicon-trash icon-red"></i></a>--}}
                       <button value="{{$fee->billNo}}" title='Collect Invoice' class='btn btn-primary @if( $fee->paidAmount<$fee->payableAmount) btninvoice @endif' @if($fee->payableAmount===$fee->paidAmount || $fee->paidAmount>=$fee->payableAmount ) onclick = "alert('Invoice Fully Paid')" @endif> <i class="fas fa-dollar-sign icon-white"></i></button>
                       <a title='Edit' class='btn btn-warning' href='{{url("/fees/invoice/update")}}/{{$fee->billNo}}'> <i class="glyphicon glyphicon-pencil icon-white"></i></a>
+                      <a title='get vouchar' class='btn btn-info' href='{{url("/fee/get_vouchar?class=$fee->class&section=$fee->section&session=jan-2019,march-2019&type=Monthly&month=$fee->month&fee_name=$fee_setup->id&regiNo=$fee->regiNo")}}'> <i class="glyphicon glyphicon-shopping-cart icon-white "></i></a>
                     </td>
                   </tr>
                 @endforeach
@@ -330,8 +322,9 @@
 
            function feecollection()
            {
-            //alert(billNo);
+            //
               var billNo = $('#billNo').val();
+              alert(billNo);
                var collectionAmount = $('#collectionAmount').val();
                var payableAmount = $('#payableAmount').val();
               // var postid = $('#post_id').val();
@@ -374,13 +367,17 @@
                       //console.log(msg);
                       //.// alert( "#myModald"+billNo+".close" );
                      //  obj.find('tbody').empty().append(msg);
-                       
+                       var table= '';
                       $("#newtable").html(msg);
-                      $('#feeList1').dataTable({
+                     var  table =  $('#feeList1').dataTable({
+                       
                          "sPaginationType": "bootstrap",
-                      });
 
-                      $(".btninvoice").click(function(){
+
+                      });
+                     
+
+                      table.$(".btninvoice").click(function(){
                           var billId=$(this).val();
                          // $('.modal-title').html('"'+billId+'" bill details information');
                           
@@ -407,15 +404,20 @@
                           });
                           //alert(("#myModald"+billId));
                           console.log("#myModald"+billId);
-                          
+                          $("#myModald"+billId+ ".close").click();
                         });
-
+                           
 
                        Swal.fire(
                                   'Invoice Paid',
                                   'You clicked the button!',
                                   'success'
-                                )
+                                ).then(function() {
+                                //$("#myModald"+billId+ ".close").click();
+                                //$('body').removeClass('modal-open');
+                                //$('.modal-backdrop').remove();
+                              });
+                       
                                
                        // location.reload(true);
                       
@@ -463,9 +465,42 @@
             $('#class').on('change',function() {
               getsections();
             });
-            $('#feeList').dataTable({
+            var table = $('#feeList').dataTable({
                "sPaginationType": "bootstrap",
             });
+            table.$(".btninvoice").click(function(){
+                          var billId=$(this).val();
+                         // $('.modal-title').html('"'+billId+'" bill details information');
+                          
+                          $.ajax({
+                            url: "{{url('/fees/invoice/details/')}}"+'/'+billId,
+                            data: {
+                              //format: 'json'
+                            },
+                            error: function(error) {
+                              alert(JSON.stringify(error));
+                            },
+                            //dataType: 'json',
+                            success: function(data) {
+                              console.log(data);
+                             // $("#moddel").find("tr:gt(0)").remove();
+                              $("#moddel").html(data);
+                              $("#myModald"+billId).modal('show');
+                              
+
+                            },
+                            type: 'GET',
+
+                            
+                          });
+                          //alert(("#myModald"+billId));
+                          console.log("#myModald"+billId);
+                          
+                        });
+
+
+
+            
             
             var session = $('#session').val().trim();
               getstudents();

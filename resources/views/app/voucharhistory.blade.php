@@ -52,7 +52,7 @@
                   {{--<th>Due Amount</th>--}}
                   <th>Status</th>
                   <th>Pay Date</th>
-                  <th>Action</th>
+                 <!--  <th>Action</th> -->
                 </tr>
               </thead>
               <tbody>
@@ -63,13 +63,28 @@
                   <td>{{$fee->paidAmount}}</td>
                   {{--<td>{{$fee->dueAmount}}</td>--}}
                   {{--<td>{{$fee->dueAmount}}</td>--}}
-                  <td>@if($fee->paidAmount=='0.00')<button  class="btn btn-danger" >UnPaid</button>@else <button  class="btn btn-success" >Paid</button>@endif</td>
+                 
+                      <?php
+                      if($fee->payableAmount===$fee->paidAmount || $fee->paidAmount>=$fee->payableAmount){
+                          $status = 'paid';
+                      }elseif($fee->paidAmount=='0.00' ||$fee->paidAmount==''){
+
+                            $status = 'unpaid';
+                      }else{
+                          $status = 'partially paid';
+                      }
+                      ?>
+                    <td>@if($status=='paid')<button  class="btn btn-success" >{{$status}}</button>@elseif($status=='partially paid')<button  class="btn btn-warning" >{{$status}}</button>@else <button  class="btn btn-danger" >{{$status}}</button>@endif </td>
+
+
+<!--                  <td>@if($fee->paidAmount=='0.00')<button  class="btn btn-danger" >UnPaid</button>@else <button  class="btn btn-success" >Paid</button>@endif</td>
+ -->                  
                   <td>{{$fee->date}}</td>
 
-                  <td>
+                  {{--<td>
                     @if($fee->paidAmount=='0.00')<a title='Paid' class='btn btn-success' href='{{url("/fees/paid")}}/{{$fee->billNo}}' onclick="return confirm('Are you sure you want to paid?');" > Paid</a>@else
                     <a title='Paid' class='btn btn-danger' href='#' onclick="return confirm('Are you sure you want to unpaid?');" > UnPaid</a>@endif
-                  </td>
+                  </td>--}}
                 </tr>
                   @endforeach
                 </tbody>

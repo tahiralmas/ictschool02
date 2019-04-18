@@ -35,7 +35,7 @@
       <div class="box-content">
 
        
-        @if($student->regiNo !="" && count($fees)<1)
+        @if($student->regiNo !="" && count($fees) < 1)
         <div class="alert alert-danger">
           <strong>Whoops!</strong> There are no fees entry for this student.<br><br>
         </div>
