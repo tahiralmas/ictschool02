@@ -234,7 +234,8 @@ if(!empty($_GET) && $_GET['direct']=='yes'){
                 <tr>
                   <th>Name</th>
                   <th>Registration Number</th>
-                  <th>Roll Number</th>
+                  <th>Class</th>
+                  <th>Section</th>
                   <th>Fee Status</th>
                   <th>Pay Date</th>
                 
@@ -247,7 +248,8 @@ if(!empty($_GET) && $_GET['direct']=='yes'){
                   
                   <td>{{$fee['firstName']}} {{$fee['lastName']}}</td>
                   <td>{{$fee['regiNo']}}</td>
-                  <td>{{$fee['rollNo']}}</td>
+                  <td>{{$fee['class']}}</td>
+                  <td>{{$fee['section']}}</td>
                   <td>@if($fee[0]=='Paid') <span class="role paid">{{$fee[0]}}</span> @else <span class="role unpaid">{{$fee[0]}}</span>@endif</td>
                   <td>@if($fee[0]=='Paid'){{$fee[1]}} @else  @endif</td>
                  <?php /*  <td>
