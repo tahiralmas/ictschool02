@@ -243,7 +243,22 @@ class studentController extends BaseController {
 		//'presentAddress' => 'required',
 		//'parmanentAddress' => 'required'
 	];
-	$validator = \Validator::make(Input::all(), $rules);
+
+	   $messsages = array(
+		'lname.required'=>'The Lastname field is required',
+		'fname.required'=>'The Firstname field is required',
+		
+	);
+
+	
+
+	$validator = \Validator::make(Input::all(), $rules,$messsages);
+	$validator = \Validator::make(Input::all(), $rules,$messsages);
+
+
+	//$messages = array( 'lname' => 'The Lastname field is required' );
+	//$validator = \Validator::make(Input::all(), $rules, $messages);
+	//$validator = \Validator::make(Input::all(), $rules);
 	if ($validator->fails())
 	{
 		return Redirect::to('/student/create')->withErrors($validator)->withInput();
