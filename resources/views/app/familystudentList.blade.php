@@ -47,7 +47,10 @@
               <button type="button" class="btn btn-primary" style="margin-left: 80px;" data-toggle="modal" data-target="#searchsd">
                     Search and Add Student this Family
               </button>
-              <button type="button" class="btn btn-primary" style="margin-left: 290px;" data-toggle="modal" data-target="#exampleModal">
+              <button type="button" class="btn btn-primary" style="margin-left: 0px;" data-toggle="modal" data-target="#students_shift">
+                   Shift Student TO Other Family
+              </button>
+              <button type="button" class="btn btn-primary" style="margin-left: 0px;" data-toggle="modal" data-target="#exampleModal">
                     Add Family Discount
               </button>
               <table id="studentList" class="table table-striped table-bordered" >
@@ -217,6 +220,77 @@
   </div>
 </div>
 
+
+<!-- Modal -->
+<div class="modal" style="display:none;" id="students_shift" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Shift Student To Other Family</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="{{url('/students/shift/'.$family_id)}}" >
+           <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                  <label for="email">Family Phone:</label>
+                  <input type="text" class="form-control" name="f_phone" id="phone" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                  <label for="email">Family ID:</label>
+                  <input type="text" class="form-control"  name="f_id" id="f_id" required>
+                </div>
+
+            </div>
+            </div>
+            <table id="studentList" class="table table-striped table-bordered" >
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Roll No</th>
+                    <th>Class</th>
+                    <th>section</th>
+                    <th>Name</th>
+                    <th>Father Name</th>
+                    <th>Guardian's Contact</th>
+                   
+                  
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach($students as $student)
+                    <tr>
+                      <td><input type="checkbox" name="sid[]" class="form-control" value="{{$student->id}}"></td>
+                      <td> {{$student->rollNo}}</td>
+                      <td>{{$student->class}}</td>
+                      <td>{{$student->name}}</td>
+                      <td>{{$student->firstName}} {{$student->middleName}} {{$student->lastName}}</td>
+                      <td>{{$student->fatherName}}</td>
+                      <td>   {!! "<b> Father:</b> ". $student->fatherCellNo. " <br \><b >Mother: </b>". $student->motherCellNo. $student->localGuardianCell !!}</td>
+                     
+                      
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+           <input type="submit" class="btn btn-primary" value="Save changes" style="float: right;margin-top: 10px;">
+      </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+       
+      </div>
+      
+    </div>
+  </div>
+</div>
 @stop
 
 

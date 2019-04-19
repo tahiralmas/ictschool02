@@ -35,11 +35,11 @@
                     @endif
 
                     <div class="form-group">
-                        <label for="name">Description</label>
+                        <label for="name"> write your message,  you can use  [name] and [amount]  variables</label>
                          @if($message->name=='mark_notification')
                        <span><?php echo "[student_name],[subjects],[marks],[outoff],[exam]";?></span>
                         @else
-                        <span><?php echo "[name],[amount]";?></span>
+                        <span><?php //echo "[name],[amount]";?></span>
                         @endif
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>

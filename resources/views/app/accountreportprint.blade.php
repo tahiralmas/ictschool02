@@ -9,22 +9,22 @@
     <meta name="author" content="">
 
     <!-- The styles -->
-    <link id="bs-css" href="/css/bootstrap-cerulean.min.css" rel="stylesheet">
+    <link id="bs-css" href="{{url('/css/bootstrap-cerulean.min.css')}}" rel="stylesheet">
 
-    <link href="/css/charisma-app.css" rel="stylesheet">
+    <link href="{{url('/css/charisma-app.css')}}" rel="stylesheet">
     <style>
     #footer
     {
 
-    width:100%;
-    height:50px;
-    position:absolute;
-    bottom:0;
-    left:0;
+      width:100%;
+      height:50px;
+      position:absolute;
+      bottom:0;
+      left:0;
     }
     .logo{
-      height:80px;
-      width: 100px;
+        height:80px;
+        width: 100px;
     }
     </style>
     </head>
@@ -33,16 +33,13 @@
   <div class="row text-center">
 
   <div class="col-md-1 col-sm-1">
-  <img class="logo" src="{{url()}}/img/logo.png">
+  <img class="logo" src="{{url('/')}}/img/logo.png">
   </div>
     <div class="col-md-11 col-sm-11">
         <h4><strong>"{{$institute->name}}" Accounting Report</strong></h4>
         <h5><strong>Establish:</strong> {{$institute->establish}}  <strong>Web:</strong> {{$institute->web}}  <strong>Email:</strong> {{$institute->email}}</h5>
         <h5><strong>Phone:</strong> {{$institute->phoneNo}} <strong>Address:</strong> {{$institute->address}}</h5>
       </div>
-
-
-
   </div>
 
 <div class="row">
@@ -69,8 +66,6 @@
                         <th>Amount</th>
                         <th>Description</th>
                         <th>Date</th>
-
-
                     </tr>
                     </thead>
                     <tbody>
@@ -81,11 +76,26 @@
                             <td>{{$data->description}}</td>
                             <td>{{date_format(date_create($data->date), 'd/m/Y')}}</td>
                         </tr>
-
-
-
                     @endforeach
+                    @if($rtype==="Income")
+                    <tr>
+                      <td>Fee Collection</td>
+                      <td>{{$tutionfees->paiTotal}}</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr>
+                        <td>Others</td>
+                        <td>{{$otherfees->paiTotal}}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <td class="text-right"><strong>Total:</strong></td><td>{{$total[0]->total + $otherfees->paiTotal + $tutionfees->paiTotal}}</td><td></td><td></td>
+
+                    @else
                     <td class="text-right"><strong>Total:</strong></td><td>{{$total[0]->total}}</td><td></td><td></td>
+
+                    @endif
                     </tbody>
                 </table>
             </div>
@@ -96,13 +106,13 @@
       <p>Print Date: {{date('d/m/Y')}}</p>
   </div>
 </div>
-    <button class="btn btn-success pull-right" onclick="printDiv('printableArea')"><i class="glyphicon glyphicon-print"></i> Print</button>
-<script src="/bower_components/jquery/jquery.min.js"></script>
-<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<button class="btn btn-success pull-right" onclick="printDiv('printableArea')"><i class="glyphicon glyphicon-print"></i> Print</button>
+<script src="{{url('/bower_components/jquery/jquery.min.js')}}"></script>
+<script src="{{url('/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 <script>
 function printDiv(divName) {
-     var printContents = document.getElementById(divName).innerHTML;
-     var originalContents = document.body.innerHTML;
+     var printContents       = document.getElementById(divName).innerHTML;
+     var originalContents    = document.body.innerHTML;
 
      document.body.innerHTML = printContents;
 

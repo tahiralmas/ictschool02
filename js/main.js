@@ -1178,10 +1178,10 @@ var ctx = document.getElementById("widgetChart60");
   try {
 
     //line chart
-    var ctx = document.getElementById("lineChart");
+    var ctx = document.getElementById("lineCharttest");
     if (ctx) {
       ctx.height = 150;
-      var myChart = new Chart(ctx, {
+      var lineCharttest = new Chart(ctx, {
         type: 'line',
         data: {
           labels: ["January", "February", "March", "April", "May", "June", "July"],

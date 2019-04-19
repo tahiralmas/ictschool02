@@ -9,6 +9,7 @@ use App\Attendance;
 use App\Student;
 use App\Institute;
 use App\AccountingSetting;
+use App\FeeCol;
 use DB;
 Class Damidata {
 
@@ -440,13 +441,33 @@ class accountingController extends BaseController {
 			$datas = Accounting::select('name', 'amount', 'date','description')->where('type', '=', $rtype)->where('date', '>=', $fdate)->where('date', '<=', $tdate)->get();
 			$total = DB::select(DB::raw("SELECT sum(amount) as total FROM accounting where type='".$rtype."' and date >='".$fdate."' and date <='".$tdate."'"));
 
+			if($rtype=='Income'){
+			$tutionfees = FeeCol::join('billHistory','stdBill.billNo','=','billHistory.billNo')->select(DB::RAW('sum(stdBill.payableAmount) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+							//->where('class',Input::get('class'))
+							//->groupBy('month')
+							->where('billHistory.title','monthly')
+							->whereDate('stdBill.updated_at','>=',$fdate.' 00:00:00')
+							->whereDate('stdBill.updated_at','<=',$tdate.' 00:00:00')
+							->first();
+			$otherfees = FeeCol::join('billHistory','stdBill.billNo','=','billHistory.billNo')->select(DB::RAW('sum(stdBill.payableAmount) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+							//->where('class',Input::get('class'))
+							//->groupBy('month')
+							->where('billHistory.title','<>','monthly')
+							->whereDate('stdBill.updated_at','>=',$fdate.' 00:00:00')
+							->whereDate('stdBill.updated_at','<=',$tdate.' 00:00:00')
+							->first();
+			}else{
+				$otherfees  = array();
+				$tutionfees = array();
+			}
+
 			if(!is_null($datas) && count($datas)>0)
 			{
 
 				$formdata=array($this->getAppdate($fdate),$this->getAppdate($tdate),$rtype);
 				$institute=Institute::select('*')->first();
 				//return View::Make('app.accountreportprint', compact('datas','formdata','total','institute'));
-				return View('app.accountreportprint', compact('datas','formdata','total','institute'));
+				return View('app.accountreportprint', compact('datas','formdata','total','institute','tutionfees','otherfees','rtype'));
 			}
 			else{
 				echo '<script> alert("Data Not Found!!!");window.close();</script> ';
@@ -469,16 +490,37 @@ class accountingController extends BaseController {
 		else {
 
 			$incomes = Accounting::select('name', 'amount','description', 'date')->where('type', '=', 'Income')->where('date', '>=', $fdate)->where('date', '<=', $tdate)->get();
+			
 			$intotal = DB::select(DB::raw("SELECT sum(amount) as total FROM accounting where type='Income' and date >='".$fdate."' and date <='".$tdate."'"));
+			
+			$tutionfees = FeeCol::join('billHistory','stdBill.billNo','=','billHistory.billNo')->select(DB::RAW('sum(stdBill.payableAmount) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+							//->where('class',Input::get('class'))
+							//->groupBy('month')
+							->where('billHistory.title','monthly')
+							->whereDate('stdBill.updated_at','>=',$fdate.' 00:00:00')
+							->whereDate('stdBill.updated_at','<=',$tdate.' 00:00:00')
+							->first();
+			$otherfees = FeeCol::join('billHistory','stdBill.billNo','=','billHistory.billNo')->select(DB::RAW('sum(stdBill.payableAmount) as payTotal,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+							//->where('class',Input::get('class'))
+							//->groupBy('month')
+							->where('billHistory.title','<>','monthly')
+							->whereDate('stdBill.updated_at','>=',$fdate.' 00:00:00')
+							->whereDate('stdBill.updated_at','<=',$tdate.' 00:00:00')
+							->first();
+			//echo "<pre>";print_r($tutionfees->toArray());exit;
+
 			$expences = Accounting::select('name', 'amount','description', 'date')->where('type', '=', 'Expence')->where('date', '>=', $fdate)->where('date', '<=', $tdate)->get();
 			$extotal = DB::select(DB::raw("SELECT sum(amount) as total FROM accounting where type='Expence' and date >='".$fdate."' and date <='".$tdate."'"));
-			$balance = array($intotal[0]->total-$extotal[0]->total);
+			$intotals = $intotal[0]->total + $tutionfees->paiTotal + $otherfees->paiTotal;
+			//$balance = array($intotal[0]->total-$extotal[0]->total);
+			$balance = array($intotals-$extotal[0]->total);
 
 
 			$formdata=array($this->getAppdate($fdate),$this->getAppdate($tdate));
 			$institute=Institute::select('*')->first();
+			 
 			//return View::Make('app.accountreportprintsum', compact('datas','formdata','incomes','expences','intotal','extotal','balance','institute'));
-			return View('app.accountreportprintsum', compact('datas','formdata','incomes','expences','intotal','extotal','balance','institute'));
+			return View('app.accountreportprintsum', compact('datas','formdata','incomes','expences','intotal','extotal','balance','institute','intotals','tutionfees','otherfees'));
 
 
 		}

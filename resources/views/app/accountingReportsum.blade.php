@@ -121,7 +121,7 @@ $( document ).ready(function() {
         if(fdate!="" && tdate !="") {
             var getUrl = window.location;
             var baseUrl = getUrl .protocol + "//" + getUrl.host;
-            var url =baseUrl+"/accounting/reportprintsum/"+fdate+"/"+tdate;
+            var url ="{{url('/accounting/reportprintsum/')}}"+"/"+fdate+"/"+tdate;
 
             var win = window.open(url, '_blank');
             win.focus();

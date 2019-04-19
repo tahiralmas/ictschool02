@@ -982,6 +982,54 @@ public function add_family_student($f_id)
 		//echo "<pre>";print_r($fm);
             		//->update(['about_family' => Input::get('familb'),'family_id' => $family_idn,'fatherName' =>$fathername,'fatherCellNo' =>$cell_phone ]);
 }
+public function shift_student_family($f_id)
+{
+
+	echo "<pre>";print_r(Input::all());
+	$fm = DB::table('Student')
+            		
+		->where(function($q) use( $f_id) {
+				$q->where('Student.family_id', '=', Input::get('f_id'))
+				->orWhere('Student.fatherCellNo', '=', Input::get('f_phone'));
+		})
+		->first();
+		if(empty($fm)){
+
+			return Redirect::to('family/students/'.$f_id)->with("error","Family Not Found.");
+
+		}else{
+			$sids = Input::get('sid');
+			///foreach($sids as $id){
+			DB::table('Student')
+			  ->whereIn('id',$sids)
+			  ->update(['family_id' => $fm->family_id,'fatherName' =>$fm->fatherName,'fatherCellNo' =>$fm->fatherCellNo ]);
+			//}
+			return Redirect::to('/family/students/'.$f_id)->with("success","Student Shift  Succesfully.");	
+
+		}
+	//..echo $f_id;
+	//print_r(Input::get('regino'));
+
+	/*$fm = DB::table('Student')
+            		
+		->where(function($q) use( $f_id) {
+				$q->where('Student.family_id', '=', $f_id)
+				->orWhere('Student.fatherCellNo', '=', $f_id);
+		})
+		->first();
+
+		$family_id =$fm->family_id ;
+		$fatherName =$fm->fatherName ;
+		$fatherCellNo = $fm->fatherCellNo;
+
+		DB::table('Student')
+			  ->whereIn('id',Input::get('regino'))
+			  ->update(['family_id' => $family_id,'fatherName' =>$fatherName,'fatherCellNo' =>$fatherCellNo ]);
+
+			  return Redirect::to('/family/students/'.$f_id)->with("success","Family Updated Succesfully.");	*/
+		//echo "<pre>";print_r($fm);
+            		//->update(['about_family' => Input::get('familb'),'family_id' => $family_idn,'fatherName' =>$fathername,'fatherCellNo' =>$cell_phone ]);
+}
 
 
 

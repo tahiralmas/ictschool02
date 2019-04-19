@@ -848,7 +848,7 @@ Chart.defaults.global.legend = {
   enabled: false
 };
 // Line chart
-   var ctx = document.getElementById("lineCharttesta");
+   var ctx = document.getElementById("lineCharttest");
    var lineCharttest = new Chart(ctx, {
      type: 'line',
      data: {
@@ -875,68 +875,16 @@ Chart.defaults.global.legend = {
          data: [<?php echo join($expences['value'], ',')?>]
        }]
      },
+     options: {
+          responsive: true
+          
+          }
+          
+
+        
    });
 
 
-   var ctx = document.getElementById("lineCharttest");
-   
-      ctx.height = 150;
-      var lineCharttesta = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ["January", "February", "March", "April", "May", "June", "July"],
-          defaultFontFamily: "Poppins",
-          datasets: [
-            {
-              label: "My First dataset",
-              borderColor: "rgba(0,0,0,.09)",
-              borderWidth: "1",
-              backgroundColor: "rgba(0,0,0,.07)",
-              data: [22, 44, 67, 43, 76, 45, 12]
-            },
-            {
-              label: "My Second dataset",
-              borderColor: "rgba(0, 123, 255, 0.9)",
-              borderWidth: "1",
-              backgroundColor: "rgba(0, 123, 255, 0.5)",
-              pointHighlightStroke: "rgba(26,179,148,1)",
-              data: [16, 32, 18, 26, 42, 33, 44]
-            }
-          ]
-        },
-        options: {
-          legend: {
-            position: 'top',
-            labels: {
-              fontFamily: 'Poppins'
-            }
-
-          },
-          responsive: true,
-          tooltips: {
-            mode: 'index',
-            intersect: false
-          },
-          hover: {
-            mode: 'nearest',
-            intersect: true
-          },
-          scales: {
-            xAxes: [{
-              ticks: {
-                fontFamily: "Poppins"
-
-              }
-            }],
-            yAxes: [{
-              ticks: {
-                beginAtZero: true,
-                fontFamily: "Poppins"
-              }
-            }]
-          }
-
-        }
-      });
+  
 </script>
 @stop

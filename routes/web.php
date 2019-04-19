@@ -142,6 +142,7 @@ Route::post('/family/update','studentController@family_update');
 Route::get('/family/students/{f_id}','studentController@family_student_list');
 Route::post('/family_discount/{f_id}','studentController@add_family_discount');
 Route::post('/student/add/{f_id}','studentController@add_family_student');
+Route::post('/students/shift/{f_id}','studentController@shift_student_family');
 });
 Route::get('/student/getList/{class}/{section}/{shift}/{session}','studentController@getForMarks');
 Route::get('/student/getsList/{class}/{section}/{shift}/{session}','studentController@getForMarksjoin');

@@ -122,7 +122,7 @@
                 if(fdate!="" && tdate !="") {
                     var getUrl = window.location;
                     var baseUrl = getUrl .protocol + "//" + getUrl.host;
-                    var url =baseUrl+"/accounting/reportprint/"+rtype+"/"+fdate+"/"+tdate;
+                    var url = "{{url('/accounting/reportprint/')}}"+"/"+rtype+"/"+fdate+"/"+tdate; //baseUrl+"/accounting/reportprint/"+rtype+"/"+fdate+"/"+tdate;
 
                     var win = window.open(url, '_blank');
                    win.focus();

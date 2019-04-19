@@ -307,7 +307,9 @@ table i{
 .box-content {
     padding: 33px !important;
 }
-
+table i {
+    ##font-size: 10px !important;
+}
   </style>
     <!-- jQuery -->
     <!--<script src="{{ URL::asset('/bower_components/jquery/jquery.min.js') }}"></script>
@@ -517,6 +519,18 @@ table i{
                                         <a href="{{url('/fees/classreport')}}">
                                           <div class="notifi__item">
                                            Fee Class Report
+                                          </div>
+                                        </a>
+                                        <div class="divider"></div>
+                                        <a href="{{url('/accounting/report')}}">
+                                          <div class="notifi__item">
+                                            Accounting Report
+                                          </div>
+                                        </a>
+                                        <div class="divider"></div>
+                                        <a href="{{url('/accounting/reportsum')}}">
+                                          <div class="notifi__item">
+                                            Over All Accounting Report
                                           </div>
                                         </a>
                                     </div>

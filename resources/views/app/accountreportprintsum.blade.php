@@ -9,9 +9,9 @@
     <meta name="author" content="">
 
     <!-- The styles -->
-    <link id="bs-css" href="/css/bootstrap-cerulean.min.css" rel="stylesheet">
+    <link id="bs-css" href="{{url('/css/bootstrap-cerulean.min.css')}}" rel="stylesheet">
 
-    <link href="/css/charisma-app.css" rel="stylesheet">
+    <link href="{{url('/css/charisma-app.css')}}" rel="stylesheet">
     <style>
     #footer
     {
@@ -34,7 +34,7 @@
   <div class="row text-center">
 
   <div class="col-md-1 col-sm-1">
-  <img class="logo" src="/img/logo.png">
+  <img class="logo" src="{{url('/img/logo.png')}}">
   </div>
     <div class="col-md-11 col-sm-11">
         <h4><strong>"{{$institute->name}}" Accounting Report</strong></h4>
@@ -81,7 +81,19 @@
 
 
             @endforeach
-            <td class="text-right"><strong>Total:</strong></td><td>{{$intotal[0]->total}} tk.</td><td></td><td></td>
+            <tr>
+            <td>Fee Collection</td>
+                    <td>{{$tutionfees->paiTotal}}</td>
+                    <td></td>
+                    <td></td>
+            </tr>
+            <tr>
+            <td>Others</td>
+                    <td>{{$otherfees->paiTotal}}</td>
+                    <td></td>
+                    <td></td>
+            </tr>
+            <td class="text-right"><strong>Total:</strong></td><td>{{--{{$intotal[0]->total}}--}} {{$intotals}} Rs.</td><td></td><td></td>
             </tbody>
         </table>
     </div>
@@ -110,7 +122,7 @@
 
 
                 @endforeach
-                <td class="text-right"><strong>Total:</strong></td><td>{{$extotal[0]->total}} tk.</td><td></td><td></td>
+                <td class="text-right"><strong>Total:</strong></td><td>{{$extotal[0]->total}} Rs.</td><td></td><td></td>
                 </tbody>
             </table>
         </div>
@@ -120,7 +132,7 @@
 <div  class="row">
     <div class="col-md-12 text-center">
 
-            <h4><strong>Balance: {{$balance[0]}}</strong> tk.</h4>
+            <h4><strong>Balance: {{$balance[0]}}</strong> Rs.</h4>
 
 
         </div>
@@ -130,8 +142,8 @@
     </div>
   </div>
       <button class="btn btn-success pull-right" onclick="printDiv('printableArea')"><i class="glyphicon glyphicon-print"></i> Print</button>
-<script src="/bower_components/jquery/jquery.min.js"></script>
-<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="{{url('/bower_components/jquery/jquery.min.js')}}"></script>
+<script src="{{url('/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 <script>
 function printDiv(divName) {
      var printContents = document.getElementById(divName).innerHTML;
