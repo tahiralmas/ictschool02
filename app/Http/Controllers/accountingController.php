@@ -219,6 +219,10 @@ class accountingController extends BaseController {
 				$income->type="Income";
 				$income->amount = $singleData["amount"];
 				$income->description = $singleData["description"];
+				if($singleData["description"]==''){
+					$income->description = '';
+				}
+				
 
 				$income->date = $this->parseAppDate($singleData["date"]);
 				$income->save();
