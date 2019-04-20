@@ -2248,14 +2248,15 @@ class feesController extends BaseController {
 								
 								$student_all->where('session','=',$student->session);
 							
-								$student_all = $student_all->get();
+								//$student_all = $student_all->get();
 		}
 	        //$data = preg_replace('!s:(\d+):"(.*?)";!e', "'s:'.strlen('$2').':\"$2\";'", Input::get('result'));
 
 		$ictcore_fees    = Ictcore_fees::select("*")->first();
 						 //echo "<pre>";print_r($student_all);
 							 //exit;
-		if(count($student_all)>0){
+		if($student_all->count()>0){
+			$student_all = $student_all->get();
 			$i=0;
 
 
