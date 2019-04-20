@@ -3,6 +3,7 @@ use App\ClassModel;
 use App\Subject;
 use App\AcadamicYear;
 use App\Student;
+use App\FeeSetup;
 use App\Http\Controllers\ictcoreController;
 use Carbon\Carbon;
 //use Storage;
@@ -303,6 +304,40 @@ if (! function_exists('Voucharcheck')) {
 					->whereYear('stdBill.created_at',$year)
 					->count();
 		return $fees;
+	}
+}
+
+if (! function_exists('gfee_setup')) {
+	function gfee_setup($class,$type){
+
+		    $now            =  Carbon::now();
+			$year           =  $now->year;
+        	$month          =  $now->month;
+			$fee_setup      = FeeSetup::select('id','title')->where('class','=',$class)->where('type','=',$type)->first();
+
+		return $fee_setup;
+	}
+}
+if (! function_exists('gsection_name')) {
+	function gsection_name($section_id){
+
+		    $now            =  Carbon::now();
+			$year           =  $now->year;
+        	$month          =  $now->month;
+			$section      = DB::table('section')->select('*')->where('id','=',$section_id)->first();
+
+		return $section;
+	}
+}
+if (! function_exists('gclass_name')) {
+	function gclass_name($class_code){
+
+		    $now            =  Carbon::now();
+			$year           =  $now->year;
+        	$month          =  $now->month;
+			$class_name      = DB::table('Class')->select('*')->where('code','=',$class_code)->first();
+
+		return $class_name;
 	}
 }
 

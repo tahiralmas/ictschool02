@@ -1725,8 +1725,8 @@ class feesController extends BaseController {
 		->join('billHistory','stdBill.billNo','=','billHistory.billNo')
 		->select(DB::RAW("stdBill.billNo,stdBill.payableAmount,stdBill.paidAmount,stdBill.dueAmount,DATE_FORMAT(stdBill.payDate,'%D %M,%Y') AS date"),'Student.firstName','Student.lastName','Student.class','Student.section','Student.regiNo','billHistory.month','billHistory.title','billHistory.fee','billHistory.lateFee')
 		//->where('stdBill.class',Input::get('class'))
-		->where('billHistory.month',Input::get('month'))
-		->whereYear('stdBill.created_at',Input::get('year'))
+		->where('billHistory.month',$month)
+		->whereYear('stdBill.created_at',$year)
 		//->where('Student.section',Input::get('section'))
 		->get();
 			//return View::Make('app.feeviewstd',compact('classes','student','fees'));

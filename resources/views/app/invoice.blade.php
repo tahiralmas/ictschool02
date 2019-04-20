@@ -178,6 +178,8 @@
                 <tr>
                   <th>Bill No</th>
                   <th>Student</th>
+                  <th>Class</th>
+                  <th>Section</th>
                   <th>Fee Type</th>
                   <th>Payable Amount</th>
                   <th>Paid Amount</th>
@@ -190,9 +192,16 @@
               </thead>
               <tbody id="ajax_data">
                 @foreach($fees as $fee)
+                   <?php 
+                        $f_idd = gfee_setup($fee->class,$fee->title);
+                        $section = gsection_name($fee->section);
+                        $class = gclass_name($fee->class);
+                      ?>
                   <tr>
                     <td><a class="btnbill" href="#" onclick="invoicepaidhistory('{{$fee->billNo}}');">{{$fee->billNo}}</a></td>
                     <td>{{$fee->firstName}} {{$fee->lastName}}</td>
+                    <td>{{ $class->name}}</td>
+                    <td>{{$section->name}}</td>
                     <td>{{$fee->title}}</td>
                     <td>{{$fee->payableAmount}}</td>
                     <td>{{$fee->paidAmount}}</td>
@@ -214,7 +223,8 @@
                       {{--<a title='Delete' class='btn btn-danger' href='{{url("/fees/delete")}}/{{$fee->billNo}}'> <i class="glyphicon glyphicon-trash icon-red"></i></a>--}}
                       <button value="{{$fee->billNo}}" title='Collect Invoice' class='btn btn-primary @if( $fee->paidAmount<$fee->payableAmount) btninvoice @endif' @if($fee->payableAmount===$fee->paidAmount || $fee->paidAmount>=$fee->payableAmount ) onclick = "alert('Invoice Fully Paid')" @endif> <i class="fas fa-dollar-sign icon-white"></i></button>
                       <a title='Edit' class='btn btn-warning' href='{{url("/fees/invoice/update")}}/{{$fee->billNo}}'> <i class="glyphicon glyphicon-pencil icon-white"></i></a>
-                      <a title='get vouchar' class='btn btn-info' href='{{url("/fee/get_vouchar?class=$fee->class&section=$fee->section&session=jan-2019,march-2019&type=Monthly&month=$fee->month&fee_name=$fee_setup->id&regiNo=$fee->regiNo")}}'> <i class="glyphicon glyphicon-shopping-cart icon-white "></i></a>
+                   
+                      <a title='get vouchar' class='btn btn-info' href='{{url("/fee/get_vouchar?class=$fee->class&section=$fee->section&session=jan-2019,march-2019&type=Monthly&month=$fee->month&fee_name=$f_idd->id&regiNo=$fee->regiNo")}}'> <i class="glyphicon glyphicon-shopping-cart icon-white "></i></a>
                     </td>
                   </tr>
                 @endforeach
