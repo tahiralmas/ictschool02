@@ -56,6 +56,7 @@
            $fe_title=array();
            $other=array();
            $ofees=array();
+           echo "count".count($vouchar_details);
           ?>
           @foreach($vouchar_details as $vouchar_detail)
            <?php  
@@ -70,8 +71,9 @@
             $fe_title[]  =  \DateTime::createFromFormat('!m', $vouchar_detail->month)->format('F'); 
           ?>
           @else
-           <?php  $other[]  = $vouchar_detail->title ;
-                   $ofees[] =$vouchar_detail->fee;
+           <?php  
+                  $other[]  = $vouchar_detail->title ;
+                  $ofees[]  = $vouchar_detail->fee;
            ?>
           @endif
           @endforeach
@@ -79,7 +81,6 @@
           <?php  sort($fe_title); $implod=implode(',', $fe_title); ?>
 
           <td>{{$implod}}</td>
-          
           <th>Due Date </th>
           <td>{{$due_date}}</td>
         </tr>

@@ -585,10 +585,11 @@ class feesController extends BaseController {
                            ->select('billHistory.*','stdBill.dueAmount','stdBill.payableAmount','stdBill.paidAmount','stdBill.class','stdBill.total_fee','stdBill.regiNo','voucherhistories.due_date')
                            //->where('billHistory.billNo',$bill )
                            ->where('billHistory.month', '=', $month)
-                           ->where('Student.regiNo',Input::get('regiNo') )
+                           ->whereYear('stdBill.created_at', '=', $year)
+                           ->where('stdBill.regiNo',Input::get('regiNo') )
                            ->get();
-                          // echo "<pre>";print_r($vouchar_details);
-                          // exit;
+                          echo "<pre>";print_r($vouchar_details);
+                          exit;
        $student = DB::table('Student')
 					->select('*')
 					->where('regiNo',Input::get('regiNo'))
