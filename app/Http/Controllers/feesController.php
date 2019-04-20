@@ -2229,19 +2229,32 @@ class feesController extends BaseController {
 	          //$student_all =unserialize(Input::get('result'));
 
 		}else{
+
+			if(Input::get('session')==''){
+				$student->session =get_current_session()->id; 
+			}
+
+
+		
 			$student_all =	DB::table('Student')
 								->select( '*')
-								->where('isActive','Yes')
-								->where('class','=',Input::get('class'))
-								->where('section','=',Input::get('section'))
-								->where('session','=',$student->session)
-								->get();
+								->where('isActive','Yes');
+								if(Input::get('class')!=''){
+								$student_all->where('class','=',Input::get('class'));
+								}
+								if(Input::get('class')!=''){
+								$student_all->where('section','=',Input::get('section'));
+								}
+								
+								$student_all->where('session','=',$student->session);
+							
+								$student_all = $student_all->get();
 		}
 	        //$data = preg_replace('!s:(\d+):"(.*?)";!e', "'s:'.strlen('$2').':\"$2\";'", Input::get('result'));
 
 		$ictcore_fees    = Ictcore_fees::select("*")->first();
-							// echo "<pre>";print_r($student_all);
-							// exit;
+						 //echo "<pre>";print_r($student_all);
+							 //exit;
 		if(count($student_all)>0){
 			$i=0;
 
@@ -2266,13 +2279,14 @@ class feesController extends BaseController {
 
 			}
 			$i=0;
+			//$contactdata = array();
 			foreach($student_all as $stdfees){
 
 				$student =	DB::table('billHistory')
 				->Join('stdBill', 'billHistory.billNo', '=', 'stdBill.billNo')
 				->select( 'billHistory.billNo','billHistory.month','billHistory.fee','billHistory.lateFee','stdBill.class as class1','stdBill.payableAmount','stdBill.billNo','stdBill.payDate','stdBill.regiNo','stdBill.paidAmount')
 						// ->whereYear('stdBill.payDate', '=', 2017)
-				->where('stdBill.paidAmount','<>','0.00')
+				->where('stdBill.paidAmount','=','0.00')
 				->where('stdBill.regiNo','=',$stdfees->regiNo)
 				->whereYear('stdBill.payDate', '=', Input::get('year'))
 				->where('billHistory.month','=',Input::get('month'))
@@ -2299,11 +2313,12 @@ class feesController extends BaseController {
 					}
 						$group  = $ict->ictcore_api('contacts/'.$contact_id.'/link/'.$group_id,'PUT',$data=array() );
 
-						if(is_object($group) && $group->error!=''){
+						//echo "<pre>gghg";print_r($group);exit;
+						/*if(!empty($group) && is_object($group) && $group->error!=''){
 							echo $group->error->message;
 							return Redirect::to('/fees/classreport')->withErrors($group->error->message);
 
-						}
+						}*/
 							//$resultArray[] = get_object_vars($stdfees);
 				}
 
@@ -2312,6 +2327,7 @@ class feesController extends BaseController {
 		else{
 			$resultArray = array();
 		}
+		//echo "<pre>";print_r($contactdata);exit;
 		if(!empty($contactdata)){
 			$data = array(
 				'program_id'  => $ictcore_fees->ictcore_program_id,
@@ -2322,7 +2338,7 @@ class feesController extends BaseController {
 				'status'      => '',
 			);
 
-			echo "<pre>";print_r($data);
+			//echo "<pre>";print_r($data);
 			$campaign_id = $ict->ictcore_api('campaigns','POST',$data );
 			if(is_object($campaign_id) && $campaign_id->error!=''){
 					//echo $campaign_id->error->message;
@@ -2337,8 +2353,8 @@ class feesController extends BaseController {
 				}   
 			          //echo "<pre>";print_r($data);
 		}else{
-			return Redirect::to('/fees/classreport')->withErrors("Unpaid Student Not Found");
-
+			//return Redirect::to('/fees/classreport')->withErrors("Unpaid Student Not Found");
+			exit;
 		}
 
 		return Redirect::to('/fees/classreport')->with("success", "Voice campaign Created Succesfully.");
