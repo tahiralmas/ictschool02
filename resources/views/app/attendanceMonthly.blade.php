@@ -138,7 +138,7 @@
 
                                 <div class="col-md-2">
                                     <div class="form-group ">
-                                        <label for="dob">attendance Month <span class="text-danger">*</span></label>
+                                        <label for="dob">Month <span class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
                                             <input type="text" class="form-control datepicker" name="yearMonth" required  data-date-format="yyyy-mm" value="{{$yearMonth}}">

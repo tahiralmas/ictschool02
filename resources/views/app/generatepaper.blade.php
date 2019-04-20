@@ -128,8 +128,9 @@
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                       
-                      <select   name="chapter[]" id="chapter" class="form-control selectpicker" multiple data-actions-box="true" data-hide-disabled="true" data-size="5"  required="true">
+                      <select   name="chapter[]" id="chapter" class="form-control selectpicker" multiple data-actions-box="true" data-hide-disabled="true"   required="true">
                       </select>
+
 
                     </div>
                   </div>
@@ -165,7 +166,7 @@
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                       
-                      <input type="number" name="short" class="form-control">
+                      <input type="number" name="short" style="width: 390px;height: 36px;">
 
                     </div>
                   </div>
@@ -347,7 +348,6 @@ function getchapter()
         });
         //console.log(data);
        $("#chapter").html(options).selectpicker('refresh');
-
       },
       type: 'GET'
     });

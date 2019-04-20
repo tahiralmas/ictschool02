@@ -382,7 +382,7 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
                                 </a>
                             </div>
                             <div class="col-sm-6 col-lg-4">
-                                <a href="{{url('/class/list')}}">
+                                <a href="#">
                                 <div class="overview-item overview-item--c3">
                                     <div class="overview__inner">
                                         <div class="overview-box clearfix">
@@ -403,7 +403,7 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
                                 </a>
                             </div>
                             <div class="col-sm-6 col-lg-4">
-                                <a href="{{url('/student/list')}}">
+                                <a href="#">
                                 <div class="overview-item overview-item--c2">
                                     <div class="overview__inner">
                                         <div class="overview-box clearfix">
@@ -423,7 +423,7 @@ $get_data = branchesapi($branch->username,$branch->password,$branch->branch_url,
                                 </a>
                             </div>
                             <div class="col-sm-6 col-lg-4">
-                               <a href="{{url('/attendance_detail?action=absent')}}">
+                               <a href="#">
                                 <div class="overview-item overview-item--c3">
                                     <div class="overview__inner">
                                         <div class="overview-box clearfix">
