@@ -67,6 +67,42 @@
                 </div>
               </div>
 
+              <div class="col-md-4">
+        <div class="form-group">
+                  <label class="control-label" for="month">Month</label>
+
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                      <?php  $data=[
+                      '1'=>'January',
+                      '2'=>'February',
+                      '3'=>'March',
+                      '4'=>'April',
+                      '5'=>'May',
+                      '6'=>'June',
+                      '7'=>'July',
+                      '8'=>'August',
+                      '9'=>'September',
+                      '10'=>'October',
+                      '11'=>'November',
+                      '12'=>'December'
+                    ];?>
+                    {{ Form::select('month',$data,$month,['class'=>'form-control','id'=>'month','required'=>'true'])}}
+                </div>
+        </div>
+        </div>
+
+        <div class="col-md-4">
+                <div class="form-group ">
+                  <label for="session">Year</label>
+                  <div class="input-group">
+
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                    <input  type="text" value="{{$year}}" id="year" required="true" class="form-control datepicker2" name="year"   data-date-format="yyyy" >
+                  </div>
+                </div>
+              </div>
+
              <?php /* <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label" for="shift">Shift</label>

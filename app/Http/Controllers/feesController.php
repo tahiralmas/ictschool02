@@ -1706,6 +1706,10 @@ class feesController extends BaseController {
 	}
 	public function stdfeeinvoices()
 	{
+		
+		$now              =  Carbon::now();
+		$year             =  $now->year;
+        $month            =  $now->month;
 		$classes = ClassModel::pluck('name','code');
 		$section = array('A'=>'A');
 		$student = new studentfdata;
@@ -1716,10 +1720,14 @@ class feesController extends BaseController {
 		$student->regiNo="";
 		$fees=array();
 			//return View::Make('app.feeviewstd',compact('classes','student','fees'));
-		return View('app.invoice',compact('classes','student','fees','section'));
+		return View('app.invoice',compact('classes','student','fees','section','month','year'));
 	}
 	public function stdfeeinvoicespost()
 	{
+		$now              =  Carbon::now();
+		$year             =  $now->year;
+        $month            =  $now->month;
+
 		$classes          = ClassModel::pluck('name','code');
 		$section          = DB::table('section')->where('class_code',Input::get('class'))->pluck('name','id');
 		$student          = new studentfdata;
@@ -1734,6 +1742,8 @@ class feesController extends BaseController {
 		->join('billHistory','stdBill.billNo','=','billHistory.billNo')
 		->select(DB::RAW("stdBill.billNo,stdBill.payableAmount,stdBill.paidAmount,stdBill.dueAmount,DATE_FORMAT(stdBill.payDate,'%D %M,%Y') AS date"),'Student.firstName','Student.lastName','Student.class','Student.section','Student.regiNo','billHistory.month','billHistory.title','billHistory.fee','billHistory.lateFee')
 		->where('stdBill.class',Input::get('class'))
+		->where('billHistory.month',Input::get('month'))
+		->whereYear('stdBill.created_at',Input::get('year'))
 		->where('Student.section',Input::get('section'))
 		->get();
 		
@@ -1744,7 +1754,7 @@ class feesController extends BaseController {
 		$fee_setup  = FeeSetup::select('id','title')->where('class','=',$student->class)->where('type','=','Monthly')->first();
 
 			//return View::Make('app.feeviewstd',compact('classes','student','fees','totals'));
-		return View('app.invoice',compact('classes','student','fees','totals','section','fee_setup'));
+		  return View('app.invoice',compact('classes','student','fees','totals','section','fee_setup','month','year'));
 	}
 	public function stdfeesdelete($billNo)
 	{

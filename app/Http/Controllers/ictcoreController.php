@@ -16,6 +16,10 @@ use App\Notification;
 use DB;
 use Carbon\Carbon;
 use Storage;
+use Exception;
+class excption {
+
+}
 class ictcoreController {
 
 	public function __construct() {
@@ -914,10 +918,16 @@ class ictcoreController {
 		    curl_close($snd_sms);
 		   // echo $urlWithSessionKey;
 		    //echo "<pre>";print_r($sms_data);
-				
+			try{	
 			$xml_sms = new \SimpleXMLElement($sms_data);
 		    //$data    = $xml_sms->data;
 		    return $xml_sms ;
+			}catch (Exception $e){
+				$message = new excption;
+				$message->response = 'error';
+		    return $message ;
+
+			}
 	}
 
 	public function verification_number_telenor_voice($post,$user,$pass)
