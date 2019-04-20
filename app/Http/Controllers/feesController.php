@@ -2291,11 +2291,12 @@ class feesController extends BaseController {
 				->where('stdBill.regiNo','=',$stdfees->regiNo)
 				->whereYear('stdBill.payDate', '=', Input::get('year'))
 				->where('billHistory.month','=',Input::get('month'))
-				->where('billHistory.month','<>','-1')
+				->where('billHistory.month','<>','-1');
 						//->orderby('stdBill.payDate')
-				->first();
+				//->first();
 				//echo "<pre>";print_r($student);
-				if(count($student)>0 ){
+				if($student->count()>0 ){
+					$student = $student->first();
 								//$resultArray = get_object_vars($stdfees)
 				$i++;
 				}else{
