@@ -105,6 +105,7 @@ class teacherController extends BaseController {
 		//'motherName' => 'required',
 		//'motherCellNo' => 'required',
 		'presentAddress' => 'required',
+		'email'    =>'nullable|unique:users',
 		//'parmanentAddress' => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
