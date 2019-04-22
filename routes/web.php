@@ -57,7 +57,7 @@ Route::post('/class/create','classController@create')->middleware('checkPermissi
 Route::get('/class/list','classController@show')->middleware('checkPermission:class_view');
 Route::get('/class/edit/{id}','classController@edit')->middleware('checkPermission:class_update');
 Route::post('/class/update','classController@update')->middleware('checkPermission:class_update');
-Route::get('/class/delete/{id}','classController@delete')->middleware('checkPermission:class_delete');
+Route::get('/class/delete/{id}','classController@delete')/*->middleware('checkPermission:class_delete')*/;
 });
 Route::get('/class/getsubjects/{class}','classController@getSubjects');
 Route::get('/class/diary/{class_id}','classController@diary');

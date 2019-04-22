@@ -225,9 +225,11 @@ class studentController extends BaseController {
 	public function create(Request $request)
 	{
 
-		$rules=['regiNo' => 'required',
+		$rules=[
+		
+		'regiNo' => 'required',
 		'fname' => 'required',
-		'lname' => 'required',
+		//'lname' => 'required',
 		'gender' => 'required',
 		//'religion' => 'required',
 		//'bloodgroup' => 'required',
@@ -294,6 +296,9 @@ class studentController extends BaseController {
 			$student->middleName = "";
 		}
 		$student->lastName = Input::get('lname');
+		if(Input::get('lname') ==''){
+			$student->lastName = "";
+		}
 		$student->gender = Input::get('gender');
 		
 		$student->religion = Input::get('religion');

@@ -1,4 +1,9 @@
 @extends('layouts.master')
+@section('style')
+<style>
+b {color:red}
+</style>
+@stop
 @section('content')
 @if (Session::get('success'))
 
@@ -43,32 +48,32 @@
                       <div class="col-md-12">
                         <div class="col-md-4">
                           <div class="form-group">
-                              <label for="name">Code</label>
+                              <label for="name">Code <b>*</b></label>
                               <div class="input-group">
                                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                  <input type="text" class="form-control" autofocus required name="code" placeholder="Subject Code">
+                                  <input type="text" class="form-control" value="{{old('code')}}" autofocus required name="code" placeholder="Subject Code">
                               </div>
                           </div>
                         </div>
                         <div class="col-md-4">
                           <div class="form-group">
-                              <label for="name">Name</label>
+                              <label for="name">Name <b>*</b></label>
                               <div class="input-group">
                                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                  <input type="text" class="form-control" required name="name" placeholder="Subject Name">
+                                  <input type="text" class="form-control" value="{{old('name')}}" required name="name" placeholder="Subject Name">
                               </div>
                           </div>
                         </div>
                         <div class="col-md-4" style="display:none">
                           <div class="form-group">
-                          <label class="control-label" for="type">Type</label>
+                          <label class="control-label" for="type">Type <b>*</b></label>
 
                           <div class="input-group">
                               <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign  blue"></i></span>
                               <select name="type" class="form-control" required>
-                              <option value="Core" selected>Core</option>
-                                <option value="Comprehensive">Comprehensive</option>
-                                <option value="Electives">Electives</option>
+                              <option value="Core" @if(old('type')=='Core') selected @else selected @endif>Core</option>
+                                <option value="Comprehensive"  @if(old('type')=='Comprehensive') selected @endif>Comprehensive</option>
+                                <option value="Electives"  @if(old('type')=='Electives') selected @endif>Electives</option>
                               </select>
                           </div>
                       </div>
@@ -81,13 +86,13 @@
                       <div class="col-md-12">
                           <div class="col-md-2" style="display:none">
                               <div class="form-group">
-                                  <label class="control-label" for="stdgroup">Subject Group</label>
+                                  <label class="control-label" for="stdgroup">Subject Group <b>*</b></label>
                                   <div class="input-group">
                                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign  blue"></i></span>
                                       <select name="subgroup" class="form-control" required >
                                           <option value="N/A" selected>N/A</option>
-                                          <option value="Bangla">Urdu</option>
-                                          <option value="English">English</option>
+                                          <option value="Bangla"  @if(old('subgroup')=='Bangla') selected @endif>Urdu</option>
+                                          <option value="English"  @if(old('subgroup')=='English') selected @endif>English</option>
 
 
                                       </select>
@@ -96,14 +101,14 @@
                           </div>
                     <div class="col-md-3">
                       <div class="form-group">
-                            <label class="control-label" for="stdgroup">Student Group</label>
+                            <label class="control-label" for="stdgroup">Student Group <b>*</b></label>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign  blue"></i></span>
                                 <select name="stdgroup" class="form-control" required >
-                                  <option value="N/A">N/A</option>
-                                  <option value="Science">Science</option>
-                                  <option value="Arts">Arts</option>
-                                  <option value="Commerce">Commerce</option>
+                                  <option value="N/A" >N/A</option>
+                                  <option value="Science" @if(old('stdgroup')=='Science') selected @endif>Science</option>
+                                  <option value="Arts" @if(old('stdgroup')=='Arts') selected @endif>Arts</option>
+                                  <option value="Commerce" @if(old('stdgroup')=='Commerce') selected @endif>Commerce</option>
 
                                 </select>
                             </div>
@@ -111,13 +116,13 @@
                     </div>
                       <div class="col-md-4">
                             <div class="form-group">
-                                            <label class="control-label" for="class">Class</label>
+                                            <label class="control-label" for="class">Class <b>*</b></label>
 
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
                                                 <select name="class[]" class="form-control selectpicker" multiple data-hide-disabled="true" data-size="5"required >
                                                   @foreach($classes as $class)
-                                                    <option value="{{$class->code}}">{{$class->name}}</option>
+                                                    <option value="{{$class->code}}"  @if(old('class.*')==$class->code) selected @endif >{{$class->name}}</option>
                                                   @endforeach
 
                                                 </select>
@@ -126,7 +131,7 @@
                       </div>
                       <div class="col-md-3">
                           <div class="form-group">
-                        <label for="for">Grade System</label>
+                        <label for="for">Grade System <b>*</b></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <select name="gradeSystem" required class="form-control">

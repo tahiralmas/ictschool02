@@ -1,4 +1,9 @@
 @extends('layouts.master')
+@section('style')
+<style>
+b {color:red}
+</style>
+@stop
 @section('content')
 @if (Session::get('success'))
 
@@ -20,7 +25,7 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                     <div class="form-group">
-                        <label for="name">Section Name</label>
+                        <label for="name">Section Name <b>*</b></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <input type="text" class="form-control" autofocus required name="name" value="{{old('name')}}" placeholder="Section Name">
@@ -29,7 +34,7 @@
                     
                       <div class="form-group">
                     <!--  <label for="name">Numeric Value of Class[One=1,Six=6,Ten=10 etc]</label>-->
-                      <label for="name">Class</label>
+                      <label for="name">Class <b>*</b></label>
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                           <!--<input type="number" min="1" max="10" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">-->
@@ -45,7 +50,7 @@
                   
                    <div class="form-group">
                     <!--  <label for="name">Numeric Value of Class[One=1,Six=6,Ten=10 etc]</label>-->
-                      <label for="name">Teachers</label>
+                      <label for="name">Teachers <b>*</b></label>
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                           <!--<input type="number" min="1" max="10" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">-->
@@ -61,7 +66,7 @@
                  
 
                     <div class="form-group">
-                        <label for="name">Description</label>
+                        <label for="name">Description <b>*</b></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <textarea type="text" class="form-control"  name="description" placeholder="Class Description">{{old('description')}}</textarea>

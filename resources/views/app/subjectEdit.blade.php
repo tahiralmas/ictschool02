@@ -1,4 +1,9 @@
 @extends('layouts.master')
+@section('style')
+<style>
+b {color:red}
+</style>
+@stop
 @section('content')
 
 <div class="row">
@@ -33,7 +38,7 @@
                      <div class="col-md-12">
                        <div class="col-md-4">
                          <div class="form-group">
-                             <label for="name">Code</label>
+                             <label for="name">Code <b>*</b></label>
                              <div class="input-group">
                                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                  <input type="text" class="form-control" required name="code" value="{{$subject->code}}" placeholder="Subject Code">
@@ -42,7 +47,7 @@
                        </div>
                        <div class="col-md-4">
                          <div class="form-group">
-                             <label for="name">Name</label>
+                             <label for="name">Name <b>*</b></label>
                              <div class="input-group">
                                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                  <input type="text" class="form-control" required name="name" value="{{$subject->name}}" placeholder="Subject Name">
@@ -51,7 +56,7 @@
                        </div>
                        <div class="col-md-4" style="display:none">
                          <div class="form-group">
-                         <label class="control-label" for="type">Type</label>
+                         <label class="control-label" for="type">Type <b>*</b></label>
 
                          <div class="input-group">
                              <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign  blue"></i></span>
@@ -69,7 +74,7 @@
                      <div class="col-md-12">
                          <div class="col-md-2" style="display:none">
                              <div class="form-group">
-                                 <label class="control-label" for="stdgroup">Subject Group</label>
+                                 <label class="control-label" for="stdgroup">Subject Group <b>*</b></label>
                                  <div class="input-group">
                                      <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign  blue"></i></span>
                                      {{ Form::select('subgroup',['N/A'=>'N/A','Bangla'=>'Bangla','English'=>'English'],$subject->subgroup,['class'=>'form-control'])}}
@@ -78,7 +83,7 @@
                          </div>
                    <div class="col-md-3">
                      <div class="form-group">
-                           <label class="control-label" for="stdgroup">Student Group</label>
+                           <label class="control-label" for="stdgroup">Student Group <b>*</b></label>
                            <div class="input-group">
                                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign  blue"></i></span>
                                {{ Form::select('stdgroup',['N/A'=>'N/A','Science'=>'Science','Arts'=>'Arts','Commerce'=>'Commerce'],$subject->stdgroup,['class'=>'form-control'])}}
@@ -89,7 +94,7 @@
                    </div>
                      <div class="col-md-4">
                            <div class="form-group">
-                                           <label class="control-label" for="class">Class</label>
+                                           <label class="control-label" for="class">Class <b>*</b></label>
 
                                            <div class="input-group">
                                                <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
@@ -103,7 +108,7 @@
                      </div>
                      <div class="col-md-3">
                          <div class="form-group">
-                       <label for="for">Grade System</label>
+                       <label for="for">Grade System <b>*</b></label>
                        <div class="input-group">
                            <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                            <select name="gradeSystem" class="form-control">

@@ -1,7 +1,10 @@
 @extends('layouts.master')
 @section('style')
 <link href="{{ URL::asset('/css/teckquiz.css') }}" rel="stylesheet">
-
+<link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
+<style>
+b {color:red}
+</style>
 @stop
 @section('content')
 
@@ -25,53 +28,53 @@
         {{ csrf_field() }}
         <div class="col-md-12">
             <div class="form-group">
-                <label for="">Quiz Name</label>
-                <input name="q_name" type="text" class="form-control" required autofocus>
+                <label for="">Quiz Name <b>*</b></label>
+                <input name="q_name" type="text" class="form-control" value="{{old('q_name')}}" required autofocus>
             </div>
             <div class="form-group">
-                <label for="">Class</label>
-                <select name="class_id" id="class_id" class="form-control">
+                <label for="">Class <b>*</b></label>
+                <select name="class_id" id="class_id" class="form-control" required>
                     <option value="">---Select Class---</option>
                     @foreach ($classes as $classe)
-                    <option value="{{ $classe->code }}">{{ $classe->name }}</option>
+                    <option value="{{ $classe->code }}" @if(old('class_id')==$classe->code) selected @endif>{{ $classe->name }}</option>
                     @endforeach
                 </select>
             </div>
             <div class="form-group">
-                <label for="">Session</label>
-                <input type="text" name="session" class="form-control">                      
+                <label for="">Session <b>*</b></label>
+                <input type="text"    name="session" class="form-control datepicker2" value="{{old('session',date('Y'))}}" required>                      
             </div>
             <div class="form-group">
-                <label for="">Subject</label>
+                <label for="">Subject <b>*</b></label>
                 <select id="subject" name="subject" class="form-control" required="true">
                   <option value="">--Select Subject--</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="">Chapter</label>
-                <input type="text" name="chapter" class="form-control">
+                <label for="">Chapter <b>*</b></label>
+                <input type="text" name="chapter" class="form-control" value="{{old('chapter')}}" required>
             </div>
             <div class="form-group">
-                <label for="">Levels</label>
+                <label for="">Levels <b>*</b></label>
                 <select name="level" class="form-control" required>
                     <option value="">---Select a Level---</option>
-                    <option value="simple">Simple</option>
-                    <option value="normal">Normal</option>
-                    <option value="hard">Hard</option>
+                    <option value="simple" @if(old('level')=='simple') selected @endif>Simple</option>
+                    <option value="normal" @if(old('level')=='normal') selected @endif>Normal</option>
+                    <option value="hard" @if(old('level')=='hard') selected @endif>Hard</option>
                 </select>
             </div>
         </div>
 
         <div class="col-12" id="question">
-            <h3>Questions</h3>
+            <h3>Questions </h3>
             <div class="row">
                 <div class="col-md-9">
-                    <label for="">Question</label>
+                    <label for="">Question <b>*</b></label>
                     <textarea class="form-control"name="question[0]" id="question[0]" cols="30" rows="5" placeholder="Input question here..." required></textarea>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="">Question Type</label>
+                        <label for="">Question Type <b>*</b></label>
 
                         <select name="qt[0]" id="qt-0" class="form-control qt" required>
                             <option value="">---Select a question type---</option>
@@ -161,18 +164,29 @@
 @section('script')
 
     <script src="{{ URL::asset('js/jquery.validate.min.js') }}"></script>
-
+  <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script>
+$(".datepicker2").datepicker( {
+              format: " yyyy", // Notice the Extra space at the beginning
+              viewMode: "years",
+              minViewMode: "years",
+              autoclose:true
+
+            }).on('changeDate', function (ev) {
+
+              
+
+            });
     var newId = 1;
     var template = jQuery.validator.format(`
         <div class="row">
                 <div class="col-md-9">
-                    <label for="">Question</label>
+                    <label for="">Question <b>*</b></label>
                     <textarea class="form-control"name="question[{0}]" id="" cols="30" rows="5" placeholder="Input question here..." required></textarea>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label for="">Question Type</label>
+                        <label for="">Question Type <b>*</b></label>
 
                         <select name="qt[{0}]" id="qt-{0}" class="form-control qt" required>
                             <option value="">---Select a question type---</option>

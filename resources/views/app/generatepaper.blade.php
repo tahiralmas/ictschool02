@@ -1,7 +1,9 @@
 @extends('layouts.master')
 @section('style')
 <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
-
+<style>
+b {color:red}
+</style>
 @stop
 @section('content')
 @if (Session::get('success'))
@@ -50,14 +52,14 @@
 
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="control-label" for="class">Class</label>
+                  <label class="control-label" for="class">Class <b>*</b></label>
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
                     @if(isset($classes2))
                     {{ Form::select('class',$classes2,$formdata->class,['class'=>'form-control','id'=>'class','required'=>'true'])}}
                     @else
-                    <select id="class" id="class" name="class" required="true" class="form-control" >
+                    <select id="class" id="class" name="class" required="true" class="form-control" required >
                       @foreach($classes as $class)
                       <option value="{{$class->code}}">{{$class->name}}</option>
                       @endforeach
@@ -89,7 +91,7 @@
 
                <div class="col-md-4">
                   <div class="form-group ">
-                    <label for="session">session</label>
+                    <label for="session">session <b>*</b></label>
                     <div class="input-group">
 
                       <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
@@ -99,14 +101,14 @@
                 </div>
               <div class="col-md-4">
                   <div class="form-group">
-                    <label class="control-label" for="subject">subject</label>
+                    <label class="control-label" for="subject">subject <b>*</b></label>
 
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-book blue"></i></span>
                       @if(isset($subjects))
                       {{ Form::select('subject',$subjects,$formdata->subject,['class'=>'form-control','id'=>'subject','required'=>'true'])}}
                       @else
-                      <select id="subject" id="subject" name="subject" required="true" class="form-control" >
+                      <select id="subject" id="subject" name="subject" required="true" class="form-control" required >
                         <option value="">--Select Subjects--</option>
 
                       </select>
@@ -123,7 +125,7 @@
                 
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label class="control-label" for="exam">Chaper</label>
+                    <label class="control-label" for="exam">Chaper <b>*</b></label>
 
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
@@ -137,7 +139,7 @@
                 </div>
                   <div class="col-md-4">
                     <div class="form-group">
-                      <label for="">Levels</label>
+                      <label for="">Levels <b>*</b></label>
                         <select name="level[]" class="form-control selectpicker" multiple data-actions-box="true" data-hide-disabled="true" data-size="5" required>
                           <option value="">---Select a Level---</option>
                           <option value="simple">Simple</option>
@@ -149,24 +151,24 @@
 
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label class="control-label" for="exam">Number of Mcqs</label>
+                    <label class="control-label" for="exam">Number of Mcqs <b>*</b></label>
 
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                       
-                      <input type="number" name="mcqs" class="form-control">
+                      <input type="number" name="mcqs" class="form-control" required >
 
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label class="control-label" for="exam">Number of Short Questions</label>
+                    <label class="control-label" for="exam">Number of Short Questions <b>*</b></label>
 
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                       
-                      <input type="number" name="short" style="width: 390px;height: 36px;">
+                      <input type="number" name="short" style="width: 390px;height: 36px;" required>
 
                     </div>
                   </div>
@@ -174,19 +176,19 @@
 
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label class="control-label" for="exam">Number of long Questions</label>
+                    <label class="control-label" for="exam">Number of long Questions <b>*</b></label>
 
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                       
-                      <input type="number" name="long" class="form-control">
+                      <input type="number" name="long" class="form-control" required>
 
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label class="control-label" for="exam">Number of Prints</label>
+                    <label class="control-label" for="exam">Number of Prints <b>*</b></label>
 
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>

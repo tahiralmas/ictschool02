@@ -1,4 +1,7 @@
 @extends('layouts.master')
+<style>
+b {color:red}
+</style>
 @section('content')
 <div class="row">
 <div class="box col-md-12">
@@ -13,16 +16,16 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                    <input type="hidden" name="id" value="{{$section->id }}">
                       <div class="form-group">
-                        <label for="name">Name</label>
+                        <label for="name">Name <b>*</b></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                            <input type="text" class="form-control" required name="name" value="{{$section->name}}" placeholder="Class Name">
+                            <input type="text" class="form-control" required name="name" value="{{old('name',$section->name)}}" placeholder="Class Name">
                         </div>
                     </div>
                     
                  <div class="form-group">
                     <!--  <label for="name">Numeric Value of Class[One=1,Six=6,Ten=10 etc]</label>-->
-                      <label for="name">Class</label>
+                      <label for="name">Class <b>*</b></label>
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                           <!--<input type="number" min="1" max="10" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">-->
@@ -30,7 +33,7 @@
                           <select class="form-control"  name="class" required >
                           <option value="">---Select Class---</option>
                            @foreach($class as $cls)
-                             <option value="{{$cls->code }}" @if($cls->code==$section->class_code) selected @endif>{{ $cls->name}}</option>
+                             <option value="{{$cls->code }}" @if($cls->code==old('class',$section->class_code)) selected @endif>{{ $cls->name}}</option>
                              @endforeach
                           </select>
                       </div>
@@ -38,7 +41,7 @@
                         
                      <div class="form-group">
                     <!--  <label for="name">Numeric Value of Class[One=1,Six=6,Ten=10 etc]</label>-->
-                      <label for="name">Teachers</label>
+                      <label for="name">Teachers <b>*</b></label>
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                           <!--<input type="number" min="1" max="10" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">-->
@@ -46,7 +49,7 @@
                           <select class="form-control"  name="teacher_id" required >
                           <option value="">---Select Class---</option>
                            @foreach($teachers as $teacher)
-                             <option value="{{$teacher->id }}" @if($teacher->id==$section->teacher_id) selected @endif>{{ $teacher->firstName}} {{$teacher->lastName}}</option>
+                             <option value="{{$teacher->id }}" @if($teacher->id==old('teacher_id',$section->teacher_id)) selected @endif>{{ $teacher->firstName}} {{$teacher->lastName}}</option>
                              @endforeach
                           </select>
                       </div>
@@ -58,10 +61,10 @@
                     
 
                     <div class="form-group">
-                        <label for="name">Description</label>
+                        <label for="name">Description <b>*</b></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                            <textarea type="text" class="form-control" required name="description" placeholder="Class Description">{{$section->description}}</textarea>
+                            <textarea type="text" class="form-control" required name="description" placeholder="Class Description">{{old('description',$section->description)}}</textarea>
                         </div>
                     </div>
                     <div class="clearfix"></div>

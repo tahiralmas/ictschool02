@@ -167,7 +167,6 @@
             function myFunction() {
                 if (confirm("Are you sure you want to unpaid?")) {
                  consol.log('asas');
-                  //window.location.href = '{{url("/fees/paid")}}/{{$fee->billNo}}?s=unpaid';
                 window.location ("http://www.google.com/");
                 window.location.href('{{url("/fees/paid")}}/{{$fee->billNo}}?s=unpaid');
                 return true;

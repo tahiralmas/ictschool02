@@ -1,4 +1,7 @@
 @extends('layouts.master')
+<style>
+b {color:red}
+</style>
 @section('content')
 <div class="row">
 <div class="box col-md-12">
@@ -13,7 +16,7 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                    <input type="hidden" name="id" value="{{$class->id }}">
                       <div class="form-group">
-                        <label for="name">Name</label>
+                        <label for="name">Name<b>*</b></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <input type="text" class="form-control" required name="name" value="{{$class->name}}" placeholder="Class Name">
@@ -21,7 +24,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="name">Description</label>
+                        <label for="name">Description<b>*</b></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <textarea type="text" class="form-control" required name="description" placeholder="Class Description">{{$class->description}}</textarea>

@@ -129,7 +129,7 @@ b {color:red}
           
               <div class="col-md-4">
                 <div class="form-group">
-                  <label for="regiNo">Registration No</label>
+                  <label for="regiNo">Registration No  <b>*</b></label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <input type="text" id="regiNo" readOnly class="form-control" required name="regiNo" value="{{old('regiNo')}}" placeholder="">
@@ -138,7 +138,7 @@ b {color:red}
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label for="rollNo">Card/Roll No</label>
+                  <label for="rollNo">Card/Roll No  <b>*</b></label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <input type="text" id="rollNo" class="form-control" required name="rollNo" value="{{old('rollNo')}}" placeholder="Class roll no">
@@ -197,7 +197,7 @@ b {color:red}
           </div>
           <div class="row">
             <div class="col-md-12">
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-group">
                   <label for="fname">First Name <b>*</b></label>
                   <div class="input-group">
@@ -206,7 +206,7 @@ b {color:red}
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
+              <!-- <div class="col-md-4">
 
                 <div class="form-group">
                   <label for="mname">Midle Name</label>
@@ -215,8 +215,10 @@ b {color:red}
                     <input type="text" class="form-control"  name="mname" value="{{old('mname')}}" placeholder="Midle Name">
                   </div>
                 </div>
-              </div>
-              <div class="col-md-4">
+              </div> -->
+                 <input type="hidden" class="form-control"  name="mname" value="{{old('mname')}}" placeholder="Midle Name">
+
+              <div class="col-md-6">
                 <div class="form-group">
                   <label for="lname">Last Name</label>
                   <div class="input-group">
@@ -264,7 +266,7 @@ b {color:red}
               <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label" for="bloodgroup">Bloodgroup</label>
-                  <div class="input-group">
+                  <div class="input-group" >
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select name="bloodgroup" class="form-control"  >
                       <option value="A+"  @if(old('bloodgroup')=="A+") selected @endif>A+</option>

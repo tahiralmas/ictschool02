@@ -1,6 +1,9 @@
 @extends('layouts.master')
 @section('style')
 <link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+<style>
+b {color:red}
+</style>
 @stop
 @section('content')
 
@@ -37,7 +40,7 @@
                   <div class="col-md-12">
                     <div class="col-md-4">
                         <div class="form-group">
-                      <label for="regiNo">Registration No</label>
+                      <label for="regiNo">Registration No <b>*</b></label>
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                           <input type="text" class="form-control" readyonly="true" required name="regiNo" value="{{$student->regiNo}}" placeholder="" readonly>
@@ -46,7 +49,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                      <label for="rollNo">Card/Roll No</label>
+                      <label for="rollNo">Card/Roll No <b>*</b></label>
                       <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                           <input type="text" class="form-control" required name="rollNo" value="{{$student->rollNo}}" placeholder="Class roll no" readonly>
@@ -55,7 +58,7 @@
                     </div>
                     <div class="col-md-4">
                       {{--<div class="form-group ">
-                                       <label for="session">session</label>
+                                       <label for="session">session <b>*</b></label>
                                            <div class="input-group">
 
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
@@ -73,7 +76,7 @@
                   <div class="col-md-12">
                 <div class="col-md-4">
                   <div class="form-group">
-                  <label class="control-label" for="class">Class</label>
+                  <label class="control-label" for="class">Class <b>*</b></label>
 
                   <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
@@ -84,7 +87,7 @@
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                  <label class="control-label" for="group">Group</label>
+                  <label class="control-label" for="group">Group <b>*</b></label>
 
                   <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
@@ -96,7 +99,7 @@
                   </div>
                   <div class="col-md-4">
                     <div class="form-group">
-                    <label class="control-label" for="section">Section</label>
+                    <label class="control-label" for="section">Section <b>*</b></label>
 
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
@@ -181,16 +184,16 @@
             </div>
                 <div class="row">
                   <div class="col-md-12">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                       <div class="form-group">
-                          <label for="fname">First Name</label>
+                          <label for="fname">First Name <b>*</b></label>
                           <div class="input-group">
                               <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                               <input type="text" class="form-control" value="{{$student->firstName}}" required name="fname" placeholder="First Name">
                           </div>
                       </div>
                     </div>
-                    <div class="col-md-4">
+                   <!--  <div class="col-md-4">
 
                         <div class="form-group">
                             <label for="mname">Midle Name</label>
@@ -199,8 +202,10 @@
                                 <input type="text" class="form-control" value="{{$student->middleName}}"  name="mname" placeholder="Midle Name">
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
+                    </div> -->
+                    <input type="hidden" class="form-control" value="{{$student->middleName}}"  name="mname" placeholder="Midle Name">
+
+                    <div class="col-md-6">
                       <div class="form-group">
                           <label for="lname">Last Name</label>
                           <div class="input-group">
@@ -289,7 +294,7 @@
 
                           <div class="col-md-4">
                             <div class="form-group ">
-                                             <label for="dob">Date Of Birth</label>
+                                             <label for="dob">Date Of Birth <b>*</b></label>
                                                  <div class="input-group">
 
                                                   <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
@@ -356,7 +361,7 @@
                           <div class="col-md-12">
                         <div class="col-md-4">
                           <div class="form-group">
-                              <label for="fatherName">Father's Name </label>
+                              <label for="fatherName">Father's Name <b>*</b></label>
                               <div class="input-group">
                                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                   <input type="text" class="form-control" value="{{$student->fatherName}}"  required  name="fatherName" placeholder="Name">
@@ -365,7 +370,7 @@
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
-                                <label for="fatherCellNo">Father's Mobile No </label>
+                                <label for="fatherCellNo">Father's Mobile No  <b>*</b></label>
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                     <input type="text" class="form-control" value="{{$student->fatherCellNo}}" required name="fatherCellNo" placeholder="+8801xxxxxxxxx">
@@ -425,7 +430,7 @@
                 <div class="col-md-12">
                           <div class="col-md-6">
                         <div class="form-group">
-                            <label for="presentAddress">Present Address</label>
+                            <label for="presentAddress">Present Address <b>*</b></label>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
                                 <textarea type="text" class="form-control" required name="presentAddress" placeholder="Address">{{$student->presentAddress}}</textarea>

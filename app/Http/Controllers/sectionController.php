@@ -30,8 +30,10 @@ class sectionController extends BaseController {
 		foreach($sections as $section){
          $teacher_ids[] = $section->teacher_id;
 		}
-		$teachers = DB::table('teacher')->join('users','teacher.id','=','users.group_id')
-	    ->select('teacher.id','teacher.firstName','teacher.lastName')/*->whereNotIn('id',$teacher_ids)*/->get();
+		$teachers = DB::table('teacher')
+						->join('users','teacher.id','=','users.group_id')
+	    				->select('teacher.id','teacher.firstName','teacher.lastName')/*->whereNotIn('id',$teacher_ids)*/
+	    				->get();
 		return View('app.sectionCreate',compact('class','teachers'));
 		//echo "this is section controller";
 	}
@@ -83,7 +85,8 @@ class sectionController extends BaseController {
 	public function show()
 	{
 		//$Classes = ClassModel::orderby('code','asc')->get();
-		$sections = DB::table('section')->leftjoin('teacher','section.teacher_id','=','teacher.id')
+		$sections = DB::table('section')
+		->leftjoin('teacher','section.teacher_id','=','teacher.id')
 		//->select(DB::raw('section.id,section.class_code,section.name,section.description'))
 		->select(DB::raw('section.id,section.class_code,section.name,section.description,(select count(Student.id) from Student where class=section.class_code And section=section.id)as students'),'teacher.firstName','teacher.lastName')
 
@@ -155,9 +158,20 @@ class sectionController extends BaseController {
 	*/
 	public function delete($id)
 	{
-		$class = SectionModel::find($id);
-		$class->delete();
-		return Redirect::to('/section/list')->with("success","Section Deleted Succesfully.");
+
+		
+		$section = SectionModel::select(DB::raw('section.id,section.class_code,section.name,section.description,(select count(Student.id) from Student where class=section.class_code And section=section.id)as students'))
+		->find($id);
+		if($section->students==0){
+			$section->delete();
+			return Redirect::to('/section/list')->with("success","Section Deleted Succesfully.");
+
+		}else{
+
+			return Redirect::to('/section/list')->with("error","Section Not deleted first delete all dependances then delete Section.");
+
+		}
+		//
 	}
 
 	public function getsections($class,$session){

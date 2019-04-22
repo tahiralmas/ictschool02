@@ -79,7 +79,8 @@
                                                                           {{$subject->ppass.' [Practical] '}}
                                                                     </td>--}}
                                                        <td>
-                                                  <a title='Edit' class='btn btn-info' href='{{url("/subject/edit")}}/{{$subject->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/subject/delete")}}/{{$subject->id}}'> <i class="glyphicon glyphicon-trash icon-white"></i></a>
+                                                  <a title='Edit' class='btn btn-info' href='{{url("/subject/edit")}}/{{$subject->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp
+                                                  <a title='Delete' class='btn btn-danger' onclick="confirmed('{{$subject->id}}');" href='#'> <i class="glyphicon glyphicon-trash icon-white"></i></a>
                                                                </td>
                                                            @endforeach
                                                            </tbody>
@@ -93,11 +94,67 @@
 </div>
 @stop
 @section('script')
+          <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
 <script type="text/javascript">
     $( document ).ready(function() {
         $('#subjectList').dataTable({
            "sPaginationType": "bootstrap",
         });
     });
+
+function confirmed(subject_id)
+{
+  //alert(family_id);
+  //return confirm('Are you sure you want to generate family vouchar?');
+  var x = confirm('Are you sure you want to delete this Subject');
+                if (x){
+                   //window.location.href('{{url("/family/vouchars")}}/'+family_id);
+                 // window.location = "{{url('/subject/delete')}}/"+subject_id;
+                  // $("#billDetails").modal('show');
+                  const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success',
+    cancelButton: 'btn btn-danger'
+  },
+  buttonsStyling: false,
+})
+
+swalWithBootstrapButtons.fire({
+  title: 'Are you sure?',
+  text: "If you delete subject students marks and timetable of this subject also be deleted",
+  type: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Yes, delete it!',
+  cancelButtonText: 'No, cancel!',
+  reverseButtons: true
+}).then((result) => {
+  if (result.value) {
+    swalWithBootstrapButtons.fire(
+      'Deleted!',
+      'Your file has been deleted.',
+      'success'
+    ).then(function() {
+
+      window.location = "{{url('/subject/delete')}}/"+subject_id;
+                              
+    });
+  } else if (
+    // Read more about handling dismissals
+    result.dismiss === Swal.DismissReason.cancel
+  ) {
+    swalWithBootstrapButtons.fire(
+      'Cancelled',
+      'Subject Not Deleted :)',
+      'error'
+    )
+  }
+})
+                 return true
+               }
+                else{
+                  return false;
+                }
+}
 </script>
 @stop

@@ -146,8 +146,18 @@ function getstudent()
            },
            
            success: function(data) {
-           // alert(JSON.stringify(data));
+            //alert(JSON.stringify(data));
+
+               if(data=='404'){
+              alert('data Not Found');
+              $("#btnsave").hide();
+            }else{
               $("#sectionList").html(data);
+              $("#btnsave").show();
+            }
+
+
+              //$("#sectionList").html(data);
            },
            type: 'GET'
        });

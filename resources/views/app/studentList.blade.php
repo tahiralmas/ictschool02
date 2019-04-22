@@ -145,7 +145,7 @@
                                                                   <td>{{$student->presentAddress}}</td>
                                                        <td>
                                                   <a title='View' class='btn btn-success' href='{{url("/student/view")}}/{{$student->id}}'> <i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp&nbsp<a title='Edit' class='btn btn-info' href='{{url("/student/edit")}}/{{$student->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
-                                                    &nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/student/delete")}}/{{$student->id}}' onclick="return confirm('Are you sure you want to delete this Student?');"> <i class="glyphicon glyphicon-trash icon-white"></i></a>
+                                                    &nbsp&nbsp<a title='Delete' class='btn btn-danger' href='#' onclick="confirmed('{{$student->id}}')"> <i class="glyphicon glyphicon-trash icon-white"></i></a>
                                                     &nbsp&nbsp <a title='View' class='btn btn-success' href='{{url("/student/access")}}/{{$student->id}}'> <i class="glyphicon glyphicon-phone"></i></a>
                                                     <?php /*&nbsp&nbsp <a title='View' class='btn btn-success' href='{{url("/fee/collections?class_id=$student->class_code&section=$student->section_id&session=$student->session&type=Monthly&month=$month&fee_name=$fee_name")}}'> <i class="glyphicon glyphicon-phone"></i></a>
                                                                */ ?>
@@ -165,7 +165,67 @@
 @stop
 @section('script')
 <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
+              <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
 <script type="text/javascript">
+
+function confirmed(student_id)
+{
+  //alert(family_id);
+  //return confirm('Are you sure you want to generate family vouchar?');
+  var x = confirm('Are you sure you want to delete this Student');
+                if (x){
+                   //window.location.href('{{url("/family/vouchars")}}/'+family_id);
+                 // window.location = "{{url('/subject/delete')}}/"+subject_id;
+                  // $("#billDetails").modal('show');
+                  const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success',
+    cancelButton: 'btn btn-danger'
+  },
+  buttonsStyling: false,
+})
+
+swalWithBootstrapButtons.fire({
+  title: 'Are you sure?',
+  text: "If you delete this Student",
+  type: 'warning',
+  showCancelButton: true,
+  confirmButtonText: 'Yes, delete it!',
+  cancelButtonText: 'No, cancel!',
+  reverseButtons: true
+}).then((result) => {
+  if (result.value) {
+    swalWithBootstrapButtons.fire(
+      'Deleted!',
+      'Your file has been deleted.',
+      'success'
+    ).then(function() {
+
+      window.location = "{{url('/student/delete')}}/"+student_id;
+                              
+    });
+  } else if (
+    // Read more about handling dismissals
+    result.dismiss === Swal.DismissReason.cancel
+  ) {
+    swalWithBootstrapButtons.fire(
+      'Cancelled',
+      'Student Not Deleted :)',
+      'error'
+    )
+  }
+})
+                 return true
+               }
+                else{
+                  return false;
+                }
+}
+
+
+
+
 $( document ).ready(function() {
   //$('#studentList').dataTable();
     $('#studentList').DataTable( {

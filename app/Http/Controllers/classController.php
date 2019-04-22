@@ -23,7 +23,7 @@ class classController extends BaseController {
 		$this->beforeFilter('userAccess',array('only'=> array('delete')));*/
 		
 	        $this->middleware('auth');
-            $this->middleware('userAccess',array('only'=> array('delete')));
+            //$this->middleware('userAccess',array('only'=> array('delete')));
 	}
 	/**
 	* Display a listing of the resource.
@@ -51,7 +51,7 @@ class classController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-			return Redirect::to('/class/create')->withErrors($validator);
+			return Redirect::to('/class/create')->withInput()->withErrors($validator);
 		}
 		else {
 			$clcode = 'cl'.Input::get('code');
@@ -142,9 +142,17 @@ class classController extends BaseController {
 	*/
 	public function delete($id)
 	{
-		$class = ClassModel::find($id);
-		$class->delete();
-		return Redirect::to('/class/list')->with("success","Class Deleted Succesfully.");
+		$class = ClassModel::select(DB::raw('Class.id,Class.code,Class.name,Class.description,(select count(Student.id) from Student where class=Class.code)as students'))
+							->find($id);
+		echo "<pre>";print_r($class->students);
+		if($class->students==0){
+			//$class->delete();
+			return Redirect::to('/class/list')->with("success","Class Deleted Succesfully.");
+		}else{
+
+			return Redirect::to('/class/list')->with("error","Class Not deleted first delete all dependances then delete Class.");
+
+		}
 	}
 
 	public function getSubjects($class)
@@ -179,9 +187,18 @@ class classController extends BaseController {
 		select('section.id','section.name')->where('section.class_code','=',$class)->whereIn('id',$sections)->get();
 		$output  ='';
 		$output .='<input type="hidden" name="class" value="'.$class.'">';
+		if(empty($sections->toArray())){
+				return '404';
+				exit;
+			}
 		foreach($sections as $section){
 			
 			$subjecname = '';
+			//echo getsubjecclass($class);
+			if(empty(getsubjecclass($class))){
+				return '404';
+				exit;
+			}
 			for($i=0;$i<count(getsubjecclass($class)['sub_name']);$i++){
 				$teachers   = DB::table('timetable')
 				->join('teacher','timetable.teacher_id','=','teacher.id')
