@@ -351,6 +351,7 @@ class teacherController extends BaseController {
 	'fatherName' => 'required',
 	'fatherCellNo' => 'required',
 	'presentAddress' => 'required',
+	'email'    =>'nullable|email|unique:teacher,email,'.Input::get('id')
 	//'parmanentAddress' => 'required'
 	];
 	$validator = \Validator::make(Input::all(), $rules);
@@ -430,8 +431,8 @@ class teacherController extends BaseController {
 
 	}
 	$teacher->phone= Input::get('phone');
-	$teacher->email= Input::get('emails');
-	if(Input::get('emails')==''){
+	$teacher->email= Input::get('email');
+	if(Input::get('email')==''){
 	$teacher->email="";
 	}
 
@@ -456,9 +457,9 @@ class teacherController extends BaseController {
 			$user->firstname = Input::get('fname');
 			$user->lastname  = Input::get('lname');
 
-			$user->email     =     Input::get('emails');
-			if(Input::get('emails')==''){
-				$user->email = NULL;
+			$user->email     =     Input::get('email');
+			if(Input::get('email')==''){
+				$user->email = '';
 			}
 
 			//$user->login     = Input::get('fname').'_'.Input::get('lname');
