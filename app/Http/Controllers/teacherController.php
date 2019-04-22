@@ -180,7 +180,7 @@ class teacherController extends BaseController {
 
 			$user->email     =     Input::get('emails');
 			if(Input::get('emails')==''){
-				$user->email = NULL;
+				$user->email = "";
 			}
 
 			$user->login     = Input::get('fname').'_'.Input::get('lname');
