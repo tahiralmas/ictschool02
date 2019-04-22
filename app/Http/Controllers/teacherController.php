@@ -88,32 +88,24 @@ class teacherController extends BaseController {
 		'fname' => 'required',
 		'lname' => 'required',
 		'gender' => 'required',
-		//'religion' => 'required',
-		//'bloodgroup' => 'required',
-		//'nationality' => 'required',
 		'dob' => 'required',
-		//'session' => 'required',
-		//'class' => 'required',
-		//'section' => 'required',
-		//'rollNo' => 'required',
-		//'shift' => 'required',
+		
 		'photo' => 'mimes:jpeg,jpg,png',
 		'phne' => 'required',
-		//'emails' => 'required',
 		'fatherName' => 'required',
 		'fatherCellNo' => 'required',
-		//'motherName' => 'required',
-		//'motherCellNo' => 'required',
 		'presentAddress' => 'required',
-		'email'    =>'nullable|unique:users',
-		//'parmanentAddress' => 'required'
+		'emails'    =>'nullable|email|unique:teacher,email'
+		//'emails'    =>'nullable|email|unique:teacher'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-			return Redirect::to('/teacher/create')->withErrors($validator);
+			return Redirect::to('/teacher/create')->withErrors($validator)->withInput();
 		}
 		else {
+
+			//exit;
 
 			if(Input::file('photo')!=""){
 				$fileName=Input::get('fname').'.'.Input::file('photo')->getClientOriginalExtension();
@@ -167,6 +159,18 @@ class teacherController extends BaseController {
 				$messages->add('Duplicate!', 'Teacher already exits with this Phone number.');
 				return Redirect::to('/teacher/create')->withErrors($messages)->withInput();
 			}
+
+			/*if(Input::get('emails')!=''){
+			$hasTeacher1 = Teacher::where('email',Input::get('emails'))->whereNotNull('email')->orwhere('email','<>','')->first();
+			echo "<pre>";print_r($hasTeacher1);exit;
+
+			if ($hasTeacher1)
+			{
+				$messages = $validator->errors();
+				$messages->add('Duplicate!', 'Teacher already exits with this Email.');
+				return Redirect::to('/teacher/create')->withErrors($messages)->withInput();
+			}
+		}*/
 			else {
 				$teacher->save();
 				if(Input::file('photo')!=""){

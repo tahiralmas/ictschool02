@@ -57,7 +57,7 @@
                   <label for="fname">First Name<b>*</b></label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                    <input type="text" class="form-control" required name="fname" placeholder="First Name">
+                    <input type="text" class="form-control" required name="fname" placeholder="First Name" value="{{old('fname')}}">
                   </div>
                 </div>
               </div>
@@ -66,7 +66,7 @@
                   <label for="lname">Last Name<b>*</b></label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                    <input type="text" class="form-control" required name="lname" placeholder="Last Name">
+                    <input type="text" class="form-control" required name="lname" placeholder="Last Name" value="{{old('lname')}}">
                   </div>
                 </div>
               </div>
@@ -83,9 +83,9 @@
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select name="gender" class="form-control" required >
 
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Other">Other</option>
+                      <option value="Male" @if(old('gender')=="Male") selected @endif>Male</option>
+                      <option value="Female" @if(old('gender')=="Female") selected @endif>Female</option>
+                      <option value="Other" @if(old('gender')=="Other") selected @endif>Other</option>
                     </select>
                   </div>
                 </div>
@@ -98,10 +98,10 @@
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select name="religion" class="form-control"  >
                       <option value="Islam" selected >Islam</option>
-                      <option value="Hindu">Hindu</option>
-                      <option value="Cristian">Cristian</option>
-                      <option value="Buddhist">Buddhist</option>
-                      <option value="Other">Other</option>
+                      <option value="Hindu" @if(old('religion')=="Hindu") selected @endif>Hindu</option>
+                      <option value="Cristian" @if(old('religion')=="Cristian") selected @endif>Cristian</option>
+                      <option value="Buddhist" @if(old('religion')=="Buddhist") selected @endif>Buddhist</option>
+                      <option value="Other" @if(old('religion')=="Other") selected @endif>Other</option>
                     </select>
                   </div>
                 </div>
@@ -114,14 +114,14 @@
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select name="bloodgroup" class="form-control"  >
                     <option value=''>--- Select Bloodgroup---</option>
-                      <option value="A+">A+</option>
-                      <option value="A-">A-</option>
-                      <option value="B+">B+</option>
-                      <option value="B-">B-</option>
-                      <option value="AB+">AB+</option>
-                      <option value="AB-">AB-</option>
-                      <option value="O+">O+</option>
-                      <option value="O-">O-</option>
+                      <option value="A+" @if(old('bloodgroup')=="A+") selected @endif>A+</option>
+                      <option value="A-" @if(old('bloodgroup')=="A-") selected @endif>A-</option>
+                      <option value="B+" @if(old('bloodgroup')=="B+") selected @endif>B+</option>
+                      <option value="B-" @if(old('bloodgroup')=="B-") selected @endif>B-</option>
+                      <option value="AB+" @if(old('bloodgroup')=="B-") selected @endif>AB+</option>
+                      <option value="AB-" @if(old('bloodgroup')=="AB-") selected @endif>AB-</option>
+                      <option value="O+" @if(old('bloodgroup')=="O+") selected @endif>O+</option>
+                      <option value="O-" @if(old('bloodgroup')=="O-") selected @endif>O-</option>
                     </select>
 
                   </select>
@@ -138,7 +138,7 @@
                 <label for="nationality">Nationality</label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control" value="Pakistani"   name="nationality" placeholder="Nationality">
+                  <input type="text" class="form-control" value="{{old('nationality','Pakistani')}}"   name="nationality" placeholder="Nationality">
                 </div>
               </div>
             </div>
@@ -149,7 +149,7 @@
                 <div class="input-group">
 
                   <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                  <input type="text"   class="form-control datepicker" name="dob" required  data-date-format="dd/mm/yyyy">
+                  <input type="text"   class="form-control datepicker" name="dob" value="{{old('dob')}}" required  data-date-format="dd/mm/yyyy">
                 </div>
 
 
@@ -174,7 +174,7 @@
                 <label for="extraActivity">Phone<b>*</b> </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control" required  name="phne" placeholder="Enter Phone NO">
+                  <input type="text"  class="form-control" required  name="phne" value="{{old('phne')}}" placeholder="Enter Phone NO">
                 </div>
               </div>
             </div>
@@ -183,7 +183,7 @@
                 <label for="remarks">Email </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="email" class="form-control"  name="emails" placeholder="Enter Email">
+                  <input type="email" class="form-control"  name="emails" value="{{old('emails')}}" placeholder="Enter Email">
                 </div>
               </div>
             </div>
@@ -205,7 +205,7 @@
                 <label for="fatherName">Father's Name<b>*</b> </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control" required  name="fatherName" placeholder="Name">
+                  <input type="text" class="form-control" required  name="fatherName" value="{{old('fatherName')}}" placeholder="Name">
                 </div>
               </div>
             </div>
@@ -214,7 +214,7 @@
                 <label for="fatherCellNo">Father's Mobile No<b>*</b> </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  required name="fatherCellNo" placeholder="+8801xxxxxxxxx">
+                  <input type="text" class="form-control"  required name="fatherCellNo" value="{{old('fatherCellNo')}}" placeholder="+8801xxxxxxxxx">
                 </div>
               </div>
             </div>
@@ -235,7 +235,7 @@
                 <label for="presentAddress">Present Address<b>*</b></label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
-                  <textarea type="text" class="form-control" required name="presentAddress" placeholder="Address"></textarea>
+                  <textarea type="text" class="form-control" required name="presentAddress" placeholder="Address">{{old('presentAddress')}}</textarea>
                 </div>
               </div>
             </div>
@@ -244,7 +244,7 @@
                 <label for="parmanentAddress">Permanent Address</label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
-                  <textarea type="text" class="form-control"  name="parmanentAddress" placeholder="Address"></textarea>
+                  <textarea type="text" class="form-control"  name="parmanentAddress" placeholder="Address">{{old('parmanentAddress')}}</textarea>
                 </div>
               </div>
             </div>
