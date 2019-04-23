@@ -2,15 +2,32 @@
 @section('style')
     <link href="/css/bootstrap-datepicker.css" rel="stylesheet">
       <link href="/css/timetable.css" rel="stylesheet">
+<style>
+b {color:red}
+</style>
 @stop
 @section('content')
     @if (Session::get('success'))
         <div class="alert alert-success">
             <button data-dismiss="alert" class="close" type="button">×</button>
-            <strong>Process Success.</strong> {{ Session::get('success')}}<br><a href="/teacher/list">View List</a><br>
+            <strong>Process Success.</strong> {{ Session::get('success')}}<br><a href="{{url('/teacher/list')}}">View List</a><br>
 
         </div>
     @endif
+    <?php 
+    //echo "<pre>";print_r(Session::all());
+
+    ?>
+    @if (count($errors) > 0)
+        <div class="alert alert-danger">
+          <strong>Whoops!</strong> There were some problems with your input.<br><br>
+          <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+          </ul>
+        </div>
+        @endif
     @if($timetable)
      <form role="form" action="{{url('/timetable/update')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -26,11 +43,11 @@
             <div class="col-md-12">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="fname">Teacher</label>
+                  <label for="fname">Teacher <b>*</b></label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select name="teacher" class="form-control" required>
-                     <option vlaue="">---Select Teacher---</option>
+                     <option value="">---Select Teacher---</option>
                     @foreach($teachers as $teacher)
                       <option value="{{$teacher->id}}" @if($timetable->teacher_id == $teacher->id) selected @endif>{{$teacher->firstName}} {{$teacher->lastName}}</option>
                       @endforeach
@@ -44,7 +61,7 @@
             <div class="col-md-12">
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="control-label" for="gender">Class</label>
+                  <label class="control-label" for="gender">Class <b>*</b></label>
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
@@ -59,7 +76,7 @@
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="control-label" for="section">Section</label>
+                  <label class="control-label" for="section">Section <b>*</b></label>
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
@@ -75,7 +92,7 @@
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="control-label" for="bloodgroup">Subject</label>
+                  <label class="control-label" for="bloodgroup">Subject <b>*</b></label>
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
@@ -96,7 +113,7 @@
           <div class="col-md-12">
             <div class="col-md-4">
               <div class="form-group">
-                <label for="nationality">Start Time</label>
+                <label for="nationality">Start Time <b>*</b></label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                   <input type="text" id="timepicker1" class="form-control" value="{{$timetable->stattime}}" required  name="startt">
@@ -106,7 +123,7 @@
 
             <div class="col-md-4">
               <div class="form-group ">
-                <label for="dob">End Time</label>
+                <label for="dob">End Time <b>*</b></label>
                 <div class="input-group">
 
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i> </span>
@@ -119,7 +136,7 @@
 
             <div class="col-md-4">
               <div class="form-group ">
-                <label for="photo">Day</label>
+                <label for="photo">Day <b>*</b></label>
                 <select name="day[]" class="form-control selectpicker" multiple data-hide-disabled="true" data-size="5">
                 <option value="">---Select Day---</option>
                 <option value="monday" @if($timetable->day=="monday") selected @endif>Monday</option>
@@ -156,14 +173,14 @@
             <div class="col-md-12">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="fname">Teacher</label>
+                  <label for="fname">Teacher <b>*</b></label>
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select name="teacher" class="form-control" required>
-                   <option vlaue="">---Select Teacher---</option>
+                   <option value="">---Select Teacher---</option>
                    
                     @foreach($teachers as $teacher)
-                      <option value="{{$teacher->id}}">{{$teacher->firstName}} {{$teacher->lastName}}</option>
+                      <option value="{{$teacher->id}}" @if(old('teacher')==$teacher->id) selected @endif>{{$teacher->firstName}} {{$teacher->lastName}}</option>
                       @endforeach
                     </select>
                   </div>
@@ -175,14 +192,14 @@
             <div class="col-md-12">
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="control-label" for="gender">Class</label>
+                  <label class="control-label" for="gender">Class <b>*</b></label>
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                     <select name="class" id="class" class="form-control" required >
 
                       @foreach($classes as $class)
-                      <option value="{{$class->code}}">{{$class->name }}</option>
+                      <option value="{{$class->code}}" @if(old('class')==$class->code) selected @endif>{{$class->name }}</option>
                       @endforeach
                     </select>
                   </div>
@@ -190,7 +207,7 @@
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="control-label" for="section">Section</label>
+                  <label class="control-label" for="section">Section <b>*</b></label>
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
@@ -203,7 +220,7 @@
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label class="control-label" for="bloodgroup">Subject</label>
+                  <label class="control-label" for="bloodgroup">Subject <b>*</b></label>
 
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
@@ -224,21 +241,21 @@
           <div class="col-md-12">
             <div class="col-md-4">
               <div class="form-group">
-                <label for="nationality">Start Time</label>
+                <label for="nationality">Start Time <b>*</b></label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                  <input type="text" id="timepicker1" class="form-control" value="" required  name="startt">
+                  <input type="text" id="timepicker1" class="form-control" value="{{old('startt')}}" required  name="startt">
                 </div>
               </div>
             </div>
 
             <div class="col-md-4">
               <div class="form-group ">
-                <label for="dob">End Time</label>
+                <label for="dob">End Time <b>*</b></label>
                 <div class="input-group">
 
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i> </span>
-                  <input type="text" id="timepicker2"  class="form-control datepicker" name="endt" required  data-date-format="">
+                  <input type="text" id="timepicker2"  class="form-control datepicker" name="endt" value="{{old('endt')}}" required  data-date-format="">
                 </div>
 
 
@@ -247,16 +264,16 @@
 
             <div class="col-md-4">
               <div class="form-group ">
-                <label for="photo">Day</label>
-                <select name="day[]" class="form-control selectpicker" multiple data-hide-disabled="true" data-size="5">
+                <label for="photo">Day <b>*</b></label>
+                <select name="day[]" class="form-control selectpicker" multiple data-hide-disabled="true" data-size="5" required>
                 <option value="">---Select Day---</option>
-                <option value="monday">Monday</option>
-                <option value="tuesday">Tuesday</option>
-                <option value="wednesday">Wednesday</option>
-                <option value="thursday">Thursday</option>
-                <option value="friday">Friday</option>
-                <option value="saturday">Saturday</option>
-                <option value="sunday">Sunday</option>
+                <option value="monday"    @if(old('day')=="monday")    selected @endif>Monday</option>
+                <option value="tuesday"   @if(old('day')=="tuesday")   selected @endif>Tuesday</option>
+                <option value="wednesday" @if(old('day')=="wednesday") selected @endif>Wednesday</option>
+                <option value="thursday"  @if(old('day')=="thursday")  selected @endif>Thursday</option>
+                <option value="friday"    @if(old('day')=="friday")    selected @endif>Friday</option>
+                <option value="saturday"  @if(old('day')=="saturday")  selected @endif>Saturday</option>
+                <option value="sunday"    @if(old('day')=="sunday")    selected @endif>Sunday</option>
                 </select>
               </div>
             </div>

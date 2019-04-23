@@ -577,7 +577,7 @@ public function send_sms($class,$section,$exam,$session)
            $section = $student->section;
 
 			$merit = DB::table('MeritList')
-			->select('regiNo', 'grade', 'point', 'totalNo','section_id')
+			->select('id','regiNo', 'grade', 'point', 'totalNo','section_id')
 			->where('exam', $exam)
 			->where('class', $class)
 			->where('session', trim($student->session))
@@ -585,7 +585,8 @@ public function send_sms($class,$section,$exam,$session)
 			//->where('regiNo',$regiNo)
 			//->orderBy('point', 'DESC')
 			//->orderBy('point')
-			->orderBy('totalNo', 'DESC')->get();
+			->orderBy('totalNo', 'DESC')
+			->get();
 			//->orderBy('totalNo', 'DESC')->get();
 			//echo "<pre>";print_r($merit);exit;
 			if (empty($student)  || empty($merit)) {
@@ -598,6 +599,7 @@ public function send_sms($class,$section,$exam,$session)
 					//$test[] = $m->section_id .'==='. $section."909".$m->regiNo .'=== '.$regiNo;
 					
 					if($m->regiNo === $regiNo && $m->section_id == $section) {
+						$meritdata->id = $m->id;
 						$meritdata->regiNo = $m->regiNo;
 						$meritdata->point = $m->point;
 						$meritdata->grade = $m->grade;
@@ -607,14 +609,14 @@ public function send_sms($class,$section,$exam,$session)
 					}
 				}
 				//echo $m->section_id .'==='. $section."909".$m->regiNo .'=== '.$regiNo;
-					// echo "<pre>";print_r($meritdata);
-					//exit;
+					 //echo "<pre>";print_r($meritdata);
+					 //exit;
              
               //print_r($meritdata);
              // exit;
 				//sub group need to implement
 				$subjects = Subject::select('name', 'code', 'subgroup', 'totalfull')->where('class', '=', $student->classcode)->get();
-
+				//echo "<pre>";print_r($subjects->toArray() );exit;
 				$overallSubject = array();
 				$subcollection = array();
 
@@ -735,7 +737,7 @@ public function send_sms($class,$section,$exam,$session)
 				$extra = array($exam_name, $subgrpbl, $totalHighest, $subgrpen, $student->extraActivity,$totalourall);
 				$query="select left(MONTHNAME(STR_TO_DATE(m, '%m')),3) as month, count(regiNo) AS present from ( select 01 as m union all select 02 union all select 03 union all select 04 union all select 05 union all select 06 union all select 07 union all select 08 union all select 09 union all select 10 union all select 11 union all select 12 ) as months LEFT OUTER JOIN Attendance ON MONTH(Attendance.date)=m and Attendance.regiNo ='".$regiNo."' and  Attendance.status IN ('Present','present','late','Late') GROUP BY m";
 				$attendance=DB::select(DB::RAW($query));
-				//echo "<pre>";print_r($attendance);
+				//echo "<pre>";print_r($subcollection);
 				//exit;
 				return View('app.stdgradesheet', compact('student', 'extra', 'meritdata', 'subcollection', 'blextra', 'banglaArray', 'enextra', 'englishArray','attendance'));
 
@@ -1144,10 +1146,15 @@ public function send_sms($class,$section,$exam,$session)
 				$totalourall = 0;
 				$isBanglaFail=false;
 				$isEnglishFail=false;
-				//echo $exam."<pre>";print_r($subjects->toArray());exit;
+				//echo $exam."<pre>";print_r($subjects->toArray());
 				foreach ($subjects as $subject) {
 					$submarks = Marks::select('written', 'mcq', 'practical', 'ca', 'total', 'point', 'grade','total_marks')->where('regiNo', '=', $student->regiNo)
-					->where('subject', '=', $subject->code)->where('exam', '=', $exam)->where('class', '=', $class)->first();
+					->where('subject', '=', $subject->code)
+					->where('exam', '=', $exam)
+					->where('class', '=', $class)
+					->first();
+					//echo $exam."<pre>";print_r($submarks->toArray());exit;
+					if(!empty($submarks)){
 					$maxMarks = Marks::select(DB::raw('max(total) as highest'))->where('class', '=', $class)->where('session', '=', $student->session)
 					->where('subject', '=', $subject->code)->where('exam', '=', $exam)->first();
 
@@ -1189,6 +1196,7 @@ public function send_sms($class,$section,$exam,$session)
 						array_push($subcollection, $submarks);
 					}
 					$outof[] = $subject->totalfull;
+				}
 				}
 				$gparules = GPA::select('gpa', 'grade', 'markfrom')->get();
 				$subgrpbl = false;

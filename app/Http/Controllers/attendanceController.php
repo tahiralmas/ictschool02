@@ -138,7 +138,7 @@ class attendanceController extends BaseController {
 						}
 						$atten =$atten->first();
 					}
-					echo "<pre>data";print_r($attenDatap);exit;
+					//echo "<pre>data";print_r($attenDatap);exit;
 					foreach ($absentStudents as $absst) {
 					   $atten = DB::table('Attendance')->where('date','=',$presentDate)->where('regiNo','=',$absst)->first();
 	                    if(is_null($atten)){
@@ -1165,10 +1165,15 @@ class attendanceController extends BaseController {
             $fullSql .=" WHERE sa.regiNo IN(".implode(',', $students->toArray()).") AND sa.status !='Absent' GROUP BY sa.regiNo ORDER BY rollNo;";
             $data = DB::select($fullSql);
             //            return $data;
-             //echo "<pre>";print_r($data);
-             //exit;
-            $keys = array_keys((array)$data[0]);
-            $type = Input::get('type');
+             /*echo "<pre>";print_r($data);
+             exit;*/
+             if(!empty($data)){
+            	$keys = array_keys((array)$data[0]);
+            	
+        	}else{
+        		$keys=array();
+        	}
+        	$type = Input::get('type');
             //            return $data;
            // echo "<pre>";print_r($keys);
             //exit;

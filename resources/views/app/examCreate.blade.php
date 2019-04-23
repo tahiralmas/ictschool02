@@ -1,4 +1,9 @@
 @extends('layouts.master')
+@section('style')
+<style>
+b {color:red}
+</style>
+@stop
 @section('content')
 @if (Session::get('success'))
 
@@ -20,19 +25,19 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                     <div class="form-group">
-                        <label for="name">Exam Type</label>
+                        <label for="name">Exam Type  <b>*</b></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                            <input type="text" class="form-control" autofocus required name="type" placeholder="Type">
+                            <input type="text" class="form-control" autofocus required name="type" value="{{old('type')}}" placeholder="Type">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="name">Class</label>
+                        <label for="name">Class <b>*</b></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                           <select name="class" id="class" class="form-control" required>
+                           <select name="class"  id="class" class="form-control" required>
                       @foreach($classes as $class)
-                      <option value="{{$class->code}}">{{$class->name}}</option>
+                      <option value="{{$class->code}}" @if(old('class')==$class->code) selected @endif>{{$class->name}}</option>
                       @endforeach
 
                     </select>
@@ -40,7 +45,7 @@
                     </div>
 
                      <div class="form-group">
-                        <label for="name">Section</label>
+                        <label for="name">Section  <b>*</b></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                            <select id="section" name="section[]" class="form-control selectpicker" id="section" multiple data-actions-box="true" data-hide-disabled="true" data-size="5"  required="true">

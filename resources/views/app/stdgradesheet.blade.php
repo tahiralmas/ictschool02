@@ -253,8 +253,13 @@
                 @endif
 
                 @foreach($subcollection as $subject)
+
+                <?php  
+                    //echo "<pre>";print_r($subject);exit;
+                ?>
+                @if(!empty($subject))
                 <tr>
-                    <td>{{$subject->subcode}}</td>
+                 <?php /*  <td>{{$subject->subcode}}</td>
                     <td class="cTitle">{{$subject->subname}}</td>
                     <td colspan="2"><b>{{$subject->written}}</b></td>
                     <td colspan="2"><b>{{$subject->mcq}}</b></td>
@@ -265,7 +270,7 @@
                     <td><b>{{$subject->total}}</b></td>
                     <td><b>{{$subject->outof}}</b></td>
                     <td><b>{{$subject->point}}</b></td>
-                    <td><b>{{$subject->grade}} </b></td>
+                    <td><b>{{$subject->grade}} </b></td> */?>
                     <!--<td><b>&nbsp;</b></td>
                     <td><b>&nbsp;</b></td>
                     <td><b>&nbsp;</b></td>
@@ -273,6 +278,8 @@
                     <td><b>&nbsp;</b></td>
                     <td><b>&nbsp;</b></td>-->
                 </tr>
+                @endif
+
               @endforeach
                 <tr>
 
@@ -334,11 +341,11 @@
                         </tr>
                     @endif
                     @foreach($subcollection as $subject)
-                        <tr>
+                        {{--<tr>
                             <td class="column1" style="width:110px; text-align:center">{{$subject->subname}}</td>
                             <td class="column2" style="width:130px">{{$subject->total}}</td>
                             <td class="column3"><b>{{$subject->point}}</b></td>
-                        </tr>
+                        </tr>--}}
                         @endforeach
                     <tr>
                         <td class="column1" style="width:110px">&nbsp;</td>

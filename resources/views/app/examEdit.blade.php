@@ -1,4 +1,9 @@
 @extends('layouts.master')
+@section('style')
+<style>
+b {color:red}
+</style>
+@stop
 @section('content')
 @if (Session::get('success'))
 
@@ -21,14 +26,14 @@
                     <input type="hidden" name="id" value="{{$exam->id }}">
 
                     <div class="form-group">
-                        <label for="name">Exam Type</label>
+                        <label for="name">Exam Type <b>*</b></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <input type="text" class="form-control" autofocus required name="type" value="{{$exam->type}}" placeholder="Type">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="name">Class</label>
+                        <label for="name">Class <b>*</b></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                            <select name="class" id="class" class="form-control" required>
@@ -41,7 +46,7 @@
                     </div>
 
                      <div class="form-group">
-                        <label for="name">Section</label>
+                        <label for="name">Section <b>*</b></label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                            <select id="section" name="section" class="form-control" required="true">

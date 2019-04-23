@@ -600,9 +600,9 @@ class teacherController extends BaseController {
 
 		//echo "<pre>";print_r(Input::get('day'));
 
-		$days = Input::get('day');
+		//
 
-
+$days = Input::get('day');
 		$rules=[//'regiNo' => 'required',
 		'teacher' => 'required',
 		'class' => 'required',
@@ -615,7 +615,7 @@ class teacherController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-		return Redirect::to('/teacher/create-timetable')->withErrors($validator);
+		return Redirect::to('/teacher/create-timetable')->withErrors($validator)->withInput();
 		}
 		else {
 

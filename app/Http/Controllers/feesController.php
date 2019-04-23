@@ -588,9 +588,13 @@ class feesController extends BaseController {
                            ->whereYear('stdBill.created_at', '=', $year)
                            ->where('stdBill.regiNo',Input::get('regiNo') )
                            ->get();
-                          echo "<pre>";print_r($vouchar_details);
-                          exit;
-       $student = DB::table('Student')
+                          ///echo "<pre>";print_r($vouchar_details);
+                         //// exit;
+                           if(empty($vouchar_details->toArray())){
+
+                           		return Redirect()->back()->withErrors('NO data Found');
+                           }
+       			$student = DB::table('Student')
 					->select('*')
 					->where('regiNo',Input::get('regiNo'))
 					->where('section',Input::get('section'))
@@ -1194,6 +1198,11 @@ class feesController extends BaseController {
 		->where('regiNo',Input::get('regiNo'))
 		->get();
 		//echo "<pre>";print_r($fees);exit;
+		if(empty($fees->toArray())){
+			
+			return Redirect()->back()->withErrors('NO data Found');
+
+		}
 		$totals = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(total_fee),0) as Totalpay,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(total_fee),0)- IFNULL(sum(paidAmount),0)) as dueAmount,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
 		->where('class',Input::get('class'))
 		->where('regiNo',Input::get('regiNo'))

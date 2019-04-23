@@ -248,6 +248,7 @@
                 @endif
 
                 @foreach($subcollection as $subject)
+                @if(!empty($subject))
                 <tr>
                     <td>{{$subject->subcode}}</td>
                     <td class="cTitle">{{$subject->subname}}</td>
@@ -268,6 +269,7 @@
                     <td><b>&nbsp;</b></td>
                     <td><b>&nbsp;</b></td>-->
                 </tr>
+                @endif
               @endforeach
                 <tr>
 

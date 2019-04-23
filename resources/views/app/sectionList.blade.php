@@ -70,7 +70,7 @@
     });
   });
 
-  function confirmed(section_id)
+function confirmed(section_id)
 {
   //alert(family_id);
   //return confirm('Are you sure you want to generate family vouchar?');
