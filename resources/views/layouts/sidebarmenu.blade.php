@@ -243,8 +243,8 @@
               <li class="{{ Request::is('result/generate') ? 'active' : '' }}"><a href="{{url('/result/generate')}}">Generate</a></li>
             @endif
             @if(in_array('search_result',$permision))
-              <li class="{{ Request::is('result/search') ? 'active' : '' }}"><a href="{{url('/result/search')}}">Search</a></li>
-              <li class="{{ Request::is('results') ? 'active' : '' }}"><a href="{{url('/results')}}">Search Public</a></li>
+              {{--<li class="{{ Request::is('result/search') ? 'active' : '' }}"><a href="{{url('/result/search')}}">Search</a></li>
+              <li class="{{ Request::is('results') ? 'active' : '' }}"><a href="{{url('/results')}}">Search Public</a></li>--}}
             @endif
           </ul>
         </li>
