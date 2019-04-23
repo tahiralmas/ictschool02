@@ -279,7 +279,7 @@ Route::group(['middleware' => 'admin'], function(){
 Route::get('/cron/run', function(){
     \Log::info('Executed at'.date('Y-m-d H:i:s'));
    \Artisan::call("Invoice:genrate");
-   //return \Artisan::Output();
+     return \Artisan::Output();
   	return redirect('/dashboard')->with('success',"Invoice Created Successfully");
    //return json_encode(auth()->user()->adminDashboardCount());
 })->name('cron.run');

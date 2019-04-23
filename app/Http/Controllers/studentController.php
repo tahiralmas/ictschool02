@@ -544,12 +544,12 @@ if(Input::get('search')==''){
 
 		}
 		else {
-			$classes = ClassModel::pluck('name','code');
-			$formdata = new formfoo2;
-			$formdata->class=Input::get('class');
-			$formdata->section=Input::get('section');
-			$formdata->shift=Input::get('shift');
-			$formdata->session=trim(Input::get('session'));
+			$classes            = ClassModel::pluck('name','code');
+			$formdata           = new formfoo2;
+			$formdata->class    = Input::get('class');
+			$formdata->section  = Input::get('section');
+			$formdata->shift    = Input::get('shift');
+			$formdata->session  = trim(Input::get('session'));
 			$month=8;
 			$fee_name=2;
 			//return View::Make("app.studentList", compact('students','classes','formdata'));
@@ -597,7 +597,7 @@ public function family_student_list($family_id)
 					     $join->where('feesSetup.type', '=', "Monthly");
 					})
 					->select('Student.id','Student.discount_id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
-		'Class.Name as class','Class.code as class_code', 'Student.presentAddress','Student.section', 'Student.gender', 'Student.religion','section.name','feesSetup.fee')
+		'Class.Name as class','Class.code as class_code', 'Student.presentAddress','Student.section', 'Student.gender', 'Student.religion','section.name','section.id as section_id','feesSetup.fee')
 					->where('Student.isActive', '=', 'Yes')
 					//->where('Student.family_id', '=', $family_id)
 					//->orwhere('Student.fatherCellNo', '=', $family_id)

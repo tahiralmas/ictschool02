@@ -49,7 +49,7 @@
                                                          <tbody>
                                                            @foreach($students as $student)
                                                              <tr>
-                                                                  <td>{{$student->fatherName}}</td>
+                                                                     <td>{{$student->fatherName}}</td>
                                                                      <td>{{$student->fatherCellNo}}</td>
                                                                      <td>{{$student->family_id}}</td>
                                                                      <td>{{$student->about_family}}</td>
@@ -65,7 +65,7 @@
                                                         ?>
                                                   <a title='View' class='btn btn-success' href='{{url("/family/students")}}/{{$family_id}}'> <i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp&nbsp
                                                   <a title='Edit' class='btn btn-info' href='{{url("/family/edit")}}/{{$family_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
-                                                  <a title='vouchar' class='btn btn-warning'  onclick="confirmed('{{$family_id}}');" href='#'> <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>
+                                                  {{--<a title='vouchar' class='btn btn-warning'  onclick="confirmed('{{$family_id}}');" href='#'> <i class="glyphicon glyphicon-shopping-cart icon-white"></i></a>--}}
                                                   <a title='vouchar history' class='btn btn-primary'  href='{{url("/family/vouchar_history")}}/{{$family_id}}'> <i class="glyphicon glyphicon-usd icon-white"></i></a>
                                                     {{--&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/student/delete")}}/{{$student->id}}' onclick="return confirm('Are you sure you want to delete this Student?');"> <i class="glyphicon glyphicon-trash icon-white"></i></a>
                                                     &nbsp&nbsp <a title='View' class='btn btn-success' href='{{url("/student/access")}}/{{$student->id}}'> <i class="glyphicon glyphicon-phone"></i></a>--}}

@@ -4,6 +4,7 @@ use App\Subject;
 use App\AcadamicYear;
 use App\Student;
 use App\FeeSetup;
+use App\FeeCol;
 use App\Http\Controllers\ictcoreController;
 use Carbon\Carbon;
 //use Storage;
@@ -338,6 +339,62 @@ if (! function_exists('gclass_name')) {
 			$class_name      = DB::table('Class')->select('*')->where('code','=',$class_code)->first();
 
 		return $class_name;
+	}
+}
+
+
+if (! function_exists('teacher_details_f')) {
+	function teacher_details_f($section_id){
+
+		    $now            =  Carbon::now();
+			$year           =  $now->year;
+        	$month          =  $now->month;
+			$teacherdetail  = DB::table('section')
+								->join('teacher','section.teacher_id','=','teacher.id')
+								->select('teacher.firstName','teacher.lastName','teacher.phone')
+								->where('section.id','=',$section_id)
+								->orderBy('teacher.id','DESC');
+								//->first();
+			if($teacherdetail->count()>0){
+				$teacherdetail  = $teacherdetail->first();
+			}else{
+				$teacherdetail  = new emtysession  ;
+				$teacherdetail->firstName = ''     ;
+				$teacherdetail->lastName  = ''     ;
+				$teacherdetail->phone     = ''     ;
+			}
+
+		return $teacherdetail;
+	}
+}
+if (! function_exists('getdatainvoice')) {
+	function getdatainvoice($bills,$month){
+
+		    /*$now            =  Carbon::now();
+			$year           =  $now->year;
+        	$month          =  $now->month;
+			$teacherdetail  = DB::table('section')
+								->join('teacher','section.teacher_id','=','teacher.id')
+								->select('teacher.firstName','teacher.lastName','teacher.phone')
+								->where('section.id','=',$section_id)
+								->orderBy('teacher.id','DESC');
+								//->first();
+			if($teacherdetail->count()>0){
+				$teacherdetail  = $teacherdetail->first();
+			}else{
+				$teacherdetail  = new emtysession  ;
+				$teacherdetail->firstName = ''     ;
+				$teacherdetail->lastName  = ''     ;
+				$teacherdetail->phone     = ''     ;
+			}*/
+			$bil_ary = explode(',',$bills);
+			$totals   = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(total_fee),0) as Totalpay,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(total_fee),0)- IFNULL(sum(paidAmount),0)) as dueAmount,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+											//->where('class',Input::get('class'))
+											->whereIn('billNo',$bil_ary)
+											//->where('billNo',$bil_ary)
+											->first();
+
+		return $totals;
 	}
 }
 

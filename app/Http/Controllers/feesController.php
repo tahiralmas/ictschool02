@@ -746,14 +746,14 @@ class feesController extends BaseController {
 					                  </div>
 					                </div>
 					               <div class="col-md-4">
-					                <div class="form-group ">
+					                <!--<div class="form-group ">
 					                  <label for="session">Family ID</label>
 					                  <div class="input-group">
 
 					                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
 					                    <input  type="text" value="" id="family_id"  class="form-control" name="family_id"  >
 					                  </div>
-					                </div>
+					                </div>-->
 					              </div>
 					              
 					            </div>
@@ -763,7 +763,7 @@ class feesController extends BaseController {
 					                  <label class="control-label" for="">&nbsp;</label>
 
 					                  <div class="input-group">
-					                    <button class="btn btn-primary pull-right" id="btnsave" type="submit"><i class="glyphicon glyphicon-th"></i> Get List</button>
+					                    <button class="btn btn-primary pull-right" id="btnsave" type="submit"><i class="glyphicon glyphicon-th"></i> Get Voucher</button>
 
 					                  </div>
 					                </div>
@@ -835,6 +835,8 @@ class feesController extends BaseController {
 							//echo "<pre>";print_r($vouchar_details->toArray());exit;
 					}else{
 						//$invoicegenrated = new Invoicegenrated;
+						return Redirect()->back()->withErrors('First Create Invoice then you print vouchar');
+
 						 $bills = array();
 						foreach($students as $std){
 							$vouchar_generates = $this->createvouchour($std->regiNo,$std->class_code,$std->discount_id,'');
@@ -862,7 +864,7 @@ class feesController extends BaseController {
 
 						 $bils     = implode(',',$bills);
 
-					  	$totals   = FeeCol::join('billHistory','stdBill.billNo','=','billHistory.billNo')->select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(total_fee),0) as Totalpay,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(total_fee),0)- IFNULL(sum(paidAmount),0)) as dueAmount,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+					  	$totals    = FeeCol::join('billHistory','stdBill.billNo','=','billHistory.billNo')->select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(total_fee),0) as Totalpay,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(total_fee),0)- IFNULL(sum(paidAmount),0)) as dueAmount,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
 											//->where('class',Input::get('class'))
 											 //->whereMonth('created_at', '=', $month)
 											 ->where('month', '=', $month)
@@ -877,21 +879,20 @@ class feesController extends BaseController {
 
                     }else{
 
-                    		 $bills = array();
-                    		 print_r(Input::get('month'));
+                    		$bills = array();
+                    		print_r(Input::get('month'));
                     		foreach(Input::get('month') as $month){
 		                    		$vouchar_details = DB::table('stdBill')
 						               ->join('Student','stdBill.regiNo','=','Student.regiNo')
 				                       //->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
 				                       ->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
 				                       ->join('billHistory','stdBill.billNo','=','billHistory.billNo')
-				                      
 		                               ->select('billHistory.*','stdBill.dueAmount','stdBill.payableAmount','stdBill.paidAmount','stdBill.class','stdBill.total_fee','stdBill.regiNo','voucherhistories.due_date','Student.discount_id', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.section')
 		                               //->where('billHistory.billNo',$bill )
 		                               ->where('billHistory.month', '=', $month)
 		                               ->where('billHistory.title', '=', 'monthly')
 		                               ->whereIn('stdBill.regiNo',$regiNo );
-		                               if($vouchar_details->count()>0){
+		                        if($vouchar_details->count()>0){
 		                    				$vouchar_details = $vouchar_details->get();
 		                              // echo "<pre>";print_r($vouchar_details->toArray());
 		                               //exit;
@@ -902,23 +903,26 @@ class feesController extends BaseController {
 
 									//echo "<pre>";print_r($vouchar_details->toArray());
 								}else{
-								//$invoicegenrated = new Invoicegenrated;
+
+									//$invoicegenrated = new Invoicegenrated;
+									$getmonthname   = \DateTime::createFromFormat('!m', $month)->format('F');
+									$errormesssage  = "Please first create invoice of month ".$getmonthname." then print vouchar";
+							     	return Redirect()->back()->withErrors($errormesssage);
 
 								foreach($students as $std){
 
 									$vouchar_generates = $this->createvouchour($std->regiNo,$std->class_code,$std->discount_id,$month);
 									
 										//echo "as";
-										
-									//$bills[] =$std->regiNo;
-									//$vouchar_generates='';
+										//$bills[] =$std->regiNo;
+										//$vouchar_generates='';
 									if($vouchar_generates!=''){
 										$bills[] =$vouchar_generates;
 									}
 								}
 
 								
-								/*$vouchar_details = DB::table('stdBill')
+									/*$vouchar_details = DB::table('stdBill')
 						               ->join('Student','stdBill.regiNo','=','Student.regiNo')
 				                       //->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
 				                       ->join('billHistory','stdBill.billNo','=','billHistory.billNo')
@@ -1199,7 +1203,7 @@ class feesController extends BaseController {
 		->get();
 		//echo "<pre>";print_r($fees);exit;
 		if(empty($fees->toArray())){
-			
+
 			return Redirect()->back()->withErrors('NO data Found');
 
 		}
@@ -1255,7 +1259,7 @@ class feesController extends BaseController {
 											->whereIn('regiNo',$regiNo)
 											->first();
 //echo "<pre>";print_r($totals );exit;
-		return View('app.fvoucharhistory',compact('classes','student','fees','totals','family_vouchers'));
+		return View('app.fvoucharhistory',compact('classes','student','fees','totals','family_vouchers','family_id'));
 		
 	}
 	public function vouchar_paid($billNo)
@@ -1333,8 +1337,11 @@ class feesController extends BaseController {
 			->where('billNo',$totals->billNo)
 			->where('regiNo',$paid->regiNo)
 			->first();
+			//echo $totals1->dueamount;
+			//exit;
 			if(Input::get('s')!='unpaid'){
-				$paid->dueAmount  =  $totals1->payTotal - $totals->total_fee;
+				//$paid->dueAmount  =  $totals1->payTotal - $totals->total_fee;
+				$paid->dueAmount  =  $totals1->dueamount;
 				//$paid->dueAmount  = $dueamount;
 			}else{
 

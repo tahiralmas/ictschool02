@@ -43,12 +43,13 @@
         @if($fees)
         <div class="row">
           <div class="col-md-12">
+          <a title='vouchar' class='btn btn-warning'  onclick="confirmed('{{$family_id}}');" href='#' style="float:right;margin-top:-30px;"> Get Voucher</a>
             <table id="feeList" class="table table-striped table-bordered table-hover">
               <thead>
                 <tr>
                   <th>Payable Amount</th>
-                  {{--<th>Paid Amount</th>--}}
-                  {{--<th>Due Amount</th>--}}
+                  <th>Paid Amount</th>
+                  <th>Due Amount</th>
                   <th>Status</th>
                   <th>Month</th>
                   <th>Pay Date</th>
@@ -59,15 +60,40 @@
                 @foreach($family_vouchers as $fee)
                 <tr>
                   
-                  <td>{{$fee->amount}}</td>
-                  {{--<td></td>--}}
+                  <td>{{getdatainvoice($fee->bills,$fee->month)->payTotal}}</td>
+                  <td>{{getdatainvoice($fee->bills,$fee->month)->paiTotal}}</td>
+                  <td>{{getdatainvoice($fee->bills,$fee->month)->dueamount}}</td>
                   {{--<td>{{$fee->dueAmount}}</td>--}}
-                  {{--<td>{{$fee->dueAmount}}</td>--}}
-                   <td>@if($fee->status=='Unpaid')<button  class="btn btn-danger" >UnPaid</button>@else <button  class="btn btn-success" >Paid</button>@endif</td>
+                   <td>
+                   <?php
+                    $paytotal  = getdatainvoice($fee->bills,$fee->month)->payTotal;
+                    $paidtotal = getdatainvoice($fee->bills,$fee->month)->paiTotal;
+                    $dueamount = getdatainvoice($fee->bills,$fee->month)->dueamount;
+                      if($dueamount=="0.00" || $dueamount=="0"){
+                          $status = 'paid';
+                      }elseif($paidtotal=='0.00' ||$paidtotal=='' || $paidtotal==0){
+
+                            $status = 'unpaid';
+                      }else{
+                          $status = 'partially paid';
+                      }
+                      ?>
+                   @if($status=='unpaid')
+                   <button  class="btn btn-danger" >UnPaid</button>
+                   @elseif($status=='paid') 
+                   <button  class="btn btn-success" >Paid</button>
+                   @else
+                   <button  class="btn btn-warning" >Partially Paid</button>
+                   @endif
+                   </td>
                   <td>{{ \DateTime::createFromFormat('!m', $fee->month)->format('F')}}</td>
                   <td>{{$fee->date}}</td>
 
                   <td>
+                    
+
+
+
                    @if($fee->status=='Unpaid')
                     <a title='Paid' href="#" onclick="submitfrom('paid','{{$fee->id}}')" class='btn btn-success'> Paid</a>
                     <form  id="fee_paid{{$fee->id}}" action='{{url("/family/paid")}}/{{$fee->id}}' method="post">
@@ -114,6 +140,9 @@
         </div>
       </div>
       @stop
+      @section('model')
+          <div id="modelshow"></div>
+      @stop
     <!-- Modal Goes here -->
      {{--<div id="billDetails" class="modal">
         <div class="modal-dialog">
@@ -154,6 +183,53 @@
           @section('script')
           <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
           <script type="text/javascript">
+
+              function checkm(type){
+                //alert(type);
+                if(type=='multi'){
+
+                  $("#multis").show();
+                }else{
+                   $("#multis").hide();
+                }
+              }
+
+              function confirmed(family_id)
+              {
+                //alert(family_id);
+                //return confirm('Are you sure you want to generate family vouchar?');
+                var x = confirm('Are you sure you want to generate family vouchar?');
+                              if (x){
+                                 //window.location.href('{{url("/family/vouchars")}}/'+family_id);
+                                //window.location = "{{url('/family/vouchars')}}/"+family_id;
+                                
+                                $.ajax({
+                                    url: "{{url('/f_vouchar/model')}}"+'/'+family_id,
+                                    data: {
+                                      //format: 'json'
+                                    },
+                                    error: function(error) {
+                                      alert("Please fill all inputs correctly!");
+                                    },
+                                    //dataType: 'json',
+                                    success: function(data) {
+                                      console.log(data);
+                                     $('#modelshow').html(data);
+                                      $("#myModal"+family_id).modal('show');
+
+                                    },
+                                    type: 'GET'
+                                });
+                                // $("#billDetails").modal('show');
+                          
+
+                               return true
+                             }
+                              else{
+                                return false;
+                              }
+              }
+
           function submitfrom(type,id){
             if(type=='unpaid'){
 

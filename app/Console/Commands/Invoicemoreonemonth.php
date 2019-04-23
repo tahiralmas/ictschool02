@@ -9,6 +9,7 @@ use App\FeeCol;
 use App\FeeSetup;
 use App\FeeHistory;
 use App\Voucherhistory;
+use App\FamilyVouchar;
 class Invoicemoreonemonth extends Command
 {
     /**
@@ -71,6 +72,32 @@ class Invoicemoreonemonth extends Command
 
                 //echo count($test);
             });
+
+           /**
+           *
+           *family voucher
+           **/
+           $get_students =  DB::table('Student')->where('isActive','Yes');
+           if($months['family_id']!=''){
+            $get_students = $get_students->where('family_id',$months['family_id']);
+           }
+           $get_students = $get_students->orderBy('id','Asc')->groupBy('fatherCellNo')->groupBy('family_id')->chunk(100, function($users) use($month)
+            {
+                $i=0;
+                foreach ($users as $user)
+                {
+                      //echo '/n';
+                     //echo $i++;
+                     $test[$user->id] = $user->id;
+                    $this->createfamilyvouchour($user->fatherCellNo,$user->family_id,$month);
+                   //echo "/n";
+                }
+                //echo $i;
+
+                //echo count($test);
+            });
+
+
         }
 
          $now             =  Carbon::now();
@@ -238,5 +265,81 @@ class Invoicemoreonemonth extends Command
                  return $e->getMessage();
                 //return Redirect::to('/fee/collection?class_id='.Input::get('class').'&section='.Input::get('section').'&session='.Input::get('session').'&type='.Input::get('type').'&month='.Input::get('gridMonth')[0].'&fee_name='.Input::get('fee'))->withErrors( $e->getMessage())->withInput();
                 }
+    }
+
+    public function createfamilyvouchour($fatherphone,$family_id,$month)
+    {
+       $now      =  Carbon::now();
+       $year1    =  $now->year;
+       //$month    =  $now->month;
+       $month    =  $month;
+
+        $students = DB::table('Student')
+          ->join('Class', 'Student.class', '=', 'Class.code')
+          ->join('section', 'Student.section', '=', 'section.id')
+          ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell','Student.discount_id','Student.class as class_code',
+              'Class.Name as class','Class.code as class_code', 'Student.presentAddress','Student.section', 'Student.gender', 'Student.religion','section.name')
+          ->where('Student.isActive', '=', 'Yes');
+         /* ->where(function($q) use( $family_id) {
+                $q->where('Student.family_id', '=', $family_id)
+                ->orWhere('Student.fatherCellNo', '=', $family_id);
+              })*/
+            if($family_id!=''){
+              $family_id = $family_id;
+              $students->where('Student.family_id', '=', $family_id);
+            }else{
+              $family_id =  $fatherphone;
+               $students->where('Student.fatherCellNo', '=', $fatherphone);
+            }
+             $students =  $students->get();
+
+             $regiNo = array();
+              foreach($students as $std){
+               $regiNo[] = $std->regiNo;  
+              }
+
+              $vouchar_details = DB::table('stdBill')
+                                ->join('Student','stdBill.regiNo','=','Student.regiNo')
+                                //->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
+                               ->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
+                                ->join('billHistory','stdBill.billNo','=','billHistory.billNo')
+                                ->select('billHistory.*','stdBill.dueAmount','stdBill.payableAmount','stdBill.paidAmount','stdBill.class','stdBill.total_fee','stdBill.regiNo','voucherhistories.due_date','Student.discount_id', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.section')
+                                //->where('billHistory.billNo',$bill )
+                                ->where('billHistory.month', '=', $month)
+                                ->where('billHistory.title', '=', 'monthly')
+                                 ->whereIn('stdBill.regiNo',$regiNo );
+                     if($vouchar_details->count()>0){
+                      $vouchar_details = $vouchar_details->get();
+                              // echo "<pre>";print_r($vouchar_details->toArray());
+                               //exit;
+                    $bills = array();
+                    foreach($vouchar_details as $vouchar_detail){
+                      $bills[] = $vouchar_detail->billNo;  
+                    }
+
+                    $bils     = implode(',',$bills);
+                    $totals   = FeeCol::join('billHistory','stdBill.billNo','=','billHistory.billNo')->select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(total_fee),0) as Totalpay,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(total_fee),0)- IFNULL(sum(paidAmount),0)) as dueAmount,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
+                       ->where('month', '=', $month)
+                       ->whereIn('regiNo',$regiNo)
+                       ->first();
+                    $check_vouchar  = FamilyVouchar::where('month',$month)->where('family_id',$family_id)->count();
+
+                      if($check_vouchar==0 && count($vouchar_details->toArray())>0){
+
+                        $family_vouchar = new FamilyVouchar;
+                        $family_vouchar->family_id  = $family_id ;
+                        $family_vouchar->bills      = $bils ;
+                        $family_vouchar->date       = Carbon::now();
+                        $family_vouchar->status     = 'Unpaid';
+                        $family_vouchar->amount     = $totals->payTotal;
+                        $family_vouchar->dueamount  = $totals->dueamount;
+                        $family_vouchar->month      = $month;
+                        $family_vouchar->save() ;
+                      }
+              //echo "<pre>";print_r($vouchar_details->toArray());exit;
+          }
+
+
+
     }
 }
