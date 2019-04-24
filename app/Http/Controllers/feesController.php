@@ -2018,7 +2018,7 @@ class feesController extends BaseController {
                               <div class="form-group row has-error" >
                                   <label class="col-sm-3 text-right control-label col-form-label">Collection Amount *</label>
                                   <div class="col-sm-9">
-                                      <input name="collectionAmount" id="collectionAmount" required="" class="form-control  type="text">
+                                      <input name="collectionAmount" id="collectionAmount" min="10" required="" class="form-control  type="text">
                                   </div>
                               </div>
                               
@@ -2052,7 +2052,10 @@ class feesController extends BaseController {
 		if($totalpaid > Input::get('payableAmount') ){
 			return 419;
 		}
-		if($paidamount=='' || $paidamount=='0.00'){
+		if($paidamount<0){
+			return 404;
+		}
+		if($paidamount=='' || $paidamount=='0.00' ||  $paidamount>0){
 			return 404;
 		}
 		if(Input::get('s')!='unpaid'){

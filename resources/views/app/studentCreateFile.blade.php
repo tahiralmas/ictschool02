@@ -34,7 +34,7 @@
                         <div class="row">
                             <div class="col-md-12">
                             <div class="alert alert-warning">
-                          <h3 class="text-danger">Example CSV Files <a href="/student/csvexample" >Click to Download</a></h3>
+                          <h3 class="text-danger">Example CSV Files <a href="{{url('/student/csvexample')}}" >Click to Download</a></h3>
                       </div>
                         </div>
                         </div>

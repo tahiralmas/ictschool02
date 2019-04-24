@@ -772,6 +772,11 @@ class attendanceController extends BaseController {
 	public function stdatdreport($b_form)
 	{
 		$stdinfo     =  DB::table('Student')->where('Student.b_form',$b_form)->first();
+		if(empty($stdinfo)){
+			return Redirect()->back()->withErrors('Student Not Found');
+
+		}
+
 		$attendances = DB::table('Attendance')
 			->join('Student', 'Attendance.regiNo', '=', 'Student.regiNo')
 			->leftjoin('section', 'section.id', '=', 'Attendance.section_id')

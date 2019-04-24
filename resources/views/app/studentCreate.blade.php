@@ -34,19 +34,112 @@ b {color:red}
         <div class="btn-group ">
           
                 <form class="navbar-search" name="navbar_search" action="{{url('/student/list')}}" id="navbar_search" method="post">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <input type="hidden" name="search" value="yes">
-
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="search" value="yes">
                     <input placeholder="Search Family by Phone Number" class="search-query form-control col-md-10" name="student_name" id="family_name" 
                     type="text" autocomplete="off">
                     <div id="familyListd">
                     </div>
                 </form>
-           
         </div>
         @endif
         <form role="form" action="{{url('/student/create')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
+          <div class="row">
+          <div class="col-md-12">
+            <h3 class="text-info"> Guardian's Detail</h3>
+            <hr>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+          
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="fatherName">Father's Name <b>*</b></label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <input type="text" class="form-control" required value="{{old('fatherName')}}"  name="fatherName" placeholder="Name" id="f_name">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="fatherCellNo">Father's Mobile No <b>*</b></label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <input type="text" class="form-control"  required name="fatherCellNo" value="{{old('fatherCellNo')}}" id="f_phone" autocomplete="off"  placeholder="+8801xxxxxxxxx">
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="presentAddress">Family Id</label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <input type="text" class="form-control"  name="family_id" id="family_id" readonly>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="motherName">Mother's Name </label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <input type="text" class="form-control"   name="motherName" value="{{old('motherName')}}" placeholder="Name" id="m_name">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="motherCellNo">Mother's Mobile No </label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <input type="text" class="form-control"  name="motherCellNo" value="{{old('motherCellNo')}}" placeholder="+8801xxxxxxxxx" id="m_phone">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="localGuardian">Local Guardian Name </label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <input type="text" class="form-control"  name="localGuardian" value="{{old('localGuardian')}}" placeholder="Name" id="g_name">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="localGuardianCell">local Guardian Mobile No </label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <input type="text" class="form-control"  name="localGuardianCell" value="{{old('localGuardianCell')}}" placeholder="+8801xxxxxxxxx" id="g_phone">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-8">
+              <div class="form-group">
+                <label for="presentAddress">About Family Behavior </label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <textarea type="text" class="form-control"  name="familyc" placeholder="">{{old('presentAddress')}}</textarea>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <input type="hidden" name="check" id="check">
+        </div>
+        
+
+
+
           <div class="row">
             <div class="col-md-12">
               <h3 class="text-info"> Acdemic Details</h3>
@@ -278,7 +371,7 @@ b {color:red}
                       <option value="O+"  @if(old('bloodgroup')=="O+") selected @endif>O+</option>
                       <option value="O-"  @if(old('bloodgroup')=="O-") selected @endif>O-</option>
                     </select>
-                </div>
+                  </div>
               </div>
             </div>
           </div>
@@ -342,97 +435,6 @@ b {color:red}
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <h3 class="text-info"> Guardian's Detail</h3>
-            <hr>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-          
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="fatherName">Father's Name <b>*</b></label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control" required value="{{old('fatherName')}}"  name="fatherName" placeholder="Name" id="f_name">
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="fatherCellNo">Father's Mobile No <b>*</b></label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  required name="fatherCellNo" value="{{old('fatherCellNo')}}" id="f_phone" autocomplete="off"  placeholder="+8801xxxxxxxxx">
-                </div>
-              </div>
-            </div>
-            
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="presentAddress">Family Id</label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  name="family_id" id="family_id" readonly>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="motherName">Mother's Name </label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"   name="motherName" value="{{old('motherName')}}" placeholder="Name" id="m_name">
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="motherCellNo">Mother's Mobile No </label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  name="motherCellNo" value="{{old('motherCellNo')}}" placeholder="+8801xxxxxxxxx" id="m_phone">
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="localGuardian">Local Guardian Name </label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  name="localGuardian" value="{{old('localGuardian')}}" placeholder="Name" id="g_name">
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="localGuardianCell">local Guardian Mobile No </label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  name="localGuardianCell" value="{{old('localGuardianCell')}}" placeholder="+8801xxxxxxxxx" id="g_phone">
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-8">
-              <div class="form-group">
-                <label for="presentAddress">About Family Behavior </label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <textarea type="text" class="form-control"  name="familyc" placeholder="">{{old('presentAddress')}}</textarea>
-                </div>
-              </div>
-            </div>
-
-          </div>
-          <input type="hidden" name="check" id="check">
         </div>
         <div class="row">
           <div class="col-md-12">

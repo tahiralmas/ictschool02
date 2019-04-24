@@ -326,7 +326,7 @@ table i {
     <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet">
 </head>
 
-<body class="animsition">
+<body @if(Request::is('student/create-file')) @else class="animsition" @endif>
 <!-- topbar starts -->
 
 <div class="page-wrapper">

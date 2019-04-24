@@ -199,18 +199,18 @@ class studentController extends BaseController {
 		}
 		$foo = array();
 		if(strlen($cl)<2) {
-			$foo[0]= substr(date("Y"), 2) .'0'.$cl.$r;
+			$foo[0]= substr(date("Y"), 2).get_current_session()->id .'0'.$cl.$r;
 		}
 		else
 		{
-			$foo[0]=  substr(date("Y"), 2) .$cl.$r;
+			$foo[0]=  substr(date("Y"), 2).get_current_session()->id .$cl.$r;
 		}
 		if(strlen($c)<2) {
-			$foo[1] ='0'.$c;
+			$foo[1] =get_current_session()->id.'0'.$c;
 		}
 		else
 		{
-			$foo[1] =$c;
+			$foo[1] =get_current_session()->id.$c;
 		}
 
 		return $foo;
@@ -1107,7 +1107,7 @@ $file = Input::file('fileUpload');
 								DB::beginTransaction();
 								try {
 			                        foreach ($data->toArray() as $raw) {
-                                     // echo "<pre>";print_r($raw);
+                                      //echo "<pre>";print_r($raw);exit;
 									$studentData= [
 											'class' => $raw['class'],
 											'section' => $raw['section'],
@@ -1121,10 +1121,11 @@ $file = Input::file('fileUpload');
 											'lastName' =>    $raw['last_name'],
 											 'Gender' => $raw['gender'],
 											 'fatherName' => $raw['father_name'],
-											 'fatherCellNo' => $raw['fathers_mobile_no']
+											 'fatherCellNo' => $raw['fathers_mobile_no'],
+											 'family_id' => $raw['family_id']
 
 										];
-										$hasStudent = Student::where('rollNo','=',$raw['nocardroll_no'])->first();
+										$hasStudent = Student::where('rollNo','=',$raw['nocardroll_no'])->where('session',$raw['session'])->first();
 											if ($hasStudent)
 											{
 												$errorMessages = new \Illuminate\Support\MessageBag;
@@ -1163,8 +1164,19 @@ $file = Input::file('fileUpload');
 }
 
 public function csvexample(){
+/*if(Storage::disk('local')->exists('/public/accounting.txt')){
 
- return response()->download(storage_path('app/public/' . 'student.csv'));
+
+}*/
+$headers = array(
+              //'Content-Type: application/csv',
+              'location:http://localhost/newschool/student/create-file'
+            );
+ //header("location: index.php");
+    return response()->download(storage_path('app/public/' . 'student.csv'), 'student.csv',['location'=>'http://localhost/newschool/student/create-file']);
+
+
+ //return response()->download(storage_path('app/public/' . 'student.csv'));
 
 }
 
