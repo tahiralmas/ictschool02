@@ -89,11 +89,11 @@
                   <td>{{ \DateTime::createFromFormat('!m', $fee->month)->format('F')}}</td>
                   <td>{{$fee->date}}</td>
 
-                  <td>
+                  <td width="200">
                     
 
 
-
+                  <a title='detail' href="#" onclick="details('{{$fee->id}}')" class='btn btn-info'> Detail</a>
                    @if($fee->status=='Unpaid')
                     <a title='Paid' href="#" onclick="submitfrom('paid','{{$fee->id}}')" class='btn btn-success'> Paid</a>
                     <form  id="fee_paid{{$fee->id}}" action='{{url("/family/paid")}}/{{$fee->id}}' method="post">
@@ -106,6 +106,8 @@
                     <input type="hidden" name="bills" value="{{$fee->bills}}">
 
                     </form>
+                    
+
                   </td>
                   @endforeach
                 </tbody>
@@ -142,6 +144,46 @@
       @stop
       @section('model')
           <div id="modelshow"></div>
+          <div id="moddel"></div>
+
+          <div id="billDetails" class="modal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            {{--<div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">Confirmation</h4>
+            </div>--}}
+
+            <div class="modal-header">
+              <h4 class="modal-title">Confirmation</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="table-responsive">
+                    <table id="billItem" class="table table-striped table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>Amount</th>
+                          <th>Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                </div>
+              </div>
+            </div>
+          </div>
       @stop
     <!-- Modal Goes here -->
      {{--<div id="billDetails" class="modal">
@@ -182,6 +224,7 @@
           </div>--}}
           @section('script')
           <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
+          <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
           <script type="text/javascript">
 
               function checkm(type){
@@ -230,6 +273,56 @@
                               }
               }
 
+              function invoicepaidhistory(billId){
+             // var billId=$(this).text();
+              //alert(billId);
+              $('.modal-title').html('"'+billId+'" bill details information');
+              $.ajax({
+                url: "{{url('/fees/history/')}}"+'/'+billId,
+                data: {
+                  format: 'json'
+                },
+                error: function(error) {
+                  alert(JSON.stringify(error));
+                  alert("Please fill all inputs correctly!");
+                },
+                dataType: 'json',
+                success: function(data) {
+                  console.log(data);
+                  $("#billItem").find("tr:gt(0)").remove();
+                  for(var i =0;i < data.length;i++)
+                  {
+                    addRow1(data[i],i);
+                  }
+
+                },
+                type: 'GET'
+              });
+              $("#billDetails").modal('show');
+            }
+         
+
+         function details(id){
+
+            $.ajax({
+                  url: "{{url('/voucher/detail')}}"+'/'+id,
+                  data: {
+                    //format: 'json'
+                  },
+                  error: function(error) {
+                    alert("Please fill all inputs correctly!");
+                  },
+                  //dataType: 'json',
+                  success: function(data) {
+                    console.log(data);
+                   $('#modelshow').html(data);
+                    $("#details"+id).modal('show');
+
+                  },
+                  type: 'GET'
+              });
+         }
+
           function submitfrom(type,id){
             if(type=='unpaid'){
 
@@ -253,10 +346,182 @@
                 }
                           
             }
+
+            function feecol(billId) {
+              alert(33);
+                          var billId=billId;
+                         // $('.modal-title').html('"'+billId+'" bill details information');
+                          
+                          $.ajax({
+                            url: "{{url('/fees/invoice/details/')}}"+'/'+billId,
+                            data: {
+                              //format: 'json'
+                            },
+                            error: function(error) {
+                              alert(JSON.stringify(error));
+                            },
+                            //dataType: 'json',
+                            success: function(data) {
+                              console.log(data);
+                             // $("#moddel").find("tr:gt(0)").remove();
+                              $("#moddel").html(data);
+                              $("#myModald"+billId).modal('show');
+                              
+
+                            },
+                            type: 'GET',
+
+                            
+                          });
+                          //alert(("#myModald"+billId));
+                          console.log("#myModald"+billId);
+                          
+                        }
+
+                  function feecollection()
+           {
+            //
+              var billNo = $('#billNo').val();
+              alert(billNo);
+               var collectionAmount = $('#collectionAmount').val();
+               var payableAmount = $('#payableAmount').val();
+              // var postid = $('#post_id').val();
+              //"{{url('/fees/invoice/details/')}}"+'/'+billId,
+                $.ajax({
+                   type: "POST",
+                   url: "{{url('/fees/invoice/collect/')}}"+'/'+billNo,
+                   data: {collectionAmount:collectionAmount,payableAmount:payableAmount},
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+
+                   success: function( msg ) {
+                     //$("myModaldB003").modal().hide();
+                  //alert(msg);
+                     if(msg=='419'){
+                      $("#oldtable").show();
+                      $("#moddel .close").click();
+                      Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'Collection Amount greater then Payable amount',
+                        footer: ''
+                      })
+                     }else if(msg=='404'){
+                      $("#oldtable").show();
+                      $("#moddel .close").click();
+                      Swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'Collection Amount Not empty or 0',
+                        footer: ''
+                      })
+                     }
+
+                     else{
+                     $("#oldtable").hide();
+                     //$("#moddel").modal().hide();
+                       $("#moddel .close").click();
+                        //$("#ajax_data").remove();
+                      //alert( JSON.stringify(msg) );
+                      //console.log(msg);
+                      //.// alert( "#myModald"+billNo+".close" );
+                     //  obj.find('tbody').empty().append(msg);
+                       var table= '';
+                      $("#newtable").html(msg);
+                     var  table =  $('#feeList1').dataTable({
+                       
+                         "sPaginationType": "bootstrap",
+
+
+                      });
+                     
+
+                      table.$(".btninvoice").click(function(){
+                          var billId=$(this).val();
+                         // $('.modal-title').html('"'+billId+'" bill details information');
+                          
+                          $.ajax({
+                            url: "{{url('/fees/invoice/details/')}}"+'/'+billId,
+                            data: {
+                              //format: 'json'
+                            },
+                            error: function(error) {
+                              alert(JSON.stringify(error));
+                            },
+                            //dataType: 'json',
+                            success: function(data) {
+                              console.log(data);
+                             // $("#moddel").find("tr:gt(0)").remove();
+                              //$("#moddel").html(data);
+                              //$("#myModald"+billId).modal('show');
+                              
+
+                            },
+                            type: 'GET',
+
+                            
+                          });
+                          //alert(("#myModald"+billId));
+                          //console.log("#myModald"+billId);
+                          //$("#myModald"+billId+ ".close").click();
+                        });
+                           
+
+                       Swal.fire(
+                                  'Invoice Paid',
+                                  'You clicked the button!',
+                                  'success'
+                                ).then(function() {
+                                  //location.reload();
+                                //$("#myModald"+billId+ ".close").click();
+                                //$('body').removeClass('modal-open');
+                                //$('.modal-backdrop').remove();
+                              });
+                       
+                               
+                       // location.reload(true);
+                      
+                   }
+                   }
+                });
+           }
+
             
-          
+         /* $('#details').on('hidden.bs.modal', function () {
+              window.alert('hidden event fired!');
+            });*/
           var stdRegiNo="{{$student->regiNo}}";
           $( document ).ready(function() {
+
+            $(".btninvoice").click(function(){
+              alert(33);
+                          var billId=$(this).val();
+                         // $('.modal-title').html('"'+billId+'" bill details information');
+                          
+                          $.ajax({
+                            url: "{{url('/fees/invoice/details/')}}"+'/'+billId,
+                            data: {
+                              //format: 'json'
+                            },
+                            error: function(error) {
+                              alert(JSON.stringify(error));
+                            },
+                            //dataType: 'json',
+                            success: function(data) {
+                              console.log(data);
+                             // $("#moddel").find("tr:gt(0)").remove();
+                              $("#moddel").html(data);
+                              $("#myModald"+billId).modal('show');
+                              
+
+                            },
+                            type: 'GET',
+
+                            
+                          });
+                          //alert(("#myModald"+billId));
+                          console.log("#myModald"+billId);
+                          
+                        });
 
             getsections();
             $('#class').on('change',function() {
@@ -355,6 +620,27 @@
               type: 'GET'
             });
           };*/
+
+          function addRow1(data,index) {
+            var table = document.getElementById('billItem');
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+
+            var cell2 = row.insertCell(0);
+            var title = document.createElement("label");
+
+            title.innerHTML=data['amount'];
+            cell2.appendChild(title);
+
+            var cell3 = row.insertCell(1);
+            var date1 = document.createElement("label");
+            date1.innerHTML=data['date'];
+            cell3.appendChild(date1);
+
+
+           
+          };
+
           function addRow(data,index) {
             var table = document.getElementById('billItem');
             var rowCount = table.rows.length;

@@ -514,6 +514,7 @@ Route::get('/fee_detail','feesController@fee_detail');
 Route::get('/family/vouchars/{family_id}','feesController@get_family_voucher');
 Route::get('/family/vouchar_history/{family_id}','feesController@family_voucherhistory');
 Route::post('/family/paid/{family_id}','feesController@family_vouchar_paid');
+Route::get('/voucher/detail/{id}','feesController@family_vouchar_detail');
 
 
 

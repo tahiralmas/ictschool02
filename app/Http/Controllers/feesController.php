@@ -695,7 +695,7 @@ class feesController extends BaseController {
           "2"=>"February",
           "3"=>"March",
           "4"=>"April",
-          "5"=>"March",
+          "5"=>"May",
           "6"=>"June",
           "7"=>"July",
           "8"=>"August",
@@ -994,7 +994,7 @@ class feesController extends BaseController {
 									$family_vouchar->amount     = $totals->payTotal;
 									$family_vouchar->dueamount  = $totals->dueamount;
 									$family_vouchar->month      = $month;
-									$family_vouchar->save() ;
+									//$family_vouchar->save() ;
 								}
 							
        			$student = DB::table('Student')
@@ -1370,6 +1370,129 @@ class feesController extends BaseController {
 
 		exit;
 
+	}
+
+	public function family_vouchar_detail($id)
+	{
+
+		$family_vouchers  = FamilyVouchar::find($id);
+		echo $getbillsNo 	  = $family_vouchers->bills;
+		$bill_ary		  = explode(',',$getbillsNo);
+
+	      $fees=DB::Table('stdBill')
+		->join('Student','stdBill.regiNo','=','Student.regiNo')
+		->join('billHistory','stdBill.billNo','=','billHistory.billNo')
+		->select(DB::RAW("stdBill.billNo,stdBill.payableAmount,stdBill.paidAmount,stdBill.dueAmount,DATE_FORMAT(stdBill.payDate,'%D %M,%Y') AS date"),'Student.firstName','Student.lastName','Student.class','Student.section','Student.regiNo','billHistory.month','billHistory.title','billHistory.fee','billHistory.lateFee')
+		//->where('stdBill.class',Input::get('class'))
+		//->where('billHistory.month',$month)
+		->whereIn('stdBill.billNo',$bill_ary)
+		//->where('Student.section',Input::get('section'))
+		->get();
+
+		$html = '<div class="modal" id="details'.$id.'" style="padding-right: 528px !important; display: block;/*! width: 1146px; */margin-top: 140px;margin-left: -210px;">
+	  <div class="modal-dialog">
+	    <div class="modal-content" style="width: 1090px;">
+
+	      <!-- Modal Header -->
+	      <div class="modal-header">
+	        <h4 class="modal-title">Fee Collection Detail</h4>
+	        <button type="button" class="close" data-dismiss="modal">&times;</button>
+	      </div>
+
+	      <!-- Modal body -->
+	      <div class="modal-body">
+       		<table id="feeList" class="table table-striped table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>Bill No</th>
+                  <th>Student</th>
+                  <th>Class</th>
+                  <th>Section</th>
+                  <th>Fee Type</th>
+                  <th>Payable Amount</th>
+                  <th>Paid Amount</th>
+                  <th>Due Amount</th>
+                  <th>Month</th>
+                  <th>Pay Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>';
+                foreach($fees as $fee){
+                 
+                        $f_idd = gfee_setup($fee->class,$fee->title);
+                        $section = gsection_name($fee->section);
+                        $class = gclass_name($fee->class);
+                        $fction = "onclick=invoicepaidhistory('$fee->billNo')";
+                  $html .= '<tr>
+                    <td><a class="btnbill" href="#" '.$fction.'>'.$fee->billNo.'</a></td>
+                    <td>'.$fee->firstName. $fee->lastName.'</td>
+                    <td>'.$class->name.'</td>
+                    <td>'.$section->name.'</td>
+                    <td>'.$fee->title.'</td>
+                    <td>'.$fee->payableAmount.'</td>
+                    <td>'.$fee->paidAmount.'</td>
+                    <td>'.$fee->dueAmount.'</td>
+                    <td> ';
+                    if($fee->title=="monthly"){
+                    	 $month_name =  \DateTime::createFromFormat('!m', $fee->month)->format('F');
+                    }else{
+                    	$month_name = '';
+                    } 
+
+                       $html .= $month_name.'</td>
+                    
+                    <td>'.$fee->date.'</td>';
+                    
+                      if($fee->payableAmount===$fee->paidAmount || $fee->paidAmount>=$fee->payableAmount){
+                          $status = 'paid';
+                      }elseif($fee->paidAmount=='0.00' ||$fee->paidAmount==''){
+
+                            $status = 'unpaid';
+                      }else{
+                          $status = 'partially paid';
+                      }
+                      
+                     $html .= '<td>';
+                    if($status=='paid'){
+                    $html .= '<button  class="btn btn-success" >'.$status.'</button>';
+                    }
+                    elseif($status=='partially paid'){
+                      $html .= '<button  class="btn btn-warning" >'.$status.'</button>';
+                    }
+                    else{ 
+                    	$html .= '<button  class="btn btn-danger" >'.$status.'</button> </td>';
+                    }
+                    if($fee->payableAmount===$fee->paidAmount || $fee->paidAmount>=$fee->payableAmount ){
+                     $fun  = "onclick =alert('Invoice Fully Paid')"; 
+                 	}else{
+                 		 $fun  ="onclick =feecol('$fee->billNo')";
+                 	}
+                    if( $fee->paidAmount<$fee->payableAmount) {
+                    	$class = "btninvoice";
+                    }else{
+                    	$class ="";
+                    } 
+                    	$html .='<td>
+                    	<button value="'.$fee->billNo.'" title="Collect Invoice" class="btn btn-primary '.$class.'" '.$fun.'> <i class="fas fa-dollar-sign icon-white"></i></button>
+						</td>';
+                   $html .= '</tr>';
+                }
+               $html .= '</tbody>';
+               $html .= '</table>';
+      		$html .= ' </div>
+
+	      <!-- Modal footer -->
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+	      </div>
+
+	    </div>
+	  </div>
+	</div>';
+		$html .= ' ';
+               echo $html;
 	}
 
 	/*public function getvouchar()
