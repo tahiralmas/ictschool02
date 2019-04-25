@@ -8,6 +8,7 @@ use App\Student;
 use App\User;
 use App\SectionModel;
 use App\ClassModel;
+use App\Referal;
 use App\FeeSetup;
 use Hash;
 use DB;
@@ -41,9 +42,18 @@ class studentController extends BaseController {
 		$section = SectionModel::select('id','name')->where('class_code','=','cl1')->get();
 		//$sections = SectionModel::select('name')->get();
 
-
+		$families = DB::table('Student')
+					->join('Class', 'Student.class', '=', 'Class.code')
+					->join('section', 'Student.section', '=', 'section.id')
+					->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.family_id',
+					'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.about_family','section.name')
+					->where('Student.isActive', '=', 'Yes')
+					->groupBy('Student.fatherCellNo')
+					->groupBy('Student.family_id')
+					//->having('Student.family_id', '<', 3)
+					->get();
 		//return View::Make('app.studentCreate',compact('classes'));
-		return View('app.studentCreate',compact('classes','section'));
+		return View('app.studentCreate',compact('classes','section','families'));
 	}
 //
 
@@ -154,19 +164,43 @@ class studentController extends BaseController {
 	{
 		// return '98';
 		$query = Input::get('query');
-		if(strlen($query)>=11){
+		///return $query;
+		if(strlen($query)<=11){
+
+			$referalname  = '';
+			$referalid    = '';
+			$fathername   = '';
+			$fatherphone  = '';
+			$localg       = '';
 		$data=DB::table('Student')->where('fatherCellNo','LIKE','%'.$query.'%')
 		 ->first();
 		 if(!empty($data)){
 		 	$unique_code = $data->family_id;
+		 	$fathername  = $data->fatherName;
+		 	$fatherphone = $data->fatherCellNo;
+		 	$localg      = $data->localGuardianCell;
+		 	
 		 	if($unique_code=='' || $unique_code==NULL){
 		 		//$unique_code =	str_random(6);
 		 		$unique_code =	hexdec(substr(uniqid(rand(), true), 5, 5));
 		 	}
+		 	$check_referals = DB::table('referals')->where('family_id',$unique_code)->first();
+		 	if(!empty($check_referals)){
+		 		$referals   = $check_referals->refral_id;
+		 		$referals_info = DB::table('Student')->where('family_id',$referals)->first();
+		 		$referalname = $referals_info->fatherName .'('.$referals_info->family_id.')';
+		 		$referalid   = $referals_info->family_id ;
+		
+		 	}else{
+		 		$referalname = '';
+		 		$referalid  = '';
+		 	}
 		 }else{
 		 	$unique_code =	 hexdec(substr(uniqid(rand(), true), 5, 5));
 		 }
-		 echo $unique_code;
+		 //echo $unique_code;
+		 return array('unique_code'=>$unique_code,'referalname'=>$referalname,'referalid'=>$referalid,'fathername'=>$fathername ,'fatherphone'=>$fatherphone,'localg'=>$localg);
+
 		}
 		//echo strlen($query);
 	}
@@ -206,15 +240,13 @@ class studentController extends BaseController {
 			$foo[0]=  substr(date("Y"), 2).get_current_session()->id .$cl.$r;
 		}
 		if(strlen($c)<2) {
-			$foo[1] =get_current_session()->id.'0'.$c;
+			$foo[1] ='0'.$c;
 		}
 		else
 		{
-			$foo[1] =get_current_session()->id.$c;
+			$foo[1] =$c;
 		}
-
 		return $foo;
-
 	}
 
 	/**
@@ -387,6 +419,15 @@ class studentController extends BaseController {
 			if( Input::file('photo')!=''){
              Input::file('photo')->move(base_path() .'/public/images',$fileName);
          	}
+
+         	if(Input::get('family_id')!='' && Input::get('refer_by')!='' /*&& Input::get('f_status')=='new'*/){
+
+         		$saverefral              = new Referal;
+         		$saverefral->student_id  = $student->id;
+         		$saverefral->family_id   = Input::get('family_id');
+         		$saverefral->refral_id   = Input::get('refer_by');
+         		$saverefral->save(); 
+         	}
                /*  $user = new User;
 
                 $user->firstname = Input::get('fname');
@@ -511,7 +552,7 @@ if(Input::get('search')==''){
 	        $students = DB::table('Student')
 			->join('Class', 'Student.class', '=', 'Class.code')
 			->join('section', 'Student.section', '=', 'section.id')
-			->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+			->select('Student.id','Student.family_id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
 			'Class.Name as class','Class.code as class_code', 'Student.presentAddress', 'Student.gender', 'Student.session','section.name','section.id as section_id')
 			->where('Student.isActive', '=', 'Yes')
 			->where('Student.id',trim(Input::get('student_name')))
@@ -529,7 +570,7 @@ if(Input::get('search')==''){
 		$students = DB::table('Student')
 		->join('Class', 'Student.class', '=', 'Class.code')
 		->join('section', 'Student.section', '=', 'section.id')
-		->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+		->select('Student.id','Student.family_id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
 		'Class.Name as class', 'Student.presentAddress', 'Student.gender', 'Student.religion','section.name')
 		->where('Student.isActive', '=', 'Yes')
 		->where('Student.class',$class_code)
@@ -596,7 +637,7 @@ public function family_student_list($family_id)
 					    //$join->on('feesSetup.type','=',DB::raw("Monthly"));
 					     $join->where('feesSetup.type', '=', "Monthly");
 					})
-					->select('Student.id','Student.discount_id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
+					->select('Student.id','Student.family_id','Student.discount_id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell',
 		'Class.Name as class','Class.code as class_code', 'Student.presentAddress','Student.section', 'Student.gender', 'Student.religion','section.name','section.id as section_id','feesSetup.fee')
 					->where('Student.isActive', '=', 'Yes')
 					//->where('Student.family_id', '=', $family_id)

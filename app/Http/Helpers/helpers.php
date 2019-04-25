@@ -397,4 +397,23 @@ if (! function_exists('getdatainvoice')) {
 		return $totals;
 	}
 }
+if (! function_exists('getrefralindfo')) {
+	function getrefralindfo($family_id){
+
+		$check_referals = DB::table('referals')->where('family_id',$family_id)->first();
+
+		if(!empty($check_referals)){
+
+				$referals      = $check_referals->refral_id;
+		 		$referals_info = DB::table('Student')->where('family_id',$referals)->first();
+		 		$referalname   = $referals_info->fatherName .'('.$referals_info->family_id.')';
+		 		$referalid     = $referals_info->family_id ;
+
+		 }else{
+
+		 	$referalname ='';
+		 }
+		return $referalname;
+	}
+}
 

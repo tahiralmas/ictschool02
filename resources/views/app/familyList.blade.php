@@ -42,6 +42,7 @@
                                                                  <th>Phone</th>
                                                                  <th>ID</th>
                                                                  <th>About Family Behavior</th>
+                                                                 <th>Refered By</th>
                                                                 
                                                                   <th>Action</th>
                                                              </tr>
@@ -53,6 +54,7 @@
                                                                      <td>{{$student->fatherCellNo}}</td>
                                                                      <td>{{$student->family_id}}</td>
                                                                      <td>{{$student->about_family}}</td>
+                                                                     <td>{{getrefralindfo($student->family_id)}}</td>
                                                              
                                                        <td>
                                                         <?php 
