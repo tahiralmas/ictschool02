@@ -399,7 +399,7 @@ class teacherController extends BaseController {
 					->first();
 		$html = '';
 		$html .='<tr>
-		<td>'.$teacher->firstName.'</td>
+		<td>'.$teacher->firstName.''.$teacher->lastName.'</td>
 		<td>'.$teacher->phone.'</td>
 		<td>'.$teacher->email.'</td>
 		</tr>

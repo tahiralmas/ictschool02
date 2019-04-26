@@ -64,6 +64,7 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Teacher</th>
             <th class="col-md-4">Action</th>
           </tr>
         </thead>
@@ -73,12 +74,17 @@
           </tr>
            @foreach ($timetables as $teacher)
              @if ($teacher->day =='monday')
+             <?php 
+                $classinfo = gclass_name($teacher->classname);
+              ?>
+             
           <tr>
             <td scope="row">{{ $teacher->stattime}}</td>
             <td >{{$teacher->endtime }}</td>
-            <td>{{$teacher->classname }}</td>
+            <td>@if(isset($classinfo->name)) {{ $classinfo->name }} @endif</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <td><a href="#" onclick="getteacherinfo('{{$teacher->id}}')">{{$teacher->firstName}}{{$teacher->lastName}}</a></td>
             <th class="col-md-4">Action</th>
             <td>
               <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
@@ -113,6 +119,7 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Teacher</th>
             <th class="col-md-4">Action</th>
           </tr>
         </thead>
@@ -122,12 +129,17 @@
           </tr>
            @foreach ($timetables as $teacher)
              @if ($teacher->day =='tuesday')
+             <?php 
+                $classinfo = gclass_name($teacher->classname);
+              ?>
           <tr>
             <td scope="row">{{ $teacher->stattime}}</td>
             <td >{{$teacher->endtime }}</td>
-            <td>{{$teacher->classname }}</td>
+            <td>@if(isset($classinfo->name)) {{ $classinfo->name }} @endif</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <td><a href="#" onclick="getteacherinfo('{{$teacher->id}}')">{{$teacher->firstName}}{{$teacher->lastName}}</a></td>
+
             <td>
               <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
              &nbsp&nbsp<a title='Delete' class='btn btn-danger' onclick="confirmed('{{$teacher->timetable_id}}');" href='#' > <i class="glyphicon glyphicon-trash icon-white"></i></a>
@@ -161,6 +173,7 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Teacher</th>
             <th class="col-md-4">Action</th>
             
           </tr>
@@ -171,12 +184,17 @@
           </tr>
            @foreach ($timetables as $teacher)
              @if ($teacher->day =='wednesday')
+             <?php 
+                $classinfo = gclass_name($teacher->classname);
+              ?>
           <tr>
             <td scope="row">{{ $teacher->stattime}}</td>
             <td >{{$teacher->endtime }}</td>
-            <td>{{$teacher->classname }}</td>
+            <td>@if(isset($classinfo->name)) {{ $classinfo->name }} @endif</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <td><a href="#" onclick="getteacherinfo('{{$teacher->id}}')">{{$teacher->firstName}}{{$teacher->lastName}}</a></td>
+
             <td>
               <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
              &nbsp&nbsp<a title='Delete' class='btn btn-danger' onclick="confirmed('{{$teacher->timetable_id}}');" href='#' > <i class="glyphicon glyphicon-trash icon-white"></i></a>
@@ -210,6 +228,7 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Teacher</th>
             <th class="col-md-4">Action</th>
             
           </tr>
@@ -220,12 +239,17 @@
           </tr>
            @foreach ($timetables as $teacher)
              @if ($teacher->day =='thursday')
+             <?php 
+                $classinfo = gclass_name($teacher->classname);
+              ?>
           <tr>
             <td scope="row">{{ $teacher->stattime}}</td>
             <td >{{$teacher->endtime }}</td>
-            <td>{{$teacher->classname }}</td>
+            <td>@if(isset($classinfo->name)) {{ $classinfo->name }} @endif</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <td><a href="#" onclick="getteacherinfo('{{$teacher->id}}')">{{$teacher->firstName}}{{$teacher->lastName}}</a></td>
+
             <td>
               <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
              &nbsp&nbsp<a title='Delete' class='btn btn-danger' onclick="confirmed('{{$teacher->timetable_id}}');" href='#' > <i class="glyphicon glyphicon-trash icon-white"></i></a>
@@ -259,6 +283,7 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Teacher</th>
             <th class="col-md-4">Action</th>
             
           </tr>
@@ -269,12 +294,17 @@
           </tr>
            @foreach ($timetables as $teacher)
              @if ($teacher->day =='friday')
+             <?php 
+                $classinfo = gclass_name($teacher->classname);
+              ?>
           <tr>
             <td scope="row">{{ $teacher->stattime}}</td>
             <td >{{$teacher->endtime }}</td>
-            <td>{{$teacher->classname }}</td>
+            <td>@if(isset($classinfo->name)) {{ $classinfo->name }} @endif</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <td><a href="#" onclick="getteacherinfo('{{$teacher->id}}')">{{$teacher->firstName}}{{$teacher->lastName}}</a></td>
+
             <td>
               <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
              &nbsp&nbsp<a title='Delete' class='btn btn-danger' onclick="confirmed('{{$teacher->timetable_id}}');" href='#' > <i class="glyphicon glyphicon-trash icon-white"></i></a>
@@ -308,6 +338,7 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Teacher</th>
             <th class="col-md-4">Action</th>
           </tr>
         </thead>
@@ -317,12 +348,17 @@
           </tr>
            @foreach ($timetables as $teacher)
              @if ($teacher->day =='saturday')
+             <?php 
+                $classinfo = gclass_name($teacher->classname);
+              ?>
           <tr>
             <td scope="row">{{ $teacher->stattime}}</td>
             <td >{{$teacher->endtime }}</td>
-            <td>{{$teacher->classname }}</td>
+            <td>@if(isset($classinfo->name)) {{ $classinfo->name }} @endif</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <td><a href="#" onclick="getteacherinfo('{{$teacher->id}}')">{{$teacher->firstName}}{{$teacher->lastName}}</a></td>
+
             <td>
               <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
              &nbsp&nbsp<a title='Delete' class='btn btn-danger' onclick="confirmed('{{$teacher->timetable_id}}');" href='#' > <i class="glyphicon glyphicon-trash icon-white"></i></a>
@@ -355,6 +391,7 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Teacher</th>
             <th class="col-md-4">Action</th>
           </tr>
         </thead>
@@ -364,12 +401,17 @@
           </tr>
            @foreach ($timetables as $teacher)
              @if ($teacher->day =='sunday')
+             <?php 
+                $classinfo = gclass_name($teacher->classname);
+              ?>
           <tr>
             <td scope="row">{{ $teacher->stattime}}</td>
             <td >{{$teacher->endtime }}</td>
-            <td>{{$teacher->classname }}</td>
+            <td>@if(isset($classinfo->name)) {{ $classinfo->name }} @endif</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <td><a href="#" onclick="getteacherinfo('{{$teacher->id}}')">{{$teacher->firstName}}{{$teacher->lastName}}</a></td>
+
             <td>
               <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
              &nbsp&nbsp<a title='Delete' class='btn btn-danger' onclick="confirmed('{{$teacher->timetable_id}}');" href='#' > <i class="glyphicon glyphicon-trash icon-white"></i></a>
@@ -395,9 +437,64 @@
     </div>
   </div>
 @stop
+@section('model')
+    <!-- The Modal -->
+<div class="modal"  data-backdrop="" id="teacherModal" role="dialog" aria-labelledby="preview-modal" aria-hidden="true" style="margin-top: 100px;" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Teacher Detail</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+       <table id="classList" class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th style="width:30%">Name</th>
+              <th style="width:30%">Phone</th>
+              <th style="width:30%">Email</th>
+            </tr>
+          </thead>
+          <tbody id="tdetails">
+            
+          </tbody>
+          </table>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+  @stop
 @section('script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 <script>
+
+function getteacherinfo(teacher_id){
+    //alert(teacher_id)
+       $.ajax({
+      url:"{{ url('/get/teacher') }}"+"/"+teacher_id,
+      method:"GET",
+      //data:{name:class_name,code:class_code,description:class_des, _token:_token},
+      success:function(data){
+          $("#tdetails").html(data);
+
+          $('#teacherModal').modal('show');
+      },
+
+            error: function (textStatus, errorThrown) {
+                alert(JSON.stringify(textStatus));
+            }
+     });
+  }
  $('#timepicker1').timepicker();
   $('#timepicker2').timepicker();
 

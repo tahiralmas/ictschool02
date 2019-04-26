@@ -310,6 +310,12 @@ table i{
 table i {
     ##font-size: 10px !important;
 }
+
+.ScrollStyle
+{
+    max-height: 500px;
+    overflow-y: scroll;
+}
   </style>
     <!-- jQuery -->
     <!--<script src="{{ URL::asset('/bower_components/jquery/jquery.min.js') }}"></script>
@@ -334,6 +340,10 @@ table i {
         <!-- END HEADER MOBILE-->
         {{--@yield('sidebarmenu')--}}
         @include('layouts.sidebarmenu') 
+
+        </ul>
+        </nav>
+        </div>
         <!-- MENU SIDEBAR-->
         </aside>
         <!-- PAGE CONTAINER-->
@@ -591,7 +601,7 @@ table i {
                                             </a>
                                         </div>
                                         
-                                        <div class="account-dropdown__item">
+                                        <div class="account-dropdown__item ScrollStyle" style="overflow-y: auto;">
                                                 
                                                  @if (Session::get('userRole')=="Admin")
                                                     <li class="has-sub" style="list-style-type: none;">
@@ -661,6 +671,36 @@ table i {
             <aside class="menu-sidebar2 js-right-sidebar d-block d-lg-none">
               
                 @include('layouts.sidebarmenu') 
+
+                <li class="has-sub">
+          <a  class="js-arrow {{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission','accounting') ? 'open' : '' }}" href="#">
+            <i class="glyphicon glyphicon-cog"></i>
+             Settings 
+            <span class="arrow {{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission','accounting') ? 'up' : '' }}">
+              <i class="fas fa-angle-down"></i> 
+            </span>                            
+          </a>
+          <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission','accounting') ? 'block' : 'none' }} ;">
+            <li class="{{ Request::is('academicYear') ? 'active' : '' }}"><a href="{{url('/academicYear')}}">Academic Year</a></li>
+            <li class="{{ Request::is('gpa') ? 'active' : '' }}"><a href="{{url('/gpa')}}">GPA Ruels</a></li>
+            <li class="{{ Request::is('users') ? 'active' : '' }}"><a href="{{url('/users')}}">Users</a></li>
+            <li class="{{ Request::is('holidays') ? 'active' : '' }}"><a href="{{url('/holidays')}}">Holidays</a></li>
+            <li class="{{ Request::is('class-off') ? 'active' : '' }}"><a href="{{url('/class-off')}}">Class Off Days</a></li>
+            <li class="{{ Request::is('institute') ? 'active' : '' }}"><a href="{{url('/institute')}}">Institute</a></li>
+            <li class="{{ Request::is('ictcore?type=sms') ? 'active' : '' }}"><a href="{{url('/ictcore?type=sms')}}">Sms Integration</a></li>
+            <li class="{{ Request::is('ictcore?type=voice') ? 'active' : '' }}"><a href="{{url('/ictcore?type=voice')}}">Voice Integration</a></li>
+            <li class="{{ Request::is('notification_type') ? 'active' : '' }}"><a href="{{url('/notification_type')}}">Notification Types</a></li>
+            <li class="{{ Request::is('ictcore/attendance') ? 'active' : '' }}"><a href="{{url('/ictcore/attendance')}}">Notifications</a></li>
+            <li class="{{ Request::is('permission') ? 'active' : '' }}"><a href="{{url('/permission')}}">Permission</a></li>
+            @if(accounting_check()!='' && accounting_check()=='yes' )
+            <li class="{{ Request::is('accounting') ? 'active' : '' }}"><a href="{{url('/accounting')}}">Accounting Api</a></li>
+            @endif 
+          </ul>
+        </li>
+
+                </ul>
+                </nav>
+                </div>
             </aside>
             <!-- END Mobile menu-->
             <!-- END HEADER DESKTOP-->

@@ -308,6 +308,4 @@
         @endif
         </li>
       @endif
-  </ul>
-</nav>
-</div>
+  

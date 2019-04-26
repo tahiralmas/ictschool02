@@ -53,6 +53,8 @@
               <button type="button" class="btn btn-primary" style="margin-left: 0px;" data-toggle="modal" data-target="#exampleModal">
                     Add Family Discount
               </button>
+              <a title='vouchar history' class='btn btn-primary'  href='{{url("/family/vouchar_history")}}/{{$family_id}}'> <i class="glyphicon glyphicon-usd icon-white"></i></a>
+
               <table id="studentList" class="table table-striped table-bordered" >
                 <thead>
                   <tr>
