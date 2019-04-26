@@ -48,7 +48,7 @@ class sectionController extends BaseController {
 			'name' => 'required',
 			'class'=> 'required',
 			//'teacher_id'=>
-			'description' => 'required',
+			//'description' => 'required',
 			'teacher_id' => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
@@ -70,6 +70,9 @@ class sectionController extends BaseController {
 				$class->name = Input::get('name');
 				$class->class_code = Input::get('class');
 				$class->description = Input::get('description');
+				if(Input::get('description')==''){
+					$class->description = '';
+				}
 				$class->teacher_id = Input::get('teacher_id');
 				$class->save();
 				return Redirect::to('/section/create')->with("success", "Section Created Succesfully.");
@@ -129,7 +132,7 @@ class sectionController extends BaseController {
 	{
 		$rules=[
 			'name' => 'required',
-			'description' => 'required',
+			//'description' => 'required',
 			'teacher_id' => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
@@ -142,6 +145,9 @@ class sectionController extends BaseController {
 			$section->name= Input::get('name');
             $section->class_code = Input::get('class');
 			$section->description=Input::get('description');
+			if(Input::get('description')==''){
+				$section->description='';
+			}
 			$section->teacher_id = Input::get('teacher_id');
 			$section->save();
 			return Redirect::to('/section/list')->with("success","Section Updated Succesfully.");

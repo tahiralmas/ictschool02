@@ -24,7 +24,7 @@ b {color:red}
                     </div>
 
                     <div class="form-group">
-                        <label for="name">Description<b>*</b></label>
+                        <label for="name">Description</label>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <textarea type="text" class="form-control" required name="description" placeholder="Class Description">{{$class->description}}</textarea>

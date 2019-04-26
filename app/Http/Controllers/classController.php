@@ -46,7 +46,7 @@ class classController extends BaseController {
 		$rules=[
 			'name' => 'required',
 			'code' => 'required|max:20',
-			'description' => 'required'
+			//'description' => 'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
@@ -67,11 +67,67 @@ class classController extends BaseController {
 				$class->name = Input::get('name');
 				$class->code = $clcode;
 				$class->description = Input::get('description');
+				if( Input::get('description')==''){
+					$class->description ='';
+				}
 				$class->save();
 				return Redirect::to('/class/create')->with("success", "Class Created Succesfully.");
 			}
 		}
 	}
+
+	public function ajaxcreate()
+	{
+		
+//echo "<pre>";print_r(Input::all());
+		$rules=[
+			'name' => 'required',
+			'code' => 'required|max:20',
+			//'description' => 'required'
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails())
+		{
+			 return response()->json($validator->errors(), 422);
+		}
+		else {
+			$clcode = 'cl'.Input::get('code');
+			$cexists=ClassModel::select('*')->where('code','=',$clcode)->get();
+			if(count($cexists)>0){
+
+				$errorMessages = new \Illuminate\Support\MessageBag;
+				$errorMessages->add('deplicate', 'Class all ready exists!!');
+				//return Redirect::to('/class/create')->withErrors($errorMessages);
+				 return response()->json($errorMessages, 422);
+			}
+			else {
+				$class = new ClassModel;
+				$class->name = Input::get('name');
+				$class->code = $clcode;
+				$class->description = Input::get('description');
+				if( Input::get('description')==''){
+					$class->description ='';
+				}
+				$class->save();
+				$classlist  = DB::table('Class')->get();
+				$html='';
+				foreach($classlist as $clas){
+
+					$html .='<option value="'.$clas->code.'"';
+					if($clas->code ==$class->code){
+						$html .='selected';
+					}
+					$html .='>'.$clas->name.'</option>';
+				}
+				//
+				//return Redirect::to('/class/create')->with("success", "Class Created Succesfully.");
+				return response()->json(array('message'=>'success','new_id'=>$class->code,'classlist'=>$html), 200);
+
+			}
+		}
+	}
+
+
 
 
 	/**
@@ -127,6 +183,9 @@ class classController extends BaseController {
 			$class->name= Input::get('name');
 
 			$class->description=Input::get('description');
+			if( Input::get('description')==''){
+					$class->description ='';
+				}
 			$class->save();
 			return Redirect::to('/class/list')->with("success","Class Updated Succesfully.");
 

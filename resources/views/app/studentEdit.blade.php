@@ -31,6 +31,50 @@ b {color:red}
                 <input type="hidden" name="id" value="{{ $student->id }}">
                   <input type="hidden" name="oldphoto" value="{{ $student->photo }}">
                 <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="text-info"> Guardian's Detail</h3>
+                            <hr>
+                        </div>
+                      </div>
+                        <div class="row">
+                          <div class="col-md-12">
+                          <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="fatherCellNo">Father's Mobile No  <b>*</b></label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                    <input type="text" class="form-control" value="{{$student->fatherCellNo}}" required name="fatherCellNo" placeholder="03000000000" readonly>
+                                </div>
+                            </div>
+                            </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                              <label for="fatherName">Father's Name <b>*</b></label>
+                              <div class="input-group">
+                                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                  <input type="text" class="form-control" value="{{$student->fatherName}}"  required  name="fatherName" placeholder="Name" readonly>
+                              </div>
+                          </div>
+                          </div>
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="localGuardianCell">local Guardian Mobile No </label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                    <input type="text" class="form-control"  value="{{$student->localGuardianCell}}"  name="localGuardianCell" placeholder="03000000000">
+                                </div>
+                            </div>
+                            </div>
+                          
+                            
+                  </div>
+                </div>
+
+                
+
+
+                <div class="row">
                   <div class="col-md-12">
                       <h3 class="text-info"> Acdemic Details</h3>
                       <hr>
@@ -210,7 +254,7 @@ b {color:red}
                           <label for="lname">Last Name</label>
                           <div class="input-group">
                               <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                              <input type="text" class="form-control" value="{{$student->lastName}}" required name="lname" placeholder="Last Name">
+                              <input type="text" class="form-control" value="{{$student->lastName}}"  name="lname" placeholder="Last Name">
                           </div>
                       </div>
                       </div>
@@ -226,9 +270,9 @@ b {color:red}
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                             <?php  $data=[
-                              'Male'=>'Male',
-                              'Female'=>'Female',
-                                'Other'=>'Other'
+                              'Male'    =>'Male',
+                              'Female'  =>'Female',
+                              'Other'   =>'Other'
 
                               ];?>
                               {{ Form::select('gender',$data,$student->gender,['class'=>'form-control','required'=>'true'])}}
@@ -237,6 +281,67 @@ b {color:red}
                       </div>
                         </div>
                         <div class="col-md-4">
+                            <div class="form-group ">
+                                             <label for="dob">Date Of Birth </label>
+                                                 <div class="input-group">
+
+                                                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                                                    <input type="text" value="{{$student->dob}}"  class="form-control datepicker" name="dob"   data-date-format="dd/mm/yyyy">
+                                                </div>
+
+
+                                         </div>
+                            </div>
+
+                            <div class="col-md-4">
+                              <div class="form-group">
+                                <label for="remarks"> B-form/Cnic </label>
+                                <div class="input-group">
+                                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                  <input type="text" class="form-control b_form" value="{{$student->b_form}}"    name="b_form" placeholder="B-form/Cnic">
+                                </div>
+                              </div>
+                           </div>
+                        
+
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        
+
+                          
+
+                            <div class="col-md-4">
+                              <div class="form-group ">
+                              <label for="photo">Photo</label>
+                              <input id="photo" name="photo"  type="file">
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="presentAddress">Present Address <b>*</b></label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
+                                <textarea type="text" class="form-control" required name="presentAddress" placeholder="Address">{{$student->presentAddress}}</textarea>
+                            </div>
+                        </div>
+                        </div>
+
+                    </div>
+                  </div>
+                  
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <h3 class="text-info">Other Details</h3>
+                      <hr>
+                    </div>
+                  </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                <div class="col-md-4">
                           <div class="form-group">
                           <label class="control-label" for="religion">Religion</label>
 
@@ -278,10 +383,6 @@ b {color:red}
                       </div>
                         </div>
 
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-12">
                         <div class="col-md-4">
                           <div class="form-group">
                               <label for="nationality">Nationality</label>
@@ -292,33 +393,7 @@ b {color:red}
                           </div>
                         </div>
 
-                          <div class="col-md-4">
-                            <div class="form-group ">
-                                             <label for="dob">Date Of Birth <b>*</b></label>
-                                                 <div class="input-group">
-
-                                                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                                    <input type="text" value="{{$student->dob}}"  class="form-control datepicker" name="dob" required  data-date-format="dd/mm/yyyy">
-                                                </div>
-
-
-                                         </div>
-                            </div>
-
-                            <div class="col-md-4">
-                              <div class="form-group ">
-                              <label for="photo">Photo</label>
-                              <input id="photo" name="photo"  type="file">
-                              </div>
-                            </div>
-
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-
-
-                      <div class="col-md-4">
+                         <div class="col-md-4">
                         <div class="form-group">
                             <label for="extraActivity">Extra Curicular Activity </label>
                             <div class="input-group">
@@ -336,91 +411,10 @@ b {color:red}
                               </div>
                           </div>
                           </div>
-
-                          <div class="col-md-4">
-                              <div class="form-group">
-                                <label for="remarks"> B-form/Cnic </label>
-                                <div class="input-group">
-                                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                  <input type="text" class="form-control b_form" value="{{$student->b_form}}"    name="b_form" placeholder="B-form/Cnic">
-                                </div>
-                              </div>
-                           </div>
-                      </div>
-                    </div>
-
-
-
-                      <div class="row">
-                        <div class="col-md-12">
-                            <h3 class="text-info"> Guardian's Detail</h3>
-                            <hr>
-                        </div>
-                      </div>
-                        <div class="row">
-                          <div class="col-md-12">
-                        <div class="col-md-4">
-                          <div class="form-group">
-                              <label for="fatherName">Father's Name <b>*</b></label>
-                              <div class="input-group">
-                                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                  <input type="text" class="form-control" value="{{$student->fatherName}}"  required  name="fatherName" placeholder="Name">
-                              </div>
-                          </div>
-                          </div>
-                          <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="fatherCellNo">Father's Mobile No  <b>*</b></label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                    <input type="text" class="form-control" value="{{$student->fatherCellNo}}" required name="fatherCellNo" placeholder="+8801xxxxxxxxx">
-                                </div>
-                            </div>
-                            </div>
-                            <div class="col-md-4">
-                              <div class="form-group">
-                                  <label for="motherName">Mother's Name </label>
-                                  <div class="input-group">
-                                      <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                      <input type="text" class="form-control"   value="{{$student->motherName}}"  name="motherName" placeholder="Name">
-                                  </div>
-                              </div>
-                              </div>
-                  </div>
                 </div>
-                <div class="row">
-                  <div class="col-md-12">
-
-                      <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="motherCellNo">Mother's Mobile No </label>
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                <input type="text" class="form-control" value="{{$student->motherCellNo}}"   name="motherCellNo" placeholder="+8801xxxxxxxxx">
-                            </div>
-                        </div>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                              <label for="localGuardian">Local Guardian Name </label>
-                              <div class="input-group">
-                                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                  <input type="text" class="form-control" value="{{$student->localGuardian}}"  name="localGuardian" placeholder="Name">
-                              </div>
-                          </div>
-                          </div>
-                          <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="localGuardianCell">local Guardian Mobile No </label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                    <input type="text" class="form-control"  value="{{$student->localGuardianCell}}"  name="localGuardianCell" placeholder="+8801xxxxxxxxx">
-                                </div>
-                            </div>
-                            </div>
-                </div>
-              </div>
-              <div class="row">
+              </div> 
+                
+              {{--<div class="row">
                 <div class="col-md-12">
                     <h3 class="text-info"> Address Detail</h3>
                     <hr>
@@ -428,15 +422,7 @@ b {color:red}
               </div>
               <div class="row">
                 <div class="col-md-12">
-                          <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="presentAddress">Present Address <b>*</b></label>
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
-                                <textarea type="text" class="form-control" required name="presentAddress" placeholder="Address">{{$student->presentAddress}}</textarea>
-                            </div>
-                        </div>
-                        </div>
+                          
                         <div class="col-md-6">
                           <div class="form-group">
                               <label for="parmanentAddress">Parmanent Address</label>
@@ -447,7 +433,7 @@ b {color:red}
                           </div>
                           </div>
               </div>
-            </div>
+            </div>--}}
 
 
                     <div class="clearfix"></div>

@@ -64,6 +64,7 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -78,6 +79,12 @@
             <td>{{$teacher->classname }}</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <th class="col-md-4">Action</th>
+            <td>
+              <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
+             &nbsp&nbsp<a title='Delete' class='btn btn-danger' onclick="confirmed('{{$teacher->timetable_id}}');" href='#' > <i class="glyphicon glyphicon-trash icon-white"></i></a>
+
+            </td>
           </tr>
           @endif
            @endforeach
@@ -106,6 +113,7 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -120,6 +128,11 @@
             <td>{{$teacher->classname }}</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <td>
+              <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
+             &nbsp&nbsp<a title='Delete' class='btn btn-danger' onclick="confirmed('{{$teacher->timetable_id}}');" href='#' > <i class="glyphicon glyphicon-trash icon-white"></i></a>
+
+            </td>
           </tr>
           @endif
            @endforeach
@@ -148,6 +161,8 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Action</th>
+            
           </tr>
         </thead>
         <tbody>
@@ -162,6 +177,11 @@
             <td>{{$teacher->classname }}</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <td>
+              <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
+             &nbsp&nbsp<a title='Delete' class='btn btn-danger' onclick="confirmed('{{$teacher->timetable_id}}');" href='#' > <i class="glyphicon glyphicon-trash icon-white"></i></a>
+
+            </td>
           </tr>
           @endif
            @endforeach
@@ -190,6 +210,8 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Action</th>
+            
           </tr>
         </thead>
         <tbody>
@@ -204,6 +226,11 @@
             <td>{{$teacher->classname }}</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <td>
+              <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
+             &nbsp&nbsp<a title='Delete' class='btn btn-danger' onclick="confirmed('{{$teacher->timetable_id}}');" href='#' > <i class="glyphicon glyphicon-trash icon-white"></i></a>
+
+            </td>
           </tr>
           @endif
            @endforeach
@@ -232,6 +259,8 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Action</th>
+            
           </tr>
         </thead>
         <tbody>
@@ -246,6 +275,11 @@
             <td>{{$teacher->classname }}</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <td>
+              <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
+             &nbsp&nbsp<a title='Delete' class='btn btn-danger' onclick="confirmed('{{$teacher->timetable_id}}');" href='#' > <i class="glyphicon glyphicon-trash icon-white"></i></a>
+
+            </td>
           </tr>
           @endif
            @endforeach
@@ -274,6 +308,7 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -288,6 +323,11 @@
             <td>{{$teacher->classname }}</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <td>
+              <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
+             &nbsp&nbsp<a title='Delete' class='btn btn-danger' onclick="confirmed('{{$teacher->timetable_id}}');" href='#' > <i class="glyphicon glyphicon-trash icon-white"></i></a>
+
+            </td>
           </tr>
           @endif
            @endforeach
@@ -315,6 +355,7 @@
             <th class="col-md-3">Class</th>
             <th class="col-md-2">Section</th>
             <th class="col-md-4">Subjects</th>
+            <th class="col-md-4">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -329,6 +370,11 @@
             <td>{{$teacher->classname }}</td>
             <td>{{$teacher->section_id }}</td>
             <td>{{$teacher->subname }}</td>
+            <td>
+              <a title='Edit' class='btn btn-info' href='{{url("/timetable/edit")}}/{{$teacher->timetable_id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
+             &nbsp&nbsp<a title='Delete' class='btn btn-danger' onclick="confirmed('{{$teacher->timetable_id}}');" href='#' > <i class="glyphicon glyphicon-trash icon-white"></i></a>
+
+            </td>
           </tr>
           @endif
            @endforeach
@@ -354,5 +400,15 @@
 <script>
  $('#timepicker1').timepicker();
   $('#timepicker2').timepicker();
+
+  function confirmed(teacher_id){
+    var x = confirm('Are you sure you want to delete timetable?');
+                if (x){
+                  window.location = "{{url('/timetable/delete/')}}/"+teacher_id;
+                 return true;
+                }else{
+                  return false;
+                }
+  }
 </script>
 @stop

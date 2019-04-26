@@ -165,13 +165,14 @@ class studentController extends BaseController {
 		// return '98';
 		$query = Input::get('query');
 		///return $query;
-		if(strlen($query)<=11){
+		if(strlen($query)>=10 ){
 
 			$referalname  = '';
 			$referalid    = '';
 			$fathername   = '';
 			$fatherphone  = '';
 			$localg       = '';
+			$unique_code  = '';
 		$data=DB::table('Student')->where('fatherCellNo','LIKE','%'.$query.'%')
 		 ->first();
 		 if(!empty($data)){
@@ -182,7 +183,7 @@ class studentController extends BaseController {
 		 	
 		 	if($unique_code=='' || $unique_code==NULL){
 		 		//$unique_code =	str_random(6);
-		 		$unique_code =	hexdec(substr(uniqid(rand(), true), 5, 5));
+		 		//$unique_code =	hexdec(substr(uniqid(rand(), true), 5, 5));
 		 	}
 		 	$check_referals = DB::table('referals')->where('family_id',$unique_code)->first();
 		 	if(!empty($check_referals)){
@@ -196,13 +197,37 @@ class studentController extends BaseController {
 		 		$referalid  = '';
 		 	}
 		 }else{
-		 	$unique_code =	 hexdec(substr(uniqid(rand(), true), 5, 5));
+		 	//$unique_code =	 hexdec(substr(uniqid(rand(), true), 5, 5));
 		 }
 		 //echo $unique_code;
 		 return array('unique_code'=>$unique_code,'referalname'=>$referalname,'referalid'=>$referalid,'fathername'=>$fathername ,'fatherphone'=>$fatherphone,'localg'=>$localg);
 
 		}
 		//echo strlen($query);
+	}
+
+	public function getrefral($refral){
+		//$refral = Input::get('query');
+		$data=DB::table('Student')
+		        ->where('fatherName','LIKE','%'.$refral.'%')
+		        ->orwhere('family_id','LIKE','%'.$refral.'%')
+		        ->groupBy('fatherName')
+		        ->limit(20)
+		        ->get();
+		        return response()->json($data);
+		$autocom = array();
+		if($data->count()>0){
+			$data = $data->get();
+			foreach($data as $ref){
+				$autocom[] = $ref->fatherName.'('.$ref->family_id.')';
+			}
+
+			//$json = implode(',',$autocom);
+			$json = '"'.implode('","', $autocom).'"';
+			//$json =  join($autocom, '","');
+			return $json;
+		}
+
 	}
 	public  function getRegi($class,$session,$section)
 	{
@@ -302,6 +327,27 @@ class studentController extends BaseController {
 		return Redirect::to('/student/create')->withErrors($validator)->withInput();
 	}
 	else {
+
+
+		$check_ids = DB::table('Student')
+            			->where('family_id', '=', Input::get('family_id'))
+						//->where('fatherCellNo', '=', Input::get('fatherCellNo'))
+						->get();
+			    $get_family_ids = array();
+			//echo "<pre>".Input::get('family_id');print_r($check_ids->toArray());
+			if(count($check_ids->toArray())>0){
+				foreach($check_ids as $f_id){
+					if($f_id->fatherCellNo==Input::get('fatherCellNo')){
+						$get_family_ids[] = $f_id->family_id;
+					}
+				}
+	            //echo "<pre>".$family_id;print_r($get_family_ids);exit;
+				if(!in_array(Input::get('family_id'), $get_family_ids)){
+
+						return Redirect::to('/student/create')->withInput()->withErrors('Family Id Already Assign Other Family plase select different ID');
+				}
+			}
+//echo "testr";exit;
 
 		if(Input::file('photo')!=''){
 
@@ -835,6 +881,9 @@ public function update()
 			$student->middleName = "";
 		}
 		$student->lastName = Input::get('lname');
+		if(Input::get('lname')==''){
+			$student->lastName ="";
+		}
 		$student->gender= Input::get('gender');
 		
 		$student->religion= Input::get('religion');

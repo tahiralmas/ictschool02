@@ -86,15 +86,15 @@ class teacherController extends BaseController {
 
 		$rules=[//'regiNo' => 'required',
 		'fname' => 'required',
-		'lname' => 'required',
-		'gender' => 'required',
-		'dob' => 'required',
+		//'lname' => 'required',
+		//'gender' => 'required',
+		//'dob' => 'required',
 		
 		'photo' => 'mimes:jpeg,jpg,png',
 		'phne' => 'required',
-		'fatherName' => 'required',
-		'fatherCellNo' => 'required',
-		'presentAddress' => 'required',
+		//'fatherName' => 'required',
+		//'fatherCellNo' => 'required',
+		//'presentAddress' => 'required',
 		'emails'    =>'nullable|email|unique:teacher,email'
 		//'emails'    =>'nullable|email|unique:teacher'
 		];
@@ -116,7 +116,13 @@ class teacherController extends BaseController {
 			$teacher = new Teacher;
 			$teacher->firstName= Input::get('fname');
 			$teacher->lastName= Input::get('lname');
+			if(Input::get('lname')==''){
+				$teacher->lastName='';
+			}
 			$teacher->gender= Input::get('gender');
+			if(Input::get('gender')==''){
+				$teacher->gender='';
+			}
 			$teacher->religion= Input::get('religion');
 			if(Input::get('religion')==''){
 				$teacher->religion="";
@@ -131,6 +137,9 @@ class teacherController extends BaseController {
 				$teacher->nationality="";
 			}
 			$teacher->dob= Input::get('dob');
+			if(Input::get('dob')==''){
+				$teacher->dob="";
+			}
 			$teacher->photo= $fileName;
 			$teacher->nationality= Input::get('nationality');
 			if(Input::get('nationality')==''){
@@ -145,8 +154,17 @@ class teacherController extends BaseController {
 			}
 
 			$teacher->fatherName= Input::get('fatherName');
+			if(Input::get('fatherName')==''){
+				$teacher->fatherName='';
+			}
 			$teacher->fatherCellNo= Input::get('fatherCellNo');
+			if(Input::get('fatherCellNo')==""){
+				$teacher->fatherCellNo="";
+			}
 			$teacher->presentAddress= Input::get('presentAddress');
+			if(Input::get('presentAddress')==''){
+				$teacher->presentAddress="";
+			}
 			$teacher->parmanentAddress= Input::get('parmanentAddress');
 			if(Input::get('parmanentAddress')==''){
 				$teacher->parmanentAddress="";
@@ -182,6 +200,9 @@ class teacherController extends BaseController {
 			$user = new User;
 			$user->firstname = Input::get('fname');
 			$user->lastname  = Input::get('lname');
+			if( Input::get('lname')==''){
+				$user->lastname='';
+			}
 
 			$user->email     =     Input::get('emails');
 			if(Input::get('emails')==''){
@@ -245,6 +266,118 @@ class teacherController extends BaseController {
 		}
 	}
 
+
+
+	public function ajaxcreate()
+	{
+
+		$rules=[//'regiNo' => 'required',
+		'fname' => 'required',
+		'photo' => 'mimes:jpeg,jpg,png',
+		'phne' => 'required',
+		'emails'    =>'nullable|email|unique:teacher,email'
+		];
+		$validator = \Validator::make(Input::all(), $rules);
+		if ($validator->fails())
+		{
+		  return response()->json($validator->errors(), 422);
+
+			//return Redirect::to('/teacher/create')->withErrors($validator)->withInput();
+		}
+		else {
+
+			//exit;
+
+			
+				$fileName='';
+			//
+			$teacher = new Teacher;
+			$teacher->firstName= Input::get('fname');
+			$teacher->lastName= Input::get('lname');
+			if(Input::get('lname')==''){
+				$teacher->lastName='';
+			}
+			$teacher->gender= Input::get('gender');
+			if(Input::get('gender')==''){
+				$teacher->gender='';
+			}
+			$teacher->religion= Input::get('religion');
+			if(Input::get('religion')==''){
+				$teacher->religion="";
+			}
+			$teacher->bloodgroup= Input::get('bloodgroup');
+			if(Input::get('bloodgroup')==''){
+				$teacher->bloodgroup="";
+
+			}
+			$teacher->nationality= Input::get('nationality');
+			if(Input::get('nationality')==''){
+				$teacher->nationality="";
+			}
+			$teacher->dob= Input::get('dob');
+			if(Input::get('dob')==''){
+				$teacher->dob="";
+			}
+			$teacher->photo= $fileName;
+			$teacher->nationality= Input::get('nationality');
+			if(Input::get('nationality')==''){
+
+				$teacher->nationality= "";
+
+			}
+			$teacher->phone= Input::get('phne');
+			$teacher->email= Input::get('emails');
+			if(Input::get('emails')==''){
+				$teacher->email="";
+			}
+
+			$teacher->fatherName= Input::get('fatherName');
+			if(Input::get('fatherName')==''){
+				$teacher->fatherName='';
+			}
+			$teacher->fatherCellNo= Input::get('fatherCellNo');
+			if(Input::get('fatherCellNo')==""){
+				$teacher->fatherCellNo="";
+			}
+			$teacher->presentAddress= Input::get('presentAddress');
+			if(Input::get('presentAddress')==''){
+				$teacher->presentAddress="";
+			}
+			$teacher->parmanentAddress= Input::get('parmanentAddress');
+			if(Input::get('parmanentAddress')==''){
+				$teacher->parmanentAddress="";
+			}
+
+			$hasTeacher = Teacher::where('phone','=',Input::get('phne'))->first();
+			if ($hasTeacher)
+			{
+				$messages = $validator->errors();
+				$messages->add('Duplicate!', 'Teacher already exits with this Phone number.');
+				//return Redirect::to('/teacher/create')->withErrors($messages)->withInput();
+			     return response()->json($messages, 422);
+
+			}else {
+				$teacher->save();
+				
+			}
+			//return Redirect::to('/teacher/create')->with("success","Teacher Created Succesfully.");
+
+			$teacherlist  = DB::table('teacher')->get();
+				$html='';
+				foreach($teacherlist as $techr){
+
+					$html .='<option value="'.$techr->id.'"';
+					if($techr->id ==$teacher->id){
+						$html .='selected';
+					}
+					$html .='>'.$techr->firstName.'</option>';
+				}
+			return response()->json(array('message'=>'success','new_id'=>$teacher->id,'teacherList'=>$html), 200);
+
+
+			}
+		}
+	
 	/**
 	* Display the specified resource.
 	*
@@ -340,17 +473,17 @@ class teacherController extends BaseController {
 
 	$rules=[
 	'fname' => 'required',
-	'lname' => 'required',
-	'gender' => 'required',
+	//'lname' => 'required',
+	//'gender' => 'required',
 	//'religion' => 'required',
 	//'bloodgroup' => 'required',
 	//'nationality' => 'required',
 	'phone' => 'required',
 	//'email' => 'required',
-	'dob' => 'required',
-	'fatherName' => 'required',
-	'fatherCellNo' => 'required',
-	'presentAddress' => 'required',
+	//'dob' => 'required',
+	///'fatherName' => 'required',
+	//'fatherCellNo' => 'required',
+	//'presentAddress' => 'required',
 	'email'    =>'nullable|email|unique:teacher,email,'.Input::get('id')
 	//'parmanentAddress' => 'required'
 	];
@@ -408,7 +541,13 @@ class teacherController extends BaseController {
 
 	$teacher->firstName= Input::get('fname');
 	$teacher->lastName= Input::get('lname');
+	if(Input::get('lname')==''){
+		$teacher->lastName= "";
+	}
 	$teacher->gender= Input::get('gender');
+	if(Input::get('gender')==""){
+		$teacher->lastName= "";
+	}
 	$teacher->religion= Input::get('religion');
 	if(Input::get('religion')==''){
 	$teacher->religion="";
@@ -423,6 +562,9 @@ class teacherController extends BaseController {
 	$teacher->nationality="";
 	}
 	$teacher->dob= Input::get('dob');
+	if(Input::get('dob')==''){
+			$teacher->dob="";
+	}
 	//	$teacher->photo= $fileName;
 	$teacher->nationality= Input::get('nationality');
 	if(Input::get('nationality')==''){
@@ -437,8 +579,17 @@ class teacherController extends BaseController {
 	}
 
 	$teacher->fatherName= Input::get('fatherName');
+	if( Input::get('fatherName')==""){
+		$teacher->fatherName="";
+	}
 	$teacher->fatherCellNo= Input::get('fatherCellNo');
+	if(Input::get('fatherCellNo')==""){
+		$teacher->fatherCellNo="";
+	}
 	$teacher->presentAddress= Input::get('presentAddress');
+	if(Input::get('presentAddress')==""){
+		$teacher->presentAddress="";
+	}
 	$teacher->parmanentAddress= Input::get('parmanentAddress');
 	if(Input::get('parmanentAddress')==''){
 	$teacher->parmanentAddress="";
@@ -456,7 +607,9 @@ class teacherController extends BaseController {
 		$user = User::find($user_id);
 			$user->firstname = Input::get('fname');
 			$user->lastname  = Input::get('lname');
-
+			if(Input::get('lname')==""){
+				$user->lastname  ="";
+			}
 			$user->email     =     Input::get('email');
 			if(Input::get('email')==''){
 				$user->email = '';
@@ -465,7 +618,7 @@ class teacherController extends BaseController {
 			//$user->login     = Input::get('fname').'_'.Input::get('lname');
 			//$user->group     = 'Teacher';
 			//$user->group_id  = $teacher->id;
-			$user->password  =	Hash::make(Input::get('phone'));
+			//$user->password  =	Hash::make(Input::get('phone'));
 			$user->save();
 	}
 
@@ -602,7 +755,7 @@ class teacherController extends BaseController {
 
 		//
 
-$days = Input::get('day');
+		$days = Input::get('day');
 		$rules=[//'regiNo' => 'required',
 		'teacher' => 'required',
 		'class' => 'required',
@@ -713,7 +866,7 @@ $days = Input::get('day');
 		->get();
 
 		//echo "<pre>";print_r($timetable);exit;
-		return View("app.teacherTimetable",compact("classes","sections","teachers","subjects","timetable"));
+		return View("app.timetableEdit",compact("classes","sections","teachers","subjects","timetable"));
 	}
 
 
@@ -738,7 +891,7 @@ $days = Input::get('day');
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-		return Redirect::to('/timetable/edit/'.Input::get('tid'))->withErrors($validator);
+		return Redirect::to('/timetable/edit/'.Input::get('tid'))->withErrors($validator)->withInput();
 		}
 		else {
 
@@ -753,7 +906,7 @@ $days = Input::get('day');
 				return Redirect::to('/teacher/create')->withErrors($messages)->withInput();
 				}
 				else {*/
-				foreach($days as $day){
+				//foreach($days as $day){
 
 				$timetable = Timetable::find(Input::get('tid'));
 				$timetable->teacher_id= Input::get('teacher');
@@ -762,20 +915,36 @@ $days = Input::get('day');
 				$timetable->subject_id= Input::get('subject');
 				$timetable->stattime= Input::get('startt');
 				$timetable->endtime= Input::get('endt');
-				$timetable->day = $day;
+				$timetable->day = Input::get('day');
 				$timetable->save();
 
-			} 
+			//} 
 
 
 
 			//echo request()->photo->move(public_path('images/'), $fileName);
-			return Redirect::to('/teacher/list')->with("success","Time Table updated Succesfully.");
+			return Redirect::to('/teacher/view-timetable/'.Input::get('teacher'))->with("success","Time Table updated Succesfully.");
 			//	}
 
 
 		}
 	}
+
+	public function delete_timetable($timetable_id)
+	{
+		$timetable = Timetable::find($timetable_id);
+		//$timetable
+		//echo "<pre>";print_r($timetable);exit;
+		$teacher_id ='';
+		if(!empty($timetable)){
+				$teacher_id = 	$timetable->teacher_id;
+				$timetable->delete();
+
+		}
+		return Redirect::to('/teacher/view-timetable/'.$teacher_id)->with("success","Time Table deleted Succesfully.");
+
+	}
+ 		
 
 
 

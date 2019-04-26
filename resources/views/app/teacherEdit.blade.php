@@ -1,6 +1,10 @@
 @extends('layouts.master')
 @section('style')
 <link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+<style type="text/css">
+  
+ b {color:red}
+</style>
 @stop
 @section('content')
 
@@ -36,9 +40,9 @@
             </div>
                 <div class="row">
                   <div class="col-md-12">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                       <div class="form-group">
-                          <label for="fname">First Name</label>
+                          <label for="fname">Full Name <b>*</b></label>
                           <div class="input-group">
                               <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                               <input type="text" class="form-control" value="{{$teacher->firstName}}" required name="fname" placeholder="First Name">
@@ -46,7 +50,7 @@
                       </div>
                     </div>
                     
-                    <div class="col-md-6">
+                    {{--<div class="col-md-6">
                       <div class="form-group">
                           <label for="lname">Last Name</label>
                           <div class="input-group">
@@ -54,13 +58,13 @@
                               <input type="text" class="form-control" value="{{$teacher->lastName}}" required name="lname" placeholder="Last Name">
                           </div>
                       </div>
-                      </div>
+                      </div>--}}
 
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-12">
-                      <div class="col-md-4">
+                      <div class="col-md-6">
                         <div class="form-group">
                         <label class="control-label" for="gender">Gender</label>
 
@@ -72,12 +76,93 @@
                                 'Other'=>'Other'
 
                               ];?>
-                              {{ Form::select('gender',$data,$teacher->gender,['class'=>'form-control','required'=>'true'])}}
+                              {{ Form::select('gender',$data,$teacher->gender,['class'=>'form-control'])}}
 
                         </div>
                       </div>
                         </div>
-                        <div class="col-md-4">
+
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                             <label for="dob">Date Of Birth</label>
+                                                 <div class="input-group">
+
+                                                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                                                    <input type="text" value="{{$teacher->dob}}"  class="form-control datepicker" name="dob"   data-date-format="dd/mm/yyyy">
+                                                </div>
+
+
+                                         </div>
+                            </div>
+
+                        
+                      
+
+                      </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-12">
+
+
+                      <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="extraActivity">Phone <b>*</b> </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                <input type="text" class="form-control" value="{{$teacher->phone}}"  name="phone" placeholder="Enter phone No">
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                              <label for="remarks">Email </label>
+                              <div class="input-group">
+                                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                  <input type="text" class="form-control"  value="{{$teacher->email}}"   name="email" placeholder="Email">
+                              </div>
+                          </div>
+                          </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-12">
+                        
+
+                          
+                            <div class="col-md-4">
+                              <div class="form-group ">
+                              <label for="photo">Photo</label>
+                              <input id="photo" name="photo"  type="file">
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="presentAddress">Address</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
+                                <textarea type="text" class="form-control"  name="presentAddress" placeholder="Address">{{$teacher->presentAddress}}</textarea>
+                            </div>
+                        </div>
+                        </div>
+
+                    </div>
+                  </div>
+                  
+
+
+                      
+               
+              <div class="row">
+                <div class="col-md-12">
+                    <h3 class="text-info"> Other Detail</h3>
+                    <hr>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                          
+                      <div class="col-md-4">
                           <div class="form-group">
                           <label class="control-label" for="religion">Religion</label>
 
@@ -96,7 +181,8 @@
                           </div>
                         </div>
                           </div>
-                      <div class="col-md-4">
+
+                          <div class="col-md-4">
                         <div class="form-group">
                         <label class="control-label" for="bloodgroup">Bloodgroup</label>
 
@@ -120,10 +206,6 @@
                       </div>
                         </div>
 
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-12">
                         <div class="col-md-4">
                           <div class="form-group">
                               <label for="nationality">Nationality</label>
@@ -132,113 +214,7 @@
                                   <input type="text" class="form-control" value="{{$teacher->nationality}}"   name="nationality" placeholder="Nationality">
                               </div>
                           </div>
-                        </div>
-
-                          <div class="col-md-4">
-                            <div class="form-group ">
-                                             <label for="dob">Date Of Birth</label>
-                                                 <div class="input-group">
-
-                                                  <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                                    <input type="text" value="{{$teacher->dob}}"  class="form-control datepicker" name="dob" required  data-date-format="dd/mm/yyyy">
-                                                </div>
-
-
-                                         </div>
-                            </div>
-
-                            <div class="col-md-4">
-                              <div class="form-group ">
-                              <label for="photo">Photo</label>
-                              <input id="photo" name="photo"  type="file">
-                              </div>
-                            </div>
-
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12">
-
-
-                      <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="extraActivity">Phone </label>
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                <input type="text" class="form-control" value="{{$teacher->phone}}"  name="phone" placeholder="Enter phone No">
-                            </div>
-                        </div>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                              <label for="remarks">Email </label>
-                              <div class="input-group">
-                                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                  <input type="text" class="form-control"  value="{{$teacher->email}}"   name="email" placeholder="Email">
-                              </div>
-                          </div>
-                          </div>
-                      </div>
-                    </div>
-
-
-
-                      <div class="row">
-                        <div class="col-md-12">
-                            <h3 class="text-info"> Guardian's Detail</h3>
-                            <hr>
-                        </div>
-                      </div>
-                        <div class="row">
-                          <div class="col-md-12">
-                        <div class="col-md-6">
-                          <div class="form-group">
-                              <label for="fatherName">Father's Name </label>
-                              <div class="input-group">
-                                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                  <input type="text" class="form-control" value="{{$teacher->fatherName}}"  required  name="fatherName" placeholder="Name">
-                              </div>
-                          </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="fatherCellNo">Father's Mobile No </label>
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                    <input type="text" class="form-control" value="{{$teacher->fatherCellNo}}" required name="fatherCellNo" placeholder="+8801xxxxxxxxx">
-                                </div>
-                            </div>
-                            </div>
-                         
-                  </div>
-                </div>
-               
-              <div class="row">
-                <div class="col-md-12">
-                    <h3 class="text-info"> Address Detail</h3>
-                    <hr>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                          <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="presentAddress">Present Address</label>
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
-                                <textarea type="text" class="form-control" required name="presentAddress" placeholder="Address">{{$teacher->presentAddress}}</textarea>
-                            </div>
-                        </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                              <label for="parmanentAddress">Parmanent Address</label>
-                              <div class="input-group">
-                                  <span class="input-group-addon"><i class="glyphicon glyphicon-map-marker blue"></i></span>
-                                  <textarea type="text" class="form-control"  name="parmanentAddress" placeholder="Address">{{$teacher->parmanentAddress}}</textarea>
-                              </div>
-                          </div>
-                          </div>
+                        </div>  
               </div>
             </div>
 

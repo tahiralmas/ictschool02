@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('style')
 <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <style>
 b {color:red}
 #errmsg
@@ -60,17 +61,7 @@ color: red;
         </div>
         <div class="row">
           <div class="col-md-12">
-          
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="fatherName">Father's Name <b>*</b></label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control" required value="{{old('fatherName')}}"  name="fatherName" placeholder="Name" id="f_name">
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
+          <div class="col-md-4">
               <div class="form-group">
                 <label for="fatherCellNo">Father's Mobile No <b>*</b></label>
                 <div class="input-group">
@@ -81,6 +72,16 @@ color: red;
                 
               </div>
             </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="fatherName">Father's Name <b>*</b></label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <input type="text" class="form-control" required value="{{old('fatherName')}}"  name="fatherName" placeholder="Name" id="f_name">
+                </div>
+              </div>
+            </div>
+            
             
            <!--  <div class="col-md-4">
               <div class="form-group">
@@ -133,7 +134,7 @@ color: red;
             </div> -->
             
 
-            <div class="col-md-8">
+            {{--<div class="col-md-8">
               <div class="form-group">
                 <label for="presentAddress">About Family Behavior </label>
                 <div class="input-group">
@@ -141,7 +142,7 @@ color: red;
                   <textarea type="text" class="form-control"  name="familyc" placeholder="">{{old('presentAddress')}}</textarea>
                 </div>
               </div>
-            </div>
+            </div>--}}
 
           </div>
           <input type="hidden" name="check" id="check">
@@ -165,7 +166,7 @@ color: red;
                 <label for="fatherName">Family Id </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  name="family_id" id="family_id" readonly>
+                  <input type="text" class="form-control"  name="family_id" value="{{old('family_id')}}" id="family_id" >
                 </div>
               </div>
             </div>
@@ -174,16 +175,16 @@ color: red;
                 <label for="fatherCellNo">Refer by Family </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  {{--<input type="text" class="form-control"   name="refer_by" value="{{old('refer_by')}}" id="refer_by" autocomplete="off"  placeholder="">--}}
+                <input type="text" class="form-control typeahead"   name="refer_by" value="{{old('refer_by')}}" id="refer_by"   placeholder="enter referal name or Id">
 
-                    <select class="form-control" id="refer_by"   name="refer_by">
+                    {{--<select class="form-control" id="refer_by"   name="refer_by">
                       <option value="">--- Select Refer By Family---</option>
                       @if($families)
                         @foreach($families as $family)
                           <option value="{{$family->family_id}}">{{ $family->fatherName }} ({{$family->family_id}})</option>
                         @endforeach
                       @endif
-                    </select>
+                    </select>--}}
                 </div>
               </div>
             </div>
@@ -566,12 +567,128 @@ color: red;
   </div>
 </div>
 </div>
+
 @stop
 @section('script')
 <script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+ <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+{{--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+--}}
 <script type="text/javascript">
 //alert({{get_current_session()->id}});
+ //$( function() {
+  
+  /*$("#refer_by").keydown(function (event) {
+
+      var refrl = $("#refer_by").val();
+    $.ajax({
+     url: "{{url('/get/refral')}}"+'/'+refrl,
+     data: {
+       //format: 'json'
+     },
+     error: function(error) {
+      
+     },
+    // dataType: 'json',
+     success: function(data) {
+
+      //alert(data);
+      var availableTags = [data];
+      // $('#regiNo').val(data[0]);
+      // $('#rollNo').val(data[1]);
+      $( "#refer_by" ).autocomplete({
+        source: availableTags
+      });
+     },
+     type: 'GET'
+   });
+
+
+
+
+
+    var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+    
+  } );*/
+
+      
+     /*var refrl = $("#refer_by").val();
+      var path  = "{{url('/get/refral')}}";
+    $('input.typeahead').typeahead({
+      //alert(refrl);
+
+     
+        source:  function (query, process) {
+
+        return $.get(path+'/'+query, function (data) {
+          console.log(9898);
+
+                return process(data);
+
+            });
+
+        }
+
+    });*/
+$(document).ready(function() {
+ $( "#refer_by" ).autocomplete({
+        //var refrl = $("#refer_by").val();
+        source: function(request, response) {
+
+            $.ajax({
+            url: "{{url('/get/refral')}}"+'/'+request.term,
+            data: {
+                   // term : request.term
+             },
+            dataType: "json",
+            success: function(data){
+               var resp = $.map(data,function(obj){
+                    console.log(obj.fatherName);
+                    return obj.fatherName+'('+obj.family_id+')';
+               }); 
+ 
+               response(resp);
+            }
+        });
+    },
+    minLength: 1
+ });
+});
+
  var getStdRegiRollNo = function(){
+
+ 
+
+
+
+
+
+
+
    var aclass = $('#class').val();
   // var session = $('#session').val().trim();
    var session = {{get_current_session()->id}};
@@ -746,20 +863,29 @@ $("#f_phone").keydown(function (event) {
           success:function(data){
             //alert(JSON.stringify(data));
            //$('#familyListd').fadeIn();  
-             $('#family_id').val(data.unique_code);
+             if(data.unique_code!='' && typeof(data.unique_code)!='undefined'){
+                $('#family_id').val(data.unique_code);
+                 $('#family_id').attr("readonly", true);
+             }else{
+              $('#family_id').val('');
+               $('#family_id').attr("readonly", false);
+             }
+             
             
              if(data.referalname!='' && typeof(data.referalname)!='undefined'){
-              // alert(data.referalname);
+               //alert(data.referalname);
               //alert(323);
               output = [];
-              output.push('<option value="'+ data.referalid +'" selected>'+ data.referalname +'</option>');
-              $('#refer_by').append(output);
+              //output.push('<option value="'+ data.referalid +'" selected>'+ data.referalname +'</option>');
+              $('#refer_by').val(data.referalname);
               $('#refer_by').attr("disabled", 'disabled');
              }else{
                $('#refer_by').attr("disabled", false);
              }
               if(data.fathername!='' && typeof(data.fathername)!='undefined'){
                   $('#f_name').val(data.fathername);
+              }else{
+                $('#f_name').val('');
               }
               if(data.fatherphone!='' && typeof(data.fatherphone)!='undefined'){
 

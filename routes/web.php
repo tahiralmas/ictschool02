@@ -54,6 +54,7 @@ Route::group(['middleware' => 'auth'], function(){
 **/
 Route::get('/class/create','classController@index')->middleware('checkPermission:class_add');
 Route::post('/class/create','classController@create')->middleware('checkPermission:class_add');
+Route::post('/ajaxcreate/create','classController@ajaxcreate')->middleware('checkPermission:class_add');
 Route::get('/class/list','classController@show')->middleware('checkPermission:class_view');
 Route::get('/class/edit/{id}','classController@edit')->middleware('checkPermission:class_update');
 Route::post('/class/update','classController@update')->middleware('checkPermission:class_update');
@@ -145,6 +146,7 @@ Route::post('/student/add/{f_id}','studentController@add_family_student');
 Route::post('/students/shift/{f_id}','studentController@shift_student_family');
 });
 Route::get('/student/getList/{class}/{section}/{shift}/{session}','studentController@getForMarks');
+Route::get('/get/refral/{refral}','studentController@getrefral');
 Route::get('/student/getsList/{class}/{section}/{shift}/{session}','studentController@getForMarksjoin');
 Route::post('/student/search','studentController@search');
 Route::post('/family/search','studentController@family');
@@ -160,6 +162,7 @@ Route::get('/teacher/getRegi/{class}/{session}/{section}','teacherController@get
 Route::group(['middleware' => 'admin'], function(){ 
 Route::get('/teacher/create','teacherController@index')->middleware('checkPermission:teacher_add');
 Route::post('/teacher/create','teacherController@create')->middleware('checkPermission:teacher_add');
+Route::post('/teacher/ajaxcreate','teacherController@ajaxcreate')->middleware('checkPermission:teacher_add');
 });
 Route::get('/teacher/list','teacherController@show')->middleware('checkPermission:teacher_add');
 Route::post('/teacher/list','teacherController@getList')->middleware('checkPermission:teacher_add');
@@ -181,6 +184,7 @@ Route::get('/teacher/create-timetable','teacherController@index_timetable')->mid
 Route::post('/teacher/create_timetable','teacherController@create_timetable')->middleware('checkPermission:teacher_timetable_add');
 Route::get('/timetable/edit/{timetable_id}','teacherController@edit_timetable');
 Route::post('/timetable/update','teacherController@update_timetable');
+Route::get('/timetable/delete/{timetable_id}','teacherController@delete_timetable');
 
 Route::get('/teacher/diary/{teacher_id}','teacherController@diary_add');
 Route::post('/teacher/diary','teacherController@diary_create');
