@@ -406,8 +406,23 @@ if (! function_exists('getrefralindfo')) {
 
 				$referals      = $check_referals->refral_id;
 		 		$referals_info = DB::table('Student')->where('family_id',$referals)->first();
-		 		$referalname   = $referals_info->fatherName .'('.$referals_info->family_id.')';
-		 		$referalid     = $referals_info->family_id ;
+		 		if(isset($referals_info->family_id)){
+		 			$refral = $referals_info->family_id;
+		 		}else{
+		 			$refral ="";
+		 		}
+		 		if(isset($referals_info->fatherName)){
+		 			$refral_fa = $referals_info->fatherName;
+		 		}else{
+		 			$refral_fa ="";
+		 		}
+		 		if(isset($referals_info->family_id)){
+		 			$refralid = $referals_info->family_id;
+		 		}else{
+		 			$refralid ="";
+		 		}
+		 		$referalname   = $refral_fa .'('.$refral.')';
+		 		$referalid     = $refralid ;
 
 		 }else{
 
