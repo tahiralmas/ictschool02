@@ -391,6 +391,22 @@ class teacherController extends BaseController {
 	->get();
 	return View("app.teacherList",compact('teachers'));
 	}
+	public function getteacherinfo($teacher_id)
+	{
+		$teacher = DB::table('teacher')
+					->select(DB::raw('teacher.*'))
+					->where('id',$teacher_id)
+					->first();
+		$html = '';
+		$html .='<tr>
+		<td>'.$teacher->firstName.'</td>
+		<td>'.$teacher->phone.'</td>
+		<td>'.$teacher->email.'</td>
+		</tr>
+		';
+		return $html;
+		//foreach($teachers as )
+	}
 	public function getList()
 	{
 		$rules = [

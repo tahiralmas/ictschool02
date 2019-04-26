@@ -91,14 +91,39 @@ class sectionController extends BaseController {
 		$sections = DB::table('section')
 		->leftjoin('teacher','section.teacher_id','=','teacher.id')
 		//->select(DB::raw('section.id,section.class_code,section.name,section.description'))
-		->select(DB::raw('section.id,section.class_code,section.name,section.description,(select count(Student.id) from Student where class=section.class_code And section=section.id)as students'),'teacher.firstName','teacher.lastName')
-
+		->select(DB::raw('section.id,section.class_code,section.name,section.teacher_id,section.description,(select count(Student.id) from Student where class=section.class_code And section=section.id)as students'),'teacher.firstName','teacher.lastName')
 		->get();
 		//dd($sections);
 		//return View::Make('app.classList',compact('Classes'));
 
 		//echo "<pre>";print_r($sections);exit;
 		return View('app.sectionList',compact('sections'));
+	}
+	public function get_section($class_code)
+	{
+		//$Classes = ClassModel::orderby('code','asc')->get();
+		$sections = DB::table('section')
+		->leftjoin('teacher','section.teacher_id','=','teacher.id')
+		//->select(DB::raw('section.id,section.class_code,section.name,section.description'))
+		->select(DB::raw('section.id,section.class_code,section.name,section.description,section.teacher_id,(select count(Student.id) from Student where class=section.class_code And section=section.id AND session='.get_current_session()->id.')as students'),'teacher.firstName','teacher.lastName')
+		->where('class_code',$class_code)
+		->get();
+		$html = '';
+		foreach($sections as $section){
+			$teacher_id = $section->teacher_id;
+			$fun = "onclick=getteacherinfo('$teacher_id')";
+			$html .= '<tr>
+              <td>'.$section->name.'</td>
+              <td>'.$section->description.'</td>
+              <td>'.count_student($section->id,$section->class_code).'</td>
+              <td><a href="#" '.$fun.' >'.$section->firstName.''.$section->lastName.'</a></td>
+              </tr>';
+		}
+		//dd($sections);
+		//return View::Make('app.classList',compact('Classes'));
+
+		//echo "<pre>";print_r($sections);exit;
+		return $html;
 	}
 
 

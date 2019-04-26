@@ -36,7 +36,7 @@
             @foreach($Classes as $class)
 
             <tr>
-              <td>{{$class->code}}</td>
+              <td><a href="#"  onclick="get_sections_deatails('{{$class->code}}')">{{$class->code}}</a></td>
               <td>{{$class->name}}</td>
               <td>{{$class->description}}</td>
               <td>{{count_student('',$class->code)}}</td>
@@ -52,17 +52,126 @@
             </tbody>
           </table>
           <br><br>
-
-
         </div>
       </div>
     </div>
   </div>
   @stop
+  @section('model')
+
+    <!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Class Section Detail</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+       <table id="classList" class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th style="width:30%">Name</th>
+              <th style="width:30%">Description</th>
+              <th style="width:30%">Students</th>
+              <th style="width:30%">Teacher</th>
+            </tr>
+          </thead>
+          <tbody id="details">
+            
+          </tbody>
+          </table>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div> 
+<!-- The Modal -->
+<div class="modal" id="teacherModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Teacher Detail</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+       <table id="classList" class="table table-striped table-bordered table-hover">
+          <thead>
+            <tr>
+              <th style="width:30%">Name</th>
+              <th style="width:30%">Phone</th>
+              <th style="width:30%">Email</th>
+            </tr>
+          </thead>
+          <tbody id="tdetails">
+            
+          </tbody>
+          </table>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+  @stop
   @section('script')
               <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 
   <script type="text/javascript">
+  function get_sections_deatails(class_code){
+    $.ajax({
+      url:"{{ url('/get/section') }}"+"/"+class_code,
+      method:"GET",
+      //data:{name:class_name,code:class_code,description:class_des, _token:_token},
+      success:function(data){
+          $("#details").html(data);
+
+          $('#myModal').modal('show');
+      },
+
+            error: function (textStatus, errorThrown) {
+                alert(JSON.stringify(textStatus));
+            }
+     });
+
+  }
+
+  function getteacherinfo(teacher_id){
+    //alert(teacher_id)
+       $.ajax({
+      url:"{{ url('/get/teacher') }}"+"/"+teacher_id,
+      method:"GET",
+      //data:{name:class_name,code:class_code,description:class_des, _token:_token},
+      success:function(data){
+          $("#tdetails").html(data);
+
+          $('#teacherModal').modal('show');
+      },
+
+            error: function (textStatus, errorThrown) {
+                alert(JSON.stringify(textStatus));
+            }
+     });
+  }
+
+
   $( document ).ready(function() {
     $('#classList').dataTable({
 

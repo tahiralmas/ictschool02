@@ -325,7 +325,7 @@ if (! function_exists('gsection_name')) {
 		    $now            =  Carbon::now();
 			$year           =  $now->year;
         	$month          =  $now->month;
-			$section      = DB::table('section')->select('*')->where('id','=',$section_id)->first();
+			$section        = DB::table('section')->select('*')->where('id','=',$section_id)->first();
 
 		return $section;
 	}
@@ -333,11 +333,11 @@ if (! function_exists('gsection_name')) {
 if (! function_exists('gclass_name')) {
 	function gclass_name($class_code){
 
-		    $now            =  Carbon::now();
-			$year           =  $now->year;
-        	$month          =  $now->month;
-			$class_name      = DB::table('Class')->select('*')->where('code','=',$class_code)->first();
-
+		$class_name     = DB::table('Class')
+								->select('*')
+								->where('code','=',$class_code)
+								->first();
+		//$name = $class_name->name;
 		return $class_name;
 	}
 }

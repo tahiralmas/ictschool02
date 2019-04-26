@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth'], function(){
 Route::get('/section/create','sectionController@index')->middleware('checkPermission:section_add');
 Route::post('/section/create','sectionController@create')->middleware('checkPermission:section_add');
 Route::get('/section/list','sectionController@show')->middleware('checkPermission:section_view');
+Route::get('/get/section/{class_code}','sectionController@get_section')->middleware('checkPermission:section_view');
 Route::get('/section/edit/{id}','sectionController@edit')->middleware('checkPermission:section_update');
 Route::post('/section/update','sectionController@update')->middleware('checkPermission:section_update');
 Route::get('/section/delete/{id}','sectionController@delete')->middleware('checkPermission:section_delete');
@@ -166,6 +167,8 @@ Route::post('/teacher/ajaxcreate','teacherController@ajaxcreate')->middleware('c
 });
 Route::get('/teacher/list','teacherController@show')->middleware('checkPermission:teacher_add');
 Route::post('/teacher/list','teacherController@getList')->middleware('checkPermission:teacher_add');
+Route::get('/get/teacher/{teacher_id}','teacherController@getteacherinfo')->middleware('checkPermission:teacher_add');
+
 Route::get('/teacher/view/{id}','teacherController@view')->middleware('checkPermission:teacher_view');
 Route::group(['middleware' => 'admin'], function(){ 
 Route::get('/teacher/edit/{id}','teacherController@edit')->middleware('checkPermission:teacher_update');
