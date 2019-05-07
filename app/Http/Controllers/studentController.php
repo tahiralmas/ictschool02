@@ -276,12 +276,12 @@ class studentController extends BaseController {
 
 		if($regicheck->count()>0){
 			$cnt = $regicheck->count() +1;
-			$foo[1] = $regicheck->first()->regiNo + $cnt ; 
+			$foo[0] = $regicheck->first()->regiNo + $cnt ; 
 
 		}
 		if($regichecks->count()>0){
 			$cnts = $regichecks->count() +1;
-			$foo[0] = $regicheck->first()->rollNo + $cnts ; 
+			$foo[1] = $regicheck->first()->rollNo + $cnts ; 
 
 		}
 		return $foo;
