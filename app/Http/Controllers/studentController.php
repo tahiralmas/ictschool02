@@ -233,12 +233,11 @@ class studentController extends BaseController {
 	{
 
 		
-		$ses =trim($session);
-		$stdcount = Student::select(DB::raw('count(*) as total'))->where('class','=',$class)->where('session','=',$ses)->first();
-
+		$ses         = trim($session);
+		$stdcount    = Student::select(DB::raw('count(*) as total'))->where('class','=',$class)->where('session','=',$ses)->first();
 		$stdseccount = Student::select(DB::raw('count(*) as total'))->where('class','=',$class)->where('session','=',$ses)->where('section','=',$section)->first();
 		$regiNolast  = Student::where('class','=',$class)->where('session','=',$ses)->where('section','=',$section)->orderBy('id', 'desc')->first();
-		$r = intval($stdcount->total)+1;
+		$r           = intval($stdcount->total)+1;
 		//echo substr($regiNolast->regiNo,4);
 		
 		if(strlen($r)<2)
@@ -254,7 +253,7 @@ class studentController extends BaseController {
        
         if(!empty($regiNolast) && $r == substr($regiNolast->regiNo,4)){
          	$r   = intval($stdcount->total)+2;
-         	$c = intval($stdseccount->total)+2;
+         	$c   = intval($stdseccount->total)+2;
 		}
 		$foo = array();
 		if(strlen($cl)<2) {
@@ -270,6 +269,20 @@ class studentController extends BaseController {
 		else
 		{
 			$foo[1] =$c;
+		}
+
+		$regicheck     = Student::select('*')->where('regiNo','=',$foo[1])->where('session','=',$ses);
+		$regichecks    = Student::select('*')->where('rollNo','=',$foo[0])->where('session','=',$ses);
+
+		if($regicheck->count()>0){
+			$cnt = $regicheck->count() +1;
+			$foo[1] = $regicheck->first()->regiNo + $cnt ; 
+
+		}
+		if($regichecks->count()>0){
+			$cnts = $regichecks->count() +1;
+			$foo[0] = $regicheck->first()->rollNo + $cnts ; 
+
 		}
 		return $foo;
 	}
