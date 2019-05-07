@@ -271,8 +271,8 @@ class studentController extends BaseController {
 			$foo[1] =$c;
 		}
 
-		$regicheck     = Student::select('*')->where('regiNo','=',$foo[1])->where('session','=',$ses);
-		$regichecks    = Student::select('*')->where('rollNo','=',$foo[0])->where('session','=',$ses);
+		$regicheck     = Student::select('*')->where('regiNo','=',$foo[0])->where('session','=',$ses);
+		$regichecks    = Student::select('*')->where('rollNo','=',$foo[1])->where('session','=',$ses);
 
 		if($regicheck->count()>0){
 			$cnt = $regicheck->count() +1;
