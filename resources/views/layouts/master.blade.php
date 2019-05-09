@@ -750,10 +750,6 @@ table i {
                                   <strong> Note!</strong> <strong>Please Create Vouchars this Months On dashboard</strong>
                                </div>
                           @endif
-                           
-                          
-
-
                           @yield('content')
 
                           <!-- content ends -->

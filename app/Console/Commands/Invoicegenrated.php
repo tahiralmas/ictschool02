@@ -62,7 +62,7 @@ class Invoicegenrated extends Command
         });
 
 
-        DB::table('Student')->where('isActive','Yes')->orderBy('id','Asc')->groupBy('fatherCellNo')->groupBy('family_id')->chunk(100, function($users)
+        DB::table('Student')->where('isActive','Yes')->orderBy('id','Asc')->groupBy('fatherCellNo','family_id')/*->groupBy('family_id')*/->chunk(100, function($users)
         {
             $i=0;
             foreach ($users as $user)
@@ -70,16 +70,16 @@ class Invoicegenrated extends Command
                   //echo '/n';
                  //echo $i++;
 
-                 $test[] = $user->fatherCellNo.'==__=='.$user->family_id;
+                 //$test[] = $user->fatherCellNo.'==__=='.$user->family_id;
                  $this->createfamilyvouchour($user->fatherCellNo,$user->family_id);
                
                //echo "/n";
             }
             //echo $i;
 
-            echo count($test);
-            echo "<pre>";print_r($test);
-            exit;
+            //echo count($test);
+            //echo "<pre>";print_r($test);
+            //exit;
         });
 
          $now             =  Carbon::now();
@@ -280,11 +280,11 @@ class Invoicegenrated extends Command
               }
 
               $vouchar_details = DB::table('stdBill')
-                                ->join('Student','stdBill.regiNo','=','Student.regiNo')
+                                //->join('Student','stdBill.regiNo','=','Student.regiNo')
                                 //->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
-                               ->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
+                                //->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
                                 ->join('billHistory','stdBill.billNo','=','billHistory.billNo')
-                                ->select('billHistory.*','stdBill.dueAmount','stdBill.payableAmount','stdBill.paidAmount','stdBill.class','stdBill.total_fee','stdBill.regiNo','voucherhistories.due_date','Student.discount_id', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.section')
+                                ->select('billHistory.*','stdBill.dueAmount','stdBill.payableAmount','stdBill.paidAmount','stdBill.class','stdBill.total_fee','stdBill.regiNo'/*,'voucherhistories.due_date','Student.discount_id', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.section'*/)
                                 //->where('billHistory.billNo',$bill )
                                 ->where('billHistory.month', '=', $month)
                                 ->where('billHistory.title', '=', 'monthly')
@@ -305,7 +305,7 @@ class Invoicegenrated extends Command
                        ->first();
                     $check_vouchar  = FamilyVouchar::where('month',$month)->where('family_id',$family_id)->count();
 
-                      if($check_vouchar==0 && count($vouchar_details->toArray())>0){
+                      if($check_vouchar == 0){
 
                         $family_vouchar = new FamilyVouchar;
                         $family_vouchar->family_id  = $family_id ;

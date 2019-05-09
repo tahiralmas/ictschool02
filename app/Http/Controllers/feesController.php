@@ -1251,9 +1251,9 @@ class feesController extends BaseController {
 				foreach($students as $std){
 				 $regiNo[] = $std->regiNo; 	
 				}
-//echo "<pre>";print_r($regiNo);
-		$family_vouchers  = FamilyVouchar::where('family_id',$family_id)->get();
 
+		$family_vouchers  = FamilyVouchar::where('family_id',$family_id)->get();
+			//echo "<pre>";print_r($family_vouchers);exit;
 		$totals   = FeeCol::select(DB::RAW('IFNULL(sum(payableAmount),0) as payTotal,IFNULL(sum(total_fee),0) as Totalpay,IFNULL(sum(paidAmount),0) as paiTotal,(IFNULL(sum(total_fee),0)- IFNULL(sum(paidAmount),0)) as dueAmount,(IFNULL(sum(payableAmount),0)- IFNULL(sum(paidAmount),0)) as dueamount'))
 											//->where('class',Input::get('class'))
 											->whereIn('regiNo',$regiNo)
@@ -2046,16 +2046,21 @@ class feesController extends BaseController {
 		->where('billNo',$billNo)
 		//->where('regiNo',Input::get('regiNo'))
 		->first();
-		$paid = FeeCol::find($totals->id);
-		$vouchers = Voucherhistory::where('bill_id',$billNo)->first();
-		$totalpaid = $paid->paidAmount +$paidamount;
+
+		$paid      = FeeCol::find($totals->id);
+		$vouchers  = Voucherhistory::where('bill_id',$billNo)->first();
+		$totalpaid = $paid->paidAmount + $paidamount;
+		/*if((int)$totalpaid > (int)Input::get('payableAmount') ){
+			echo  $totalpaid ."ww======ww".Input::get('payableAmount');
+		}
+		echo  $totalpaid ."======".Input::get('payableAmount');exit;*/
 		if($totalpaid > Input::get('payableAmount') ){
 			return 419;
 		}
 		if($paidamount<0){
 			return 404;
 		}
-		if($paidamount=='' || $paidamount=='0.00' ||  $paidamount>0){
+		if($paidamount=='' || $paidamount=='0.00' /*||  $paidamount>0*/){
 			return 404;
 		}
 		if(Input::get('s')!='unpaid'){

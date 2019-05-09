@@ -348,7 +348,7 @@
             }
 
             function feecol(billId) {
-              alert(33);
+              //alert(33);
                           var billId=billId;
                          // $('.modal-title').html('"'+billId+'" bill details information');
                           
@@ -382,7 +382,7 @@
            {
             //
               var billNo = $('#billNo').val();
-              alert(billNo);
+              //alert(billNo);
                var collectionAmount = $('#collectionAmount').val();
                var payableAmount = $('#payableAmount').val();
               // var postid = $('#post_id').val();
@@ -493,7 +493,7 @@
           $( document ).ready(function() {
 
             $(".btninvoice").click(function(){
-              alert(33);
+             // alert(33);
                           var billId=$(this).val();
                          // $('.modal-title').html('"'+billId+'" bill details information');
                           

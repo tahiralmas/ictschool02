@@ -370,7 +370,7 @@
            {
             //
               var billNo = $('#billNo').val();
-              alert(billNo);
+              //alert(billNo);
                var collectionAmount = $('#collectionAmount').val();
                var payableAmount = $('#payableAmount').val();
               // var postid = $('#post_id').val();
@@ -515,6 +515,7 @@
                "sPaginationType": "bootstrap",
             });
             table.$(".btninvoice").click(function(){
+
                           var billId=$(this).val();
                          // $('.modal-title').html('"'+billId+'" bill details information');
                           

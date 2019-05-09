@@ -295,7 +295,7 @@ Route::get('/cron/invoices/months', function(){
 	$months = Input::get('month');
 	$f_id = Input::get('family_id');
     \Log::info('Executed at'.date('Y-m-d H:i:s'));
-   //\Artisan::call("Invoice:months", ['arg_name' => ['month'=>$months, 'family_id'=>$f_id]]);
+     \Artisan::call("Invoice:months", ['arg_name' => ['month'=>$months, 'family_id'=>$f_id]]);
    //return \Artisan::Output();
     return redirect('/dashboard')->with('success',"Invoice Created Successfully");
    //return json_encode(auth()->user()->adminDashboardCount());
