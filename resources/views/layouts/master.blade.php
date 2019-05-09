@@ -474,11 +474,11 @@ table i {
                                            <i class="glyphicon glyphicon-shopping-cart"></i> &nbsp;&nbsp;&nbsp;&nbsp;Invoices
                                           </div>
                                         </a>
-                                        <a href="{{url('/fee/collection')}}">
+                                        {{--<a href="{{url('/fee/collection')}}">
                                           <div class="notifi__item">
                                            <i class="glyphicon glyphicon-pencil"></i> &nbsp;&nbsp;&nbsp;&nbsp;Fees Collection
                                           </div>
-                                        </a>
+                                        </a>--}}
                                         <a href="{{url('/fees/list')}}">
                                           <div class="notifi__item">
                                           <i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;&nbsp;&nbsp;Fees List

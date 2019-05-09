@@ -45,7 +45,7 @@ class Invoicemoreonemonth extends Command
     {
        $months = $this->argument('arg_name');
 
-       echo "<pre>";print_r($months);
+       //echo "<pre>";print_r($months);
 
         foreach($months['month'] as $month){
             if($months['family_id']!=''){
@@ -275,10 +275,10 @@ class Invoicemoreonemonth extends Command
        $month    =  $month;
 
         $students = DB::table('Student')
-          ->join('Class', 'Student.class', '=', 'Class.code')
-          ->join('section', 'Student.section', '=', 'section.id')
+         // ->join('Class', 'Student.class', '=', 'Class.code')
+          //->join('section', 'Student.section', '=', 'section.id')
           ->select('Student.id', 'Student.regiNo', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName', 'Student.fatherName', 'Student.motherName', 'Student.fatherCellNo', 'Student.motherCellNo', 'Student.localGuardianCell','Student.discount_id','Student.class as class_code',
-              'Class.Name as class','Class.code as class_code', 'Student.presentAddress','Student.section', 'Student.gender', 'Student.religion','section.name')
+             /* 'Class.Name as class','Class.code as class_code',*/ 'Student.presentAddress','Student.section', 'Student.gender', 'Student.religion'/*,'section.name'*/)
           ->where('Student.isActive', '=', 'Yes');
          /* ->where(function($q) use( $family_id) {
                 $q->where('Student.family_id', '=', $family_id)
@@ -299,11 +299,11 @@ class Invoicemoreonemonth extends Command
               }
 
               $vouchar_details = DB::table('stdBill')
-                                ->join('Student','stdBill.regiNo','=','Student.regiNo')
+                               // ->join('Student','stdBill.regiNo','=','Student.regiNo')
                                 //->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
-                               ->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
+                               //->join('voucherhistories','stdBill.billNo','=','voucherhistories.bill_id')
                                 ->join('billHistory','stdBill.billNo','=','billHistory.billNo')
-                                ->select('billHistory.*','stdBill.dueAmount','stdBill.payableAmount','stdBill.paidAmount','stdBill.class','stdBill.total_fee','stdBill.regiNo','voucherhistories.due_date','Student.discount_id', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.section')
+                                ->select('billHistory.*','stdBill.dueAmount','stdBill.payableAmount','stdBill.paidAmount','stdBill.class','stdBill.total_fee','stdBill.regiNo'/*,'voucherhistories.due_date','Student.discount_id', 'Student.rollNo', 'Student.firstName', 'Student.middleName', 'Student.lastName','Student.section'*/)
                                 //->where('billHistory.billNo',$bill )
                                 ->where('billHistory.month', '=', $month)
                                 ->where('billHistory.title', '=', 'monthly')
