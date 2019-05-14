@@ -41,7 +41,7 @@ class studentController extends BaseController {
 		
 		$section = SectionModel::select('id','name')->where('class_code','=','cl1')->get();
 		//$sections = SectionModel::select('name')->get();
-
+		$family_id = Input::get('family_id');
 		$families = DB::table('Student')
 					->join('Class', 'Student.class', '=', 'Class.code')
 					->join('section', 'Student.section', '=', 'section.id')
@@ -53,7 +53,7 @@ class studentController extends BaseController {
 					//->having('Student.family_id', '<', 3)
 					->get();
 		//return View::Make('app.studentCreate',compact('classes'));
-		return View('app.studentCreate',compact('classes','section','families'));
+		return View('app.studentCreate',compact('classes','section','families','family_id'));
 	}
 //
 
@@ -205,13 +205,106 @@ class studentController extends BaseController {
 		}
 		//echo strlen($query);
 	}
+	public function get_family_data()
+	{
+		// return '98';
+		$query = Input::get('query');
 
-	public function getrefral($refral){
+		//$ex = explode('(', $query)
+		//preg_match_all('\[(\d+)=>([\d,]+)\]', $query, $matches);
+			/*$query = trim(trim($query, '['), ']');
+			$query = explode(', ', $query);*/
+
+			//$text = '[This] is a [test] string, [eat] my [shorts].';
+//preg_match_all("/\[[^\]*\]/", $query, $matches);
+//var_dump($matches[0]);
+
+//$phonenumberlist = '[0761234567, 072999999, 0731111111]';
+/*$text = 'ignore everything except this(text)';
+preg_match('#\((.*?)\)#', $text, $match);
+if(isset($match[0])){
+	$q = $match[1];
+}else{
+	$q = $query;
+}*/
+
+if( preg_match( '!\(([^\)]+)\)!', $query, $match ) ){
+    $query = $match[1];
+}
+//print $query ;
+		//return $text ;
+		if(strlen($query)>=3 ){
+
+			$referalname  = '';
+			$referalid    = '';
+			$fathername   = '';
+			$fatherphone  = '';
+			$localg       = '';
+			$unique_code  = '';
+		$data=DB::table('Student')->where('family_id','LIKE','%'.$query.'%')
+		 ->first();
+		 if(!empty($data)){
+		 	$unique_code = $data->family_id;
+		 	$fathername  = $data->fatherName;
+		 	$fatherphone = $data->fatherCellNo;
+		 	$localg      = $data->localGuardianCell;
+		 	
+		 	if($unique_code=='' || $unique_code==NULL){
+		 		//$unique_code =	str_random(6);
+		 		//$unique_code =	hexdec(substr(uniqid(rand(), true), 5, 5));
+		 	}
+		 	$check_referals = DB::table('referals')->where('family_id',$unique_code)->first();
+		 	if(!empty($check_referals)){
+		 		$referals   = $check_referals->refral_id;
+		 		$referals_info = DB::table('Student')->where('family_id',$referals)->first();
+		 		$referalname = $referals_info->fatherName .'('.$referals_info->family_id.')';
+		 		$referalid   = $referals_info->family_id ;
+		
+		 	}else{
+		 		$referalname = '';
+		 		$referalid  = '';
+		 	}
+		 }else{
+		 	//$unique_code =	 hexdec(substr(uniqid(rand(), true), 5, 5));
+		 }
+		 //echo $unique_code;
+		 return array('unique_code'=>$unique_code,'referalname'=>$referalname,'referalid'=>$referalid,'fathername'=>$fathername ,'fatherphone'=>$fatherphone,'localg'=>$localg);
+
+		}
+		//echo strlen($query);
+	}
+
+	public function getrefral($refral)
+	{
 		//$refral = Input::get('query');
 		$data=DB::table('Student')
 		        ->where('fatherName','LIKE','%'.$refral.'%')
 		        ->orwhere('family_id','LIKE','%'.$refral.'%')
 		        ->groupBy('fatherName')
+		        ->limit(20)
+		        ->get();
+		        return response()->json($data);
+		$autocom = array();
+		if($data->count()>0){
+			$data = $data->get();
+			foreach($data as $ref){
+				$autocom[] = $ref->fatherName.'('.$ref->family_id.')';
+			}
+
+			//$json = implode(',',$autocom);
+			$json = '"'.implode('","', $autocom).'"';
+			//$json =  join($autocom, '","');
+			return $json;
+		}
+
+	}
+	public function f_id_list($f_id)
+	{
+		//$refral = Input::get('query');
+		$data=DB::table('Student')
+		        //->where('fatherName','LIKE','%'.$refral.'%')
+		        ->where('family_id','LIKE','%'.$f_id.'%')
+		        ->groupBy('family_id')
 		        ->limit(20)
 		        ->get();
 		        return response()->json($data);
@@ -341,10 +434,25 @@ class studentController extends BaseController {
 		return Redirect::to('/student/create')->withErrors($validator)->withInput();
 	}
 	else {
+		if( preg_match( '!\(([^\)]+)\)!', Input::get('refer_by'), $match ) ){
+    			$refer_by = $match[1];
+		}else{
+			$refer_by =Input::get('refer_by');
+		}
+		if( preg_match( '!\(([^\)]+)\)!', Input::get('family_id'), $match ) ){
+    			$family_id = $match[1];
+		}else{
+			$family_id =Input::get('family_id');
+		}
 
+		if($family_id ==$refer_by ){
+
+			return Redirect::to('/student/create')->withInput()->withErrors('Family Id And Refer Id same ');
+
+		}
 
 		$check_ids = DB::table('Student')
-            			->where('family_id', '=', Input::get('family_id'))
+            			->where('family_id', '=', $family_id)
 						//->where('fatherCellNo', '=', Input::get('fatherCellNo'))
 						->get();
 			    $get_family_ids = array();
@@ -356,9 +464,9 @@ class studentController extends BaseController {
 					}
 				}
 	            //echo "<pre>".$family_id;print_r($get_family_ids);exit;
-				if(!in_array(Input::get('family_id'), $get_family_ids)){
+				if(!in_array($family_id, $get_family_ids)){
 
-						return Redirect::to('/student/create')->withInput()->withErrors('Family Id Already Assign Other Family plase select different ID');
+						return Redirect::to('/student/create')->withInput()->withErrors('Family Id Already Assign Other Family please select different ID');
 				}
 			}
 //echo "testr";exit;
@@ -454,7 +562,7 @@ class studentController extends BaseController {
 			$student->localGuardianCell="";
 		}
 
-		$student->family_id=Input::get('family_id');
+		$student->family_id=$family_id;
 		$student->about_family=Input::get('familyc');
 
 		$student->presentAddress= Input::get('presentAddress');
@@ -484,8 +592,8 @@ class studentController extends BaseController {
 
          		$saverefral              = new Referal;
          		$saverefral->student_id  = $student->id;
-         		$saverefral->family_id   = Input::get('family_id');
-         		$saverefral->refral_id   = Input::get('refer_by');
+         		$saverefral->family_id   = $family_id;
+         		$saverefral->refral_id   = $refer_by;
          		$saverefral->save(); 
          	}
                /*  $user = new User;

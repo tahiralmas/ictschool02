@@ -55,6 +55,60 @@ color: red;
          
              <div class="row">
           <div class="col-md-12">
+            <h3 class="text-info">School Information</h3>
+            <hr>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+          
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="fatherName">Family Id </label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <input type="text" class="form-control"  name="family_id" value="{{old('family_id',$family_id)}}" id="family_id" @if($family_id!='') readonly @endif>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="fatherCellNo">Refer by Family </label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                <input type="text" class="form-control typeahead"   name="refer_by" value="{{old('refer_by')}}" id="refer_by"   placeholder="enter referal name or Id">
+
+                    {{--<select class="form-control" id="refer_by"   name="refer_by">
+                      <option value="">--- Select Refer By Family---</option>
+                      @if($families)
+                        @foreach($families as $family)
+                          <option value="{{$family->family_id}}">{{ $family->fatherName }} ({{$family->family_id}})</option>
+                        @endforeach
+                      @endif
+                    </select>--}}
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-8">
+              <div class="form-group">
+                <label for="presentAddress">About Family Behavior </label>
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                  <textarea type="text" class="form-control"  name="familyc" placeholder="">{{old('presentAddress')}}</textarea>
+                </div>
+              </div>
+            </div>
+
+
+
+          </div>
+        </div>
+
+
+             <div class="row">
+          <div class="col-md-12">
             <h3 class="text-info"> Guardian's Detail</h3>
             <hr>
           </div>
@@ -151,58 +205,7 @@ color: red;
 
 
 
-          <div class="row">
-          <div class="col-md-12">
-            <h3 class="text-info">School Information</h3>
-            <hr>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-12">
           
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="fatherName">Family Id </label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  name="family_id" value="{{old('family_id')}}" id="family_id" >
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="fatherCellNo">Refer by Family </label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                <input type="text" class="form-control typeahead"   name="refer_by" value="{{old('refer_by')}}" id="refer_by"   placeholder="enter referal name or Id">
-
-                    {{--<select class="form-control" id="refer_by"   name="refer_by">
-                      <option value="">--- Select Refer By Family---</option>
-                      @if($families)
-                        @foreach($families as $family)
-                          <option value="{{$family->family_id}}">{{ $family->fatherName }} ({{$family->family_id}})</option>
-                        @endforeach
-                      @endif
-                    </select>--}}
-                </div>
-              </div>
-            </div>
-            
-            <div class="col-md-8">
-              <div class="form-group">
-                <label for="presentAddress">About Family Behavior </label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <textarea type="text" class="form-control"  name="familyc" placeholder="">{{old('presentAddress')}}</textarea>
-                </div>
-              </div>
-            </div>
-
-
-
-          </div>
-        </div>
        
 
 
@@ -655,6 +658,10 @@ color: red;
 
     });*/
 $(document).ready(function() {
+  @if($family_id!='')
+
+    getfamilydata({{$family_id}});
+  @endif
  $( "#refer_by" ).autocomplete({
         //var refrl = $("#refer_by").val();
         source: function(request, response) {
@@ -676,6 +683,37 @@ $(document).ready(function() {
         });
     },
     minLength: 1
+ });
+
+
+ $( "#family_id" ).autocomplete({
+        //var refrl = $("#refer_by").val();
+        source: function(request, response) {
+
+            $.ajax({
+            url: "{{url('/get/family_id/list')}}"+'/'+request.term,
+            data: {
+                   // term : request.term
+             },
+            dataType: "json",
+            success: function(data){
+               var resp = $.map(data,function(obj){
+                    //console.log(obj.fatherName);
+
+                   
+                    return obj.fatherName+'('+obj.family_id+')';
+               }); 
+                 //$('#family_id').keyup();
+                 //getfamilydata();
+               response(resp);
+            }
+        });
+    },
+    minLength: 1,
+     select: function(event, ui) {
+        getfamilydata(ui.item.value);
+           // alert(ui.item.value);
+             }
  });
 });
 
@@ -851,24 +889,35 @@ $("#f_phone").keydown(function (event) {
     });
 
 
-      $('#f_phone').keyup(function(){ 
-        var query = $('#f_phone').val();
+      $('#family_id').keyup(function(){ 
+        getfamilydata($('#family_id').val());
+      });
+        //);
+
+});
+function getfamilydata(id){
+     // $('#family_id').bind('click keyup', function() { 
+        var query =id ;
+        //alert(query);
+        console.log(query);
         if(query != '')
         {
          var _token = $('input[name="_token"]').val();
          $.ajax({
-          url:"{{ url('get/family_id') }}",
+          //url:"{{ url('get/family_id') }}",
+          url:"{{ url('get/family/data') }}",
           method:"POST",
           data:{query:query, _token:_token},
           success:function(data){
             //alert(JSON.stringify(data));
            //$('#familyListd').fadeIn();  
              if(data.unique_code!='' && typeof(data.unique_code)!='undefined'){
-                $('#family_id').val(data.unique_code);
-                 $('#family_id').attr("readonly", true);
+               // $('#f_phone').val(data.unique_code);
+                $('#f_phone').val(data.fatherphone);
+                 $('#f_phone').attr("readonly", true);
              }else{
-              $('#family_id').val('');
-               $('#family_id').attr("readonly", false);
+              $('#f_phone').val('');
+               $('#f_phone').attr("readonly", false);
              }
              
             
@@ -898,10 +947,7 @@ $("#f_phone").keydown(function (event) {
           }
          });
         }
-    });
-
-});
-
+    }
 
 
 </script>

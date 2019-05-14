@@ -54,6 +54,7 @@
                     Add Family Discount
               </button>
               <a title='vouchar history' class='btn btn-primary'  href='{{url("/family/vouchar_history")}}/{{$family_id}}'> <i class="glyphicon glyphicon-usd icon-white"></i></a>
+              <a title='Add Student' class='btn btn-primary'  href='{{url("/student/create")}}?family_id={{$family_id}}'> <i class="glyphicon glyphicon-plus icon-white"></i></a>
 
               <table id="studentList" class="table table-striped table-bordered" >
                 <thead>

@@ -148,11 +148,13 @@ Route::post('/students/shift/{f_id}','studentController@shift_student_family');
 });
 Route::get('/student/getList/{class}/{section}/{shift}/{session}','studentController@getForMarks');
 Route::get('/get/refral/{refral}','studentController@getrefral');
+Route::get('/get/family_id/list/{refral}','studentController@f_id_list');
 Route::get('/student/getsList/{class}/{section}/{shift}/{session}','studentController@getForMarksjoin');
 Route::post('/student/search','studentController@search');
 Route::post('/family/search','studentController@family');
 Route::post('/family/student/search','studentController@familystudent');
 Route::post('/get/family_id','studentController@get_family_id');
+Route::post('/get/family/data','studentController@get_family_data');
 Route::post('/sms/send','studentController@send_sms');
 
 Route::get('/fee/getdiscountjson/{student_registration}','studentController@getdiscount');
