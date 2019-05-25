@@ -86,7 +86,9 @@ window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+000A'||e.ke
 
     @yield("style")
     <style media="screen">
-  
+  b {
+    color:red
+  }
   .dataTables_wrapper .dataTables_paginate .paginate_button {
     padding : 0px;
     margin-left: 0px;

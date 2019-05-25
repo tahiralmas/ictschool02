@@ -51,7 +51,8 @@ class classController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-			return Redirect::to('/class/create')->withInput()->withErrors($validator);
+			//return Redirect::to('/class/create')->withInput()->withErrors($validator);
+			return Redirect::to('/class/list')->withInput()->withErrors($validator);
 		}
 		else {
 			$clcode = 'cl'.Input::get('code');
@@ -60,7 +61,8 @@ class classController extends BaseController {
 
 				$errorMessages = new \Illuminate\Support\MessageBag;
 				$errorMessages->add('deplicate', 'Class all ready exists!!');
-				return Redirect::to('/class/create')->withErrors($errorMessages);
+				//return Redirect::to('/class/create')->withErrors($errorMessages);
+				return Redirect::to('/class/list')->withErrors($errorMessages);
 			}
 			else {
 				$class = new ClassModel;
@@ -71,7 +73,8 @@ class classController extends BaseController {
 					$class->description ='';
 				}
 				$class->save();
-				return Redirect::to('/class/create')->with("success", "Class Created Succesfully.");
+				//return Redirect::to('/class/create')->with("success", "Class Created Succesfully.");
+				return Redirect::to('/class/list')->with("success", "Class Created Succesfully.");
 			}
 		}
 	}
@@ -141,8 +144,11 @@ class classController extends BaseController {
 		$Classes = DB::table('Class')
 		->select(DB::raw('Class.id,Class.code,Class.name,Class.description,(select count(Student.id) from Student where class=Class.code)as students'))
 		->get();
+
+		$class = array();
+		
 		//return View::Make('app.classList',compact('Classes'));
-		return View('app.classList',compact('Classes'));
+		return View('app.classList',compact('Classes','class'));
 	}
 
 
@@ -156,8 +162,15 @@ class classController extends BaseController {
 	public function edit($id)
 	{
 		$class = ClassModel::find($id);
+		$Classes = DB::table('Class')
+		->select(DB::raw('Class.id,Class.code,Class.name,Class.description,(select count(Student.id) from Student where class=Class.code)as students'))
+		->get();
+
+		
+		
 		//return View::Make('app.classEdit',compact('class'));
-		return View('app.classEdit',compact('class'));
+		//return View('app.classEdit',compact('class'));
+		return View('app.classList',compact('class','Classes'));
 	}
 
 

@@ -757,7 +757,7 @@ class markController extends BaseController {
 		else {
 			$getexam       = DB::table('exam')->where('id',Input::get('exam'))->first();
 				$exam_name = $getexam->type;
-			$total_marks = Input::get('total_marks');
+			$total_marks   = Input::get('total_marks');
 			if($total_marks==100){
 				$grade = 1;
 			}

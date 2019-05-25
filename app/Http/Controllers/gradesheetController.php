@@ -261,9 +261,9 @@ public function send_sms($class,$section,$exam,$session)
          
 		if(!empty($data)){
          $message = 'your child [name]';
-         $sub = " subject [sub]";
-         $obtain = ' obtains marks [obt]';
-         $total = ' out of  [total] marks';
+         $sub     = " subject [sub]";
+         $obtain  = ' obtains marks [obt]';
+         $total   = ' out of  [total] marks';
 			 $message = str_replace("[name]",$name,$message);
          
 			for($i=0;$i<count($data);$i++){

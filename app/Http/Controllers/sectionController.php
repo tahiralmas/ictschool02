@@ -54,7 +54,8 @@ class sectionController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-			return Redirect::to('/section/create')->withInput()->withErrors($validator);
+			//return Redirect::to('/section/create')->withInput()->withErrors($validator);
+			return Redirect::to('/section/list')->withInput()->withErrors($validator);
 		}
 		else {
 			$sname = Input::get('name');
@@ -63,7 +64,8 @@ class sectionController extends BaseController {
 
 				$errorMessages = new \Illuminate\Support\MessageBag;
 				$errorMessages->add('deplicate', 'Section all ready exists!!');
-				return Redirect::to('/section/create')->withErrors($errorMessages);
+				//return Redirect::to('/section/create')->withErrors($errorMessages);
+				return Redirect::to('/section/list')->withErrors($errorMessages);
 			}
 			else {
 				$class = new SectionModel;
@@ -75,7 +77,8 @@ class sectionController extends BaseController {
 				}
 				$class->teacher_id = Input::get('teacher_id');
 				$class->save();
-				return Redirect::to('/section/create')->with("success", "Section Created Succesfully.");
+				//return Redirect::to('/section/create')->with("success", "Section Created Succesfully.");
+				return Redirect::to('/section/list')->with("success", "Section Created Succesfully.");
 			}
 		}
 
@@ -93,11 +96,25 @@ class sectionController extends BaseController {
 		//->select(DB::raw('section.id,section.class_code,section.name,section.description'))
 		->select(DB::raw('section.id,section.class_code,section.name,section.teacher_id,section.description,(select count(Student.id) from Student where class=section.class_code And section=section.id)as students'),'teacher.firstName','teacher.lastName')
 		->get();
+		
+		$class = DB::table('Class')
+		->select(DB::raw('name,code'))
+		->get();
+		$sectionss = SectionModel::get();
+		$teacher_ids = array();
+		foreach($sectionss as $section){
+         $teacher_ids[] = $section->teacher_id;
+		}
+		$teachers = DB::table('teacher')
+						->join('users','teacher.id','=','users.group_id')
+	    				->select('teacher.id','teacher.firstName','teacher.lastName')/*->whereNotIn('id',$teacher_ids)*/
+	    				->get();
+	   	$section = array();
 		//dd($sections);
 		//return View::Make('app.classList',compact('Classes'));
 
-		//echo "<pre>";print_r($sections);exit;
-		return View('app.sectionList',compact('sections'));
+		//echo "<pre>";print_r($class);exit;
+		return View('app.sectionList',compact('sections','section','class','teacher_ids','teachers','sectionss'));
 	}
 	public function get_section($class_code)
 	{
@@ -142,8 +159,14 @@ class sectionController extends BaseController {
 		->get();
 		$teachers = DB::table('teacher')->join('users','teacher.id','=','users.group_id')
 	    ->select('teacher.id','teacher.firstName','teacher.lastName')->get();
+		$sections = DB::table('section')
+		->leftjoin('teacher','section.teacher_id','=','teacher.id')
+		//->select(DB::raw('section.id,section.class_code,section.name,section.description'))
+		->select(DB::raw('section.id,section.class_code,section.name,section.teacher_id,section.description,(select count(Student.id) from Student where class=section.class_code And section=section.id)as students'),'teacher.firstName','teacher.lastName')
+		->get();
 		//return View::Make('app.classEdit',compact('class'));
-		return View('app.sectionEdit',compact('section','class','teachers'));
+		//return View('app.sectionEdit',compact('section','class','teachers'));
+		return View('app.sectionList',compact('sections','section','class','teachers'));
 	}
 
 

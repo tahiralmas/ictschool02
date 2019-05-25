@@ -48,7 +48,8 @@ class examController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-			return Redirect::to('/exam/create')->withErrors($validator);
+			//return Redirect::to('/exam/create')->withErrors($validator);
+			return Redirect::to('/exam/list')->withErrors($validator);
 		}
 		else {
 			$type = Input::get('type');
@@ -62,7 +63,8 @@ class examController extends BaseController {
 
 				$errorMessages = new \Illuminate\Support\MessageBag;
 				$errorMessages->add('deplicate', 'Exam all ready exists!!');
-				return Redirect::to('/exam/create')->withErrors($errorMessages);
+				//return Redirect::to('/exam/create')->withErrors($errorMessages);
+				return Redirect::to('/exam/list')->withErrors($errorMessages);
 			}
 			else {
 				//echo "<pre>";print_r(Input::get('section'));exit;
@@ -74,7 +76,8 @@ class examController extends BaseController {
 					$exam->section_id = $section_id;
 					$exam->save();
 			    }
-				return Redirect::to('/exam/create')->with("success", "Exam Created Succesfully.");
+				//return Redirect::to('/exam/create')->with("success", "Exam Created Succesfully.");
+				return Redirect::to('/exam/list')->with("success", "Exam Created Succesfully.");
 			}
 
 		}
@@ -99,6 +102,9 @@ class examController extends BaseController {
           ->join('section', 'exam.section_id', '=', 'section.id')
           ->select('exam.id','exam.type', 'Class.name as class', 'section.name as section')
           ->get();
+          $exam = array();
+          $classes = DB::table('Class')->get();
+		  $sections = DB::table('section')->get();
 
 
        // echo "<pre>";print_r($exams);
@@ -107,7 +113,7 @@ class examController extends BaseController {
          //exit;
 		//dd($sections);
 		//return View::Make('app.classList',compact('Classes'));
-		return View('app.examList',compact('exams'));
+		return View('app.examList',compact('exams','classes','sections','exam'));
 	}
 	/**
 	* Show the form for editing the specified resource.
@@ -117,14 +123,20 @@ class examController extends BaseController {
 	*/
 	public function edit($id)
 	{
-		$exam = Exam::find($id);
+		 $exams = DB::table('exam')
+          ->join('Class', 'exam.class_id', '=', 'Class.id')
+          ->join('section', 'exam.section_id', '=', 'section.id')
+          ->select('exam.id','exam.type', 'Class.name as class', 'section.name as section')
+          ->get();
+		 $exam = Exam::find($id);
 		 $classes = DB::table('Class')->get();
 
 		  $getclsss_code = DB::table('Class')->select("*")->where('id','=',$exam->class_id)->first();
 		  
 		 $sections = DB::table('section')->where('class_code','=',$getclsss_code->code)->get();
 		//return View::Make('app.classEdit',compact('class'));
-		return View('app.examEdit',compact('exam','classes','sections'));
+		//return View('app.examEdit',compact('exam','classes','sections'));
+		return View('app.examList',compact('exams','exam','classes','sections'));
 	}
 
 
@@ -144,6 +156,7 @@ class examController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
+			//return Redirect::to('/exam/edit/'.Input::get('id'))->withErrors($validator);
 			return Redirect::to('/exam/edit/'.Input::get('id'))->withErrors($validator);
 		}
 		else {
@@ -155,6 +168,7 @@ class examController extends BaseController {
 			$exam->section_id = Input::get('section');
 
 			$exam->save();
+			//return Redirect::to('/exam/list')->with("success","Exam Updated Succesfully.");
 			return Redirect::to('/exam/list')->with("success","Exam Updated Succesfully.");
 
 		}

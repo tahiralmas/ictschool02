@@ -17,11 +17,114 @@
 @endif
 <div class="row">
   <div class="box col-md-12">
+
     <div class="box-inner">
       <div data-original-title="" class="box-header well">
         <h2><i class="glyphicon glyphicon-home"></i> Class List</h2>
       </div>
       <div class="box-content">
+      @if (count($errors) > 0)
+                                  <div class="alert alert-danger">
+                                      <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                                      <ul>
+                                          @foreach ($errors->all() as $error)
+                                              <li>{{ $error }}</li>
+                                          @endforeach
+                                      </ul>
+                                  </div>
+                  @endif
+         @if($class)
+              <form role="form" action="{{url('/class/update')}}" method="post">
+                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                   <input type="hidden" name="id" value="{{$class->id }}">
+
+                     <div class="row">
+                     <div class="col-md-12">
+                       <div class="col-md-4">
+                           <div class="form-group">
+                         <label for="for">Name  <b>*</b></label>
+                         <div class="input-group">
+                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                            <input type="text" class="form-control" required name="name" value="{{$class->name}}" placeholder="Class Name">
+                         </div>
+                     </div>
+                       </div>
+                       {{--<div class="col-md-6">
+                           <div class="form-group">
+                        <label for="gpa" style="font-weight: 600 !important;">Numeric Value of Class <small>[play=-2,nusery=-1,parp=0,One=1,Six=6,Ten=10 etc]</small> <b>*</b></label>
+                         <div class="input-group">
+                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                              <select name="class" id="class" class="form-control" required>
+                                @foreach($classes as $class)
+                                <option value="{{$class->code}}" @if($exam->class_id == $class->id) selected @endif>{{$class->name}}</option>
+                                @endforeach
+                              </select>
+                         </div>
+                     </div>
+                       </div>--}}
+                       <div class="col-md-4">
+                         <div class="form-group">
+                             <label for="grade">Description  <b>*</b></label>
+                             <div class="input-group">
+                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                  <textarea type="text" class="form-control" required name="description" placeholder="Class Description">{{$class->description}}</textarea>
+
+                             </div>
+                         </div>
+                       </div>
+                       
+                       <div class="col-md-4">
+                        <button class="btn btn-primary" type="submit" style="margin-top: 30px;"><i class="glyphicon glyphicon-plus"></i>Update</button>
+
+                       </div>
+                     </div>
+                   </div>
+                      </form>
+                    @else
+                    <form role="form" action="{{url('/class/create')}}" method="post">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                    <div class="row">
+                     <div class="col-md-12">
+                       <div class="col-md-2">
+                           <div class="form-group">
+                         <label for="for">Name  <b>*</b></label>
+                         <div class="input-group">
+                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                            <input type="text" class="form-control" autofocus required name="name" placeholder="Class Name">
+                         </div>
+                     </div>
+                       </div>
+                       <div class="col-md-6">
+                           <div class="form-group">
+                         <label for="gpa" style="font-weight: 600 !important;">Numeric Value of Class <small>[play=-2,nusery=-1,parp=0,One=1,Six=6,Ten=10 etc]</small> <b>*</b></label>
+                         <div class="input-group">
+                             <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                            <input type="number" min="-3" max="14" class="form-control" required name="code" placeholder="One=1,Six=6,Ten=10 etc">
+
+                         </div>
+                     </div>
+                       </div>
+                       <div class="col-md-2">
+                         <div class="form-group">
+                             <label for="grade">Description  <b>*</b></label>
+                             <div class="input-group">
+                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                  <textarea type="text" class="form-control" required name="description" placeholder="Class Description"></textarea>
+
+                             </div>
+                         </div>
+                       </div>
+                       <div class="col-md-2">
+                        <button class="btn btn-primary" type="submit" style="margin-top: 30px;"><i class="glyphicon glyphicon-plus"></i>Add</button>
+
+                       </div>
+
+                     </div>
+                   </div>
+                      <br>
+                        </form>
+                    @endif
         <table id="classList" class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
