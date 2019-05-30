@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-    <link href="<?php  echo url();?>/css/bootstrap-datepicker.css" rel="stylesheet">
+    <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 @stop
 @section('content')
 
@@ -52,7 +52,7 @@
                                             <div class="input-group">
 
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                                <input type="text" value="{{date_format(date_create($income->date), 'd/m/Y');}}"  class="form-control datepicker" name="date" required  data-date-format="dd/mm/yyyy">
+                                                <input type="text" value="{{date_format(date_create($income->date), 'd/m/Y')}}"  class="form-control datepicker" name="date" required  data-date-format="dd/mm/yyyy">
                                             </div>
 
 
@@ -103,7 +103,7 @@
     </div>
 @stop
 @section('script')
-    <script src="<?php echo url();?>/js/bootstrap-datepicker.js"></script>
+    <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
     <script type="text/javascript">
 
     $( document ).ready(function() {

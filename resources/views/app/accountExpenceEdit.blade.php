@@ -52,7 +52,7 @@
                                             <div class="input-group">
 
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                                <input type="text" value="{{date_format(date_create($expence->date), 'd/m/Y');}}"  class="form-control datepicker" name="date" required  data-date-format="dd/mm/yyyy">
+                                                <input type="text" value="{{date_format(date_create($expence->date), 'd/m/Y')}}"  class="form-control datepicker" name="date" required  data-date-format="dd/mm/yyyy">
                                             </div>
 
 
@@ -60,7 +60,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label class="control-label" for="type">Amount</label>
+                                            <label class="control-label" for="type">Description</label>
 
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>

@@ -203,9 +203,9 @@ class accountingController extends BaseController {
 						array_push($dataToSave, $data);
 					}else
 					{
-						$errorMessages = new Illuminate\Support\MessageBag;
+						$errorMessages = new \Illuminate\Support\MessageBag;
 						$errorMessages->add('Invalid', 'Amount must be a number.');
-						return Redirect::to('/accounting/income')->withInput(Input::all())->withErrors($errorMessages);
+						//return Redirect::to('/accounting/income')->withInput(Input::all())->withErrors($errorMessages);
 					}
 				}
 
@@ -244,9 +244,11 @@ class accountingController extends BaseController {
 	public  function incomeListPost()
 	{
 		$year = trim(Input::get('year'));
+		$month =$nmonth = date('m',strtotime(trim(Input::get('month'))));
 
 
-		$incomes = DB::select(DB::raw("SELECT * FROM accounting WHERE type ='Income' and YEAR(date)='".$year."'"));
+
+		$incomes = DB::select(DB::raw("SELECT * FROM accounting WHERE type ='Income' and YEAR(date)='".$year."'  and MONTH(date)='".$month."'"));
 		//return View::Make('app.accountIncomeView',compact('incomes'));
 		return View('app.accountIncomeView',compact('incomes'));
 	}
@@ -340,7 +342,7 @@ class accountingController extends BaseController {
 					{
 						$errorMessages = new \Illuminate\Support\MessageBag;
 						$errorMessages->add('Invalid', 'Amount must be a number.');
-						return Redirect::to('/accounting/expence')->withInput(Input::all())->withErrors($errorMessages);
+						//return Redirect::to('/accounting/expence')->withInput(Input::all())->withErrors($errorMessages);
 					}
 				}
 
@@ -377,9 +379,11 @@ class accountingController extends BaseController {
 	public  function expenceListPost()
 	{
 		$year = trim(Input::get('year'));
+		$month =$nmonth = date('m',strtotime(trim(Input::get('month'))));
 
 
-		$expences = DB::select(DB::raw("SELECT * FROM accounting WHERE type ='Expence' and YEAR(date)='".$year."'"));
+
+		$expences = DB::select(DB::raw("SELECT * FROM accounting WHERE type ='Expence' and YEAR(date)='".$year."' and MONTH(date)='".$month."'"));
 		//return View::Make('app.accountExpenceView',compact('expences'));
 		return View('app.accountExpenceView',compact('expences'));
 	}
@@ -387,7 +391,7 @@ class accountingController extends BaseController {
 	public function  expenceEdit($id)
 	{
 		$expence = Accounting::find($id);
-		return View::Make('app.accountExpenceEdit',compact('expence'));
+		return View('app.accountExpenceEdit',compact('expence'));
 	}
 	public function expenceUpdate()
 	{

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('style')
-    <link href="/css/bootstrap-datepicker.css" rel="stylesheet">
+    <link href="{{url('/css/bootstrap-datepicker.css')}}" rel="stylesheet">
 
 @stop
 @section('content')
@@ -45,6 +45,17 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="col-md-3">
+                                        <div class="form-group ">
+                                            <label for="session">Income Month</label>
+                                            <div class="input-group">
+
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                                                <input value="{{date('M')}}" type="text"  required="true" class="form-control datepicker3" name="month"    data-date-format="M">
+                                            </div>
+                                        </div>
+                                    </div>
                                         <div class="col-md-3">
                                             <div class="form-group ">
                                                 <label for="ff">&nbsp;</label>
@@ -105,7 +116,9 @@
     <script src="/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript">
         $( document ).ready(function() {
-            $('#studentList').dataTable();
+            $('#studentList').dataTable({
+                "sPaginationType": "bootstrap",
+            });
             $(".datepicker2").datepicker( {
                 format: " yyyy", // Notice the Extra space at the beginning
                 viewMode: "years",
@@ -113,6 +126,13 @@
                 autoclose:true
 
             });
+             $(".datepicker3").datepicker( {
+            format: " M", // Notice the Extra space at the beginning
+            viewMode: "months",
+            minViewMode: "months",
+            autoclose:true
+
+        });
         });
     </script>
 @stop

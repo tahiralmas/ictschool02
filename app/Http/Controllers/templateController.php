@@ -27,9 +27,9 @@ class templateController extends BaseController {
 	public function index()
 	{
 		$message = Message::first();
-		if(!empty($message)){
+		/*if(!empty($message)){
 			return Redirect::to('/message/edit/'.$message ->id);
-		}
+		}*/
 	         
 		return View('app.templateCreate');
 	}

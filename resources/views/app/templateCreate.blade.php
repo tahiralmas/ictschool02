@@ -12,7 +12,7 @@
 <div class="box col-md-12">
         <div class="box-inner">
             <div data-original-title="" class="box-header well">
-                <h2><i class="glyphicon glyphicon-th"></i> Fee Collection Message</h2>
+                <h2><i class="glyphicon glyphicon-th"></i>Add Template</h2>
 
             </div>
              <div class="box-content">
@@ -23,6 +23,14 @@
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <br >
                                 <div class="form-group col-md-12 row">
+                                    <label for="name"  class="col-sm-2 col-form-label">Type</label>
+                                    <div class="input-group col-md-6">
+                                    <select name="type" class="form-control" required>
+                                      <option value="fee_add">Fees Paid</option>
+                                      <option value="mark_notification">Result</option>
+                                    </select>
+                                    </div>
+                                </div><div class="form-group col-md-12 row">
                                     <label for="name"  class="col-sm-2 col-form-label">Title</label>
                                     <div class="input-group col-md-6">
                                        <input type="text" name="title" class="form-control" required>
@@ -30,9 +38,9 @@
                                 </div>
                               
                                 <div class="form-group row">
-                                    <label for="name" class="col-sm-2 col-form-label">Description</label>
+                                    <label for="name" class="col-sm-12 col-form-label">write your message, you can use<small>[name],[amount],[student_name],[subjects],[marks],[outoff],[exam]</small></label>
                                     <div class="input-group col-md-6">
-                                       <span><?php echo "[name],[amount]";?></span>
+                                       
                                         <textarea type="text" class="form-control"  name="description" placeholder="Class Description"></textarea>
                                     </div>
                                 </div>
