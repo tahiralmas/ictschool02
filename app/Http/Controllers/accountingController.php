@@ -282,7 +282,7 @@ class accountingController extends BaseController {
 			$income = Accounting::find(Input::get('id'));
 			$income->amount=Input::get('amount');
 			$income->description=Input::get('description');
-			if(Input::get('description')){
+			if(Input::get('description')==''){
 				$income->description='';
 			}
 			$income->date=$this->parseAppDate(Input::get('date'));
@@ -416,6 +416,9 @@ class accountingController extends BaseController {
 			$income = Accounting::find(Input::get('id'));
 			$income->amount=Input::get('amount');
 			$income->description=Input::get('description');
+			if(Input::get('description')==''){
+				$income->description = '';
+			}
 			$income->date=$this->parseAppDate(Input::get('date'));
 			$income->save();
 
