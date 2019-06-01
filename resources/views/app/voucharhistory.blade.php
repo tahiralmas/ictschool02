@@ -181,7 +181,9 @@
             $('#class').on('change',function() {
               getsections();
             });
-            $('#feeList').dataTable();
+            $('#feeList').dataTable({
+              "sPaginationType": "bootstrap",
+            });
             //var session = $('#session').val().trim();
               //getstudents();
             $(".datepicker2").datepicker( {

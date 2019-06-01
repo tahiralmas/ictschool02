@@ -415,7 +415,7 @@ color: red;
                 <label for="dob">Date Of Birth </label>
                 <div class="input-group">
                   <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                  <input type="text"   class="form-control datepicker" name="dob" value="{{old('dob')}}"   data-date-format="dd/mm/yyyy">
+                  <input type="date"   class="form-control db" name="dob" value="{{old('dob')}}"   data-date-format="dd/mm/yyyy">
                 </div>
               </div>
             </div>
@@ -583,6 +583,7 @@ color: red;
 
 {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
 --}}
+<script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
 <script type="text/javascript">
 //alert({{get_current_session()->id}});
  //$( function() {
@@ -663,6 +664,18 @@ color: red;
 
     });*/
 $(document).ready(function() {
+
+
+$(".db").datepicker( {
+              //format: "yyyy/m", // Notice the Extra space at the beginning
+             // viewMode: "years",
+             // minViewMode: "years",
+              autoclose:true
+
+            })
+
+
+
   @if($family_id!='')
 
     getfamilydata({{$family_id}});
