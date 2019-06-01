@@ -83,10 +83,9 @@ class templateController extends BaseController {
 				$ictcore_message->save();
 				if(Input::get('title')=='mark_notification'){
 					//return Redirect::to('/template/creates')->withErrors($errorMessages);
-					return Redirect::to('/template/message/edit/'.$ictcore_message->id)->with("success", "Message Created Succesfully.");
-
+					return Redirect::to('/template/list/')->with("success", "Message Created Succesfully.");
 				}
-				return Redirect::to('/message/edit/'.$ictcore_message->id)->with("success", "Message Created Succesfully.");
+				return Redirect::to('/template/list/')->with("success", "Message Created Succesfully.");
 
                /* $remove_spaces =  str_replace(" ","_",Input::get('title'));
 
@@ -104,7 +103,7 @@ class templateController extends BaseController {
 
                /*$ictcore_integration = Ictcore_integration::select("*")->first();
                    
-		    if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
+		    	if(!empty($ictcore_integration) && $ictcore_integration->ictcore_url && $ictcore_integration->ictcore_user && $ictcore_integration->ictcore_password){
 				$ictcore_api  = new ictcoreController();
 				$sname = Input::get('title');
                 $remove_spaces =  str_replace(" ","_",Input::get('title'));

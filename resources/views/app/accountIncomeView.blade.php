@@ -29,7 +29,18 @@
 
                 <div class="row">
                     <div class="col-md-12">
-
+                            @php
+                            if($year!=''){
+                            $year = $year;
+                            }else{
+                            $year = date('Y');
+                            }
+                            if($mn!=''){
+                            $month = $mn;
+                            }else{
+                            $month = date('M');
+                            }
+                            @endphp
                         <form role="form" action="{{url('/accounting/incomelist')}}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="row">
@@ -41,7 +52,7 @@
                                             <div class="input-group">
 
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                                <input value="{{date('Y')}}" type="text"  required="true" class="form-control datepicker2" name="year" value=""   data-date-format="yyyy">
+                                                <input value="{{$year}}" type="text"  required="true" class="form-control datepicker2" name="year" value=""   data-date-format="yyyy">
                                             </div>
                                         </div>
                                     </div>
@@ -51,7 +62,7 @@
                                             <div class="input-group">
 
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                                <input value="{{date('M')}}" type="text"  required="true" class="form-control datepicker3" name="month"    data-date-format="M">
+                                                <input value="{{ $month}}" type="text"  required="true" class="form-control datepicker3" name="month"    data-date-format="M">
                                             </div>
                                         </div>
                                     </div>
@@ -95,7 +106,8 @@
                                     <td>{{date_format(date_create($income->date), 'd/m/Y')}}</td>
                                     <td>{{$income->description}}</td>
                                     <td>
-                                        <a title='Edit' class='btn btn-info' href='{{url("/accounting/incomeedit")}}/{{$income->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/accounting/incomedelete")}}/{{$income->id}}'> <i class="glyphicon glyphicon-trash icon-white"></i></a>
+                                        <a title='Edit' class='btn btn-info' href='{{url("/accounting/incomeedit")}}/{{$income->id}}?year={{$year}}&month={{$month}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp
+                                        <a title='Delete' class='btn btn-danger' href='{{url("/accounting/incomedelete")}}/{{$income->id}}?year={{$year}}&month={{$month}}'> <i class="glyphicon glyphicon-trash icon-white"></i></a>
                                     </td>
                                     @endforeach
                                 </tbody>

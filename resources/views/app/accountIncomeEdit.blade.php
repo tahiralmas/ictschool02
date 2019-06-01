@@ -23,9 +23,11 @@
                         </div>
                     @endif
                     @if (isset($income))
-                        <form role="form" action="/accounting/incomeupdate" method="post">
+                        <form role="form" action="{{url('/accounting/incomeupdate')}}" method="post">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="id" value="{{$income->id }}">
+                            <input type="hidden" name="month" value="{{$month }}">
+                            <input type="hidden" name="year" value="{{$year }}">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="col-md-4">

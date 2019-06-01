@@ -10,6 +10,7 @@ use App\SectionModel;
 use App\ClassModel;
 use App\Referal;
 use App\FeeSetup;
+use App\AdmissionfeeCollection;
 use Hash;
 use DB;
 use App\Ictcore_integration;
@@ -391,23 +392,24 @@ if( preg_match( '!\(([^\)]+)\)!', $query, $match ) ){
 
 		$rules=[
 		
-		'regiNo' => 'required',
-		'fname' => 'required',
+		'regiNo'      => 'required',
+		'fname'       => 'required',
 		//'lname' => 'required',
-		'gender' => 'required',
+		'gender'      => 'required',
 		//'religion' => 'required',
 		//'bloodgroup' => 'required',
 		//'nationality' => 'required',
 		//'dob' => 'required',
-		'session' => 'required',
-		'class' => 'required',
-		'section' => 'required',
-		'rollNo' => 'required',
-		'shift' => 'required',
-		'photo' => 'mimes:jpeg,jpg,png',
+		'session'       => 'required',
+		'class'         => 'required',
+		'section'       => 'required',
+		'rollNo'        => 'required',
+		'shift'         => 'required',
+		'photo'         => 'mimes:jpeg,jpg,png',
 		//'b_form' => 'required',
-		'fatherName' => 'required',
+		'fatherName'   => 'required',
 		'fatherCellNo' => 'required',
+		'adfee'        => 'integer',
 		//'motherName' => 'required',
 		//'motherCellNo' => 'required',
 		//'presentAddress' => 'required',
@@ -417,6 +419,7 @@ if( preg_match( '!\(([^\)]+)\)!', $query, $match ) ){
 	   $messsages = array(
 		'lname.required'=>'The Last Name field is required',
 		'fname.required'=>'The First Name field is required',
+		'adfee.integer'=>'The admission fee must be an integer.',
 		
 	);
 
@@ -587,7 +590,12 @@ if( preg_match( '!\(([^\)]+)\)!', $query, $match ) ){
 			if( Input::file('photo')!=''){
              Input::file('photo')->move(base_path() .'/public/images',$fileName);
          	}
-
+         	if(Input::get('adfee')>0){
+         		$admissionfee = new AdmissionfeeCollection;
+         		$admissionfee->student_id = $student->id;
+         		$admissionfee->admission_fee = Input::get('adfee');
+         		$admissionfee->save(); 
+         	}
          	if(Input::get('family_id')!='' && Input::get('refer_by')!='' /*&& Input::get('f_status')=='new'*/){
 
          		$saverefral              = new Referal;

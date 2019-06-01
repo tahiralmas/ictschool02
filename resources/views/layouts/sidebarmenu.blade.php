@@ -335,7 +335,7 @@
         @endif
       @if (Session::get('userRole')=="Admin")
 
-            {{--<li class="has-sub">
+            <li class="has-sub">
           <a  class="js-arrow {{ Request::is('template/*') ? 'open' : '' }}" href="#">
             <i class="glyphicon  glyphicon glyphicon-font"></i>
             Template
@@ -348,7 +348,7 @@
             <li class="{{ Request::is('template/list') ? 'active' : '' }}"><a href="{{url('/template/list')}}">Templates</a></li>
             
           </ul>
-        </li>--}}
+        </li>
       
         {{--<li class="has-sub">
           <a  class="js-arrow {{ Request::is('academicYear', 'gpa', 'users', 'holidays', 'class-off', 'institute', 'ictcore?type=sms', 'ictcore?type=voice','notification_type','ictcore/attendance','permission','accounting') ? 'open' : '' }}" href="#">

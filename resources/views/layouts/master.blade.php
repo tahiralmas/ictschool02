@@ -296,7 +296,7 @@ table i{
 }
 
 .notifi-dropdown {
-    left: 22px;
+    left: 0px;
     top: 49px;
 }
 .js-dropdown a {
@@ -318,6 +318,11 @@ table i {
     max-height: 500px;
     overflow-y: scroll;
 }
+
+.mess-dropdown, .email-dropdown, .notifi-dropdown, .setting-dropdown{
+
+  min-width: 239px !important;
+}
   </style>
     <!-- jQuery -->
     <!--<script src="{{ URL::asset('/bower_components/jquery/jquery.min.js') }}"></script>
@@ -332,6 +337,7 @@ table i {
     <!-- The fav icon -->
     <link rel="shortcut icon" href="{{ URL::asset('img/favicon.ico')}}">
     <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css" rel="stylesheet">
+}
 </head>
 
 <body @if(Request::is('student/create-file')) @else class="animsition" @endif>

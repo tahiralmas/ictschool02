@@ -176,7 +176,7 @@ class accountingController extends BaseController {
 	public function  incomeCreate()
 	{
 		$rules=[
-			'name' => 'required',
+			'name'   => 'required',
 			'amount' => 'required|between:0,99.99',
 			'date'   => 'required'
 
@@ -187,17 +187,17 @@ class accountingController extends BaseController {
 			return Redirect::to('/accounting/income')->withInput(Input::all())->withErrors($validator);
 		}
 		else {
-			$sectors = Input::get('name');
-			$amount = Input::get('amount');
-			$date = Input::get('date');
-			$desc = Input::get('description');
-			$sectorIds= array_keys($sectors);
+			$sectors   = Input::get('name');
+			$amount    = Input::get('amount');
+			$date      = Input::get('date');
+			$desc      = Input::get('description');
+			$sectorIds = array_keys($sectors);
 			// $amountIds = array_keys($amount);
 			//$dateIds = array_keys($date);
 			$dataToSave = array();
 			foreach($sectorIds as $id)
 			{
-				if($amount[$id] !=="" && $date[$id] !=="") {
+				if($amount[$id] !== "" && $date[$id] !== "") {
 					if (is_numeric($amount[$id])) {
 						$data = array("name" => $sectors[$id], "amount" => $amount[$id], "date" => $date[$id],"description"=>$desc[$id]);
 						array_push($dataToSave, $data);
@@ -231,33 +231,53 @@ class accountingController extends BaseController {
 
 
 			return Redirect::to('/accounting/income')->with("success",$counter."'s income saved Succesfully.");
-
 		}
 
 	}
 	public  function incomeList()
 	{
 		$incomes = array();
+		if(Input::get('year')==''){
+			$year = '';
+		}else{
+			$year = Input::get('year');
+
+		}
+		if(Input::get('month')==''){
+			$mn = '';
+		}else{
+			$mn = Input::get('month');
+			$month  = date('m',strtotime($mn));
+		}
+		if($mn !='' && $year!=''){
+
+			$incomes = DB::select(DB::raw("SELECT * FROM accounting WHERE type ='Income' and YEAR(date)='".$year."'  and MONTH(date)='".$month."'"));
+
+		}
+		//echo "<pre>".$mn.$year;print_r($incomes);
 		//return View::Make('app.accountIncomeView',compact('incomes'));
-		return View('app.accountIncomeView',compact('incomes'));
+		return View('app.accountIncomeView',compact('incomes','year','mn'));
 	}
 	public  function incomeListPost()
 	{
 		$year = trim(Input::get('year'));
-		$month =$nmonth = date('m',strtotime(trim(Input::get('month'))));
+		$mn   = trim(Input::get('month'));
+		$month  = date('m',strtotime($mn));
 
 
 
 		$incomes = DB::select(DB::raw("SELECT * FROM accounting WHERE type ='Income' and YEAR(date)='".$year."'  and MONTH(date)='".$month."'"));
 		//return View::Make('app.accountIncomeView',compact('incomes'));
-		return View('app.accountIncomeView',compact('incomes'));
+		return View('app.accountIncomeView',compact('incomes','year','mn'));
 	}
 
 	public function  incomeEdit($id)
 	{
 		$income = Accounting::find($id);
+		 $year = trim(Input::get('year'));
+		 $month   = trim(Input::get('month'));
 		//return View::Make('app.accountIncomeEdit',compact('income'));
-		return View('app.accountIncomeEdit',compact('income'));
+		 return View('app.accountIncomeEdit',compact('income','year','month'));
 	}
 	public function incomeUpdate()
 	{
@@ -270,7 +290,7 @@ class accountingController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-			return Redirect::to('/accounting/incomeedit/'.Input::get('id'))->withErrors($validator);
+			return Redirect::to('/accounting/incomeedit/'.Input::get('id').'?year='.Input::get('year').'&month='.Input::get('month'))->withErrors($validator);
 		}
 		elseif(!is_numeric(Input::get('amount')))
 		{
@@ -288,14 +308,14 @@ class accountingController extends BaseController {
 			$income->date=$this->parseAppDate(Input::get('date'));
 			$income->save();
 
-			return Redirect::to('/accounting/incomelist')->with("success","Income Updated Succesfully.");
+			return Redirect::to('/accounting/incomelist?year='.Input::get('year').'&month='.Input::get('month'))->with("success","Income Updated Succesfully.");
 		}
 	}
 	public function incomeDelete($id)
 	{
 		$income = Accounting::find($id);
 		$income->delete();
-		return Redirect::to('/accounting/incomelist')->with("success","Income Deleted Succesfully.");
+		return Redirect::to('/accounting/incomelist?year='.Input::get('year').'&month='.Input::get('month'))->with("success","Income Deleted Succesfully.");
 	}
 
 	public function  expence()
@@ -309,10 +329,9 @@ class accountingController extends BaseController {
 	public function expenceCreate()
 	{
 		$rules=[
-			'name' => 'required',
+			'name'   => 'required',
 			'amount' => 'required|between:0,99.99',
 			'date'   => 'required'
-
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
@@ -321,11 +340,11 @@ class accountingController extends BaseController {
 		}
 		else {
 			$sectors = Input::get('name');
-			$amount = Input::get('amount');
-			$date = Input::get('date');
-			$desc = Input::get('description');
+			$amount  = Input::get('amount');
+			$date    = Input::get('date');
+			$desc    = Input::get('description');
 
-			$sectorIds= array_keys($sectors);
+			$sectorIds = array_keys($sectors);
 			// $amountIds = array_keys($amount);
 			//$dateIds = array_keys($date);
 			$dataToSave = array();
@@ -374,29 +393,46 @@ class accountingController extends BaseController {
 	{
 		$expences = array();
 		//return View::Make('app.accountExpenceView',compact('expences'));
-		return View('app.accountExpenceView',compact('expences'));
+		if(Input::get('year')==''){
+			$year = '';
+		}else{
+			$year = Input::get('year');
+
+		}
+		if(Input::get('month')==''){
+			$mn = '';
+		}else{
+			$mn     = Input::get('month');
+			$month  = date('m',strtotime($mn));
+		}
+		if($mn !='' && $year!=''){
+
+			$expences = DB::select(DB::raw("SELECT * FROM accounting WHERE type ='Expence' and YEAR(date)='".$year."'  and MONTH(date)='".$month."'"));
+
+		}
+		return View('app.accountExpenceView',compact('expences','year','mn'));
 	}
 	public  function expenceListPost()
 	{
-		$year = trim(Input::get('year'));
-		$month =$nmonth = date('m',strtotime(trim(Input::get('month'))));
-
-
-
+		$year     = trim(Input::get('year'));
+		$mn       = trim(Input::get('month'));
+		$month    = date('m',strtotime($mn));
 		$expences = DB::select(DB::raw("SELECT * FROM accounting WHERE type ='Expence' and YEAR(date)='".$year."' and MONTH(date)='".$month."'"));
 		//return View::Make('app.accountExpenceView',compact('expences'));
-		return View('app.accountExpenceView',compact('expences'));
+		return View('app.accountExpenceView',compact('expences','year','mn'));
 	}
 
 	public function  expenceEdit($id)
 	{
-		$expence = Accounting::find($id);
-		return View('app.accountExpenceEdit',compact('expence'));
+		$expence  = Accounting::find($id);
+		 $year    = trim(Input::get('year'));
+		 $month   = trim(Input::get('month'));
+		return View('app.accountExpenceEdit',compact('expence','year','month'));
 	}
 	public function expenceUpdate()
 	{
 		$rules=[
-			'name' => 'required',
+			'name'   => 'required',
 			'amount' => 'required|between:0,99.99',
 			'date'   => 'required'
 
@@ -404,13 +440,13 @@ class accountingController extends BaseController {
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
 		{
-			return Redirect::to('/accounting/expenceedit/'.Input::get('id'))->withErrors($validator);
+			return Redirect::to('/accounting/expenceedit/'.Input::get('id').'?year='.Input::get('year').'&month='.Input::get('month'))->withErrors($validator);
 		}
 		elseif(!is_numeric(Input::get('amount')))
 		{
 			$errorMessages = new Illuminate\Support\MessageBag;
 			$errorMessages->add('Invalid', 'Amount must be a number.');
-			return Redirect::to('/accounting/expenceedit/'.Input::get('id'))->withErrors($errorMessages);
+			return Redirect::to('/accounting/expenceedit/'.Input::get('id').'?year='.Input::get('year').'&month='.Input::get('month'))->withErrors($errorMessages);
 		}
 		else {
 			$income = Accounting::find(Input::get('id'));
@@ -422,14 +458,14 @@ class accountingController extends BaseController {
 			$income->date=$this->parseAppDate(Input::get('date'));
 			$income->save();
 
-			return Redirect::to('/accounting/expencelist')->with("success","Expence Updated Succesfully.");
+			return Redirect::to('/accounting/expencelist?year='.Input::get('year').'&month='.Input::get('month'))->with("success","Expence Updated Succesfully.");
 		}
 	}
 	public function expenceDelete($id)
 	{
 		$income = Accounting::find($id);
 		$income->delete();
-		return Redirect::to('/accounting/expencelist')->with("success","Expence Deleted Succesfully.");
+		return Redirect::to('/accounting/expencelist?year='.Input::get('year').'&month='.Input::get('month'))->with("success","Expence Deleted Succesfully.");
 	}
 
 	public  function getReport()
@@ -438,7 +474,6 @@ class accountingController extends BaseController {
 		$datas=array();
 		//return View::Make('app.accountingReport',compact('datas','formdata'));
 		return View('app.accountingReport',compact('datas','formdata'));
-
 	}
 	public  function printReport($rtype,$fdate,$tdate)
 	{

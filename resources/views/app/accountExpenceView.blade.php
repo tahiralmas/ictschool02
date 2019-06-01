@@ -29,7 +29,18 @@
 
                     <div class="row">
                         <div class="col-md-12">
-
+                            @php
+                            if($year!=''){
+                            $year = $year;
+                            }else{
+                            $year = date('Y');
+                            }
+                            if($mn!=''){
+                            $month = $mn;
+                            }else{
+                            $month = date('M');
+                            }
+                            @endphp
                             <form role="form" action="{{url('/accounting/expencelist')}}" method="post" enctype="multipart/form-data">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <div class="row">
@@ -41,18 +52,18 @@
                                                 <div class="input-group">
 
                                                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                                    <input type="text" value="{{date('Y')}}"  required="true" class="form-control datepicker2" name="year" value=""   data-date-format="yyyy">
+                                                    <input type="text" value="{{$year}}"  required="true" class="form-control datepicker2" name="year" value=""   data-date-format="yyyy">
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                         <div class="form-group ">
-                                            <label for="session">Income Month</label>
+                                            <label for="session">Expence Month</label>
                                             <div class="input-group">
 
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
-                                                <input value="{{date('M')}}" type="text"  required="true" class="form-control datepicker3" name="month"    data-date-format="M">
+                                                <input value="{{$month}}" type="text"  required="true" class="form-control datepicker3" name="month"    data-date-format="M">
                                             </div>
                                         </div>
                                     </div>
@@ -96,7 +107,8 @@
                                         <td>{{date_format(date_create($expence->date), 'd/m/Y')}}</td>
                                         <td>{{$expence->description}}</td>
                                         <td>
-                                            <a title='Edit' class='btn btn-info' href='{{url("/accounting/expenceedit")}}/{{$expence->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/accounting/expencedelete")}}/{{$expence->id}}'> <i class="glyphicon glyphicon-trash icon-white"></i></a>
+                                            <a title='Edit' class='btn btn-info' href='{{url("/accounting/expenceedit")}}/{{$expence->id}}?year={{$year}}&month={{$month}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp
+                                            <a title='Delete' class='btn btn-danger' href='{{url("/accounting/expencedelete")}}/{{$expence->id}}?year={{$year}}&month={{$month}}'> <i class="glyphicon glyphicon-trash icon-white"></i></a>
                                         </td>
                                 @endforeach
                                 </tbody>

@@ -25,17 +25,19 @@
                                 <div class="form-group col-md-12 row">
                                     <label for="name"  class="col-sm-2 col-form-label">Type</label>
                                     <div class="input-group col-md-6">
-                                    <select name="type" class="form-control" required>
+                                    <select name="title" class="form-control" required>
                                       <option value="fee_add">Fees Paid</option>
-                                      <option value="mark_notification">Result</option>
+                                      <option value="mark_notification">Mark Notification</option>
+                                      
                                     </select>
                                     </div>
-                                </div><div class="form-group col-md-12 row">
+                                </div>
+                                {{--<div class="form-group col-md-12 row">
                                     <label for="name"  class="col-sm-2 col-form-label">Title</label>
                                     <div class="input-group col-md-6">
                                        <input type="text" name="title" class="form-control" required>
                                     </div>
-                                </div>
+                                </div>--}}
                               
                                 <div class="form-group row">
                                     <label for="name" class="col-sm-12 col-form-label">write your message, you can use<small>[name],[amount],[student_name],[subjects],[marks],[outoff],[exam]</small></label>
@@ -71,8 +73,6 @@
                                         <br>
                                     </div>
                          </form>
-                    
-           
         </div>
 
 @stop

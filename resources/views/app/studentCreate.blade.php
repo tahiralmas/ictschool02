@@ -458,7 +458,12 @@ color: red;
         <div class="row">
           <div class="col-md-12">
             
-            
+            <div class="col-md-4">
+              <div class="form-group ">
+                <label for="photo">Admission Fee</label>
+                <input id="adfee" name="adfee" class="form-control" value="{{old('adfee',0)}}"  type="text">
+              </div>
+            </div>
           </div>
         </div>
         <!-- <div class="row">
