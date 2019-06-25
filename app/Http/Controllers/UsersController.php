@@ -192,6 +192,7 @@ class UsersController extends BaseController {
 
   public  function show()
   {
+    //User::create(array('firstname'=>'Mr.','lastname'=>'kashif','login'=>'ictkashif','email' => 'kashif@ictinnovations.com','group'=>'Admin','desc'=>'admin Deatils Here',"password"=> Hash::make("123456")));
     $users= User::all();
     $user=array();
     //return View::Make('app.users',compact('users','user'));
@@ -254,12 +255,12 @@ class UsersController extends BaseController {
   {
     $rules=[
       'firstname' => 'required',
-      'lastname' => 'required',
-      'email' => 'required|email',
-      'group' => 'required',
-      'desc' => 'required',
-      'login' => 'required',
-      'password' => 'required'
+      'lastname'  => 'required',
+      'email'     => 'required|email',
+      'group'     => 'required',
+      'desc'      => 'required',
+      'login'     => 'required',
+      'password'  => 'required'
 
     ];
     $validator = \Validator::make(Input::all(), $rules);
@@ -277,14 +278,14 @@ class UsersController extends BaseController {
           $errorMessages->add('deplicate', 'User all ready exists with this email');
           return Redirect::to('/users')->withInput(Input::all())->withErrors($errorMessages);
         } else {
-          $user = User::find(Input::get('id'));
+          $user            = User::find(Input::get('id'));
           $user->firstname = Input::get('firstname');
-          $user->lastname = Input::get('lastname');
-          $user->login = Input::get('login');
-          $user->desc = Input::get('desc');
-          $user->email = Input::get('email');
-          $user->group = Input::get('group');
-          $user->password = Hash::make(Input::get('password'));
+          $user->lastname  = Input::get('lastname');
+          $user->login     = Input::get('login');
+          $user->desc      = Input::get('desc');
+          $user->email     = Input::get('email');
+          $user->group     = Input::get('group');
+          $user->password  = Hash::make(Input::get('password'));
           $user->save();
           return Redirect::to('/users')->with("success", "User Updated Succesfully.");
         }

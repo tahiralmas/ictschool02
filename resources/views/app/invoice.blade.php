@@ -67,7 +67,7 @@
                 </div>
               </div>
 
-              <div class="col-md-4">
+              <div class="col-md-4" id="mnth">
         <div class="form-group">
                   <label class="control-label" for="month">Month</label>
 
@@ -99,6 +99,19 @@
 
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
                     <input  type="text" value="{{$year}}" id="year" required="true" class="form-control datepicker2" name="year"   data-date-format="yyyy" >
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group ">
+                  <label for="session">Fee Type</label>
+                  <div class="input-group">
+
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i> </span>
+                    <select name="fee_type" id="fee_type" class="form-control">
+                    <option value="monthly">Monthly</option>
+                      <option value="other">Other</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -224,7 +237,8 @@
                       <button value="{{$fee->billNo}}" title='Collect Invoice' class='btn btn-primary @if( $fee->paidAmount<$fee->payableAmount) btninvoice @endif' @if($fee->payableAmount===$fee->paidAmount || $fee->paidAmount>=$fee->payableAmount ) onclick = "alert('Invoice Fully Paid')" @endif> <i class="fas fa-dollar-sign icon-white"></i></button>
                       <a title='Edit' class='btn btn-warning' href='{{url("/fees/invoice/update")}}/{{$fee->billNo}}'> <i class="glyphicon glyphicon-pencil icon-white"></i></a>
                    
-                      <a title='get vouchar' class='btn btn-info' href='{{url("/fee/get_vouchar?class=$fee->class&section=$fee->section&session=jan-2019,march-2019&type=Monthly&month=$fee->month&fee_name=$f_idd->id&regiNo=$fee->regiNo")}}'> <i class="glyphicon glyphicon-shopping-cart icon-white "></i></a>
+                     <a title='get vouchar' class='btn btn-info' href='{{url("/fee/get_vouchar?class=$fee->class&section=$fee->section&session=jan-2019,march-2019&type=Monthly&month=$fee->month&fee_name=$f_idd->id&regiNo=$fee->regiNo")}}'> <i class="glyphicon glyphicon-shopping-cart icon-white "></i></a>
+                     
                     </td>
                   </tr>
                 @endforeach
@@ -360,6 +374,17 @@
           <script src="{{url('/js/bootstrap-datepicker.js')}}"></script>
           <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
           <script type="text/javascript">
+$( document ).ready(function() {
+           $("#fee_type").on('change',function(){
+             var type = $("#fee_type").val();
+             if(type == 'other'){
+              $("#mnth").hide();
+             }else{
+              $("#mnth").show();
+             }
+
+           });
+           });
           var stdRegiNo="{{$student->regiNo}}";
            $('.datepicker').datepicker({
     format: 'mm/dd/yyyy',
@@ -660,9 +685,6 @@
             var date1 = document.createElement("label");
             date1.innerHTML=data['date'];
             cell3.appendChild(date1);
-
-
-           
           };
 
 

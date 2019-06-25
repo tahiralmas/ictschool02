@@ -132,8 +132,12 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="type">Grade System</label>
-                                               <input data-no-uniform="true" name="grade_system"  @if($gradsystem=='' || $gradsystem=='auto') checked @endif type="checkbox" class="iphone-toggle">
-                                        </div>
+<!--                                                <input data-no-uniform="true" name="grade_system"  @if($gradsystem=='' || $gradsystem=='auto') checked @endif type="checkbox" class="iphone-toggle">
+ -->                                        
+                                                <div class="input-group">
+                                                <input class="chb form-control" data-toggle="toggle" id="grade_system" data-on="Auto" data-off="Manual" data-width="100"   name="grade_system" data-onstyle="danger" data-offstyle="success" type="checkbox" @if($gradsystem=='' || $gradsystem=='auto') checked @endif  >                                            
+                                            </div>
+                                    </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">

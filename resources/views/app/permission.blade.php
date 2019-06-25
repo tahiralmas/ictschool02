@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+   <link type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" />
    <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" />
 @if (Session::get('success'))
 
@@ -133,9 +134,9 @@ $permission_fields = array(
           'Paper Add',
           'Paper update',
           'Paper delete',
+          'Accounting',
         );
 
-//echo "<pre>";print_r($permission_field);exit;
 ?>
 <div class="row">
 <div class="box col-md-12">
@@ -146,86 +147,199 @@ $permission_fields = array(
             </div>
              <div class="box-content">
                <div class="container">
+              <form role="form" >
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label" for="class">admin</label>
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
+                                                  <input type="checkbox" name="admin" class="form-control" style="margin-top: -35px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                     
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label" for="section">teacher</label>
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                                 <input type="checkbox" name="teacher" class="form-control" style="margin-top: -35px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label" for="section">Student</label>
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                                 <input type="checkbox" name="student" class="form-control" style="margin-top: -35px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label" for="section">Accountant</label>
+
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
+                                                 <input type="checkbox" name="accountant" class="form-control" style="margin-top: -35px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary pull-right"  type="submit"><i class="glyphicon glyphicon-th"></i>Get List</button>
+
+                                </div>
+                            </div>
+                            <br>
+                        </form>
 <div id="user-permissions">
    <form role="form" action="{{url('/permission/create')}}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-<table style="width:100%" class="table table-bordered">
+<table style="width:100%" id="permission" class="table responsive table-bordered">
   <thead>
     <tr>
       <th>Permissions</th>
-      <th>Admin</th>
-      <th>Teachers</th>
-      <th>Students</th>
+     @if($admin=="yes")
+     <th>Admin <input type="checkbox" id="checkAll"></th>
+     @endif
+     @if($teacherd=="yes")
+      <th>Teachers <input type="checkbox" id="checkAll1"></th>
+      @endif
+      @if($studentss=="yes")
+      <th>Students <input type="checkbox" id="checkAll2"></th>
+      @endif
+       @if($accountant=="yes")
+      <th>Accuntant <input type="checkbox" id="checkAll3"></th>
+      @endif 
     </tr>
   </thead>
    <tbody>
    <?php 
-   $i = 0 ;
-   $student = count($permission_fields);
-   $teacher =  $student  + count($permission_fields);
+
+      $i       = 0 ;
+      $student = count($permission_fields);
+     /*if($studentss=="yes"){
+      
+        }
+       else{
+        $teacher =  $student  + count($permission_fields);
+        }*/
+
+      $teacher  =   $student  + count($permission_fields);
+       $accounnt  =   $teacher  + count($permission_fields);
+      //echo $teacher + $student;
+
+     // echo "<pre>";print_r($permissions->toArray());
+       //echo $studentss;
    ?>
     @foreach($permission_fields as $permission_field)
+
     <?php $field_name = str_replace(" ","_",strtolower($permission_field)); 
     ?>
-    @if($permissions)
-    <tr>
-      <td>{{$permission_field}}</td>
-      @if($permissions[$i]->permission_group=='admin')
-      <td>
-        <div class="btn-group btn-toggle">
-            <input class="chb" data-toggle="toggle" id="admin_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="admin[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox"  @if($permissions[$i]->permission_type=='yes') checked @endif  >                                            
-        </div>
-      </td>
-      @endif
-       @if($permissions[$teacher]->permission_group=='teacher')
-      <td>
-        <div class="btn-group btn-toggle">
-          <input class="chb" data-toggle="toggle" id="teacher_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="teacher[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox"   @if($permissions[$teacher]->permission_type=='yes') checked @endif >                                            
-        </div>
 
-        </div>
-      </td>
-      @endif
-       @if($permissions[$student]->permission_group=='student')
-      <td>
+    @if($permissions)
+
+    <tr>
+
+      <td width="50">{{$permission_field}}</td>
+      
+      @if($permissions[$i]->permission_group=='admin')
+      @if($admin=="yes")
+      <td width="50">
         <div class="btn-group btn-toggle">
-          <input class="chb" data-toggle="toggle" id="student_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="student[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox" @if($permissions[$student]->permission_type=='yes') checked @endif >                                            
+            <input class="cb-element chb admins" data-toggle="toggle" id="admin_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="admin[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox"  @if($permissions[$i]->permission_type=='yes') checked @endif  >                                            
         </div>
       </td>
       @endif
+      @endif
+      
+       @if($permissions[$teacher]->permission_group=='teacher')
+       @if($teacherd=="yes")
+        <td width="50">
+          <div class="btn-group btn-toggle">
+            <input class="cb-element1 chb" data-toggle="toggle" id="teacher_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="teacher[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox"   @if($permissions[$teacher]->permission_type=='yes') checked @endif >                                            
+          </div>
+
+          </div>
+        </td>
+      @endif
+      @endif
+      
+       @if($permissions[$student]->permission_group=='student')
+       @if($studentss=="yes")
+      <td width="50">
+        <div class="btn-group btn-toggle">
+          <input class="cb-element2 chb" data-toggle="toggle" id="student_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="student[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox" @if($permissions[$student]->permission_type=='yes') checked @endif >                                            
+        </div>
+      </td>
+      @endif
+      @endif
+     
+      @if($permissions[$accounnt]->permission_group=='accountant')
+      @if($accountant=="yes")
+     
+      <td width="50">
+        <div class="btn-group btn-toggle">
+          <input class="cb-element3 chb" data-toggle="toggle" id="accutant_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="accutant[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox" @if($permissions[$accounnt]->permission_type=='yes') checked @endif >                                            
+        </div>
+      </td>
+      @endif
+      @endif
+
     </tr>
     <?php 
-   $i++ ;
-   $student++ ;
-   $teacher++;
-   ?>
+     $i++ ;
+     $student++ ;
+     $teacher++;
+     $accounnt++;
+    ?>
    @else
 
     <tr>
       <td>{{$permission_field}}</td>
-      
+      @if($admin=="yes")
       <td>
         <div class="btn-group btn-toggle">
-            <input class="chb" data-toggle="toggle" id="admin_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="admin[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox"  >                                            
+            <input class="cb-element chb" data-toggle="toggle" id="admin_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="admin[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox"  >                                            
         </div>
       </td>
-     
+      @endif
+     @if($teacherd=="yes")
       <td>
         <div class="btn-group btn-toggle">
-          <input class="chb" data-toggle="toggle" id="teacher_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="teacher[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox"    >                                            
+          <input class="cb-element1 chb" data-toggle="toggle" id="teacher_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="teacher[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox"    >                                            
         </div>
 
         </div>
       </td>
-      
+      @endif
+      @if($studentss=="yes")
       <td>
         <div class="btn-group btn-toggle">
-          <input class="chb" data-toggle="toggle" id="student_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="student[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox" >                                            
+          <input class="cb-element2 chb" data-toggle="toggle" id="student_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="student[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox" >                                            
         </div>
       </td>
-      
+      @endif
+      @if($accountant=="yes")
+      <td>
+        <div class="btn-group btn-toggle">
+          <input class="cb-element3 chb" data-toggle="toggle" id="accutant_{{$field_name}}" data-on="Yes" data-off="No" data-width="100"   name="accutant[{{$field_name}}]" data-onstyle="success" data-offstyle="danger" type="checkbox" >                                            
+        </div>
+      </td>
     </tr>
+   @endif
    @endif
     @endforeach
     
@@ -245,11 +359,78 @@ $permission_fields = array(
            
         </div>
         </div>
+
+       
 @stop
 @section('script')
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 <script>
+
+
 $( document ).ready(function() {
+
+  $('#permissione').DataTable();
+
+  $("#checkAll").change(function () {
+  //alert(34);
+  //alert(JSON.stringify($("input:checkbox.cb-element").prop('checked', $(this).prop("checked"))));
+    $("input:checkbox.cb-element").prop('checked', $(this).prop("checked")).change();
+});
+$(".cb-element").change(function () {
+    _tot = $(".cb-element").length 
+    //alert(_tot);             
+    _tot_checked = $(".cb-element:checked").length;
+    
+    if(_tot != _tot_checked){
+      $("#checkAll").prop('checked',false);
+    }
+});
+
+$("#checkAll1").change(function () {
+  //alert(34);
+  //alert(JSON.stringify($("input:checkbox.cb-element").prop('checked', $(this).prop("checked"))));
+    $("input:checkbox.cb-element1").prop('checked', $(this).prop("checked")).change();
+});
+$(".cb-element1").change(function () {
+    _tot = $(".cb-element1").length 
+    //alert(_tot);             
+    _tot_checked = $(".cb-element1:checked").length;
+    
+    if(_tot != _tot_checked){
+      $("#checkAll1").prop('checked',false);
+    }
+});
+
+$("#checkAll2").change(function () {
+  //alert(34);
+  ///alert(JSON.stringify($("input:checkbox.cb-element").prop('checked', $(this).prop("checked"))));
+    $("input:checkbox.cb-element2").prop('checked', $(this).prop("checked")).change();
+});
+$(".cb-element2").change(function () {
+    _tot = $(".cb-element2").length 
+    //alert(_tot);             
+    _tot_checked = $(".cb-element2:checked").length;
+    
+    if(_tot != _tot_checked){
+      $("#checkAll2").prop('checked',false);
+    }
+});
+$("#checkAll3").change(function () {
+  //alert(34);
+  ///alert(JSON.stringify($("input:checkbox.cb-element").prop('checked', $(this).prop("checked"))));
+    $("input:checkbox.cb-element3").prop('checked', $(this).prop("checked")).change();
+});
+$(".cb-element3").change(function () {
+    _tot = $(".cb-element3").length 
+    //alert(_tot);             
+    _tot_checked = $(".cb-element3:checked").length;
+    
+    if(_tot != _tot_checked){
+      $("#checkAll3").prop('checked',false);
+    }
+});
+
    //$('#timepicker1').timepicker();
     $('#timepicker').timepicker({
         timeFormat: 'HH:mm:ss',
@@ -257,6 +438,28 @@ $( document ).ready(function() {
 
             $('#timepicker1').timepicker();
     
+});
+
+$("#adminchckwww").click(function(e) {
+    // this function will get executed every time the #home element is clicked (or tab-spacebar changed)
+    if($(this).is(":checked")) // "this" refers to the element that fired the event
+    {
+        alert('home is checked');
+        /*$(':checkbox').each(function () {
+          //$(this).removeAttr('checked');
+          $('input[type="radio"]').prop('checked', false);
+
+        })*/
+        $('input:checkbox[name=admin]').each(function () { $(this).prop('checked', true); });
+          
+    }else{
+      alert('home is unchecked');
+      $('.admins').prop('checked', $(e.target).prop('checked'));
+
+     // $("input:checkbox[name=admin]").prop('checked', $(this).prop("checked",false));
+       //$('input:checkbox').removeAttr('checked');
+      //$('input:checkbox[name=admin]').each(function () { alert($(this)); $(this).prop('checked', false); });
+    }
 });
 </script>
 @stop

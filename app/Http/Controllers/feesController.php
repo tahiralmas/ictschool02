@@ -81,7 +81,7 @@ class feesController extends BaseController {
 					'enabled'=>'1',
 					//'name'=>'api2',
 				);
-			if(accounting_check()!='' && accounting_check()=='yes' ){
+					/*if(accounting_check()!='' && accounting_check()=='yes' ){
 				$item = php_curl('items','POST',$data);
 				//echo "<pre>vv";print_r($item);exit;
 				if (is_int($item)){
@@ -101,7 +101,7 @@ class feesController extends BaseController {
 				}else{
 					return Redirect::to('/fees/setup')->withErrors('somthing wrong please try again to creat new feesetup');
 				}
-			}else{
+			}else{*/
 				    $fee              = new FeeSetup();
 					$fee->class       = Input::get('class');
 					$fee->type        = Input::get('type');
@@ -114,7 +114,7 @@ class feesController extends BaseController {
 						$fee->description ='';
 					}
 					$fee->save();
-			    }
+			    //}
 			return Redirect::to('/fees/setup')->with("success","Fee Save Succesfully.");
 		}
 	}
@@ -1567,7 +1567,7 @@ class feesController extends BaseController {
 
 		'class'      => 'required',
 		'student'    => 'required',
-			//'date'     => 'required',
+		//'date'     => 'required',
 		'paidamount' => 'required',
 		'dueamount'  => 'required',
 		'ctotal'     => 'required'
@@ -1584,6 +1584,14 @@ class feesController extends BaseController {
 		else {
 
 			try {
+				$student = DB::table('Student')
+						->select('*')
+						->where('regiNo',Input::get('student'))
+						->where('section',Input::get('section'))
+						->first();
+				 $now            =  Carbon::now();
+				 $due_date		 =  $now->addDays(10);
+				 $due_fromate 	 =  $due_date->format('Y-m-d');
 
 				/*$chk = DB::table('stdBill')
 				->join('billHistory','stdBill.billNo','=','billHistory.billNo')
@@ -1595,7 +1603,9 @@ class feesController extends BaseController {
 				$feeLateAmounts  = Input::get('gridLateFeeAmount');
 				$feeTotalAmounts = Input::get('gridTotal');
 				$feeMonths       = Input::get('gridMonth');
-				$month = $feeMonths[0]; 
+				$feetype         = Input::get('feetype');
+				$type            = Input::get('type1');
+				$month           = $feeMonths[0]; 
 				$counter         = count($feeTitles);
 
 				if($counter>0)
@@ -1614,18 +1624,76 @@ class feesController extends BaseController {
 						$billId = 'B'.($rows+1);
 					}
 
-					DB::transaction(function() use ($billId,$counter,$feeTitles,$feeAmounts,$feeLateAmounts,$feeTotalAmounts,$feeMonths)
+					DB::transaction(function() use ($billId,$counter,$feeTitles,$feeAmounts,$feeLateAmounts,$feeTotalAmounts,$feeMonths,$feetype,$type)
 					{
-						$j=0;
+						$j    = 0;
+						$item = '';
 						for ($i=0;$i<$counter;$i++) {
-
+							if($feeMonths[$i]=='-1' || $type[$i]=='Other'){
+                               	$type = 'Other';
+                               }else{
+                               	$type ='Monthly';
+                               }
+                               $feetype = DB::table('feesSetup')
+                               				->where('id',$feetype[$i])
+                               				->first();
 							$chk = DB::table('stdBill')
 							->join('billHistory','stdBill.billNo','=','billHistory.billNo')
 							->where('stdBill.regiNo',Input::get('student'))
 							->where('billHistory.month',$feeMonths[$i]);
+							if($feetype->type =='Monthly'){
+								$chk =$chk->where('billHistory.title',$feetype->title);
+								//$chk =$chk->where()
+							}else{
+								$chk =$chk->where('billHistory.title',$feetype->title);
+							}
+							//->where('billHistory.month',$feeMonths[$i]);
 
 
-							if(  $chk->count()==0){
+							
+								if(  $chk->count()==0){
+								$feehistory          = new FeeHistory();
+								$feehistory->billNo  = $billId;
+								$feehistory->title   = $feeTitles[$i];
+								$feehistory->fee     = $feeAmounts[$i];
+								$feehistory->lateFee = $feeLateAmounts[$i];
+								$feehistory->total   = $feeTotalAmounts[$i];
+								$feehistory->month   = $feeMonths[$i];
+								$feehistory->save();
+
+                               
+
+
+								$voucharhistory           = new Voucherhistory();
+								$voucharhistory->bill_id  = $billId;
+								$voucharhistory->type     = $type;
+								$voucharhistory->ref_id     = $item;
+								$voucharhistory->amount   = $feeAmounts[$i];
+								//$voucharhistory->due_amount   = $feeAmounts[$i];
+								$voucharhistory->rgiNo    = Input::get('student');
+								$voucharhistory->status   = 'unpaid';
+								$voucharhistory->date    =   Carbon::now();
+								$voucharhistory->save();
+								$j++;
+							}else{
+								/*$chk =$chk->first();
+
+							    $feeCol                = FeeCol::find($chk->id);
+								//$feeCol->billNo        = $billId;
+								//$feeCol->class         = Input::get('class');
+								//$feeCol->regiNo        = Input::get('student');
+								$feeCol->payableAmount = Input::get('ctotal');
+								$feeCol->paidAmount    = 0;
+								$feeCol->total_fee     = Input::get('paidamount');
+								//$feeCol->dueAmount     = Input::get('dueamount');
+								$feeCol->dueAmount     = Input::get('gtotal');
+								//$feeCol->payDate       = Carbon::now()->format('Y-m-d');
+							//echo "<pre>";print_r(Carbon::now()->format('Y-m-d'));exit;
+								$feeCol->save();*/
+							}
+
+
+							/*if(  $chk->count()==0){
 								$feehistory          = new FeeHistory();
 								$feehistory->billNo  = $billId;
 								$feehistory->title   = $feeTitles[$i];
@@ -1646,7 +1714,7 @@ class feesController extends BaseController {
                                 $voucharhistory->status   = 'unpaid';
                                 $voucharhistory->date     =   Carbon::now();
                                 $voucharhistory->save();
-							}
+							}*/
 
 						}
 						if($j>0){
@@ -1656,9 +1724,11 @@ class feesController extends BaseController {
 							$feeCol->regiNo        = Input::get('student');
 							$feeCol->payableAmount = Input::get('ctotal');
 							//$feeCol->paidAmount    = Input::get('paidamount');
+							$feeCol->total_fee     = Input::get('total_fee');
 							$feeCol->paidAmount    ='0.00';
-							$feeCol->dueAmount     = Input::get('dueamount');
-							$feeCol->payDate       = Carbon::now()->addDays(5)->format('Y-m-d');
+							//$feeCol->dueAmount     = Input::get('dueamount');
+							$feeCol->dueAmount     = Input::get('ctotal');
+							$feeCol->payDate       = Carbon::now()->format('Y-m-d');
 						//echo "<pre>";print_r(Carbon::now()->format('Y-m-d'));exit;
 							$feeCol->save();
 
@@ -1869,6 +1939,7 @@ class feesController extends BaseController {
 		->whereYear('stdBill.created_at',$year)
 		//->where('Student.section',Input::get('section'))
 		->get();
+		//echo "<pre>";print_r($fees);exit;
 			//return View::Make('app.feeviewstd',compact('classes','student','fees'));
 		return View('app.invoice',compact('classes','student','fees','section','month','year'));
 	}
@@ -1887,13 +1958,18 @@ class feesController extends BaseController {
 		$student->session = Input::get('session');
 		$student->regiNo  = Input::get('student');
 		
-		$fees=DB::Table('stdBill')
+		$fees = DB::Table('stdBill')
 		->join('Student','stdBill.regiNo','=','Student.regiNo')
 		->join('billHistory','stdBill.billNo','=','billHistory.billNo')
 		->select(DB::RAW("stdBill.billNo,stdBill.payableAmount,stdBill.paidAmount,stdBill.dueAmount,DATE_FORMAT(stdBill.payDate,'%D %M,%Y') AS date"),'Student.firstName','Student.lastName','Student.class','Student.section','Student.regiNo','billHistory.month','billHistory.title','billHistory.fee','billHistory.lateFee')
-		->where('stdBill.class',Input::get('class'))
-		->where('billHistory.month',Input::get('month'))
-		->whereYear('stdBill.created_at',Input::get('year'))
+		->where('stdBill.class',Input::get('class'));
+		if(Input::get('fee_type')=='monthly'){
+		$fees=$fees->where('billHistory.month',Input::get('month'));
+		}else{
+			$month = '-1';
+			$fees=$fees->where('billHistory.month','-1');
+		}
+		$fees=$fees->whereYear('stdBill.created_at',Input::get('year'))
 		->where('Student.section',Input::get('section'))
 		->get();
 		
@@ -1913,7 +1989,6 @@ class feesController extends BaseController {
 			{
 				FeeCol::where('billNo',$billNo)->delete();
 				FeeHistory::where('billNo',$billNo)->delete();
-
 			});
 			return Redirect::to('/fees/view')->with("success","Fees deleted succesfull.");
 		}
@@ -2041,6 +2116,10 @@ class feesController extends BaseController {
 
 	public function invoiceCollect($billNo)
 	{
+		$now              =  Carbon::now();
+		$year             =  $now->year;
+        $month            =  $now->month;
+
 		$paidamount = Input::get('collectionAmount').'.00';
 		$totals = FeeCol::select('*')
 		->where('billNo',$billNo)
@@ -2049,6 +2128,8 @@ class feesController extends BaseController {
 
 		$paid      = FeeCol::find($totals->id);
 		$vouchers  = Voucherhistory::where('bill_id',$billNo)->first();
+		$getmonth  = DB::table('billHistory')->where('billNo',$billNo)->where('month','<>','-1')->first();
+
 		$totalpaid = $paid->paidAmount + $paidamount;
 		/*if((int)$totalpaid > (int)Input::get('payableAmount') ){
 			echo  $totalpaid ."ww======ww".Input::get('payableAmount');
@@ -2109,6 +2190,8 @@ class feesController extends BaseController {
 		->select(DB::RAW("stdBill.billNo,stdBill.payableAmount,stdBill.paidAmount,stdBill.dueAmount,DATE_FORMAT(stdBill.payDate,'%D %M,%Y') AS date"),'Student.firstName','Student.lastName','Student.class','Student.section','billHistory.month','billHistory.title','billHistory.fee','billHistory.lateFee')
 		->where('stdBill.class',$paid->class)
 		->where('Student.section',$student->section)
+		->where('billHistory.month',$getmonth->month)
+		->whereYear('stdBill.created_at',$year)
 		->get();
 
 		$html = '<table id="feeList1" class="table table-striped table-bordered table-hover">
@@ -2135,8 +2218,14 @@ class feesController extends BaseController {
                     <td>'.$fee->title.'</td>
                     <td>'.$fee->payableAmount.'</td>
                     <td>'.$fee->paidAmount.'</td>
-                    <td>'.$fee->dueAmount.'</td>
-                    <td>'. \DateTime::createFromFormat('!m', $fee->month)->format('F').' </td>
+                    <td>'.$fee->dueAmount.'</td>';
+                    if($fee->title=="monthly"){ 
+                    	$month = \DateTime::createFromFormat('!m', $fee->month)->format('F'); 
+                    }else{ 
+                    	$month="other"; 
+                    }
+                   /* <td>'. \DateTime::createFromFormat('m', $fee->month)->format('F').' </td>*/
+                   $html .= ' <td>'.$month .' </td>
                     <td>'.$fee->date.'</td>';
                     
                       if($fee->payableAmount===$fee->paidAmount || $fee->paidAmount>=$fee->payableAmount){
@@ -2210,25 +2299,25 @@ class feesController extends BaseController {
 
 	public function classreportindex()
 	{
-		$classes = ClassModel::pluck('name','code');
-		$class   = '';
-		$section = '';
-		$month   = '';
-		$session = '';
-		$year    = '';
-		$student = new studentfdata;
-		$student->class = "";
-		$student->section = "";
-		$student->shift = "";
-		$student->session = "";
-		$student->regiNo = "";
-		$fees = array();
-		$paid_student = array();
-		$resultArray  = array();
+		$classes 			= ClassModel::pluck('name','code');
+		$class   			= '';
+		$section 			= '';
+		$month   			= '';
+		$session 			= '';
+		$year    			= '';
+		$student 			= new studentfdata;
+		$student->class 	= "";
+		$student->section 	= "";
+		$student->shift 	= "";
+		$student->session 	= "";
+		$student->regiNo 	= "";
+		$fees         		= array();
+		$paid_student 		= array();
+		$resultArray  		= array();
 
-		 $now   =  Carbon::now();
-		 $year  =  $now->year;
-		 $month =  $now->month;
+		 $now  				=  Carbon::now();
+		 $year  			=  $now->year;
+		 $month 			=  $now->month;
 
 		$student_all =	DB::table('Student')
 	    ->join('Class','Student.class','=','Class.code')
@@ -2256,7 +2345,7 @@ class feesController extends BaseController {
 				->where('billHistory.month','<>','-1')
 					//->orderby('stdBill.payDate')
 				->get();
-//echo "<pre>";print_r($student);exit;
+				//echo "<pre>";print_r($student);exit;
 				if(count($student)>0 ){
 
 					foreach($student as $rey){
@@ -2281,11 +2370,6 @@ class feesController extends BaseController {
 		else{
 			$resultArray = array();
 		}
-
-
-
-
-
 
 		return View('app.feestdreportclass',compact('classes','student','fees','totals','class','section','month','session','paid_student','year','resultArray'));
 	}
@@ -2502,7 +2586,7 @@ class feesController extends BaseController {
 				}   
 			          //echo "<pre>";print_r($data);
 		}else{
-			//return Redirect::to('/fees/classreport')->withErrors("Unpaid Student Not Found");
+			return Redirect::to('/fees/classreport')->withErrors("Unpaid Student Not Found");
 			exit;
 		}
 

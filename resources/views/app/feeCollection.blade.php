@@ -30,21 +30,21 @@
 if(!empty($_GET)){
 
    $class1      = $_GET['class_id'];
-   $section    = $_GET['section'];
-   $session    = $_GET['session'];
-   $month      = $_GET['month'];
-   $type       = $_GET['type'];
-   $fee        = $_GET['fee_name'];
+   $section     = $_GET['section'];
+   $session     = $_GET['session'];
+   $month       = $_GET['month'];
+   $type        = $_GET['type'];
+   $fee         = $_GET['fee_name'];
 
 }else{
-
-  $class1   = '';
-  $section = '';
-  $session = '';
-  $month   = $month;
-  $type    = '';
-  $fee     = '';
-  //$regiNo ='';
+    
+  $class1       = '';
+  $section      = '';
+  $session      = '';
+  $month        = $month;
+  $type         = '';
+  $fee          = '';
+  //$regiNo     ='';
 }
 //echo "<pre>";print_r($_GET);
 ?>
@@ -67,7 +67,6 @@ if(!empty($_GET)){
               <div class="col-md-4">
                 <div class="form-group">
                   <label class="control-label" for="class">Class</label>
-
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-home blue"></i></span>
                     <select id="class" id="class" name="class" class="form-control" >
@@ -241,7 +240,7 @@ if(!empty($_GET)){
               </div>
           <div class="row">
             <div class="col-md-12">
-            <div class="col-md-3">
+            <div class="col-md-3" id="stddis">
                 <div class="form-group">
                   <label for="discount">Student Fee Discount</label>
                   <div class="input-group">
@@ -328,7 +327,7 @@ if(!empty($_GET)){
                       </div>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row" style="display:none">
                     <div class="col-md-12">
                       <div class="col-md-6">
                         <label class="control-label" for="gtotal">Grand Total:</label>
@@ -338,7 +337,7 @@ if(!empty($_GET)){
                       </div>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row" style="display:none">
                     <div class="col-md-12">
                       <div class="col-md-6">
                         <label class="control-label" for="paidamount">Paid Amount:</label>
@@ -348,7 +347,18 @@ if(!empty($_GET)){
                       </div>
                     </div>
                   </div>
-                  <div class="row">
+
+                  <div class="row" >
+                    <div class="col-md-12">
+                      <div class="col-md-6">
+                        <label class="control-label" for="paidamount">Payable Amount:</label>
+                      </div>
+                      <div class="col-md-6">
+                        <input type="number" min='0' class="form-control" id="ctotal1" required="true" name="paidamount" value="0.00" readonly>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" style="display:none">
                     <div class="col-md-12">
                       <div class="col-md-6">
                         <label class="control-label" for="dueamount">Due Amount:</label>
@@ -534,9 +544,11 @@ if(!empty($_GET)){
       });*/
       $("#student").on('change',function(){
        // alert(34);
+       
+
         var student_reg = $("#student").val();
         var ids = $('#fee').val();
-        //alert(ids);
+        alert(ids);
         $('#feeInfoDiv').show();
         if (ids!="-1")
         {
@@ -638,9 +650,14 @@ if(!empty($_GET)){
                 if (fee == 'null'){
                   fee=0;
                 }
+                if($("#type")=='Monthly'){
                 var total = data[0].fee - fee;
+                }else{
+                  var total = data[0].fee ;
+                }
                 //alert(fee);
                 $('#total_fee').val(data[0].fee);
+                
                 $('#feeAmount').val(total);
                 //$('#paidamount').val(total);
                 $('#per').html(damnt);
@@ -655,6 +672,7 @@ if(!empty($_GET)){
           },
           type: 'GET'
         });
+      
       });
     $( document ).ready(function() {
      <?php if(!empty($student)){ ?>
@@ -700,9 +718,10 @@ if(!empty($_GET)){
         else
         {
           $('#month').hide();
+          document.getElementById("month").value = "-1";
         }
-        var aclass = $('#class').val();
-        var type =  $('#type').val();
+        var aclass  =  $('#class').val();
+        var type    =  $('#type').val();
         $.ajax({
           url: "{{url('/fee/getListjson/')}}"+'/'+aclass+'/'+type,
           data: {
@@ -807,9 +826,12 @@ if(!empty($_GET)){
           
             LateFeeAmount.value=$('#LateFeeAmount').val();
         }
+        cell5.appendChild(LateFeeAmount);
+       
+        
           // alert(LateFeeAmount.value);
        // LateFeeAmount.value=$('#LateFeeAmount').val();
-        cell5.appendChild(LateFeeAmount);
+        
 
         var cell6 = row.insertCell(5);
         var total = document.createElement("input");
@@ -817,11 +839,36 @@ if(!empty($_GET)){
         total.readOnly="true";
         total.value=totalFee;
         cell6.appendChild(total);
+        
+        //var cell6 = row.insertCell(5);
+        var feetype = document.createElement("input");
+        feetype.name="feetype[]";
+        feetype.readOnly="true";
+        feetype.type="hidden";
+        feetype.value=$('#fee option:selected').val();;
+        cell6.appendChild(feetype);
+
+        var type1 = document.createElement("input");
+        type1.name="type1[]";
+        type1.readOnly="true";
+        type1.type="hidden";
+        type1.value=$('#type option:selected').val();;
+        cell6.appendChild(type1);
+
+        /*var cell7 = row.insertCell(6);
+        var feetype = document.createElement("input");
+        feetype.name="feetype[]";
+        feetype.readOnly="true";
+        feetype.type="text";
+        total.value=$('#fee option:selected').val();;
+        cell7.appendChild(feetype);*/
 
         //add to total fee below
         var ctotal= parseFloat($('#ctotal').val());
 
         $('#ctotal').val(ctotal+totalFee);
+        $('#ctotal1').val(ctotal+totalFee);
+        //alert(ctotal+totalFee);
         addTotalWithDue();
         btnSaveIsvisibale();
         $('#month').val(-1);
@@ -842,6 +889,7 @@ if(!empty($_GET)){
               var ftotal = parseFloat(row.getElementsByTagName('input')[5].value);
               var ctotal= parseFloat($('#ctotal').val());
               $('#ctotal').val(ctotal-ftotal);
+             
 
               table.deleteRow(i);
               rowCount--;

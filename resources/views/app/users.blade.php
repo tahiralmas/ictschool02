@@ -30,8 +30,8 @@
                     @endif
                     @if($user)
                         <form role="form" action="{{url('/userupdate')}}" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="id" value="{{$user->id}}">
-                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="id" value="{{$user->id}}">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="col-md-3">
@@ -70,7 +70,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>  </div>
+                                </div>  
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="col-md-4">
@@ -88,7 +89,7 @@
 
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                                {{ Form::select('group',['Director'=>'Director','Admin'=>'Admin','Teacher'=>'Teacher','Staff'=>'Staff'],$user->group,['class'=>'form-control','required'=>'true'])}}
+                                                {{ Form::select('group',['Director'=>'Director','Admin'=>'Admin','Teacher'=>'Teacher','Accountant'=>'Accountant','Staff'=>'Staff'],$user->group,['class'=>'form-control','required'=>'true'])}}
 
 
                                             </div>
@@ -106,13 +107,14 @@
                                     </div>
 
 
-                                </div>  </div>
+                                </div>  
+                            </div>
 
                             <button class="btn btn-primary pull-right" type="submit"><i class="glyphicon glyphicon-plus"></i> Update</button>
                             <br>
                         </form>
                     @else
-                        <form role="form" action="{{url('/usercreate')}}" method="post" enctype="multipart/form-data">
+                    <form role="form" action="{{url('/usercreate')}}" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                             <div class="row">
@@ -153,7 +155,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>  </div>
+                                </div>  
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="col-md-4">
@@ -172,9 +175,10 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                                 <select name="group"  required="true" class="form-control" >
-                                                    <option value="Director">Director</option>
-                                                    <option value="Admin">Admin</option>
-                                                    <option value="Teacher">Teacher</option>
+                                                     <option value="Director">Director</option>
+                                                     <option value="Admin">Admin</option>
+                                                     <option value="Teacher">Teacher</option>
+                                                     <option value="Accountant">Accountant</option>
                                                      <option value="Staff">Staff</option>
                                                 </select>
 
@@ -187,13 +191,13 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                                 <textarea type="text" class="form-control" required name="desc" placeholder="Description"></textarea>
-
                                             </div>
                                         </div>
                                     </div>
 
 
-                                </div>  </div>
+                                </div>  
+                            </div>
 
                             <button class="btn btn-primary pull-right" type="submit"><i class="glyphicon glyphicon-plus"></i> Add</button>
                             <br>
@@ -214,21 +218,17 @@
                                     <th>Login</th>
                                     <th>Group</th>
                                     <th>Descripton</th>
-
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($users as $user)
-
                                     <tr>
                                         <td>{{$user->firstname}} {{$user->lastname}}</td>
                                         <td>{{$user->email}}</td>
                                         <td>{{$user->login}}</td>
                                         <td>{{$user->group}}</td>
                                         <td>{{$user->desc}}</td>
-
-
                                         <td>
                                             <a title='Edit' class='btn btn-info' href='{{url("/useredit")}}/{{$user->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>&nbsp&nbsp<a title='Delete' class='btn btn-danger' href='{{url("/userdelete")}}/{{$user->id}}'> <i class="glyphicon glyphicon-trash icon-white"></i></a>
                                         </td>
@@ -239,12 +239,6 @@
                         </div>
                     </div>
                 @endif
-
-
-
-
-
-
             </div>
         </div>
     </div>
@@ -253,7 +247,9 @@
 @section('script')
     <script type="text/javascript">
         $( document ).ready(function() {
-            $('#sectorList').dataTable();
+            $('#sectorList').dataTable({
+                "sPaginationType": "bootstrap",
+            });
         });
     </script>
 

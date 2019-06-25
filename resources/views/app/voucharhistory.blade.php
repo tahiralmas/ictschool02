@@ -59,7 +59,7 @@
                 @foreach($fees as $fee)
                 <tr>
                   <td><a class="btnbill" href="#">{{$fee->billNo}}</a></td>
-                  <td>{{$fee->total_fee}}</td>
+                  <td>{{$fee->payableAmount}}</td>
                   <td>{{$fee->paidAmount}}</td>
                   {{--<td>{{$fee->dueAmount}}</td>--}}
                   {{--<td>{{$fee->dueAmount}}</td>--}}

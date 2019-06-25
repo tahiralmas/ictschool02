@@ -10,6 +10,9 @@ foreach($permissions as $permission){
 $permision[] = $permission->permission_name;
 }
 ?>
+<?php //echo "<pre>";print_r($permision); 
+//exit;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -427,14 +430,23 @@ table i {
                               <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
+                          
+
                               <li><a href="{{url('/template/create')}}"><i class="glyphicon glyphicon-folder-open"></i><span> Fee Collection Message</span></a></li>
+                              @if(in_array('view_fess',$permision))
                               <li><a href="{{url('/fees/view')}}"><i class="glyphicon glyphicon-search"></i> Student Fees</a></li>
+                               @endif
+
+                               @if(in_array('add_fess',$permision))
                               <li><a href="{{url('/fees/invoices')}}"><i class="glyphicon glyphicon-shopping-cart"></i> Invoices</a></li>
                               <!--<li><a href="/fee/vouchar"><i class="glyphicon glyphicon-pencil"></i> Create Vouchar</a></li>-->
                               <li><a href="{{url('/fee/collection')}}"><i class="glyphicon glyphicon-pencil"></i> Fees Collection</a></li>
-
+                              @endif
                               <li class="divider"></li>
+                              
+                              @if(in_array('view_fess',$permision))
                               <li><a href="{{url('/fees/list')}}"><i class="glyphicon glyphicon-list"></i> Fees List</a></li>
+                              @endif
                               <li><a href="{{url('/fees/setup')}}"><i class="glyphicon glyphicon-cog"></i> Fees Setup</a></li>
                             </ul>
                           </div>--}}
@@ -477,33 +489,40 @@ table i {
                                            <i class="glyphicon glyphicon-search"></i> &nbsp;&nbsp;&nbsp;&nbsp;Student Fees
                                           </div>
                                         </a>
+                                        @if(in_array('add_fess',$permision))
                                         <a href="{{url('/fees/invoices')}}">
                                           <div class="notifi__item">
                                            <i class="glyphicon glyphicon-shopping-cart"></i> &nbsp;&nbsp;&nbsp;&nbsp;Invoices
                                           </div>
                                         </a>
-                                        {{--<a href="{{url('/fee/collection')}}">
+                                        @endif
+                                        @if(in_array('add_fess',$permision))
+                                        <a href="{{url('/fee/collection')}}">
                                           <div class="notifi__item">
                                            <i class="glyphicon glyphicon-pencil"></i> &nbsp;&nbsp;&nbsp;&nbsp;Fees Collection
                                           </div>
-                                        </a>--}}
+                                        </a>
+                                        @endif
+                                        @if(in_array('view_fess',$permision))
                                         <a href="{{url('/fees/list')}}">
                                           <div class="notifi__item">
                                           <i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;&nbsp;&nbsp;Fees List
                                           </div>
                                         </a>
+                                        @endif
                                         
                                         {{--<a href="{{url('/fees/list')}}">
                                           <div class="notifi__item">
                                            <i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;&nbsp;&nbsp; Fees List
                                           </div>
                                         </a>--}}
-
+                                        @if(in_array('add_fess',$permision))
                                         <a href="{{url('/fees/setup')}}">
                                           <div class="notifi__item">
                                            <i class="glyphicon glyphicon-cog"></i>&nbsp;&nbsp;&nbsp;&nbsp; Fees Setup
                                           </div>
                                         </a>
+                                        @endif
                                         </div>
                                     </div>
                                   <div class="noti__item js-item-menu">

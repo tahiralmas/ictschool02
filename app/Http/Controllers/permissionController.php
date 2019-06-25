@@ -23,7 +23,23 @@ class permissionController extends Controller
         }else{
             $permissions =array(); 
         }
-       return view('app/permission',compact('permissions'));
+        $admin='';
+        $teacherd='';
+        $studentss='';
+        $accountant='';
+        if(Input::get('admin')){
+          $admin="yes";
+        }
+        if(Input::get('teacher')){
+          $teacherd="yes";
+        }
+        if(Input::get('student')){
+          $studentss="yes";
+        }
+        if(Input::get('accountant')){
+          $accountant="yes";
+        }
+       return view('app/permission',compact('permissions','admin','teacherd','studentss','accountant'));
     }
 
     /**
@@ -117,8 +133,10 @@ class permissionController extends Controller
           'Paper Add',
           'Paper update',
           'Paper delete',
+          'Accounting',
         );
-    DB::table("permission")->delete();
+   /* DB::table("permission")->delete();*/
+      DB::table('permission')->truncate();
       foreach($permission_fields as $field){
         $permission_save = new Permission;
         $field_name = str_replace(" ","_",strtolower($field));
@@ -162,6 +180,22 @@ class permissionController extends Controller
             }else{
                 $permission_save->permission_name  =  $field_name ;
                 $permission_save->permission_group =  'teacher'     ;
+                $permission_save->permission_type  =  'no'       ;  
+                $permission_save->save();
+            }
+      }
+
+      foreach($permission_fields as $field){
+        $permission_save = new Permission;
+        $field_name = str_replace(" ","_",strtolower($field));
+            if(!empty(Input::get('accutant')) && in_array($field_name, array_keys(Input::get('accutant')))){
+                $permission_save->permission_name  =  $field_name ;
+                $permission_save->permission_group =  'accountant'     ;
+                $permission_save->permission_type  =  'yes'       ;  
+                $permission_save->save();
+            }else{
+                $permission_save->permission_name  =  $field_name ;
+                $permission_save->permission_group =  'accountant'     ;
                 $permission_save->permission_type  =  'no'       ;  
                 $permission_save->save();
             }

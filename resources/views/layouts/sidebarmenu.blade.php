@@ -32,7 +32,7 @@
       </li>
     @endif
 @if (Session::get('userRole') !="Director")
-    @if (Session::get('userRole') =="Admin")
+ {{-- @if (Session::get('userRole') =="Admin" )--}}
     @if(in_array('teacher_view',$permision) || in_array('teacher_add',$permision) || in_array('teacher_delete',$permision) || in_array('add_teacher_bulk_add',$permision))
       <li class="has-sub">
         <a  class="js-arrow {{ Request::is('teacher/*') ? 'open' : '' }}" href="#">
@@ -171,7 +171,7 @@
       </li>
     @endif--}}
 
-  @endif
+ {{-- @endif --}}
 
     {{--@if(in_array('teacher_view',$permision) || in_array('teacher_add',$permision) || in_array('teacher_delete',$permision) || in_array('add_teacher_bulk_add',$permision))
       <li class="has-sub">
@@ -222,6 +222,8 @@
         </ul>
       </li>
     @endif
+  @if(in_array('paper_add',$permision) || in_array('paper_view',$permision) || in_array('paper_update',$permision) || in_array('paper_delete',$permision))
+
     <li class="has-sub">
           <a  class="js-arrow {{ Request::is('question/*') ? 'open' : '' }} {{ Request::is('paper/generate') ? 'open' : '' }} " href="#">
           <i class="glyphicon glyphicon-hdd"></i>
@@ -233,11 +235,18 @@
         </a>
         <ul class="list-unstyled navbar__sub-list js-sub-list" style="display:{{ Request::is('question/*') ? 'block' : '' }}  {{ Request::is('paper/generate') ? 'block' : '' }};" href="#">
 
+          @if(in_array('paper_add',$permision))
           <li class="{{ Request::is('question/create') ? 'active' : '' }}"><a href="{{url('/question/create')}}">Add New</a></li>
+          @endif
+          @if(in_array('paper_view',$permision))
           <li class="{{ Request::is('question/list') ? 'active' : '' }}"><a href="{{url('/question/list')}}">List</a></li>
+          @endif
+          @if(in_array('paper_add',$permision))
           <li class="{{ Request::is('paper/generate') ? 'active' : '' }}"><a href="{{url('/paper/generate')}}"> Generate Paper</a></li>
+          @endif
         </ul>
       </li>
+    @endif
     @if(in_array('exam_view',$permision) || in_array('exam_add',$permision))
       <li class="has-sub">
         <a  class="js-arrow {{ Request::is('exam/*') ? 'open' : '' }}" href="#">
@@ -287,7 +296,7 @@
         </ul>
       </li>
     @endif
-    @if (Session::get('userRole') =="Admin")
+    {{--@if (Session::get('userRole') =="Admin")--}}
       @if(in_array('generate_result',$permision) || in_array('search_result',$permision))
         <li class="has-sub">
           <a  class="js-arrow {{ Request::is('result/*') ? 'open' : '' }}" href="#">
@@ -308,6 +317,7 @@
           </ul>
         </li>
       @endif
+        @if(in_array('accunting',$permision))
        <li class="has-sub">
           <a  class="js-arrow {{ Request::is('accounting/*') ? 'open' : '' }}" href="#">
             <i class="glyphicon  glyphicon glyphicon-font"></i>
@@ -324,13 +334,14 @@
             <li class="{{ Request::is('accounting/expencelist') ? 'active' : '' }}"><a href="{{url('/accounting/expencelist')}}">View Expence</a></li>
           </ul>
         </li>
+        @endif
       
       @if(in_array('send_notification',$permision) )
         <li class="{{ Request::is('message') ? 'active' : '' }} has-sub">
           <a href="{{url('/message')}}"><i class="glyphicon glyphicon-envelope"></i><span> Voice / SMS</span></a>
         </li>
       @endif
-    @endif
+    {{--@endif--}}
         @if (Session::get('userRole') =="Admin")
         @endif
       @if (Session::get('userRole')=="Admin")

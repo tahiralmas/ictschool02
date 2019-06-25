@@ -96,7 +96,6 @@ class examController extends BaseController {
 		/*$exams = DB::table('exam')
 		->select(DB::raw('*'))
 		->get();*/
-
          $exams = DB::table('exam')
           ->join('Class', 'exam.class_id', '=', 'Class.id')
           ->join('section', 'exam.section_id', '=', 'section.id')

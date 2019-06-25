@@ -107,17 +107,17 @@ Route::get('/subject/delete/{id}','subjectController@delete')->middleware('check
 /**
 * Question routes
 **/
-Route::get('/question/create','QuestionController@create');
-Route::post('/question/create','QuestionController@store');
-Route::get('/paper/generate','QuestionController@generate');
-Route::post('/paper/generate','QuestionController@post_generate');
-Route::get('/question/list','QuestionController@list');
-Route::post('/question/list','QuestionController@getlist');
+Route::get('/question/create','QuestionController@create')->middleware('checkPermission:paper_add');
+Route::post('/question/create','QuestionController@store')->middleware('checkPermission:paper_add');
+Route::get('/paper/generate','QuestionController@generate')->middleware('checkPermission:paper_add');
+Route::post('/paper/generate','QuestionController@post_generate')->middleware('checkPermission:paper_add');
+Route::get('/question/list','QuestionController@list')->middleware('checkPermission:paper_view');
+Route::post('/question/list','QuestionController@getlist')->middleware('checkPermission:paper_view');
 
-Route::get('/question/edit/{id}','QuestionController@edit');
-Route::post('/question/update','QuestionController@update');
-Route::get('/question/delete/{id}','QuestionController@delete');
-Route::get('/chapter/getList/{class}','QuestionController@chapters');
+Route::get('/question/edit/{id}','QuestionController@edit')->middleware('checkPermission:paper_update');
+Route::post('/question/update','QuestionController@update')->middleware('checkPermission:paper_update');
+Route::get('/question/delete/{id}','QuestionController@delete')->middleware('checkPermission:paper_delete');
+Route::get('/chapter/getList/{class}','QuestionController@chapters')->middleware('checkPermission:paper_view');
 });
 Route::get('/subject/getmarks/{subject}/{cls}','subjectController@getmarks');
 Route::get('/subject/getList/{cls}','subjectController@getsubjects');
@@ -162,24 +162,25 @@ Route::get('/fee/getdiscountjson/{student_registration}','studentController@getd
 // Teacher routes
 Route::get('/teacher/getRegi/{class}/{session}/{section}','teacherController@getRegi');
 
-Route::group(['middleware' => 'admin'], function(){ 
-Route::get('/teacher/create','teacherController@index')->middleware('checkPermission:teacher_add');
-Route::post('/teacher/create','teacherController@create')->middleware('checkPermission:teacher_add');
-Route::post('/teacher/ajaxcreate','teacherController@ajaxcreate')->middleware('checkPermission:teacher_add');
+Route::group(['middleware' => 'auth'], function(){ 
+	
+	Route::get('/teacher/create','teacherController@index')->middleware('checkPermission:teacher_add');
+	Route::post('/teacher/create','teacherController@create')->middleware('checkPermission:teacher_add');
+	Route::post('/teacher/ajaxcreate','teacherController@ajaxcreate')->middleware('checkPermission:teacher_add');
 });
-Route::get('/teacher/list','teacherController@show')->middleware('checkPermission:teacher_add');
-Route::post('/teacher/list','teacherController@getList')->middleware('checkPermission:teacher_add');
+Route::get('/teacher/list','teacherController@show')->middleware('checkPermission:teacher_view');
+Route::post('/teacher/list','teacherController@getList')->middleware('checkPermission:teacher_view');
 Route::get('/get/teacher/{teacher_id}','teacherController@getteacherinfo')->middleware('checkPermission:teacher_add');
 
 Route::get('/teacher/view/{id}','teacherController@view')->middleware('checkPermission:teacher_view');
-Route::group(['middleware' => 'admin'], function(){ 
+Route::group(['middleware' => 'auth'], function(){ 
 Route::get('/teacher/edit/{id}','teacherController@edit')->middleware('checkPermission:teacher_update');
 Route::post('/teacher/update','teacherController@update')->middleware('checkPermission:teacher_update');
 Route::get('/teacher/delete/{id}','teacherController@delete')->middleware('checkPermission:teacher_delete');
 });
 Route::get('/teacher/getList/{class}/{section}/{shift}/{session}','teacherController@getForMarks');
 
-Route::group(['middleware' => 'admin'], function(){ 
+Route::group(['middleware' => 'auth'], function(){ 
 
 Route::get('/teacher/create-file','teacherController@index_file')->middleware('checkPermission:teacher_bulk_add');
 Route::post('/teacher/create-file','teacherController@create_file')->middleware('checkPermission:teacher_bulk_add');
@@ -215,7 +216,7 @@ Route::post('/attendance/list','attendanceController@getlist')->middleware('chec
 Route::get('/attendance/edit/{id}','attendanceController@edit')->middleware('checkPermission:teacher_timetable_view');
 Route::post('/attendance/update','attendanceController@update')->middleware('checkPermission:teacher_timetable_view');
 Route::get('/attendance/printlist/{class}/{section}/{shift}/{session}/{date}','attendanceController@printlist');
-Route::group(['middleware' => 'admin'], function(){ 
+Route::group(['middleware' => 'auth'], function(){ 
 Route::get('/attendance/report','attendanceController@report');
 Route::post('/attendance/report','attendanceController@getReport');
 Route::get('/attendance/student_report','attendanceController@stdatdreportindex');
@@ -282,7 +283,7 @@ Route::get('/sms/delete/{id}','smsController@delete');
 
 Route::get('/sms','smsController@getsmssend');
 Route::post('/sms/send','smsController@postsmssend');*/
-Route::group(['middleware' => 'admin'], function(){ 
+Route::group(['middleware' => 'auth'], function(){ 
 
 
 Route::get('/cron/run', function(){
@@ -335,7 +336,7 @@ Route::get('/template/creates','markController@template');
 Route::get('/template/message/edit/{message_id}','markController@edittemplate');
 
 //Markssheet
-Route::group(['middleware' => 'admin'], function(){ 
+Route::group(['middleware' => 'auth'], function(){ 
 Route::get('/result/generate','gradesheetController@getgenerate');
 Route::post('/result/generate','gradesheetController@postgenerate');
 Route::post('/result/m_generate','gradesheetController@mpostgenerate');
@@ -354,7 +355,7 @@ Route::get('/gradesheet/print/{regiNo}/{exam}/{class}','gradesheetController@pri
 Route::get('/gradesheet/m_print/{regiNo}/{exam}/{class}','gradesheetController@m_printsheet');
 });
 //tabulation sheet
-Route::group(['middleware' => 'admin'], function(){ 
+Route::group(['middleware' => 'auth'], function(){ 
 Route::get('/tabulation','tabulationController@index');
 Route::post('/tabulation','tabulationController@getsheet');
 
@@ -419,67 +420,67 @@ Route::get('/schedule','settingsController@get_schedule');
 Route::post('/schedule','settingsController@post_schedule');
 // Accounting
 
-Route::group(['middleware' => 'admin'], function(){ 
+Route::group(['middleware' => 'auth'], function(){ 
 
-Route::get('/accounting','accountingController@index');
-Route::post('/accounting','accountingController@store');
+Route::get('/accounting','accountingController@index')->middleware('checkPermission:accounting');
+Route::post('/accounting','accountingController@store')->middleware('checkPermission:accounting');
 
-Route::get('/accounting/sectors','accountingController@sectors');
-Route::post('/accounting/sectorcreate','accountingController@sectorCreate');
-Route::get('/accounting/sectorlist','accountingController@sectorList');
-Route::get('/accounting/sectoredit/{id}','accountingController@sectorEdit');
-Route::post('/accounting/sectorupdate','accountingController@sectorUpdate');
-Route::get('/accounting/sectordelete/{id}','accountingController@sectorDelete');
+Route::get('/accounting/sectors','accountingController@sectors')->middleware('checkPermission:accounting');
+Route::post('/accounting/sectorcreate','accountingController@sectorCreate')->middleware('checkPermission:accounting');
+Route::get('/accounting/sectorlist','accountingController@sectorList')->middleware('checkPermission:accounting');
+Route::get('/accounting/sectoredit/{id}','accountingController@sectorEdit')->middleware('checkPermission:accounting');
+Route::post('/accounting/sectorupdate','accountingController@sectorUpdate')->middleware('checkPermission:accounting');
+Route::get('/accounting/sectordelete/{id}','accountingController@sectorDelete')->middleware('checkPermission:accounting');
 
-Route::get('/accounting/income','accountingController@income');
-Route::post('/accounting/incomecreate','accountingController@incomeCreate');
-Route::get('/accounting/incomelist','accountingController@incomeList');
-Route::post('/accounting/incomelist','accountingController@incomeListPost');
-Route::get('/accounting/incomeedit/{id}','accountingController@incomeEdit');
-Route::post('/accounting/incomeupdate','accountingController@incomeUpdate');
-Route::get('/accounting/incomedelete/{id}','accountingController@incomeDelete');
+Route::get('/accounting/income','accountingController@income')->middleware('checkPermission:accounting');
+Route::post('/accounting/incomecreate','accountingController@incomeCreate')->middleware('checkPermission:accounting');
+Route::get('/accounting/incomelist','accountingController@incomeList')->middleware('checkPermission:accounting');
+Route::post('/accounting/incomelist','accountingController@incomeListPost')->middleware('checkPermission:accounting');
+Route::get('/accounting/incomeedit/{id}','accountingController@incomeEdit')->middleware('checkPermission:accounting');
+Route::post('/accounting/incomeupdate','accountingController@incomeUpdate')->middleware('checkPermission:accounting');
+Route::get('/accounting/incomedelete/{id}','accountingController@incomeDelete')->middleware('checkPermission:accounting');
 
-Route::get('/accounting/expence','accountingController@expence');
-Route::post('/accounting/expencecreate','accountingController@expenceCreate');
-Route::get('/accounting/expencelist','accountingController@expenceList');
-Route::post('/accounting/expencelist','accountingController@expenceListPost');
-Route::get('/accounting/expenceedit/{id}','accountingController@expenceEdit');
-Route::post('/accounting/expenceupdate','accountingController@expenceUpdate');
-Route::get('/accounting/expencedelete/{id}','accountingController@expenceDelete');
+Route::get('/accounting/expence','accountingController@expence')->middleware('checkPermission:accounting');
+Route::post('/accounting/expencecreate','accountingController@expenceCreate')->middleware('checkPermission:accounting');
+Route::get('/accounting/expencelist','accountingController@expenceList')->middleware('checkPermission:accounting');
+Route::post('/accounting/expencelist','accountingController@expenceListPost')->middleware('checkPermission:accounting');
+Route::get('/accounting/expenceedit/{id}','accountingController@expenceEdit')->middleware('checkPermission:accounting');
+Route::post('/accounting/expenceupdate','accountingController@expenceUpdate')->middleware('checkPermission:accounting');
+Route::get('/accounting/expencedelete/{id}','accountingController@expenceDelete')->middleware('checkPermission:accounting');
 
-Route::get('/accounting/report','accountingController@getReport');
-Route::get('/accounting/reportsum','accountingController@getReportsum');
+Route::get('/accounting/report','accountingController@getReport')->middleware('checkPermission:accounting');
+Route::get('/accounting/reportsum','accountingController@getReportsum')->middleware('checkPermission:accounting');
 
-Route::get('/accounting/reportprint/{rtype}/{fdate}/{tdate}','accountingController@printReport');
-Route::get('/accounting/reportprintsum/{fdate}/{tdate}','accountingController@printReportsum');
+Route::get('/accounting/reportprint/{rtype}/{fdate}/{tdate}','accountingController@printReport')->middleware('checkPermission:accounting');
+Route::get('/accounting/reportprintsum/{fdate}/{tdate}','accountingController@printReportsum')->middleware('checkPermission:accounting');
 
 //}
 });
 //Fees Related routes
-Route::group(['middleware' => 'admin'], function(){ 
-Route::get('/fees/setup','feesController@getsetup');
-Route::post('/fees/setup','feesController@postsetup');
-Route::get('/fees/list','feesController@getList');
-Route::post('/fees/list','feesController@postList');
+Route::group(['middleware' => 'auth'], function(){ 
+Route::get('/fees/setup','feesController@getsetup')->middleware('checkPermission:add_fess');;
+Route::post('/fees/setup','feesController@postsetup')->middleware('checkPermission:add_fess');;
+Route::get('/fees/list','feesController@getList')->middleware('checkPermission:view_fess');;
+Route::post('/fees/list','feesController@postList')->middleware('checkPermission:view_fess');;
 
-Route::get('/fee/edit/{id}','feesController@getEdit');
-Route::post('/fee/edit','feesController@postEdit');
-Route::get('/fee/delete/{id}','feesController@getDelete');
+Route::get('/fee/edit/{id}','feesController@getEdit')->middleware('checkPermission:update_fess');;
+Route::post('/fee/edit','feesController@postEdit')->middleware('checkPermission:update_fess');;
+Route::get('/fee/delete/{id}','feesController@getDelete')->middleware('checkPermission:delete_fess');;
 
-Route::get('/fee/collection','feesController@getCollection');
+Route::get('/fee/collection','feesController@getCollection')->middleware('checkPermission:add_fess');;
 //Route::get('/fee/vouchar','feesController@getvouchar');
 //Route::post('/fee/vouchar','feesController@gpostvouchar');
-Route::post('/fee/collection','feesController@postCollection');
+Route::post('/fee/collection','feesController@postCollection')->middleware('checkPermission:add_fess');;
 Route::get('/fee/getListjson/{class}/{type}','feesController@getListjson');
 Route::get('/fee/getFeeInfo/{id}','feesController@getFeeInfo');
 Route::get('/fee/getDue/{class}/{stdId}','feesController@getDue');
 
-Route::get('/fees/view','feesController@stdfeeview');
-Route::post('/fees/view','feesController@stdfeeviewpost');
+Route::get('/fees/view','feesController@stdfeeview')->middleware('checkPermission:view_fess');;
+Route::post('/fees/view','feesController@stdfeeviewpost')->middleware('checkPermission:view_fess');;
 
 
-Route::get('/fees/invoices','feesController@stdfeeinvoices');
-Route::post('/fees/invoices','feesController@stdfeeinvoicespost');
+Route::get('/fees/invoices','feesController@stdfeeinvoices')->middleware('checkPermission:add_fess');;
+Route::post('/fees/invoices','feesController@stdfeeinvoicespost')->middleware('checkPermission:add_fess');;
 
 
 Route::get('/fees/delete/{billNo}','feesController@stdfeesdelete');
@@ -497,11 +498,6 @@ Route::post('/fee/voucher','feesController@postvouchar');
 Route::get('/fee/get_vouchar','feesController@createvoucher');
 Route::get('/fee/get_vouchar/{id}','feesController@getvoucher');
 Route::get('/f_vouchar/model/{f_id}','feesController@getfvoucher');
-
-
-
-
-
 
 Route::get('/fees/details/{billNo}','feesController@billDetails');
 Route::get('/fees/history/{billNo}','feesController@invoicehist');
@@ -523,13 +519,9 @@ Route::get('/family/vouchar_history/{family_id}','feesController@family_voucherh
 Route::post('/family/paid/{family_id}','feesController@family_vouchar_paid');
 Route::get('/voucher/detail/{id}','feesController@family_vouchar_detail');
 
-
-
-
-
 });
 //Admisstion routes
-Route::group(['middleware' => 'admin'], function(){ 
+Route::group(['middleware' => 'auth'], function(){ 
 Route::get('/regonline','admissionController@regonline');
 Route::post('/regonline','admissionController@Postregonline');
 Route::get('/applicants','admissionController@applicants');
@@ -542,7 +534,7 @@ Route::post('/printadmitcard','admissionController@printAdmitCard');
 });
 
 //library routes
-Route::group(['middleware' => 'admin'], function(){ 
+Route::group(['middleware' => 'auth'], function(){ 
 Route::get('/library/addbook','libraryController@getAddbook');
 Route::post('/library/addbook','libraryController@postAddbook');
 Route::get('/library/view','libraryController@getviewbook');
@@ -576,7 +568,7 @@ Route::get('/library/reportprint/{do}','libraryController@Reportprint');
 Route::get('/library/reports/fine/{month}','libraryController@ReportsFineprint');
 });
 //Hostel Routes
-Route::group(['middleware' => 'admin'], function(){ 
+Route::group(['middleware' => 'auth'], function(){ 
 Route::get('/dormitory','dormitoryController@index');
 Route::post('/dormitory/create','dormitoryController@create');
 Route::get('/dormitory/edit/{id}','dormitoryController@edit');
@@ -603,7 +595,7 @@ Route::get('/dormitory/report/fee','dormitoryController@reportfee');
 Route::get('/dormitory/report/fee/{dormId}/{month}','dormitoryController@reportfeeprint');
 });
 //barcode generate
-Route::group(['middleware' => 'admin'], function(){ 
+Route::group(['middleware' => 'auth'], function(){ 
 Route::get('/barcode','barcodeController@index');
 Route::post('/barcode','barcodeController@generate');
 

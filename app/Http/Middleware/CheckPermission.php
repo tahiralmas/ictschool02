@@ -18,7 +18,8 @@ class CheckPermission
     {
         //return $next($request);
          //here you have to get logged in user role
-        $role = 'admin';
+        $role = strtolower(Auth::user()->group);
+        //$role = 'admin';
          // so now check permission
          $permission = DB::table('permission')->where('permission_group', strtolower($role))->where('permission_name',$permission_name)->where('permission_type','yes')->first();
         
