@@ -486,8 +486,7 @@ class teacherController extends BaseController {
 	*/
 	public function update()
 	{
-     
-     $checkuser_id = DB::table('users')->where('group_id',Input::get('id'))->first();
+
 	$rules=[
 	'fname' => 'required',
 	//'lname' => 'required',
@@ -501,7 +500,7 @@ class teacherController extends BaseController {
 	///'fatherName' => 'required',
 	//'fatherCellNo' => 'required',
 	//'presentAddress' => 'required',
-	'email'    =>'nullable|email|unique:teacher,'.Input::get('id').'|unique:users,'.$checkuser_id->id
+	'email'    =>'nullable|email|unique:teacher,email,'.Input::get('id')
 	//'parmanentAddress' => 'required'
 	];
 	$validator = \Validator::make(Input::all(), $rules);
@@ -592,7 +591,7 @@ class teacherController extends BaseController {
 	$teacher->phone= Input::get('phone');
 	$teacher->email= Input::get('email');
 	if(Input::get('email')==''){
-	$teacher->email=NULL;
+	$teacher->email="";
 	}
 
 	$teacher->fatherName= Input::get('fatherName');
@@ -630,7 +629,6 @@ class teacherController extends BaseController {
 			
 			if(Input::get('email')!=''){
 				$user->email     =     Input::get('email');
-				//$user->email = '';
 			}
 
 			//$user->login     = Input::get('fname').'_'.Input::get('lname');
