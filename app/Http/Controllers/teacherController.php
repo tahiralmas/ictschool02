@@ -619,23 +619,25 @@ class teacherController extends BaseController {
 	if($teacher->save()){
 
 		$users =  User::where('group_id',Input::get('id'))->first();
-		$user_id = $users->id;
-		$user = User::find($user_id);
-			$user->firstname = Input::get('fname');
-			$user->lastname  = Input::get('lname');
-			if(Input::get('lname')==""){
-				$user->lastname  ="";
-			}
-			
-			if(Input::get('email')!=''){
-				$user->email     =     Input::get('email');
-			}
+		if($users){
+			$user_id = $users->id;
+			$user = User::find($user_id);
+				$user->firstname = Input::get('fname');
+				$user->lastname  = Input::get('lname');
+				if(Input::get('lname')==""){
+					$user->lastname  ="";
+				}
+				
+				if(Input::get('email')!=''){
+					$user->email     =     Input::get('email');
+				}
 
-			//$user->login     = Input::get('fname').'_'.Input::get('lname');
-			//$user->group     = 'Teacher';
-			//$user->group_id  = $teacher->id;
-			//$user->password  =	Hash::make(Input::get('phone'));
-			$user->save();
+				//$user->login     = Input::get('fname').'_'.Input::get('lname');
+				//$user->group     = 'Teacher';
+				//$user->group_id  = $teacher->id;
+				//$user->password  =	Hash::make(Input::get('phone'));
+				$user->save();
+		}
 	}
 
 	return Redirect::to('/teacher/list')->with("success","Teacher Updated Succesfully.");
