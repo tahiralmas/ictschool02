@@ -81,6 +81,7 @@ class attendanceController extends BaseController {
 				$leave    = Input::get('leave');
                 //echo "<pre>present";print_r($presents);
                 //echo "<pre>leave";print_r($leave);
+                //exit;
                /* $leaves = array();
                 foreach($leave as $key=>$val){
                 	$leaves[] = $key;
@@ -109,8 +110,8 @@ class attendanceController extends BaseController {
 					}
 				}
 
-              //echo "<pre>pp";print_r($stpresent);
-              //echo "<pre>ab";print_r($absentStudents);
+             // echo "<pre>pp";print_r($stpresent);
+             // echo "<pre>ab";print_r($absentStudents);
                 //exit;
 				$presentDate = $this->parseAppDate(Input::get('date'));
 				DB::beginTransaction();
@@ -132,7 +133,7 @@ class attendanceController extends BaseController {
 							'session'=>Input::get('session'),
 							'created_at' => Carbon::now()
 							];
-							//Attendance::insert($attenData);
+							Attendance::insert($attenData);
 							$attenDatap[] = $attenData;
 							$i++;
 						}
