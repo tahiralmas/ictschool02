@@ -46,14 +46,14 @@ class Invoicemoreonemonth extends Command
        $months = $this->argument('arg_name');
 
        //echo "<pre>";print_r($months);
-
+        $year             =  get_current_session()->id;
         foreach($months['month'] as $month){
             if($months['family_id']!=''){
                 $wheres = "->where('family_id',".$months['family_id'].")";
             }else{
                 $wheres = '';
             }
-          $get_students =  DB::table('Student')->where('isActive','Yes');
+          $get_students =  DB::table('Student')->where('session',$year)->where('isActive','Yes');
            if($months['family_id']!=''){
             $get_students = $get_students->where('family_id',$months['family_id']);
            }
@@ -77,7 +77,7 @@ class Invoicemoreonemonth extends Command
            *
            *family voucher
            **/
-           $get_students =  DB::table('Student')->where('isActive','Yes');
+           $get_students =  DB::table('Student')->where('session',$year)->where('isActive','Yes');
            if($months['family_id']!=''){
             $get_students = $get_students->where('family_id',$months['family_id']);
            }

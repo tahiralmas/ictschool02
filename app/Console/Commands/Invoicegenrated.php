@@ -43,8 +43,8 @@ class Invoicegenrated extends Command
     */
     public function handle()
     {
-        
-        DB::table('Student')->where('isActive','Yes')->orderBy('id','Asc')->chunk(100, function($users)
+        $year             =  get_current_session()->id;
+        DB::table('Student')->where('isActive','Yes')->where('session',$year)->orderBy('id','Asc')->chunk(100, function($users)
         {
             $i=0;
             foreach ($users as $user)
