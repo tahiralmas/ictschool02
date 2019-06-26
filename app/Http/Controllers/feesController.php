@@ -1386,6 +1386,7 @@ class feesController extends BaseController {
 		//->where('stdBill.class',Input::get('class'))
 		//->where('billHistory.month',$month)
 		->whereIn('stdBill.billNo',$bill_ary)
+		//->where('Student.session',get_current_session()->id)
 		//->where('Student.section',Input::get('section'))
 		->get();
 
@@ -1541,16 +1542,16 @@ class feesController extends BaseController {
 			$sections = '';
 		}
 		if(Input::get('fee_name')!=''){
-			$fees= FeeSetup::select('id','title')->where('id','=',Input::get('fee_name'))->get();
+			$fees = FeeSetup::select('id','title')->where('id','=',Input::get('fee_name'))->get();
 		}else{
-			$fees=array();
+			$fees = array();
 		}
 		if(Input::get('regiNo')!=''){
-			$student= Student::select('regiNo','rollNo','firstName','middleName','lastName','discount_id')->where('isActive','=','Yes')->where('regiNo','=',Input::get('regiNo'))->first();
+			$student = Student::select('regiNo','rollNo','firstName','middleName','lastName','discount_id')->where('isActive','=','Yes')->where('regiNo','=',Input::get('regiNo'))->first();
 	      //return $students;
 		}
 		else{
-			$student=array();
+			$student = array();
 		}
 		    $now             =  Carbon::now();
 			$year            =  $now->year;

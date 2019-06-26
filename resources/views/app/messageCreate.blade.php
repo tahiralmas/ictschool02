@@ -84,7 +84,7 @@
                               <div class="form-group col-md-12 row" id="class" >
                                 <label for="name"  class="col-sm-2 col-form-label">Message Title</label>
                                 <div class="input-group col-md-6">
-                                    <input  name="mess_name" required class="form-control">
+                                    <input  name="mess_name" required class="">
 
                                 </div>
 
@@ -192,7 +192,7 @@
                               <div class="form-group col-md-12 row" id="class" >
                                 <label for="name"  class="col-sm-2 col-form-label">Message Title</label>
                                 <div class="input-group col-md-6">
-                                    <input  name="mess_name" required class="form-control">
+                                    <input  name="mess_name" required class="">
                                 </div>
                             </div>
 
@@ -236,6 +236,12 @@
 
 $(document).ready(function()
 {
+
+
+  $('.selectpicker').selectpicker({
+    style: 'btn-default',
+    size: 4
+});
 
    $("#upload").hide();
    $("#studen").hide();
