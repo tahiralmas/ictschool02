@@ -720,6 +720,7 @@ class markController extends BaseController {
 
 						->select(DB::raw("CONCAT(Student.firstName,' ',Student.lastName) as fullname"),'Student.regiNo as student_id','Marks.*')
 						//->where('Marks.exam',$request->get('exam'))
+						->where('Student.session',get_current_session()->id)
 						->where('Student.class',$request->get('class'))
 						->where('Student.section',$request->get('section'))
 						->groupBy('Student.regiNo')
