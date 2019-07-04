@@ -64,22 +64,22 @@
   foreach( $result as $key=>$rest){
     //$first_names[] = array_column($rest[$i], $key);
      //$typew[] = $rest[$i]['type'];
- //echo $student = $rest['firstName'].' '.$rest['firstName'];
+     //echo $student = $rest['firstName'].' '.$rest['firstName'];
 
-   //echo 'fdf<pre>'.$key;print_r($rest['subject_name'] );
-  // exit;
-   /*$old_sub = $rest['subject_name'];
-   if($old_sub ==$rest['subject_name']){
-    $column[] =array_merge($rest);
-   }*/
+       //echo 'fdf<pre>'.$key;print_r($rest['subject_name'] );
+      // exit;
+       /*$old_sub = $rest['subject_name'];
+       if($old_sub ==$rest['subject_name']){
+        $column[] =array_merge($rest);
+       }*/
     $result_array[]     = $rest;
-    $student      = $rest[0]['firstName'];
-    $fatherName   = $rest[0]['fatherName'];
-    $class        = $rest[0]['class'];
-    $section_name = $rest[0]['section_name'];
-    $session      = $rest[0]['session'];
-    $rollNo      =   $rest [0]['rollNo'];
-    $subject  = $key;
+    $student            = $rest[0]['firstName'];
+    $fatherName         = $rest[0]['fatherName'];
+    $class              = $rest[0]['class'];
+    $section_name       = $rest[0]['section_name'];
+    $session            = $rest[0]['session'];
+    $rollNo             = $rest[0]['rollNo'];
+    $subject            = $key;
     $i++;
     break;
   }
@@ -183,8 +183,6 @@
                     <td rowspan="2"><b>{{$blextra[1]}}</b></td>
                     <td rowspan="2"><b>{{$blextra[2]}}</b></td>
                     <td rowspan="2"><b>{{$blextra[3]}}</b></td>
-
-
                     <!--<td><b>&nbsp;</b></td>
                     <td><b>&nbsp;</b></td>
                     <td><b>&nbsp;</b></td>
@@ -444,11 +442,16 @@
                     <tr><td></td></tr> </tbody></table>
 
                 <h2 class="markTitle">Achievement</h2>
-                <table class="pagetble" style="height:106px"><tbody>
-                    <tr><th align="center" valign="middle"></th><th align="center" valign="middle">
-                     
-
-                    </th></tr>                    </tbody></table>
+                <table class="pagetble" style="height:106px">
+                    <tbody>
+                        <tr>
+                            <th align="center" valign="middle">
+                            </th>
+                            <th align="center" valign="middle">
+                            </th>
+                        </tr>                    
+                    </tbody>
+                </table>
             </div><!-- end of overalreport -->
 
         </div><!-- end of resmidcontainer -->
@@ -459,7 +462,8 @@
             <div class="sign-head">
                 <!--<img src="/markssheetcontent/head-sign.png" alt="" style="left:23px;bottom:21px">-->                <b>Signature (Head Master)</b>
             </div>
-        </div></div><!-- end of signatureWraper -->
+        </div>
+            </div><!-- end of signatureWraper -->
     <img src="{{url('/markssheetcontent/certificate-bg.png')}}" alt="" class="result-bg">    </div><!-- end of wraperResult -->
   </div>
 
@@ -477,8 +481,9 @@
            printContents += inpText;
        }
        $('input').hide();
-         var printContents = document.getElementById(divName).innerHTML;
-        var originalContents = document.body.innerHTML;
+
+         var printContents    = document.getElementById(divName).innerHTML;
+         var originalContents = document.body.innerHTML;
        
         //var inpText = document.getElementsByTagName("input").value;
        

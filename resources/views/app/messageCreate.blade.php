@@ -158,27 +158,27 @@
                                         </select>
                                     </div>
                                 </div>
-                             <div id="studen1" >
-                                <div class="form-group col-md-12 row" id="class" >
-                                    <label for="name"  class="col-sm-2 col-form-label">Class</label>
-                                    <div class="input-group col-md-6">
-                                        <select  name="class" id="class1" class="form-control" >
-                                            <option value="">Select Classes</option>
-                                          @foreach($classes as $class)
-                                            <option value="{{$class->code}}">{{$class->name }}</option>
-                                          @endforeach
-                                        </select>
+                                 <div id="studen1" >
+                                    <div class="form-group col-md-12 row" id="class" >
+                                        <label for="name"  class="col-sm-2 col-form-label">Class</label>
+                                        <div class="input-group col-md-6">
+                                            <select  name="class" id="class1" class="form-control" >
+                                                <option value="">Select Classes</option>
+                                              @foreach($classes as $class)
+                                                <option value="{{$class->code}}">{{$class->name }}</option>
+                                              @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12 row" id="class" >
+                                        <label for="name"  class="col-sm-2 col-form-label">Section</label>
+                                        <div class="input-group col-md-6">
+                                            <select  name="section[]" id="section1" class="form-control selectpicker" multiple="" data-hide-disabled="true" data-actions-box="true" data-size="5" tabindex="-99">
+                                                 <option value="">Select Sections</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group col-md-12 row" id="class" >
-                                    <label for="name"  class="col-sm-2 col-form-label">Section</label>
-                                    <div class="input-group col-md-6">
-                                        <select  name="section[]" id="section1" class="form-control selectpicker" multiple="" data-hide-disabled="true" data-actions-box="true" data-size="5" tabindex="-99">
-                                             <option value="">Select Sections</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
 
                               <div class="form-group col-md-12 row" id="testing1" >
                                 <label for="name"  class="col-sm-2 col-form-label">Phone Numbers</label>

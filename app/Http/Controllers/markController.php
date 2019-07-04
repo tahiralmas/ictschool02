@@ -42,10 +42,12 @@ class markController extends BaseController {
 		}else{
 			$eections = array();
 		}
-		$section =Input::get('section');
-		$session =Input::get('session');
-		$exam =Input::get('exam');
-		if($exam !='' && $class_code!=''){
+
+		$section   = Input::get('section');
+		$session   = Input::get('session');
+		$exam      = Input::get('exam');
+
+		if($exam  !='' && $class_code!=''){
 			$exams = DB::table('exam')->where('id',$exam)->get();
 		}else{
 			$exams = array();
@@ -85,17 +87,17 @@ class markController extends BaseController {
 	public function create()
 	{
 		$rules=[
-			'class' => 'required',
-			'section' => 'required',
-			'shift' => 'required',
-			'session' => 'required',
-			'regiNo' => 'required',
-			'exam' => 'required',
-			'subject' => 'required',
-			'written' => 'required',
-			'mcq' => 'required',
+			'class'     => 'required',
+			'section'   => 'required',
+			'shift'     => 'required',
+			'session'   => 'required',
+			'regiNo'    => 'required',
+			'exam'      => 'required',
+			'subject'   => 'required',
+			'written'   => 'required',
+			'mcq'       => 'required',
 			'practical' =>'required',
-			'ca' =>'required'
+			'ca'        =>'required'
 		];
 		$validator = \Validator::make(Input::all(), $rules);
 		if ($validator->fails())
@@ -119,13 +121,13 @@ class markController extends BaseController {
 			//	 $totalMark = Input
 			$len = count(Input::get('regiNo'));
 
-			$regiNos = Input::get('regiNo');
-			$writtens=Input::get('written');
-			$mcqs =Input::get('mcq');
-			$practicals=Input::get('practical');
-			$cas=Input::get('ca');
-			$isabsent = Input::get('absent');
-			$counter=0;
+			$regiNos    = Input::get('regiNo');
+			$writtens   = Input::get('written');
+			$mcqs       = Input::get('mcq');
+			$practicals = Input::get('practical');
+			$cas        = Input::get('ca');
+			$isabsent   = Input::get('absent');
+			$counter    = 0;
 
 			for ( $i=0; $i< $len;$i++) {
 				$isAddbefore = Marks::where('regiNo','=',$regiNos[$i])->where('exam','=',Input::get('exam'))->where('subject','=',Input::get('subject'))->first();

@@ -64,7 +64,7 @@ class attendanceNotification extends Command
         $data    = explode('<br>',$contant );
         $attendance_time = $data[0]; 
 
-        if($now->format('H:i')>=$attendance_time){
+        if($now->format('H:i')>=$attendance_time  ){
         
             $previouse_sended_sms = SMSLog::whereDate('created_at', '=', $now->toDateString())->where('status','ok')->orwhere('status','sended')->get();
             $previus_sended_ids   = array();

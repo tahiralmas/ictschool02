@@ -863,14 +863,14 @@ public function send_sms($class,$section,$exam,$session)
                       //  echo "<pre>";print_r($students->toArray());exit;
 						if (count($students) != 0) {
 							$marksSubmitStudents=Marks::select('Marks.regiNo')
-							->join('Student', 'Marks.regiNo', '=', 'Student.regiNo')
-							->where('Student.isActive', '=', 'Yes')
-							->where('Student.class', '=', Input::get('class'))
-							->where('Marks.class', '=', Input::get('class'))
-							->where('Marks.session', '=', trim(Input::get('session')))
-							->where('Marks.exam', '=', Input::get('exam'))
-							->distinct()
-							->get();
+													->join('Student', 'Marks.regiNo', '=', 'Student.regiNo')
+													->where('Student.isActive', '=', 'Yes')
+													->where('Student.class', '=', Input::get('class'))
+													->where('Marks.class', '=', Input::get('class'))
+													->where('Marks.session', '=', trim(Input::get('session')))
+													->where('Marks.exam', '=', Input::get('exam'))
+													->distinct()
+													->get();
 
 							if(count($students)==count($marksSubmitStudents))
 							{
@@ -879,12 +879,12 @@ public function send_sms($class,$section,$exam,$session)
 								foreach ($students as $student) {
 									$marks = Marks::select('subject', 'grade', 'point', 'total')->where('regiNo', '=', $student->regiNo)->where('exam', '=', Input::get('exam'))->get();
 
-									$totalpoint = 0;
-									$totalmarks = 0;
-									$subcounter = 0;
-									$banglamark = 0;
+									$totalpoint  = 0;
+									$totalmarks  = 0;
+									$subcounter  = 0;
+									$banglamark  = 0;
 									$englishmark = 0;
-									$isfail = false;
+									$isfail      = false;
 									foreach ($marks as $mark) {
 
 
@@ -1105,6 +1105,7 @@ public function send_sms($class,$section,$exam,$session)
 			} else {
 				$meritdata = new Meritdata();
 				$position  = 0;
+				//echo "<pre>";print_r($merit->toArray());
 				foreach ($merit as $m) {
 					$position++;
 					//$test[] = $m->section_id .'==='. $section."909".$m->regiNo .'=== '.$regiNo;
@@ -1147,6 +1148,7 @@ public function send_sms($class,$section,$exam,$session)
 				$isBanglaFail=false;
 				$isEnglishFail=false;
 				//echo $exam."<pre>";print_r($subjects->toArray());
+				///exit;
 				foreach ($subjects as $subject) {
 					$submarks = Marks::select('written', 'mcq', 'practical', 'ca', 'total', 'point', 'grade','total_marks')->where('regiNo', '=', $student->regiNo)
 					->where('subject', '=', $subject->code)
@@ -1163,9 +1165,9 @@ public function send_sms($class,$section,$exam,$session)
 					$submarks["subcode"] = $subject->code;
 
 					$submarks["subname"] = $subject->name;
-					$submarks["outof"] = $submarks->total_marks;
+					$submarks["outof"]   = $submarks->total_marks;
 
-
+					//echo $this->getSubGroup($subjects, $subject->code);
 					if ($this->getSubGroup($subjects, $subject->code) === "Bangla") {
 
 						if($submarks->grade=="F")
@@ -1198,6 +1200,7 @@ public function send_sms($class,$section,$exam,$session)
 					$outof[] = $subject->totalfull;
 				}
 				}
+				//exit;
 				$gparules = GPA::select('gpa', 'grade', 'markfrom')->get();
 				$subgrpbl = false;
 
@@ -1255,7 +1258,7 @@ public function send_sms($class,$section,$exam,$session)
 				$extra = array($exam_name, $subgrpbl, $totalHighest, $subgrpen, $student->extraActivity,$totalourall);
 				$query="select left(MONTHNAME(STR_TO_DATE(m, '%m')),3) as month, count(regiNo) AS present from ( select 01 as m union all select 02 union all select 03 union all select 04 union all select 05 union all select 06 union all select 07 union all select 08 union all select 09 union all select 10 union all select 11 union all select 12 ) as months LEFT OUTER JOIN Attendance ON MONTH(Attendance.date)=m and Attendance.regiNo ='".$regiNo."' and  Attendance.status IN ('Present','present','late','Late') GROUP BY m";
 				$attendance=DB::select(DB::RAW($query));
-				//echo "<pre>";print_r($subcollection);
+				////////////echo "<pre>";print_r($meritdata);
 				//exit;
 				if(Input::get('type')=='sigle' || Input::get('type')==''):
 				return View('app.mstdgradesheet', compact('student', 'extra', 'meritdata', 'subcollection', 'blextra', 'banglaArray', 'enextra', 'englishArray','attendance'));
@@ -1410,8 +1413,8 @@ public function combined_results($type,$regiNo,$exam,$class)
 	public  function  mpostgenerate()
 	{
 		$rules = [
-			'class' => 'required',
-			'exam' => 'required',
+			'class'   => 'required',
+			'exam'    => 'required',
 			'session' => 'required',
 			'section' => 'required'
 		];
@@ -1428,12 +1431,13 @@ public function combined_results($type,$regiNo,$exam,$class)
 			->get();
 			if(count($isGenerated)==0)
 			{
-				$subjects           = Subject::select('name', 'code', 'type', 'subgroup')->where('class', '=', Input::get('class'))->get();
-				 $sectionsHas        = Student::select('section')->where('class', '=', Input::get('class'))->where('section', '=', Input::get('section'))->where('session', trim(Input::get('session')))->where('isActive', '=', 'Yes')->distinct()->orderBy('section', 'asc')->get();
-				 $sectionMarksSubmit = Marks::select('section')->where('class', '=', Input::get('class'))->where('section', '=', Input::get('section'))->where('session', trim(Input::get('session')))->where('exam',Input::get('exam'))->distinct()->get();
-				//echo "ee<pre>ew";print_r($sectionsHas);
-				//echo "ew<pre>ee";print_r($sectionMarksSubmit);
-				//exit;
+				 $subjects            = Subject::select('name', 'code', 'type', 'subgroup')->where('class', '=', Input::get('class'))->get();
+				 $sectionsHas         = Student::select('section')->where('class', '=', Input::get('class'))->where('section', '=', Input::get('section'))->where('session', trim(Input::get('session')))->where('isActive', '=', 'Yes')->distinct()->orderBy('section', 'asc')->get();
+				 $sectionMarksSubmit  = Marks::select('section')->where('class', '=', Input::get('class'))->where('section', '=', Input::get('section'))->where('session', trim(Input::get('session')))->where('exam',Input::get('exam'))->distinct()->get();
+				 
+				 //echo "ee<pre>";print_r($sectionsHas->toArray());
+				// echo "ew<pre>";print_r($sectionMarksSubmit->toArray());
+				// exit;
 				//dd($sectionsHas);
 				if (count($sectionsHas)==count($sectionMarksSubmit))
 				{
@@ -1463,12 +1467,13 @@ public function combined_results($type,$regiNo,$exam,$class)
 
 
 						$students = Student::select('regiNo')
-						->join('section','Student.section','=','section.id')
-						->select('Student.*','section.name')
-						->where('Student.class', '=', Input::get('class'))
-						->where('Student.section', '=', Input::get('section'))
-						->where('Student.session', '=', trim(Input::get('session')))
-						->where('Student.isActive', '=', 'Yes')->get();
+									->join('section','Student.section','=','section.id')
+									->select('Student.*','section.name')
+									->where('Student.class',    '=', Input::get('class'))
+									->where('Student.section',  '=', Input::get('section'))
+									->where('Student.session',  '=', trim(Input::get('session')))
+									->where('Student.isActive', '=', 'Yes')
+									->get();
                       //  echo "<pre>";print_r($students->toArray());exit;
 						if (count($students) != 0) {
 							$marksSubmitStudents=Marks::select('Marks.regiNo')
@@ -1484,20 +1489,19 @@ public function combined_results($type,$regiNo,$exam,$class)
 							if(count($students)==count($marksSubmitStudents))
 							{
 								$gparules = GPA::select('gpa', 'grade', 'markfrom')->get();
-								$foobar = array();
+								$foobar   = array();
 								foreach ($students as $student) {
-									$marks = Marks::select('subject', 'grade', 'point', 'total','total_marks')->where('regiNo', '=', $student->regiNo)->where('exam', '=', Input::get('exam'))->get();
-
-									$totalpoint = 0;
-									$totalmarks = 0;
-									$subcounter = 0;
-									$banglamark = 0;
-									$englishmark = 0;
+									
+									$marks 			= Marks::select('subject', 'grade', 'point', 'total','total_marks')->where('regiNo', '=', $student->regiNo)->where('exam', '=', Input::get('exam'))->get();
+									$totalpoint     = 0;
+									$totalmarks     = 0;
+									$subcounter     = 0;
+									$banglamark     = 0;
+									$englishmark    = 0;
 									$totalexammarks = 0;
-									$isfail = false;
+									$isfail 		= false;
+
 									foreach ($marks as $mark) {
-
-
 										if ($this->getSubGroup($subjects, $mark->subject) === "Bangla") {
 											$banglamark += $mark->total;
 
@@ -1536,19 +1540,19 @@ public function combined_results($type,$regiNo,$exam,$class)
 
 
 									if ($banglamark > 0) {
-										$blmarks = floor($banglamark / 2);
 
+										$blmarks = floor($banglamark / 2);
 
 										$totalmarks += $banglamark;
 
 										$totalpoint += $this->pointCalculator($blmarks, $gparules);
 
 										$subcounter--;
-
 									}
 
 
 									if ($englishmark > 0) {
+
 										$enmarks = floor($englishmark / 2);
 										$totalmarks += $englishmark;
 										$totalpoint += $this->pointCalculator($enmarks, $gparules);
@@ -1564,13 +1568,16 @@ public function combined_results($type,$regiNo,$exam,$class)
 									if ($isfail) {
 										$grandGrade = $this->gradnGradeCal(0.00, $gparules);
 									} else {
+
 										$grandGrade = $this->gradnGradeCal($grandPoint, $gparules);
 									}
-									$grandtotal = $totalmarks/$totalexammarks * 100;
+									
+									$grandtotal     = $totalmarks/$totalexammarks * 100;
                                    
 								     if ($grandtotal <= 100 && $grandtotal >= 95){
-								     	$grade = 'A+';
-								     	//$gpoint = '4.00' 
+								     		
+								     		$grade = 'A+';
+								     		//$gpoint = '4.00' 
 								     }
 								     elseif ($grandtotal >= 90 &&$grandtotal < 95){
 								     	$grade = 'A';
@@ -1592,16 +1599,16 @@ public function combined_results($type,$regiNo,$exam,$class)
 									//if($grandtotal)
 									//echo "<pre>dd".$grandPoint ;print_r($grandGrade);
 									//echo "grade = ".$grade;
-									$merit          = new MeritList;
-									$merit->class   = Input::get('class');
-									$merit->session = trim(Input::get('session'));
-									$merit->exam    = Input::get('exam');
-									$merit->regiNo  = $student->regiNo;
-									$merit->totalNo = $totalmarks;
-									$merit->point   = $grandPoint;
+									$merit          		= new MeritList;
+									$merit->class   		= Input::get('class');
+									$merit->session 		= trim(Input::get('session'));
+									$merit->exam    		= Input::get('exam');
+									$merit->regiNo  		= $student->regiNo;
+									$merit->totalNo 		= $totalmarks;
+									$merit->point   		= $grandPoint;
 									//$merit->grade   = $grandGrade;
-									$merit->grade   = $grade;
-									$merit->section_id   = $student->section;
+									$merit->grade   		= $grade;
+									$merit->section_id   	= $student->section;
                                 // echo "<pre>";print_r($merit );
 									$merit->save();
                                     //$test[] = $merit;
@@ -1610,8 +1617,6 @@ public function combined_results($type,$regiNo,$exam,$class)
 								}
 													//echo "<pre>";print_r($test );
 									//exit;
-								
-
 							}
 							else {
 

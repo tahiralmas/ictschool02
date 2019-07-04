@@ -16,7 +16,7 @@ class CreateTableMarks extends Migration {
 		{
 			$table->increments('id');
 			$table->string('class',20);
-			$table->string('section',1);
+			$table->string('section',12);
 			$table->string('shift',20);
 			$table->string('session',10);
 			$table->string('regiNo',20);
@@ -27,7 +27,7 @@ class CreateTableMarks extends Migration {
 			$table->integer('practical');
 			$table->integer('ca');
 			$table->integer('total');
-		  $table->string('grade');
+		  	$table->string('grade');
 			$table->decimal('point',3,2);
 			$table->string('Absent',10)->default('No');
 			$table->timestamps();
