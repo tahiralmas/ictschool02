@@ -53,59 +53,7 @@ color: red;
         <form role="form" action="{{url('/student/create')}}" method="post" enctype="multipart/form-data">
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
          
-             <div class="row">
-          <div class="col-md-12">
-            <h3 class="text-info">School Information</h3>
-            <hr>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-12">
-          
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="fatherName">Family Id </label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <input type="text" class="form-control"  name="family_id" value="{{old('family_id',$family_id)}}" id="family_id" @if($family_id!='') readonly @endif>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="fatherCellNo">Refer by Family </label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                <input type="text" class="form-control typeahead"   name="refer_by" value="{{old('refer_by')}}" id="refer_by"   placeholder="enter referal name or Id">
-
-                    {{--<select class="form-control" id="refer_by"   name="refer_by">
-                      <option value="">--- Select Refer By Family---</option>
-                      @if($families)
-                        @foreach($families as $family)
-                          <option value="{{$family->family_id}}">{{ $family->fatherName }} ({{$family->family_id}})</option>
-                        @endforeach
-                      @endif
-                    </select>--}}
-                </div>
-              </div>
-            </div>
-            
-            <div class="col-md-8">
-              <div class="form-group">
-                <label for="presentAddress">About Family Behavior </label>
-                <div class="input-group">
-                  <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                  <textarea type="text" class="form-control"  name="familyc" placeholder="">{{old('presentAddress')}}</textarea>
-                </div>
-              </div>
-            </div>
-
-
-
-          </div>
-        </div>
-
+             
 
              <div class="row">
           <div class="col-md-12">

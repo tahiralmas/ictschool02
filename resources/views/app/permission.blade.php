@@ -79,11 +79,11 @@ $permission_fields = array(
           'Generate Result',
           'Search Result',
           'promote Student',
-          'Add Fess',
+          /*'Add Fess',
           'View Fess',
           'Update Fess',
           'Delete Fess',
-          'View Fess Report',
+          'View Fess Report',*/
           'View Result Reports',
           'View Attendance Reports',
           'View Sms/voice log Reports',
@@ -134,7 +134,7 @@ $permission_fields = array(
           'Paper Add',
           'Paper update',
           'Paper delete',
-          'Accounting',
+          /*'Accounting',*/
         );
 
 ?>
@@ -182,16 +182,7 @@ $permission_fields = array(
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label class="control-label" for="section">Accountant</label>
-
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
-                                                 <input type="checkbox" name="accountant" class="form-control" style="margin-top: -35px;">
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
 

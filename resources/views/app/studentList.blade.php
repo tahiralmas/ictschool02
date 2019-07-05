@@ -128,7 +128,7 @@
                                                                   <th>Father Name</th>
                                                                    <th>Guardian's Contact</th>
                                                                  <th>Present Address</th>
-                                                                 <th>Family Id</th>
+                                                                 
                                                                   <th>Action</th>
                                                              </tr>
                                                          </thead>
@@ -144,7 +144,6 @@
                                                                   <td>{{$student->fatherName}}</td>
                                                                   <td>   {!! "<b> Father:</b> ". $student->fatherCellNo. " <br \><b >Mother: </b>". $student->motherCellNo. $student->localGuardianCell !!}</td>
                                                                   <td>{{$student->presentAddress}}</td>
-                                                                  <td><a class='btn btn-success' href="{{url('/family/students')}}/{{$student->family_id}}">{{$student->family_id}}</a></td>
                                                        <td>
                                                   <a title='View' class='btn btn-success' href='{{url("/student/view")}}/{{$student->id}}'> <i class="glyphicon glyphicon-zoom-in icon-white"></i></a>&nbsp&nbsp<a title='Edit' class='btn btn-info' href='{{url("/student/edit")}}/{{$student->id}}'> <i class="glyphicon glyphicon-edit icon-white"></i></a>
                                                     &nbsp&nbsp<a title='Delete' class='btn btn-danger' href='#' onclick="confirmed('{{$student->id}}')"> <i class="glyphicon glyphicon-trash icon-white"></i></a>

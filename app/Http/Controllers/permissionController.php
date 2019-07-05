@@ -78,11 +78,11 @@ class permissionController extends Controller
           'Generate Result',
           'Search Result',
           'promote Student',
-          'Add Fess',
+          /*'Add Fess',
           'View Fess',
           'Update Fess',
           'Delete Fess',
-          'View Fess Report',
+          'View Fess Report',*/
           'View Result Reports',
           'View Attendance Reports',
           'View Sms/voice log Reports',
@@ -133,7 +133,7 @@ class permissionController extends Controller
           'Paper Add',
           'Paper update',
           'Paper delete',
-          'Accounting',
+          //'Accounting',
         );
    /* DB::table("permission")->delete();*/
       DB::table('permission')->truncate();

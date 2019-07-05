@@ -373,30 +373,11 @@
                 <a class="btn btn-danger btn-lg btn-block" href='{{url("/teacher/view-timetable/student?class=$student->class_code&section=$student->section")}}'><h4>Time Tables</h4></a>
               </div>
             </div>
-            {{--<div class="row">
-              <div class="col-md-12">
-                <a class="btn btn-secondary btn-lg btn-block" href='{{url("/fee/collection?class_id=$student->class_code&section=$student->section&session=$student->session_id&type=Monthly&month=$month&fee_name=$fee_name&regiNo=$student->regiNo")}}'><h4>Add Fees</h4></a>
-              </div>
-            </div>--}}
-            {{--<div class="row">
-              <div class="col-md-12">
-                <a class="btn btn-primary btn-lg btn-block" href='{{url("/fee/detail?class=$student->class_code&section=$student->section&regiNo=$student->regiNo")}}'><h4>Fees Detail</h4></a>
-              </div>
-            </div>--}}
+           
+            
             {{--@if(accounting_check()!='' && accounting_check()=='yes' )
               --}}
-              <div class="row">
-                <div class="col-md-12">
-                  <a class="btn btn-primary btn-lg btn-block" href='{{url("/fee/vouchar?class=$student->class_code&section=$student->section&regiNo=$student->regiNo")}}'><h4>Create Fee Vouchar</h4></a>
-                 
-                  <a class="btn btn-success btn-lg btn-block" href='{{url("/fee/get_vouchar?class=$student->class_code&section=$student->section&session=$student->session&type=Monthly&month=$month&fee_name=$fee_name&regiNo=$student->regiNo")}}'><h4>Get Vouchar</h4></a>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <a class="btn btn-secondary btn-lg btn-block" href='{{url("/fee/vouchar/history?class=$student->class_code&section=$student->section&regiNo=$student->regiNo")}}'><h4>Fee Vouchar History</h4></a>
-                </div>
-              </div>
+              
             {{--@endif--}}
             <div class="row">
               <div class="col-md-12">

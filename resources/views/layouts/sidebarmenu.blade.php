@@ -23,14 +23,7 @@
 
     <li class="{{ Request::is('dashboard') ? 'active' : '' }} has-sub"><a class="js-arrow" href="{{url('/dashboard')}}"> <i class="fas fa-tachometer-alt"></i><span> Dashboard</span></a>
     </li>
-    @if (Session::get('userRole') =="Director")
-      <li class="has-sub">
-        <a  class="js-arrow" href="#"><i class="glyphicon glyphicon-cog"></i><span> Settings</span></a>
-        <ul class="list-unstyled navbar__sub-list js-sub-list">
-          <li><a href="{{url('/branches')}}">Branches</a></li>
-        </ul>
-      </li>
-    @endif
+    
 @if (Session::get('userRole') !="Director")
  {{-- @if (Session::get('userRole') =="Admin" )--}}
     @if(in_array('teacher_view',$permision) || in_array('teacher_add',$permision) || in_array('teacher_delete',$permision) || in_array('add_teacher_bulk_add',$permision))

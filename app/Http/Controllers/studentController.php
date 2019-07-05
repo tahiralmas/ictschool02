@@ -448,11 +448,11 @@ if( preg_match( '!\(([^\)]+)\)!', $query, $match ) ){
 			$family_id =Input::get('family_id');
 		}
 
-		if($family_id ==$refer_by ){
+		/*if($family_id ==$refer_by ){
 
 			return Redirect::to('/student/create')->withInput()->withErrors('Family Id And Refer Id same ');
 
-		}
+		}*/
 
 		$check_ids = DB::table('Student')
             			->where('family_id', '=', $family_id)
@@ -467,7 +467,7 @@ if( preg_match( '!\(([^\)]+)\)!', $query, $match ) ){
 					}
 				}
 	            //echo "<pre>".$family_id;print_r($get_family_ids);exit;
-				if(!in_array($family_id, $get_family_ids)){
+				if(!empty($get_family_ids) && !in_array($family_id, $get_family_ids)){
 
 						return Redirect::to('/student/create')->withInput()->withErrors('Family Id Already Assign Other Family please select different ID');
 				}

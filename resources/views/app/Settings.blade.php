@@ -1,6 +1,5 @@
 @extends('layouts.master')
 @section('style')
-
 @stop
 @section('content')
     @if (Session::get('success'))
@@ -51,7 +50,6 @@
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="glyphicon glyphicon-info-sign blue"></i></span>
                                                 <input type="text" class="form-control" required name="lastname" placeholder="Foo" value="{{$set->lastname}}">
-
                                             </div>
                                         </div>
                                     </div>
@@ -75,9 +73,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    </div>
-
                                 </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="col-md-3">
@@ -129,14 +126,6 @@
                         </form>
 
                 </div>
-
-
-
-
-
-
-
-
             </div>
         </div>
     </div>
