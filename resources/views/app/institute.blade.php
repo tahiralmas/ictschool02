@@ -139,23 +139,7 @@
                                             </div>
                                     </div>
                                     </div>
-                                    {{--<div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="type">Family</label>
-                                                <input   id="toggle-one" @if($family=='on') checked @endif name="family" type="checkbox">                                        
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="type">Accounting</label>
-                                              <!-- <input data-no-uniform="true" name="accounting"  @if($accounting=='' || $accounting=='yes') checked @endif type="checkbox" class="iphone-toggle">-->
-                                            <div class="input-group">
-                                                <input class="chb form-control" data-toggle="toggle" id="accounting" data-on="No" data-off="Yes" data-width="100"   name="accounting" data-onstyle="danger" data-offstyle="success" type="checkbox" @if($accounting=='' || $accounting=='no') checked @endif  >                                            
-                                            </div>
-                                        </div>
-                                    </div>--}}
+                                    
                                     </div>
                             </div>
                                 

@@ -38,98 +38,32 @@ class instituteController extends BaseController {
           $contant = Storage::get('/public/grad_system.txt');
           $data = explode('<br>',$contant );
 
-			//echo "<pre>";print_r($data);
-			$gradsystem = $data[0]; 
-		}else{
-	      $gradsystem ='';
-		}
-
-		if(Storage::disk('local')->exists('/public/family.txt')){
-          $contant_family = Storage::get('/public/family.txt');
-          $data_family = explode('<br>',$contant_family );
-
-			//echo "<pre>";print_r($data);
-			$family = $data_family[0]; 
-		}else{
-	      $family ='';
-		}
-
-		if(Storage::disk('local')->exists('/public/accounting.txt')){
-          $ac = Storage::get('/public/accounting.txt');
-          $ac_data = explode('<br>',$ac );
-
-			//echo "<pre>";print_r($data);
-			$accounting = $ac_data[0]; 
-		}else{
-	      $accounting ='';
-		}
+            //echo "<pre>";print_r($data);
+            $gradsystem = $data[0]; 
+        }else{
+          $gradsystem ='';
+        }
         //print_r($data);exit;
 		//return View::Make('app.institute',compact('institute'));
 		return View('app.institute',compact('institute','gradsystem','family','accounting'));
 	}
-	/**
-	* Display a listing of the resource.
-	*
-	* @return Response
-	*/
-	public function branches()
-	{
-		$branches= Branch::select("*")->get();
-		$countb= Branch::count();
-		/*if(empty($institute))
-		{
-			$branches=new Branch;
-			$branches->branchname = "";
-			$branches->url = "";
-			$branches->username = "";
-			$branches->password = "";
-		}*/
-       // print_r($branches);exit;
-		//return View::Make('app.institute',compact('institute'));
-		return View('app.branches',compact('branches','countb'));
-	}
-	public function createbranch(Request $request)
-	{
-		$rules=[
-			'branchname.*' => 'required',
-			'url.*' => 'required',
-			'username.*' => 'required',
-			'password.*' => 'required',
-		];
-		//echo "<pre>";print_r(Input::file('logo'));exit;
-		$validator = \Validator::make(Input::all(), $rules);
-		if ($validator->fails())
-		{
-			return Redirect::to('branches')->withinput(Input::all())->withErrors($validator);
-		}
-		else {
-				Branch::truncate();
-            for($i=0;$i<count($request->branchname);$i++){
-            	$branch = new Branch;
-            	$branch->branch_name =$request->branchname[$i];
-            	$branch->branch_url =$request->url[$i];
-            	$branch->username =$request->username[$i];
-            	$branch->password =$request->password[$i];
-            	$branch->save();
-            }
-            return Redirect::to('/branches')->with("success","Branches Created Succesfully.");
-		}
-	}
-
 
 	public function index1()
-	{
+    {
        if(Storage::disk('local')->exists('/public/grad_system.txt')){
           $contant = Storage::get('/public/grad_system.txt');
           $data = explode('<br>',$contant );
 
-			//echo "<pre>";print_r($data);
-			$gradsystem = $data[0]; 
-		}else{
-	      $gradsystem ='';
-		}
-		return $gradsystem;
-	}
+            //echo "<pre>";print_r($data);
+            $gradsystem = $data[0]; 
+        }else{
+          $gradsystem ='';
+        }
+        return $gradsystem;
+    }
+	
+
+	
 
 	/**
 	* Show the form for creating a new resource.
@@ -172,7 +106,8 @@ class instituteController extends BaseController {
             Storage::put('/public/family.txt', $fm);
 
              if(Input::get('accounting')=='' ):
-              $accounting = 'yes';
+               //$accounting = 'yes';
+          		$accounting = 'no';
             else:
               $accounting = 'no';
             endif;
