@@ -51,6 +51,7 @@ class ictcoreController {
 			//'ictcore_url' => 'required',
 			'ictcore_user' => 'required',
 			'ictcore_password' => 'required',
+			'ictcore_account_id' => 'required|numeric',
 			];
 	    }else{
 			$rules=[
@@ -66,25 +67,29 @@ class ictcoreController {
 			return Redirect::to('ictcore?type='.Input::get('type'))->withinput(Input::all())->withErrors($validator);
 		}else {
 			if(Input::get('method')==''){
-				$method = 'telenor';
+				//$method = 'telenor';
+				$method  = 'ictcore';
+				$method1 = 'ictcore_getway';
 			}else{
-				$method = 'ictcore';
+				$method  = 'ictcore';
+				$method1 = '';
 			}
 
 			if(Input::get('ictcore_url')==''){
-				$url = '';
+				$url = 'http://core.ict.vision:180/api/';
 			}else{
 				$url =Input::get('ictcore_url');
 			}
 			//echo $url;exit;
 			DB::table("ictcore_integration")->where('type',Input::get('type'))->delete();
-			$ictcore_integration=new Ictcore_integration;
-			$ictcore_integration->ictcore_url =$url;
-			$ictcore_integration->ictcore_user = Input::get('ictcore_user');
-			$ictcore_integration->ictcore_password = Input::get('ictcore_password');
+			$ictcore_integration                     = new Ictcore_integration;
+			$ictcore_integration->ictcore_url        =  $url;
+			$ictcore_integration->ictcore_user       = Input::get('ictcore_user');
+			$ictcore_integration->ictcore_password   = Input::get('ictcore_password');
 			$ictcore_integration->ictcore_account_id = Input::get('ictcore_account_id');
-			$ictcore_integration->method = $method;
-			$ictcore_integration->type = Input::get('type');
+			$ictcore_integration->method 			 = $method;
+			$ictcore_integration->type   			 = Input::get('type');
+			$ictcore_integration->type1   			 = $method1;
 			$ictcore_integration->save();
 			return Redirect::to('ictcore?type='.Input::get('type'))->with('success', 'Integration  Information saved.');
 		}
